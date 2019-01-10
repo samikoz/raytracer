@@ -16,7 +16,10 @@ class Real3TupleTest {
 
     @Test
     void testEqualityOfTuples() {
+        Tuple first = new Real3Tuple(0.0, -2.0, 0.0001);
+        Tuple second = new Real3Tuple(0.0, -2.0, 0.0);
 
+        assertTrue(first.equalTo(second), "Equality of tuples should be up to a small delta");
     }
 
 }
