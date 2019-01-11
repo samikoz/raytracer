@@ -4,4 +4,12 @@ public final class Real3Point extends Real3Tuple implements Point {
     public Real3Point(double x, double y, double z) {
         super(x, y, z);
     }
+
+    public Real3Point add(Vector displacement) {
+        return new Real3Point(
+                this.getX() + displacement.getX(),
+                this.getY() + displacement.getY(),
+                this.getZ() + displacement.getZ()
+        );
+    }
 }

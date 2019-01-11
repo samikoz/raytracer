@@ -28,7 +28,7 @@ class TupleTest {
         Vector vector = new Real3Vector(-5.0, 0.2, 0.0);
         Point expectedSum = new Real3Point(7.0, 3.9, -0.2);
 
-        assertEquals(expectedSum, point.add(vector), "Sum of a point and a vector should be a point");
+        assertTrue(expectedSum.equalTo(point.add(vector)), "Sum of a point and a vector should be a point");
     }
 
 }
@@ -41,6 +41,6 @@ class VectorTest {
         Vector second = new Real3Vector(1.0, 0.0,-1.0);
         Vector expectedSum = new Real3Vector(2.0,1.0, 0.0);
 
-        assertEquals(expectedSum, first.add(second), "Sum of two vectors should be a vector");
+        assertTrue(expectedSum.equalTo(first.add(second)), "Sum of two vectors should be a vector");
     }
 }

@@ -4,4 +4,12 @@ public final class Real3Vector extends Real3Tuple implements Vector {
     public Real3Vector(double x, double y, double z) {
         super(x, y, z);
     }
+
+    public Real3Vector add(Vector them) {
+        return new Real3Vector(
+                this.getX() + them.getX(),
+                this.getY() + them.getY(),
+                this.getZ() + them.getZ()
+        );
+    }
 }
