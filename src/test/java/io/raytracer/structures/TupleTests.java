@@ -4,10 +4,10 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class TupleTest {
+class Real3TupleTest {
 
     @Test
-    void testDifferentTuplesWithSameCoords() {
+    void testInequalityOfDifferentTuplesWithSameCoords() {
         Point point = new Real3Point(1.0, 0.5, 0.0);
         Vector vector = new Real3Vector(1.0, 0.5, 0.0);
 
@@ -15,12 +15,37 @@ class TupleTest {
     }
 
     @Test
-    void testEqualityOfTuples() {
+    void testEqualityOfTuplesUpToADelta() {
         Tuple first = new Real3Tuple(0.0, -2.0, 1e-4);
         Tuple second = new Real3Tuple(0.0, -2.0, 0.0);
 
         assertTrue(first.equalTo(second), "Equality of tuples should be up to a small delta");
     }
+
+}
+
+class Real3VectorTest {
+
+    @Test
+    void testAdditionOfTwoVectorsGivesVector() {
+        Vector first = new Real3Vector(1.0, 1.0, 1.0);
+        Vector second = new Real3Vector(1.0, 0.0,-1.0);
+        Vector expectedSum = new Real3Vector(2.0,1.0, 0.0);
+
+        assertTrue(expectedSum.equalTo(first.add(second)), "Sum of two vectors should be a vector");
+    }
+
+    @Test
+    void testSubtractionOfTwoVectorsGivesVector() {
+        Vector first = new Real3Vector(2.8, -0.001, 12.0);
+        Vector second = new Real3Vector(2.8, 0.001,0.0);
+        Vector expectedSum = new Real3Vector(0.0,-0.002, 12.0);
+
+        assertTrue(expectedSum.equalTo(first.subtract(second)), "Difference of two vectors should be a vector");
+    }
+}
+
+class Real3PointTest {
 
     @Test
     void testAdditionOfPointAndVectorGivesPoint() {
@@ -31,16 +56,27 @@ class TupleTest {
         assertTrue(expectedSum.equalTo(point.add(vector)), "Sum of a point and a vector should be a point");
     }
 
-}
+    @Test
+    void testSubtractionOfTwoPointsGivesVector() {
+        Point first = new Real3Point(-1.0,-1.0,0.0);
+        Point second = new Real3Point(2.0,-2.0,5.0);
+        Vector expectedDifference = new Real3Vector(-3.0,1.0,-5.0);
 
-class VectorTest {
+        assertTrue(
+                expectedDifference.equalTo(first.subtract(second)),
+                "Difference of two points should be a vector"
+        );
+    }
 
     @Test
-    void testAdditionOfTwoVectorsGivesVector() {
-        Vector first = new Real3Vector(1.0, 1.0, 1.0);
-        Vector second = new Real3Vector(1.0, 0.0,-1.0);
-        Vector expectedSum = new Real3Vector(2.0,1.0, 0.0);
+    void testSubtractionOfPointAndVectorGivesPoint() {
+        Point point = new Real3Point(3.5,0.0,0.0);
+        Vector displacement = new Real3Vector(0.0,0.0,-2.1);
+        Point expectedPosition = new Real3Point(3.5,0.0,2.1);
 
-        assertTrue(expectedSum.equalTo(first.add(second)), "Sum of two vectors should be a vector");
+        assertTrue(
+                expectedPosition.equalTo(point.subtract(displacement)),
+                "Difference of a point and a vector should be a point"
+        );
     }
 }

@@ -13,9 +13,14 @@ public final class Real3Vector extends Real3Tuple implements Vector {
     @Override
     public Real3Vector add(Vector them) {
         return new Real3Vector(
-                this.getX() + them.getX(),
-                this.getY() + them.getY(),
-                this.getZ() + them.getZ()
+            this.getX() + them.getX(),
+            this.getY() + them.getY(),
+            this.getZ() + them.getZ()
         );
+    }
+
+    @Override
+    public Vector subtract(Vector them) {
+        return null;
     }
 }
