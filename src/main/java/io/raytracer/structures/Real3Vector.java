@@ -5,6 +5,12 @@ public final class Real3Vector extends Real3Tuple implements Vector {
         super(x, y, z);
     }
 
+    @Override
+    public double distance(Vector them) {
+        return super.distance(them);
+    }
+
+    @Override
     public Real3Vector add(Vector them) {
         return new Real3Vector(
                 this.getX() + them.getX(),
