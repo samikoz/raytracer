@@ -16,7 +16,7 @@ public final class Real3Vector extends Real3Tuple implements Vector {
 
     @Override
     public double norm() {
-        return 0;
+        return super.distance(new Real3Vector(0,0,0));
     }
 
     @Override
@@ -31,7 +31,7 @@ public final class Real3Vector extends Real3Tuple implements Vector {
 
     @Override
     public Real3Vector negate() {
-        return new Real3Vector(0.0, 0.0, 0.0).subtract(this);
+        return new Real3Vector(0, 0, 0).subtract(this);
     }
 
     @Override
