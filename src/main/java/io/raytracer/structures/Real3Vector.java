@@ -31,6 +31,10 @@ public final class Real3Vector extends Real3Tuple implements Vector {
 
     @Override
     public Vector multiply(double scalar) {
-        return null;
+        return new Real3Vector(
+            scalar*this.getX(),
+            scalar*this.getY(),
+            scalar*this.getZ()
+        );
     }
 }
