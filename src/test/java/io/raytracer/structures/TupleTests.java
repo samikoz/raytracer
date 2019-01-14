@@ -91,7 +91,26 @@ class Real3VectorTest {
     @Test
     void testNorm() {
         Vector vector = new Real3Vector(1, 2, 3);
-        assertEquals(Math.sqrt(14), vector.norm(), 1e-1,"Norm of (1, 2, 3) should be sqrt(14).");
+        assertEquals(Math.sqrt(14), vector.norm(), 1e-3,"Norm of (1, 2, 3) should be sqrt(14).");
+    }
+
+
+    @Test
+    void testNormalise() {
+        Vector vector = new Real3Vector(1,2,3);
+        Vector expectedNormalised = new Real3Vector(1/Math.sqrt(14), 2/Math.sqrt(14), 3/Math.sqrt(14));
+        Vector normalised = vector.normalise();
+
+        assertAll(
+            "Should return a correctly normalised vector.",
+            () -> assertEquals(
+                normalised.norm(), 1, 1e-3, "Normalised vector should have unit norm"
+            ),
+            () -> assertTrue(
+                expectedNormalised.equalTo(normalised),
+                () -> TupleComparator.compareCoordinates(expectedNormalised, normalised)
+            )
+        );
     }
 }
 

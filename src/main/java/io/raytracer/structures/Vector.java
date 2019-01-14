@@ -5,6 +5,8 @@ public interface Vector extends Tuple {
 
     double norm();
 
+    Vector normalise();
+
     Vector add(Vector them);
 
     Vector subtract(Vector them);
