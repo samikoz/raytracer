@@ -39,6 +39,14 @@ public class Real3Tuple implements Tuple {
         );
     }
 
+    Tuple add(Tuple them) {
+        return new Real3Tuple(
+            this.getX() + them.getX(),
+            this.getY() + them.getY(),
+            this.getZ() + them.getZ()
+        );
+    }
+
     Tuple subtract(Tuple them) {
         return new Real3Tuple(
             this.getX() - them.getX(),

@@ -16,11 +16,7 @@ public final class Real3Point extends Real3Tuple implements Point {
 
     @Override
     public Real3Point add(Vector displacement) {
-        return new Real3Point(
-            this.getX() + displacement.getX(),
-            this.getY() + displacement.getY(),
-            this.getZ() + displacement.getZ()
-        );
+        return new Real3Point(super.add(displacement));
     }
 
     @Override
