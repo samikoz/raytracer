@@ -5,6 +5,10 @@ public final class Real3Point extends Real3Tuple implements Point {
         super(x, y, z);
     }
 
+    Real3Point(Tuple tuple) {
+        this(tuple.getX(), tuple.getY(), tuple.getZ());
+    }
+
     @Override
     public double distance(Point them) {
         return super.distance(them);
@@ -21,11 +25,11 @@ public final class Real3Point extends Real3Tuple implements Point {
 
     @Override
     public Real3Vector subtract(Point them) {
-        return null;
+        return new Real3Vector(super.subtract(them));
     }
 
     @Override
     public Real3Point subtract(Vector displacement) {
-        return null;
+        return new Real3Point(super.subtract(displacement));
     }
 }

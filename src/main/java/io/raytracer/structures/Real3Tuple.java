@@ -38,4 +38,12 @@ public class Real3Tuple implements Tuple {
             Math.pow(this.getZ() - them.getZ(), 2)
         );
     }
+
+    Tuple subtract(Tuple them) {
+        return new Real3Tuple(
+            this.getX() - them.getX(),
+            this.getY() - them.getY(),
+            this.getZ() - them.getZ()
+        );
+    }
 }

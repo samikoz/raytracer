@@ -39,9 +39,16 @@ class Real3VectorTest {
     void testSubtractionOfTwoVectorsGivesVector() {
         Vector first = new Real3Vector(2.8, -0.001, 12.0);
         Vector second = new Real3Vector(2.8, 0.001,0.0);
-        Vector expectedSum = new Real3Vector(0.0,-0.002, 12.0);
+        Vector expectedDifference = new Real3Vector(0.0,-0.002, 12.0);
+        Vector subtracted = first.subtract(second);
 
-        assertTrue(expectedSum.equalTo(first.subtract(second)), "Difference of two vectors should be a vector");
+        assertTrue(
+            expectedDifference.equalTo(subtracted),
+            () -> "Subtraction result should be a vector. " +
+                Double.toString(subtracted.getX()) + " should be " + Double.toString(expectedDifference.getX()) +
+                ", " + Double.toString(subtracted.getY()) + " should be " + Double.toString(expectedDifference.getY()) +
+                ", " + Double.toString(subtracted.getZ()) + " should be " + Double.toString(expectedDifference.getZ())
+        );
     }
 
     @Test
