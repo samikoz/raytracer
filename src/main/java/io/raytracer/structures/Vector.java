@@ -8,4 +8,6 @@ public interface Vector extends Tuple {
     Vector subtract(Vector them);
 
     Vector negate();
+
+    Vector multiply(double scalar);
 }

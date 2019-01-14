@@ -28,4 +28,9 @@ public final class Real3Vector extends Real3Tuple implements Vector {
     public Real3Vector negate() {
         return new Real3Vector(0.0, 0.0, 0.0).subtract(this);
     }
+
+    @Override
+    public Vector multiply(double scalar) {
+        return null;
+    }
 }
