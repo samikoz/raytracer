@@ -43,6 +43,14 @@ class Real3VectorTest {
 
         assertTrue(expectedSum.equalTo(first.subtract(second)), "Difference of two vectors should be a vector");
     }
+
+    @Test
+    void testNegation() {
+        Vector vector = new Real3Vector(0.0, 15.2, -5.8);
+        Vector negated = new Real3Vector(0.0, -15.2, 5.8);
+
+        assertTrue(negated.equalTo(vector.negate()), "A vector should negate by negating all coordinaes");
+    }
 }
 
 class Real3PointTest {

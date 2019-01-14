@@ -6,4 +6,6 @@ public interface Vector extends Tuple {
     Vector add(Vector them);
 
     Vector subtract(Vector them);
+
+    Vector negate();
 }

@@ -20,7 +20,12 @@ public final class Real3Vector extends Real3Tuple implements Vector {
     }
 
     @Override
-    public Vector subtract(Vector them) {
+    public Real3Vector subtract(Vector them) {
+        return null;
+    }
+
+    @Override
+    public Real3Vector negate() {
         return null;
     }
 }
