@@ -15,6 +15,11 @@ public final class Real3Vector extends Real3Tuple implements Vector {
     }
 
     @Override
+    public double norm() {
+        return 0;
+    }
+
+    @Override
     public Real3Vector add(Vector them) {
         return new Real3Vector(super.add(them));
     }

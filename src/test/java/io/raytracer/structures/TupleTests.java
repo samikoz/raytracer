@@ -87,6 +87,12 @@ class Real3VectorTest {
                 TupleComparator.compareCoordinates(expectedProduct, product)
         );
     }
+
+    @Test
+    void testNorm() {
+        Vector vector = new Real3Vector(1, 2, 3);
+        assertEquals(Math.sqrt(14), vector.norm(), 1e-1,"Norm of (1, 2, 3) should be sqrt(14).");
+    }
 }
 
 class Real3PointTest {
