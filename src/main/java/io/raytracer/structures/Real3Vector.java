@@ -47,4 +47,9 @@ public final class Real3Vector extends Real3Tuple implements Vector {
             scalar*this.getZ()
         );
     }
+
+    @Override
+    public double dot(Vector them) {
+        return 0;
+    }
 }

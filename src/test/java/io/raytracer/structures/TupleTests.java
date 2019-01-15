@@ -91,7 +91,7 @@ class Real3VectorTest {
     @Test
     void testNorm() {
         Vector vector = new Real3Vector(1, 2, 3);
-        assertEquals(Math.sqrt(14), vector.norm(), 1e-3,"Norm of (1, 2, 3) should be sqrt(14).");
+        assertEquals(Math.sqrt(14), vector.norm(), 1e-3,"Norm of (1, 2, 3) should be sqrt(14)");
     }
 
 
@@ -111,6 +111,15 @@ class Real3VectorTest {
                 () -> TupleComparator.compareCoordinates(expectedNormalised, normalised)
             )
         );
+    }
+
+    @Test
+    void testDotProduct() {
+        Vector first = new Real3Vector(1, 2, 3);
+        Vector second = new Real3Vector(2,3,4);
+        double expectedProduct = 20;
+
+        assertEquals(expectedProduct, first.dot(second), "(1, 2, 3) dot (2, 3, 4) should equal 20.0");
     }
 }
 

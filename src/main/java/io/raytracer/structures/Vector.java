@@ -14,4 +14,6 @@ public interface Vector extends Tuple {
     Vector negate();
 
     Vector multiply(double scalar);
+
+    double dot(Vector them);
 }
