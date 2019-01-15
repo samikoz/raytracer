@@ -21,7 +21,7 @@ public final class Real3Vector extends Real3Tuple implements Vector {
 
     @Override
     public Vector normalise() {
-        return null;
+        return this.multiply(1/this.norm());
     }
 
     @Override
