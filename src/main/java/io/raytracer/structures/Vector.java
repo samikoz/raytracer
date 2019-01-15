@@ -16,4 +16,6 @@ public interface Vector extends Tuple {
     Vector multiply(double scalar);
 
     double dot(Vector them);
+
+    Vector cross(Vector them);
 }

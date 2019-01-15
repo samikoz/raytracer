@@ -52,4 +52,9 @@ public final class Real3Vector extends Real3Tuple implements Vector {
     public double dot(Vector them) {
         return this.getX()*them.getX() + this.getY()*them.getY() + this.getZ()*them.getZ();
     }
+
+    @Override
+    public Vector cross(Vector them) {
+        return null;
+    }
 }

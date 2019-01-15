@@ -121,6 +121,20 @@ class Real3VectorTest {
 
         assertEquals(expectedProduct, first.dot(second), "(1, 2, 3) dot (2, 3, 4) should equal 20.0");
     }
+
+    @Test
+    void cross() {
+        Vector first = new Real3Vector(1, 2, 3);
+        Vector second = new Real3Vector(2, 3, 4);
+        Vector expectedCrossProduct = new Real3Vector(-1, 2, -1);
+        Vector crossed = first.cross(second);
+
+        assertTrue(
+            expectedCrossProduct.equalTo(crossed),
+                () -> "(1, 2, 3) cross (2, 3, 4) should be a vector. " +
+                    TupleComparator.compareCoordinates(expectedCrossProduct, crossed)
+        );
+    }
 }
 
 class Real3PointTest {
