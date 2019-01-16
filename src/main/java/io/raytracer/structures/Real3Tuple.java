@@ -54,4 +54,12 @@ public class Real3Tuple implements Tuple {
             this.getZ() - them.getZ()
         );
     }
+
+    Tuple multiply(double scalar) {
+        return new Real3Tuple(
+            scalar * this.getX(),
+            scalar * this.getY(),
+            scalar * this.getZ()
+        );
+    }
 }
