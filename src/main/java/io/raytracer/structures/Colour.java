@@ -1,11 +1,9 @@
 package io.raytracer.structures;
 
-public interface Colour {
+public interface Colour extends Tuple {
     double getRed();
     double getGreen();
     double getBlue();
-
-    boolean equalTo(Colour them);
 
     Colour add(Colour them);
     Colour subtract(Colour them);

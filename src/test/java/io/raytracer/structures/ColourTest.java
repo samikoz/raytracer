@@ -13,9 +13,9 @@ class ColourTest {
 
     @Test
     void add() {
-        Colour first = new UnitColour(0.9, 0.6, 0.75);
-        Colour second = new UnitColour(0.7, 0.1, 0.25);
-        Colour expectedSum = new UnitColour(1.6, 0.7, 1);
+        Colour first = new TupleColour(0.9, 0.6, 0.75);
+        Colour second = new TupleColour(0.7, 0.1, 0.25);
+        Colour expectedSum = new TupleColour(1.6, 0.7, 1);
         Colour summed = first.add(second);
 
         assertTrue(
@@ -26,9 +26,9 @@ class ColourTest {
 
     @Test
     void subtract() {
-        Colour first = new UnitColour(0.9, 0.6, 0.75);
-        Colour second = new UnitColour(0.7, 0.1, 0.25);
-        Colour expectedDifference = new UnitColour(0.2, 0.5, 0.5);
+        Colour first = new TupleColour(0.9, 0.6, 0.75);
+        Colour second = new TupleColour(0.7, 0.1, 0.25);
+        Colour expectedDifference = new TupleColour(0.2, 0.5, 0.5);
         Colour subtracted = first.subtract(second);
 
         assertTrue(
@@ -40,8 +40,8 @@ class ColourTest {
 
     @Test
     void multiply() {
-        Colour first = new UnitColour(0.2, 0.3, 0.4);
-        Colour expectedProduct = new UnitColour(0.4, 0.6, 0.8);
+        Colour first = new TupleColour(0.2, 0.3, 0.4);
+        Colour expectedProduct = new TupleColour(0.4, 0.6, 0.8);
         Colour multiplied = first.multiply(2);
 
         assertTrue(
@@ -53,9 +53,9 @@ class ColourTest {
 
     @Test
     void mix() {
-        Colour first = new UnitColour(1, 0.2, 0.4);
-        Colour second = new UnitColour(0.9, 1, 0.1);
-        Colour expectedProduct = new UnitColour(0.9, 0.2, 0.04);
+        Colour first = new TupleColour(1, 0.2, 0.4);
+        Colour second = new TupleColour(0.9, 1, 0.1);
+        Colour expectedProduct = new TupleColour(0.9, 0.2, 0.04);
         Colour mixed = first.mix(second);
 
         assertTrue(
