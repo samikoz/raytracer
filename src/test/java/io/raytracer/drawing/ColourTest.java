@@ -2,14 +2,20 @@ package io.raytracer.drawing;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import static org.junit.jupiter.api.Assertions.*;
 
-class ColourTest {
+class ColourComparator {
     static String compareColourComponents(Colour expected, Colour actual) {
         return expected.getRed() + " should be " + actual.getRed() +
-            ", " + expected.getGreen() + " should be " + actual.getGreen() +
-            ", " + expected.getBlue() + " should be " + actual.getBlue();
+                ", " + expected.getGreen() + " should be " + actual.getGreen() +
+                ", " + expected.getBlue() + " should be " + actual.getBlue();
     }
+}
+
+class ColourTest {
 
     @Test
     void add() {
@@ -20,7 +26,7 @@ class ColourTest {
 
         assertTrue(
             expectedSum.equalTo(summed),
-            () -> "Sum of Colours should be a colour. " + compareColourComponents(expectedSum, summed)
+            () -> "Sum of Colours should be a colour. " + ColourComparator.compareColourComponents(expectedSum, summed)
         );
     }
 
@@ -34,7 +40,7 @@ class ColourTest {
         assertTrue(
             expectedDifference.equalTo(subtracted),
             () -> "Subtraction of Colours should be a colour. " +
-                compareColourComponents(expectedDifference, subtracted)
+                ColourComparator.compareColourComponents(expectedDifference, subtracted)
         );
     }
 
@@ -47,7 +53,7 @@ class ColourTest {
         assertTrue(
             expectedProduct.equalTo(multiplied),
             () -> "Colour multiplied by scalar should be a colour. " +
-                compareColourComponents(expectedProduct, multiplied)
+                ColourComparator.compareColourComponents(expectedProduct, multiplied)
         );
     }
 
@@ -60,7 +66,52 @@ class ColourTest {
 
         assertTrue(
             expectedProduct.equalTo(mixed),
-            () -> "Mixture of Colours should be a colour. " + compareColourComponents(expectedProduct, mixed)
+            () -> "Mixture of Colours should be a colour. " +
+                ColourComparator.compareColourComponents(expectedProduct, mixed)
+        );
+    }
+}
+
+class CanvasTest{
+
+    @Test
+    void defaultCanvasColour() {
+        Canvas canvas = new PPMCanvas(2, 3);
+
+        Set<Colour> canvasColours = new HashSet<>();
+        for (Colour c : canvas) {
+            canvasColours.add(c);
+        }
+
+        assertAll(
+            "Default canvas colour is all black.",
+            () -> assertEquals(canvasColours.size(), 1, "Should be monocoloured by default."),
+            () -> assertTrue(canvasColours.contains(new Unit3TupleColour(0, 0, 0)), "Should have black colour.")
+        );
+    }
+
+    @Test
+    void writeAndReadFromCanvas() {
+        Colour first = new Unit3TupleColour(0.5, 0.2, 0.3);
+        Colour second = new Unit3TupleColour(0, 0, 0.4);
+        Canvas canvas = new PPMCanvas(10, 20);
+
+        canvas.write(0, 19, first);
+        canvas.write(2, 0, second);
+
+        Colour firstRead = canvas.read(0, 19);
+        Colour secondRead = canvas.read(2, 0);
+
+        assertAll(
+            "Reading should return written objects.",
+            () -> assertTrue(
+                firstRead.equalTo(first),
+                () -> ColourComparator.compareColourComponents(firstRead, first)
+            ),
+            () -> assertTrue(
+                secondRead.equalTo(second),
+                () -> ColourComparator.compareColourComponents(secondRead, second)
+            )
         );
     }
 }
