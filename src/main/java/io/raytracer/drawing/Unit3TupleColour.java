@@ -1,6 +1,9 @@
-package io.raytracer.mathsy;
+package io.raytracer.drawing;
 
-public class Unit3TupleColour extends Real3Tuple implements Colour  {
+import io.raytracer.mathsy.Real3Tuple;
+import io.raytracer.mathsy.Tuple;
+
+public class Unit3TupleColour extends Real3Tuple implements Colour {
 
     public Unit3TupleColour(double red, double green, double blue) {
         super(red, green, blue);

@@ -31,7 +31,7 @@ public class Real3Tuple implements Tuple {
         return (this.getClass() == them.getClass() && this.distance(them) < 1e-3);
     }
 
-    double distance(Tuple them) {
+    public double distance(Tuple them) {
         return Math.sqrt(
             Math.pow(this.getX() - them.getX(), 2) +
             Math.pow(this.getY() - them.getY(), 2) +
@@ -39,7 +39,7 @@ public class Real3Tuple implements Tuple {
         );
     }
 
-    Tuple add(Tuple them) {
+    public Tuple add(Tuple them) {
         return new Real3Tuple(
             this.getX() + them.getX(),
             this.getY() + them.getY(),
@@ -47,7 +47,7 @@ public class Real3Tuple implements Tuple {
         );
     }
 
-    Tuple subtract(Tuple them) {
+    public Tuple subtract(Tuple them) {
         return new Real3Tuple(
             this.getX() - them.getX(),
             this.getY() - them.getY(),
@@ -55,7 +55,7 @@ public class Real3Tuple implements Tuple {
         );
     }
 
-    Tuple multiply(double scalar) {
+    public Tuple multiply(double scalar) {
         return new Real3Tuple(
             scalar * this.getX(),
             scalar * this.getY(),

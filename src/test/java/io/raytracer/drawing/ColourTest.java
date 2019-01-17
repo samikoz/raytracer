@@ -1,4 +1,4 @@
-package io.raytracer.mathsy;
+package io.raytracer.drawing;
 
 import org.junit.jupiter.api.Test;
 
