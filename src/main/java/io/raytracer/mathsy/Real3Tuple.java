@@ -1,4 +1,4 @@
-package io.raytracer.structures;
+package io.raytracer.mathsy;
 
 public class Real3Tuple implements Tuple {
     private double x;

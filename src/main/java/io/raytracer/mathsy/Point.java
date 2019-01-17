@@ -1,4 +1,4 @@
-package io.raytracer.structures;
+package io.raytracer.mathsy;
 
 public interface Point extends Tuple {
     double distance(Point them);

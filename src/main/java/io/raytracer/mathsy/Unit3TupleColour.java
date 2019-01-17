@@ -1,12 +1,12 @@
-package io.raytracer.structures;
+package io.raytracer.mathsy;
 
-public class TupleColour extends Real3Tuple implements Colour  {
+public class Unit3TupleColour extends Real3Tuple implements Colour  {
 
-    public TupleColour(double red, double green, double blue) {
+    public Unit3TupleColour(double red, double green, double blue) {
         super(red, green, blue);
     }
 
-    TupleColour(Tuple them) {
+    Unit3TupleColour(Tuple them) {
         this(them.getX(), them.getY(), them.getZ());
     }
 
@@ -27,22 +27,22 @@ public class TupleColour extends Real3Tuple implements Colour  {
 
     @Override
     public Colour add(Colour them) {
-        return new TupleColour(super.add(them));
+        return new Unit3TupleColour(super.add(them));
     }
 
     @Override
     public Colour subtract(Colour them) {
-        return new TupleColour(super.subtract(them));
+        return new Unit3TupleColour(super.subtract(them));
     }
 
     @Override
     public Colour multiply(double scalar) {
-        return new TupleColour(super.multiply(scalar));
+        return new Unit3TupleColour(super.multiply(scalar));
     }
 
     @Override
     public Colour mix(Colour them) {
-        return new TupleColour(
+        return new Unit3TupleColour(
             this.getRed()*them.getRed(),
             this.getGreen()*them.getGreen(),
             this.getBlue()*them.getBlue()

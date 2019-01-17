@@ -1,4 +1,4 @@
-package io.raytracer.structures;
+package io.raytracer.mathsy;
 
 public final class Real3Vector extends Real3Tuple implements Vector {
     public Real3Vector(double x, double y, double z) {

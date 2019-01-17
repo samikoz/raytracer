@@ -1,6 +1,6 @@
-package io.raytracer.structures;
+package io.raytracer.mathsy;
 
-interface Tuple {
+public interface Tuple {
     double getX();
     double getY();
     double getZ();

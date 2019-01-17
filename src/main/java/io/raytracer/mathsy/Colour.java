@@ -1,4 +1,4 @@
-package io.raytracer.structures;
+package io.raytracer.mathsy;
 
 public interface Colour extends Tuple {
     double getRed();

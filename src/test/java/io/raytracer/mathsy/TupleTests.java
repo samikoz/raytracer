@@ -1,4 +1,4 @@
-package io.raytracer.structures;
+package io.raytracer.mathsy;
 
 import org.junit.jupiter.api.Test;
 
