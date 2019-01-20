@@ -1,11 +1,11 @@
 package io.raytracer.drawing;
 
-import io.raytracer.mathsy.Tuple;
-
-public interface Colour extends Tuple {
+public interface Colour {
     double getRed();
     double getGreen();
     double getBlue();
+
+    boolean equalTo(Colour them);
 
     Colour add(Colour them);
     Colour subtract(Colour them);

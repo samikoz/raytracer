@@ -1,6 +1,12 @@
 package io.raytracer.mathsy;
 
-public interface Point extends Tuple {
+public interface Point {
+    double getX();
+    double getY();
+    double getZ();
+
+    boolean equalTo(Point them);
+
     double distance(Point them);
 
     Point add(Vector displacement);

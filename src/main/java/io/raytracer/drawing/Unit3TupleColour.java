@@ -1,46 +1,68 @@
 package io.raytracer.drawing;
 
-import io.raytracer.mathsy.Real3Tuple;
-import io.raytracer.mathsy.Tuple;
-
-public class Unit3TupleColour extends Real3Tuple implements Colour {
+public class Unit3TupleColour implements Colour {
+    private double red;
+    private double green;
+    private double blue;
 
     public Unit3TupleColour(double red, double green, double blue) {
-        super(red, green, blue);
-    }
-
-    Unit3TupleColour(Tuple them) {
-        this(them.getX(), them.getY(), them.getZ());
+        this.red = red;
+        this.green = green;
+        this.blue = blue;
     }
 
     @Override
     public double getRed() {
-        return super.getX();
+        return red;
     }
 
     @Override
     public double getGreen() {
-        return super.getY();
+        return green;
     }
 
     @Override
     public double getBlue() {
-        return super.getZ();
+        return blue;
+    }
+
+    private double distance(Unit3TupleColour them) {
+        return Math.sqrt(
+            Math.pow(this.getRed() - them.getRed(), 2) +
+            Math.pow(this.getGreen() - them.getGreen(), 2) +
+            Math.pow(this.getBlue() - them.getBlue(), 2)
+        );
+    }
+
+    public boolean equalTo(Colour them) {
+        return (this.getClass() == them.getClass() && this.distance((Unit3TupleColour) them) < 1e-3);
     }
 
     @Override
-    public Colour add(Colour them) {
-        return new Unit3TupleColour(super.add(them));
+    public Unit3TupleColour add(Colour them) {
+        return new Unit3TupleColour(
+            this.getRed() + them.getRed(),
+            this.getGreen() + them.getGreen(),
+            this.getBlue() + them.getBlue()
+        );
     }
 
     @Override
     public Colour subtract(Colour them) {
-        return new Unit3TupleColour(super.subtract(them));
+        return new Unit3TupleColour(
+            this.getRed() - them.getRed(),
+            this.getGreen() - them.getGreen(),
+            this.getBlue() - them.getBlue()
+        );
     }
 
     @Override
     public Colour multiply(double scalar) {
-        return new Unit3TupleColour(super.multiply(scalar));
+        return new Unit3TupleColour(
+            scalar*this.getRed(),
+            scalar*this.getGreen(),
+            scalar*this.getBlue()
+        );
     }
 
     @Override

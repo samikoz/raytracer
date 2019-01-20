@@ -1,6 +1,12 @@
 package io.raytracer.mathsy;
 
-public interface Vector extends Tuple {
+public interface Vector {
+    double getX();
+    double getY();
+    double getZ();
+
+    boolean equalTo(Vector them);
+
     double distance(Vector them);
 
     double norm();
