@@ -1,5 +1,7 @@
 package io.raytracer.mathsy;
 
+import java.util.Arrays;
+
 class Real3Tuple implements Vector, Point {
     private double x;
     private double y;
@@ -26,18 +28,18 @@ class Real3Tuple implements Vector, Point {
         return z;
     }
 
-    private boolean equalTo(Real3Tuple them) {
-        return (this.getClass() == them.getClass() && this.distance(them) < 1e-3);
+    @Override
+    public int hashCode() {
+        double[] coords = {this.getX(), this.getY(), this.getZ()};
+        return Arrays.hashCode(coords);
     }
 
     @Override
-    public boolean equalTo(Vector them) {
-        return equalTo((Real3Tuple) them);
-    }
+    public boolean equals(Object them) {
+        if (this.getClass() != them.getClass()) return false;
 
-    @Override
-    public boolean equalTo(Point them) {
-        return equalTo((Real3Tuple) them);
+        Real3Tuple themTuple = (Real3Tuple) them;
+        return (this.distance(themTuple) < 1e-3);
     }
 
     private double distance(Real3Tuple them) {

@@ -1,5 +1,7 @@
 package io.raytracer.drawing;
 
+import java.util.Arrays;
+
 public class Unit3TupleColour implements Colour {
     private double red;
     private double green;
@@ -34,8 +36,18 @@ public class Unit3TupleColour implements Colour {
         );
     }
 
-    public boolean equalTo(Colour them) {
-        return (this.getClass() == them.getClass() && this.distance((Unit3TupleColour) them) < 1e-3);
+    @Override
+    public int hashCode() {
+        double[] coords = {this.getRed(), this.getGreen(), this.getBlue()};
+        return Arrays.hashCode(coords);
+    }
+
+    @Override
+    public boolean equals(Object them) {
+        if (this.getClass() != them.getClass()) return false;
+
+        Unit3TupleColour themColour = (Unit3TupleColour) them;
+        return (this.distance(themColour) < 1e-3);
     }
 
     @Override

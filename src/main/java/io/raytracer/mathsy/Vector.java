@@ -5,8 +5,6 @@ public interface Vector {
     double getY();
     double getZ();
 
-    boolean equalTo(Vector them);
-
     double distance(Vector them);
 
     double norm();

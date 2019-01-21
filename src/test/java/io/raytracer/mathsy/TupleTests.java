@@ -27,7 +27,7 @@ class Real3TupleTest {
         Vector first = new Real3Tuple(0.0, -2.0, 1e-4);
         Vector second = new Real3Tuple(0.0, -2.0, 0.0);
 
-        assertTrue(first.equalTo(second), "Equality of tuples should be up to a small delta");
+        assertEquals(first, second, "Equality of tuples should be up to a small delta");
     }
 
 }
@@ -41,8 +41,8 @@ class Real3VectorTest {
         Vector expectedSum = new Real3Tuple(2.0,1.0, 0.0);
         Vector added = first.add(second);
 
-        assertTrue(
-            expectedSum.equalTo(added),
+        assertEquals(
+            expectedSum, added,
             () -> "Sum of two vectors should be a vector. " +
                 TupleComparator.compareCoordinates(expectedSum, added)
         );
@@ -55,8 +55,8 @@ class Real3VectorTest {
         Vector expectedDifference = new Real3Tuple(0.0,-0.002, 12.0);
         Vector subtracted = first.subtract(second);
 
-        assertTrue(
-            expectedDifference.equalTo(subtracted),
+        assertEquals(
+            expectedDifference, subtracted,
             () -> "Subtraction of two vectors should be a vector. " +
                 TupleComparator.compareCoordinates(expectedDifference, subtracted)
         );
@@ -68,8 +68,8 @@ class Real3VectorTest {
         Vector expectedNegation = new Real3Tuple(0.0, -15.2, 5.8);
         Vector negated = vector.negate();
 
-        assertTrue(
-            expectedNegation.equalTo(negated),
+        assertEquals(
+            expectedNegation, negated,
             () -> "Negation of a vector should be a vector. " +
                 TupleComparator.compareCoordinates(expectedNegation, negated)
         );
@@ -81,8 +81,8 @@ class Real3VectorTest {
         Vector expectedProduct = new Real3Tuple(1.25, -0.2,0.5);
         Vector product = vector.multiply(0.5);
 
-        assertTrue(
-            expectedProduct.equalTo(product),
+        assertEquals(
+            expectedProduct, product,
             () -> "A vector times a scalar should be a vector. " +
                 TupleComparator.compareCoordinates(expectedProduct, product)
         );
@@ -106,8 +106,8 @@ class Real3VectorTest {
             () -> assertEquals(
                 normalised.norm(), 1, 1e-3, "Normalised vector should have unit norm"
             ),
-            () -> assertTrue(
-                expectedNormalised.equalTo(normalised),
+            () -> assertEquals(
+                expectedNormalised, normalised,
                 () -> TupleComparator.compareCoordinates(expectedNormalised, normalised)
             )
         );
@@ -129,8 +129,8 @@ class Real3VectorTest {
         Vector expectedCrossProduct = new Real3Tuple(-1, 2, -1);
         Vector crossed = first.cross(second);
 
-        assertTrue(
-            expectedCrossProduct.equalTo(crossed),
+        assertEquals(
+            expectedCrossProduct, crossed,
                 () -> "(1, 2, 3) cross (2, 3, 4) should be a vector. " +
                     TupleComparator.compareCoordinates(expectedCrossProduct, crossed)
         );
@@ -146,8 +146,8 @@ class Real3PointTest {
         Point expectedSum = new Real3Tuple(7.0, 3.9, -0.2);
         Point summed = point.add(vector);
 
-        assertTrue(
-            expectedSum.equalTo(summed),
+        assertEquals(
+            expectedSum, summed,
             () -> "Sum of a point and a vector should be a point. " +
                 TupleComparator.compareCoordinates(expectedSum, summed)
         );
@@ -160,8 +160,8 @@ class Real3PointTest {
         Vector expectedDifference = new Real3Tuple(-3.0,1.0,-5.0);
         Vector subtracted = first.subtract(second);
 
-        assertTrue(
-            expectedDifference.equalTo(subtracted),
+        assertEquals(
+            expectedDifference, subtracted,
             () -> "Difference of two points should be a vector. " +
                 TupleComparator.compareCoordinates(expectedDifference, subtracted)
         );
@@ -174,8 +174,8 @@ class Real3PointTest {
         Point expectedPosition = new Real3Tuple(3.5,0.0,2.1);
         Point subtracted = point.subtract(displacement);
 
-        assertTrue(
-            expectedPosition.equalTo(subtracted),
+        assertEquals(
+            expectedPosition, subtracted,
             () -> "Difference of a point and a vector should be a point. " +
                 TupleComparator.compareCoordinates(expectedPosition, subtracted)
         );

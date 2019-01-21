@@ -24,8 +24,8 @@ class ColourTest {
         Colour expectedSum = new Unit3TupleColour(1.6, 0.7, 1);
         Colour summed = first.add(second);
 
-        assertTrue(
-            expectedSum.equalTo(summed),
+        assertEquals(
+            expectedSum, summed,
             () -> "Sum of Colours should be a colour. " + ColourComparator.compareColourComponents(expectedSum, summed)
         );
     }
@@ -37,8 +37,8 @@ class ColourTest {
         Colour expectedDifference = new Unit3TupleColour(0.2, 0.5, 0.5);
         Colour subtracted = first.subtract(second);
 
-        assertTrue(
-            expectedDifference.equalTo(subtracted),
+        assertEquals(
+            expectedDifference, subtracted,
             () -> "Subtraction of Colours should be a colour. " +
                 ColourComparator.compareColourComponents(expectedDifference, subtracted)
         );
@@ -50,8 +50,8 @@ class ColourTest {
         Colour expectedProduct = new Unit3TupleColour(0.4, 0.6, 0.8);
         Colour multiplied = first.multiply(2);
 
-        assertTrue(
-            expectedProduct.equalTo(multiplied),
+        assertEquals(
+            expectedProduct, multiplied,
             () -> "Colour multiplied by scalar should be a colour. " +
                 ColourComparator.compareColourComponents(expectedProduct, multiplied)
         );
@@ -64,8 +64,8 @@ class ColourTest {
         Colour expectedProduct = new Unit3TupleColour(0.9, 0.2, 0.04);
         Colour mixed = first.mix(second);
 
-        assertTrue(
-            expectedProduct.equalTo(mixed),
+        assertEquals(
+            expectedProduct, mixed,
             () -> "Mixture of Colours should be a colour. " +
                 ColourComparator.compareColourComponents(expectedProduct, mixed)
         );
@@ -104,12 +104,12 @@ class CanvasTest{
 
         assertAll(
             "Reading should return written objects.",
-            () -> assertTrue(
-                firstRead.equalTo(first),
+            () -> assertEquals(
+                firstRead, first,
                 () -> ColourComparator.compareColourComponents(firstRead, first)
             ),
-            () -> assertTrue(
-                secondRead.equalTo(second),
+            () -> assertEquals(
+                secondRead, second,
                 () -> ColourComparator.compareColourComponents(secondRead, second)
             )
         );
