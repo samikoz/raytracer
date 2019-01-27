@@ -116,10 +116,25 @@ class CanvasTest{
     }
 
     @Test
-    void exportCanvasToPPM() {
+    void correctPPMExportHeader() {
         Canvas canvas = new PPMCanvas(5, 3);
         String expectedPPMFileStart = "P3\n5 3\n255";
 
         assertTrue(canvas.exportToPPM().startsWith(expectedPPMFileStart));
+    }
+
+    @Test
+    void correctPPMExportPixelData() {
+        Canvas canvas = new PPMCanvas(5, 3);
+        canvas.write(0, 0, new Unit3TupleColour(1.5, 0,0));
+        canvas.write(2, 1, new Unit3TupleColour(0, 0.5, 0));
+        canvas.write(4, 2, new Unit3TupleColour(-0.5, 0, 1));
+
+        String expectedFirstRowData = "255 0 0 0 0 0 0 0 0 0 0 0 0 0 0\n";
+        String expectedSecondRowData = "0 0 0 0 0 0 0 128 0 0 0 0 0 0 0\n";
+        String expectedThirdRowData = "0 0 0 0 0 0 0 0 0 0 0 0 0 0 255\n";
+        String expectedPixelData = expectedFirstRowData + expectedSecondRowData + expectedThirdRowData;
+
+        assertTrue(canvas.exportToPPM().endsWith(expectedPixelData));
     }
 }
