@@ -7,6 +7,7 @@ import java.util.NoSuchElementException;
 public class PPMCanvas implements Canvas {
     private Colour[][] pixelGrid;
     static private final Colour initialColour = new Unit3TupleColour(0 ,0,0);
+    private final String exportHeader;
 
     private class PPMCanvasIterator implements Iterator<Colour> {
         private int horizontalIndex;
@@ -41,8 +42,8 @@ public class PPMCanvas implements Canvas {
     public Iterator<Colour> iterator() {
         return new PPMCanvasIterator();
     }
-
     public PPMCanvas(int x, int y) {
+        exportHeader = "P3\n" + x + " " + y + "\n255";
         pixelGrid = new Colour[y][x];
         for (int i = 0; i < y; i++) {
             Arrays.fill(pixelGrid[i], initialColour);
@@ -61,6 +62,6 @@ public class PPMCanvas implements Canvas {
 
     @Override
     public String exportToPPM() {
-        return null;
+        return exportHeader;
     }
 }
