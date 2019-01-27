@@ -51,11 +51,11 @@ public class PPMCanvas implements Canvas {
 
     @Override
     public void write(int x, int y, Colour colour) {
-
+        pixelGrid[y][x] = colour;
     }
 
     @Override
     public Colour read(int x, int y) {
-        return null;
+        return pixelGrid[y][x];
     }
 }
