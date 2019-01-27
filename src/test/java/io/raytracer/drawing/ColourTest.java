@@ -114,4 +114,12 @@ class CanvasTest{
             )
         );
     }
+
+    @Test
+    void exportCanvasToPPM() {
+        Canvas canvas = new PPMCanvas(5, 3);
+        String expectedPPMFileStart = "P3\n5 3\n255";
+
+        assertTrue(canvas.exportToPPM().startsWith(expectedPPMFileStart));
+    }
 }

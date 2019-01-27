@@ -58,4 +58,9 @@ public class PPMCanvas implements Canvas {
     public Colour read(int x, int y) {
         return pixelGrid[y][x];
     }
+
+    @Override
+    public String exportToPPM() {
+        return null;
+    }
 }

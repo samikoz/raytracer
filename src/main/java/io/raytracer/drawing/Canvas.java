@@ -9,4 +9,6 @@ public interface Canvas extends Iterable<Colour> {
 
     void write(int x, int y, Colour colour);
     Colour read(int x, int y);
+
+    String exportToPPM();
 }
