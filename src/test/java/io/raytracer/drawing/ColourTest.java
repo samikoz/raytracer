@@ -120,7 +120,10 @@ class CanvasTest{
         Canvas canvas = new PPMCanvas(5, 3);
         String expectedPPMFileStart = "P3\n5 3\n255";
 
-        assertTrue(canvas.exportToPPM().startsWith(expectedPPMFileStart));
+        assertTrue(
+            canvas.exportToPPM().startsWith(expectedPPMFileStart),
+            "Exported canvas header should have correct format"
+        );
     }
 
     @Test
@@ -135,6 +138,9 @@ class CanvasTest{
         String expectedThirdRowData = "0 0 0 0 0 0 0 0 0 0 0 0 0 0 255\n";
         String expectedPixelData = expectedFirstRowData + expectedSecondRowData + expectedThirdRowData;
 
-        assertTrue(canvas.exportToPPM().endsWith(expectedPixelData));
+        assertTrue(
+            canvas.exportToPPM().endsWith(expectedPixelData),
+            "Canvas should export correct pixel data."
+        );
     }
 }
