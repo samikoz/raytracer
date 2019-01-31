@@ -17,7 +17,7 @@ public class PPMCanvas implements Canvas {
     }
 
     public PPMCanvas(int x, int y) {
-        exportHeader = "P3\n" + x + " " + y + "\n255";
+        exportHeader = "P3\n" + x + " " + y + "\n255\n";
 
         Colour[] rowPrototype = new Colour[x];
         Arrays.fill(rowPrototype, initialColour);
@@ -40,7 +40,8 @@ public class PPMCanvas implements Canvas {
 
     @Override
     public String exportToPPM() {
-        return exportHeader;
+        StringBuilder exported = new StringBuilder(exportHeader);
+        return exported.toString();
     }
 
     private class PPMCanvasIterator implements Iterator<Colour> {

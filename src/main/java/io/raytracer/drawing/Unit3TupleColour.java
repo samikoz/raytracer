@@ -1,11 +1,14 @@
 package io.raytracer.drawing;
 
 import java.util.Arrays;
+import java.util.List;
 
 public class Unit3TupleColour implements Colour {
     private double red;
     private double green;
     private double blue;
+
+    private static int exportScale = 255;
 
     public Unit3TupleColour(double red, double green, double blue) {
         this.red = red;
@@ -26,6 +29,21 @@ public class Unit3TupleColour implements Colour {
     @Override
     public double getBlue() {
         return blue;
+    }
+
+    private int normaliseComponent(double componentValue, int scaleFactor) {
+        if (componentValue <= 0) {
+            componentValue = 0;
+        } else if (componentValue >= 1) {
+            componentValue = 1;
+        }
+        return (int) Math.round(componentValue * scaleFactor);
+    }
+
+    String exportNormalised() {
+        return Integer.toString(normaliseComponent(getRed(), exportScale)) + " " +
+            Integer.toString(normaliseComponent(getGreen(), exportScale)) + " " +
+            Integer.toString(normaliseComponent(getBlue(), exportScale));
     }
 
     private double distance(Unit3TupleColour them) {
