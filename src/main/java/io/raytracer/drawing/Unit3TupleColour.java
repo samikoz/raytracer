@@ -40,7 +40,8 @@ public class Unit3TupleColour implements Colour {
         return (int) Math.round(componentValue * scaleFactor);
     }
 
-    String exportNormalised() {
+    @Override
+    public String exportNormalised() {
         return Integer.toString(normaliseComponent(getRed(), exportScale)) + " " +
             Integer.toString(normaliseComponent(getGreen(), exportScale)) + " " +
             Integer.toString(normaliseComponent(getBlue(), exportScale));

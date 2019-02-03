@@ -78,16 +78,10 @@ class CanvasTest{
     void defaultCanvasColour() {
         Canvas canvas = new PPMCanvas(2, 3);
 
-        Set<Colour> canvasColours = new HashSet<>();
-        for (Colour c : canvas) {
-            canvasColours.add(c);
-        }
+        Colour defaultCanvasColour = canvas.read(1, 1);
+        Colour black = new Unit3TupleColour(0,0,0);
 
-        assertAll(
-            "Default canvas colour is all black.",
-            () -> assertEquals(canvasColours.size(), 1, "Should be monocoloured by default."),
-            () -> assertTrue(canvasColours.contains(new Unit3TupleColour(0, 0, 0)), "Should have black colour.")
-        );
+        assertEquals(defaultCanvasColour, black, "Default canvas colour should be black");
     }
 
     @Test
@@ -118,7 +112,7 @@ class CanvasTest{
     @Test
     void correctPPMExportHeader() {
         Canvas canvas = new PPMCanvas(5, 3);
-        String expectedPPMFileStart = "P3\n5 3\n255";
+        String expectedPPMFileStart = "P3\n5 3\n255\n";
 
         assertTrue(
             canvas.exportToPPM().startsWith(expectedPPMFileStart),

@@ -9,4 +9,6 @@ public interface Colour {
     Colour subtract(Colour them);
     Colour multiply(double scalar);
     Colour mix(Colour them);
+
+    String exportNormalised();
 }
