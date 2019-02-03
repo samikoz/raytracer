@@ -137,4 +137,30 @@ class CanvasTest{
             "Canvas should export correct pixel data."
         );
     }
+
+    @Test
+    void noLinesLongerThan70InExportedString() {
+        Canvas canvas = new PPMCanvas(10, 2);
+        Colour aColour = new Unit3TupleColour(1, 0.8, 0.6);
+
+        for (int i = 0; i < 10; ++i) {
+            canvas.write(i, 0, aColour);
+            canvas.write(i, 1, aColour);
+        }
+
+        String expectedPreLineBreak = "255 204 153 255 204 153 255 204 153 255 204 153 255 204 153 255 204";
+        String expectedPostLineBreak = "153 255 204 153 255 204 153 255 204 153 255 204 153";
+
+        assertTrue(
+            canvas.exportToPPM().endsWith(expectedPreLineBreak + "\n" + expectedPostLineBreak),
+            "Exporting should correctly break lines longer than 70 characters."
+        );
+    }
+
+    @Test
+    void exportTerminatedByNewline() {
+        Canvas canvas = new PPMCanvas(5, 3);
+
+        assertTrue(canvas.exportToPPM().endsWith("\n"), "Export should be terminated by a newline.");
+    }
 }
