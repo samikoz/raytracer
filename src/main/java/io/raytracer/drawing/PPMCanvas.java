@@ -5,6 +5,7 @@ import java.util.*;
 public class PPMCanvas implements Canvas {
     private PPMCanvasRow[] pixelGrid;
     static private final Colour initialColour = new Unit3TupleColour(0 ,0,0);
+    static private final int exportedLineMaxLenght = 70;
     private final String exportHeader;
 
     public PPMCanvas(int x, int y) {
@@ -26,12 +27,23 @@ public class PPMCanvas implements Canvas {
         return pixelGrid[y].get(x);
     }
 
+    private String putLineBreaks(String exportRow) {
+        StringBuilder rowToBreak = new StringBuilder(exportRow);
+        int numberOfBreaks = exportRow.length() / exportedLineMaxLenght;
+        for (int breakNumber = 1; breakNumber <= numberOfBreaks; breakNumber++) {
+            int whitespacePosition = breakNumber*exportedLineMaxLenght;
+            while (rowToBreak.charAt(whitespacePosition) != ' ') whitespacePosition--;
+            rowToBreak.setCharAt(whitespacePosition, '\n');
+        }
+        return rowToBreak.toString();
+    }
+
     @Override
     public String exportToPPM() {
         StringBuilder exported = new StringBuilder(exportHeader);
 
         for (PPMCanvasRow row : rows()) {
-            exported.append(String.join(" ", row.export()));
+            exported.append(putLineBreaks(String.join(" ", row.export())));
             exported.append("\n");
         }
         return exported.toString();

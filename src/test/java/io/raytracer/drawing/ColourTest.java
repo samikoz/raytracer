@@ -152,15 +152,8 @@ class CanvasTest{
         String expectedPostLineBreak = "153 255 204 153 255 204 153 255 204 153 255 204 153";
 
         assertTrue(
-            canvas.exportToPPM().endsWith(expectedPreLineBreak + "\n" + expectedPostLineBreak),
+            canvas.exportToPPM().endsWith(expectedPreLineBreak + "\n" + expectedPostLineBreak + "\n"),
             "Exporting should correctly break lines longer than 70 characters."
         );
-    }
-
-    @Test
-    void exportTerminatedByNewline() {
-        Canvas canvas = new PPMCanvas(5, 3);
-
-        assertTrue(canvas.exportToPPM().endsWith("\n"), "Export should be terminated by a newline.");
     }
 }
