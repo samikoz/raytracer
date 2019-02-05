@@ -3,41 +3,53 @@ package io.raytracer.mathsy;
 import java.util.Arrays;
 
 public class RealSquareMatrix implements Matrix {
-    private int dim;
-    private double[][] rows;
-    private double[][] cols;
+    public int dim;
+    private double[][] entries;
+
+    private RealSquareMatrix(int dimension) {
+        dim = dimension;
+        entries = new double[dim][dim];
+    }
 
     public RealSquareMatrix(double... entries) {
         double sizeRoot = Math.sqrt(entries.length);
         dim = (int) sizeRoot;
         assert Math.abs(sizeRoot - dim) < 1e-3;
 
-        rows = new double[dim][dim];
-        cols = new double[dim][dim];
+        this.entries = new double[dim][dim];
 
         int entriesIndex = 0;
         for (int rowIndex = 0; rowIndex < dim; ++rowIndex) {
             for (int i = 0; i < dim; ++i) {
-                rows[rowIndex][i] = entries[entriesIndex++];
-                cols[i][rowIndex] = rows[rowIndex][i];
+                this.entries[rowIndex][i] = entries[entriesIndex++];
             }
         }
     }
 
+    @Override
+    public int dim() {
+        return dim;
+    }
+
+    @Override
     public double get(int x, int y) {
-        return rows[x][y];
+        return entries[x][y];
+    }
+
+    private void set(int x, int y, double element) {
+        entries[x][y] = element;
     }
 
     @Override
     public int hashCode() {
-        return Arrays.hashCode(rows);
+        return Arrays.hashCode(entries);
     }
 
     @Override
     public boolean equals(Object them) {
         if (this.getClass() != them.getClass()) return false;
-        RealSquareMatrix themMatrix = (RealSquareMatrix) them;
-        if (this.dim != themMatrix.dim) return false;
+        Matrix themMatrix = (Matrix) them;
+        if (this.dim() != themMatrix.dim()) return false;
 
         double maxEntryDifference = 0;
         for (int x = 0; x < dim; x++) {
@@ -49,8 +61,30 @@ public class RealSquareMatrix implements Matrix {
         return (maxEntryDifference < 1e-3);
     }
 
+    private static double dot(double[] row, double[] column) {
+        double dotted = 0;
+        for (int i = 0; i < row.length; i++) {
+            dotted += row[i]*column[i];
+        }
+        return dotted;
+    }
+
     @Override
     public Matrix multiply(Matrix them) {
-        return null;
+        assert this.dim() == them.dim();
+        int dim = this.dim();
+
+        RealSquareMatrix product = new RealSquareMatrix(dim);
+        for (int y = 0; y < dim; y++) {
+            double[] theirColumn = new double[dim];
+            for (int i = 0; i < dim; i++) {
+                theirColumn[i] = them.get(i, y);
+            }
+
+            for (int x = 0; x < dim; x++) {
+                product.set(x, y, RealSquareMatrix.dot(this.entries[x], theirColumn));
+            }
+        }
+        return product;
     }
 }
