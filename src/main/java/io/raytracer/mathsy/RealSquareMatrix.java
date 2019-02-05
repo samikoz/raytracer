@@ -48,4 +48,9 @@ public class RealSquareMatrix implements Matrix {
         }
         return (maxEntryDifference < 1e-3);
     }
+
+    @Override
+    public Matrix multiply(Matrix them) {
+        return null;
+    }
 }

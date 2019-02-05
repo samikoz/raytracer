@@ -34,4 +34,37 @@ class MatrixTest {
             () -> assertNotEquals(second, fourth, "Should not give false equality for same dimensions")
         );
     }
+
+    @Test
+    void multiply() {
+        Matrix first = new RealSquareMatrix(
+            1, 2, 3, 4,
+            5, 6, 7, 8,
+            9, 8, 7, 6,
+            5, 4, 3, 2
+        );
+        Matrix second = new RealSquareMatrix(
+            -2, 1, 2, 3,
+            3, 2, 1, -1,
+            4, 3, 6, 5,
+            1, 2, 7, 8
+        );
+        Matrix product = first.multiply(second);
+        Matrix expectedProduct = new RealSquareMatrix(
+            20, 22, 50, 48,
+            44, 54, 114, 108,
+            40, 58, 110, 102,
+            26, 26, 46, 42
+        );
+
+        for (int x = 0; x < 4; x++) {
+            for (int y = 0; y < 4; y++) {
+                assertEquals(
+                    product.get(x, y),
+                    expectedProduct.get(x, y),
+                    "(" + x + "," + y + ")-coordinates should be equal"
+                );
+            }
+        }
+    }
 }
