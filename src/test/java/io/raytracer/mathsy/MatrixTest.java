@@ -19,4 +19,17 @@ class MatrixTest {
             () -> assertEquals(1, m.get(1, 0))
         );
     }
+
+    @Test
+    void equalityOfMatrices() {
+        Matrix first = new RealSquareMatrix(0.0, -2.0, 1e-4, 12);
+        Matrix second = new RealSquareMatrix(0.0, -2.0, 0.0, 12);
+        Matrix third = new RealSquareMatrix(0, -2, -2, 12, 1, 1, 1, 1, 1);
+
+        assertAll(
+            "Equality of matrices should be coordinate-wise up to a small factor",
+            () -> assertEquals(first, second, "Equality of matrices should be up to a small delta"),
+            () -> assertNotEquals(second, third, "Matrices of different dimensions should be different")
+        );
+    }
 }

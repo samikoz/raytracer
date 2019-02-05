@@ -35,7 +35,7 @@ class Real3TupleTest {
 class Real3VectorTest {
 
     @Test
-    void testAdditionOfTwoVectors() {
+    void add() {
         Vector first = new Real3Tuple(1.0, 1.0, 1.0);
         Vector second = new Real3Tuple(1.0, 0.0,-1.0);
         Vector expectedSum = new Real3Tuple(2.0,1.0, 0.0);
@@ -49,7 +49,7 @@ class Real3VectorTest {
     }
 
     @Test
-    void testSubtractionOfTwoVectors() {
+    void subtract() {
         Vector first = new Real3Tuple(2.8, -0.001, 12.0);
         Vector second = new Real3Tuple(2.8, 0.001,0.0);
         Vector expectedDifference = new Real3Tuple(0.0,-0.002, 12.0);
@@ -63,7 +63,7 @@ class Real3VectorTest {
     }
 
     @Test
-    void testNegation() {
+    void negate() {
         Vector vector = new Real3Tuple(0.0, 15.2, -5.8);
         Vector expectedNegation = new Real3Tuple(0.0, -15.2, 5.8);
         Vector negated = vector.negate();
@@ -76,7 +76,7 @@ class Real3VectorTest {
     }
 
     @Test
-    void testScalarMultiplication() {
+    void multiply() {
         Vector vector = new Real3Tuple(2.5, -0.4, 1);
         Vector expectedProduct = new Real3Tuple(1.25, -0.2,0.5);
         Vector product = vector.multiply(0.5);
@@ -89,14 +89,14 @@ class Real3VectorTest {
     }
 
     @Test
-    void testNorm() {
+    void norm() {
         Vector vector = new Real3Tuple(1, 2, 3);
         assertEquals(Math.sqrt(14), vector.norm(), 1e-3,"Norm of (1, 2, 3) should be sqrt(14)");
     }
 
 
     @Test
-    void testNormalise() {
+    void normalise() {
         Vector vector = new Real3Tuple(1,2,3);
         Vector expectedNormalised = new Real3Tuple(1/Math.sqrt(14), 2/Math.sqrt(14), 3/Math.sqrt(14));
         Vector normalised = vector.normalise();
@@ -114,7 +114,7 @@ class Real3VectorTest {
     }
 
     @Test
-    void testDotProduct() {
+    void dot() {
         Vector first = new Real3Tuple(1, 2, 3);
         Vector second = new Real3Tuple(2,3,4);
         double expectedProduct = 20;
@@ -140,7 +140,7 @@ class Real3VectorTest {
 class Real3PointTest {
 
     @Test
-    void testAdditionOfPointAndVector() {
+    void additionOfPointAndVector() {
         Point point = new Real3Tuple(12.0, 3.7, -0.2);
         Vector vector = new Real3Tuple(-5.0, 0.2, 0.0);
         Point expectedSum = new Real3Tuple(7.0, 3.9, -0.2);
@@ -154,7 +154,7 @@ class Real3PointTest {
     }
 
     @Test
-    void testSubtractionOfTwoPoints() {
+    void subtractionOfTwoPoints() {
         Point first = new Real3Tuple(-1.0,-1.0,0.0);
         Point second = new Real3Tuple(2.0,-2.0,5.0);
         Vector expectedDifference = new Real3Tuple(-3.0,1.0,-5.0);
@@ -168,7 +168,7 @@ class Real3PointTest {
     }
 
     @Test
-    void testSubtractionOfPointAndVector() {
+    void subtractionOfPointAndVector() {
         Point point = new Real3Tuple(3.5,0.0,0.0);
         Vector displacement = new Real3Tuple(0.0,0.0,-2.1);
         Point expectedPosition = new Real3Tuple(3.5,0.0,2.1);
