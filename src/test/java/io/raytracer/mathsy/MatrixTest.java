@@ -25,11 +25,13 @@ class MatrixTest {
         Matrix first = new RealSquareMatrix(0.0, -2.0, 1e-4, 12);
         Matrix second = new RealSquareMatrix(0.0, -2.0, 0.0, 12);
         Matrix third = new RealSquareMatrix(0, -2, -2, 12, 1, 1, 1, 1, 1);
+        Matrix fourth = new RealSquareMatrix(0, 0, 0, 0);
 
         assertAll(
             "Equality of matrices should be coordinate-wise up to a small factor",
             () -> assertEquals(first, second, "Equality of matrices should be up to a small delta"),
-            () -> assertNotEquals(second, third, "Matrices of different dimensions should be different")
+            () -> assertNotEquals(second, third, "Matrices of different dimensions should be different"),
+            () -> assertNotEquals(second, fourth, "Should not give false equality for same dimensions")
         );
     }
 }
