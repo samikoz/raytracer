@@ -90,6 +90,11 @@ public class RealSquareMatrix implements Matrix {
 
     @Override
     public Vector multiply(Vector them) {
-        return null;
+        double[] vectorCoords = {them.getX(), them.getY(), them.getZ()};
+        return new Real3Tuple(
+            RealSquareMatrix.dot(entries[0], vectorCoords),
+            RealSquareMatrix.dot(entries[1], vectorCoords),
+            RealSquareMatrix.dot(entries[2], vectorCoords)
+        );
     }
 }
