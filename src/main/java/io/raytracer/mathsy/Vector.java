@@ -1,9 +1,9 @@
 package io.raytracer.mathsy;
 
 public interface Vector {
-    double getX();
-    double getY();
-    double getZ();
+    int dim();
+    double get(int coordinate);
+    double[] toArray();
 
     double distance(Vector them);
 

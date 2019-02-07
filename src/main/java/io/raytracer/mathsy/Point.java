@@ -1,9 +1,7 @@
 package io.raytracer.mathsy;
 
 public interface Point {
-    double getX();
-    double getY();
-    double getZ();
+    double get(int coordinate);
 
     double distance(Point them);
 

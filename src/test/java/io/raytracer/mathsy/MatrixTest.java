@@ -75,9 +75,9 @@ class MatrixTest {
             2, 4, 4,
             8, 6, 4
         );
-        Vector x = new Real3Tuple(1, 2, 3);
+        Vector x = new RealTuple(1, 2, 3);
         Vector multiplied = A.multiply(x);
-        Vector expectedProduct = new Real3Tuple(14, 22, 32);
+        Vector expectedProduct = new RealTuple(14, 22, 32);
 
         assertEquals(
             expectedProduct,
