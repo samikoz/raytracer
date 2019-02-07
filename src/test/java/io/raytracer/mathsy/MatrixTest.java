@@ -36,7 +36,7 @@ class MatrixTest {
     }
 
     @Test
-    void multiply() {
+    void matrixMultiplication() {
         Matrix first = new RealSquareMatrix(
             1, 2, 3, 4,
             5, 6, 7, 8,
@@ -66,5 +66,23 @@ class MatrixTest {
                 );
             }
         }
+    }
+
+    @Test
+    void multiplicationByVector() {
+        Matrix A = new RealSquareMatrix(
+            1, 2, 3,
+            2, 4, 4,
+            8, 6, 4
+        );
+        Vector x = new Real3Tuple(1, 2, 3);
+        Vector multiplied = A.multiply(x);
+        Vector expectedProduct = new Real3Tuple(14, 22, 32);
+
+        assertEquals(
+            expectedProduct,
+            multiplied,
+            "Product of a matrix and a vector should be a vector. " +
+                TupleComparator.compareCoordinates(expectedProduct, multiplied));
     }
 }

@@ -87,4 +87,9 @@ public class RealSquareMatrix implements Matrix {
         }
         return product;
     }
+
+    @Override
+    public Vector multiply(Vector them) {
+        return null;
+    }
 }
