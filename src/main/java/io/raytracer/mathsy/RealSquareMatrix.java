@@ -123,6 +123,11 @@ public class RealSquareMatrix implements Matrix {
 
     @Override
     public double det() {
-        return 0;
+        if (dim == 2) {
+            return get(0,0)*get(1, 1) - get(0, 1)*get(1, 0);
+        }
+        else {
+            return 0;
+        }
     }
 }
