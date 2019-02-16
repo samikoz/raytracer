@@ -10,4 +10,6 @@ public interface Matrix {
     Matrix transpose();
 
     double det();
+
+    Matrix submatrix(int x, int y);
 }

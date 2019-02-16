@@ -130,4 +130,9 @@ public class RealSquareMatrix implements Matrix {
             return 0;
         }
     }
+
+    @Override
+    public Matrix submatrix(int x, int y) {
+        return null;
+    }
 }
