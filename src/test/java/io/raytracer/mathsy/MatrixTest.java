@@ -121,4 +121,12 @@ class MatrixTest {
 
         compareMatrices(expectedTranspose, transposed);
     }
+
+    @Test
+    void twoByTwoDeterminant() {
+        Matrix A = new RealSquareMatrix(1, 5, -3, 2);
+        double expectedDeterminant = 17;
+
+        assertEquals(expectedDeterminant, A.det(), "Should correctly compute 2x2 matrix determinant");
+    }
 }

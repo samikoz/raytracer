@@ -8,4 +8,6 @@ public interface Matrix {
     Vector multiply(Vector them);
 
     Matrix transpose();
+
+    double det();
 }

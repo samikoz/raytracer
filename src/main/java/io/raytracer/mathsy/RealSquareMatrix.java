@@ -120,4 +120,9 @@ public class RealSquareMatrix implements Matrix {
         }
         return transposed;
     }
+
+    @Override
+    public double det() {
+        return 0;
+    }
 }
