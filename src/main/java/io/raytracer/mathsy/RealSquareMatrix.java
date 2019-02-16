@@ -132,7 +132,17 @@ public class RealSquareMatrix implements Matrix {
     }
 
     @Override
-    public Matrix submatrix(int x, int y) {
-        return null;
+    public Matrix submatrix(int rowToSkip, int colToSkip) {
+        RealSquareMatrix sub = new RealSquareMatrix(dim -1);
+
+        for (int x = 0; x < dim - 1; x++) {
+            for (int y = 0; y < dim - 1; y++) {
+                sub.set(x, y, this.get(
+                    x >= rowToSkip ? x + 1 : x,
+                    y >= colToSkip ? y + 1 : y
+                ));
+            }
+        }
+        return sub;
     }
 }
