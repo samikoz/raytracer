@@ -5,6 +5,18 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 class MatrixTest {
+    private static void compareMatrices(Matrix expected, Matrix actual) {
+        assertEquals(expected.dim(), actual.dim(), "Matrix dimensions should be the same");
+        for (int x = 0; x < expected.dim(); x++) {
+            for (int y = 0; y < expected.dim(); y++) {
+                assertEquals(
+                    expected.get(x, y),
+                    actual.get(x, y),
+                    "(" + x + "," + y + ")-coordinates should be equal"
+                );
+            }
+        }
+    }
 
     @Test
     void correctEntryAccess() {
@@ -57,15 +69,7 @@ class MatrixTest {
             16, 26, 46, 42
         );
 
-        for (int x = 0; x < 4; x++) {
-            for (int y = 0; y < 4; y++) {
-                assertEquals(
-                    product.get(x, y),
-                    expectedProduct.get(x, y),
-                    "(" + x + "," + y + ")-coordinates should be equal"
-                );
-            }
-        }
+        compareMatrices(expectedProduct, product);
     }
 
     @Test
@@ -84,5 +88,18 @@ class MatrixTest {
             multiplied,
             "Product of a matrix and a vector should be a vector. " +
                 TupleComparator.compareCoordinates(expectedProduct, multiplied));
+    }
+
+    @Test
+    void multiplicationByIdentityMatrix() {
+        Matrix id = RealSquareMatrix.Id(4);
+        Matrix A = new RealSquareMatrix(
+            0, 1, 2, 4,
+            1, 2, 4, 8,
+            2, 4, 8, 16,
+            4, 8, 16, 32
+        );
+
+        compareMatrices(A, id.multiply(A));
     }
 }
