@@ -92,7 +92,7 @@ class MatrixTest {
 
     @Test
     void multiplicationByIdentityMatrix() {
-        Matrix id = RealSquareMatrix.Id(4);
+        Matrix id = RealSquareMatrix.id(4);
         Matrix A = new RealSquareMatrix(
             0, 1, 2, 4,
             1, 2, 4, 8,

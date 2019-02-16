@@ -3,7 +3,7 @@ package io.raytracer.mathsy;
 import java.util.Arrays;
 
 public class RealSquareMatrix implements Matrix {
-    public int dim;
+    private int dim;
     private double[][] entries;
 
     private RealSquareMatrix(int dimension) {
@@ -98,5 +98,15 @@ public class RealSquareMatrix implements Matrix {
         }
 
         return new RealTuple(productCoords);
+    }
+
+    public static Matrix id (int dim) {
+        RealSquareMatrix identity = new RealSquareMatrix(dim);
+
+        for (int diagonalIndex = 0; diagonalIndex < dim; diagonalIndex++) {
+            identity.set(diagonalIndex, diagonalIndex, 1);
+        }
+
+        return identity;
     }
 }
