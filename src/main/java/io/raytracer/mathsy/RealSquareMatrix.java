@@ -112,6 +112,12 @@ public class RealSquareMatrix implements Matrix {
 
     @Override
     public Matrix transpose() {
-        return null;
+        RealSquareMatrix transposed = new RealSquareMatrix(dim);
+        for (int i = 0; i < dim; i++) {
+            for (int j = 0; j < dim; j++) {
+                transposed.set(i, j, this.get(j, i));
+            }
+        }
+        return transposed;
     }
 }
