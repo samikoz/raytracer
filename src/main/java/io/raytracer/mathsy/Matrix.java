@@ -6,4 +6,6 @@ public interface Matrix {
 
     Matrix multiply(Matrix them);
     Vector multiply(Vector them);
+
+    Matrix transpose();
 }

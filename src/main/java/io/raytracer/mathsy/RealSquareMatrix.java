@@ -109,4 +109,9 @@ public class RealSquareMatrix implements Matrix {
 
         return identity;
     }
+
+    @Override
+    public Matrix transpose() {
+        return null;
+    }
 }
