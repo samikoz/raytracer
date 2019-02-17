@@ -122,6 +122,11 @@ public class RealSquareMatrix implements Matrix {
     }
 
     @Override
+    public boolean isInvertible() {
+        return det() != 0;
+    }
+
+    @Override
     public double det() {
         if (dim == 2) {
             return get(0,0)*get(1, 1) - get(0, 1)*get(1, 0);
@@ -151,5 +156,10 @@ public class RealSquareMatrix implements Matrix {
 
     double cofactor(int row, int col) {
         return Math.pow(-1, row + col)*submatrix(row, col).det();
+    }
+
+    @Override
+    public Matrix inverse() {
+        return null;
     }
 }
