@@ -127,7 +127,11 @@ public class RealSquareMatrix implements Matrix {
             return get(0,0)*get(1, 1) - get(0, 1)*get(1, 0);
         }
         else {
-            return 0;
+            double det = 0;
+            for (int firstRowIndex = 0; firstRowIndex < dim; firstRowIndex++) {
+                det += get(0, firstRowIndex)*cofactor(0, firstRowIndex);
+            }
+            return det;
         }
     }
 
