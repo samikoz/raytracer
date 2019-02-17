@@ -12,6 +12,7 @@ class MatrixTest {
                 assertEquals(
                     expected.get(x, y),
                     actual.get(x, y),
+                    1e-3,
                     "(" + x + "," + y + ")-coordinates should be equal"
                 );
             }

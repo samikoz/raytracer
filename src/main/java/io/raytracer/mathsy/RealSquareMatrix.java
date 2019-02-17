@@ -160,6 +160,14 @@ public class RealSquareMatrix implements Matrix {
 
     @Override
     public Matrix inverse() {
-        return null;
+        RealSquareMatrix inverted = new RealSquareMatrix(dim);
+        double det = det();
+
+        for (int row = 0; row < dim; row++) {
+            for (int col = 0; col < dim; col++) {
+                inverted.set(col, row, cofactor(row, col)/det);
+            }
+        }
+        return inverted;
     }
 }
