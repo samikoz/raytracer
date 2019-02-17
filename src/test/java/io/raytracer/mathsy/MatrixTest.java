@@ -158,15 +158,15 @@ class MatrixTest {
     }
 
     @Test
-    void minor() {
+    void cofactor() {
         RealSquareMatrix A = new RealSquareMatrix(
             3, 5, 0,
             2, -1, -7,
             6, -1, 5
         );
-        double expectedMinor = 25;
-        double minor = A.minor(1, 0);
+        double expectedCofactor = -25;
+        double cofactor = A.cofactor(1, 0);
 
-        assertEquals(expectedMinor, minor, "Should correctly compute 3x3 minor");
+        assertEquals(expectedCofactor, cofactor, "Should correctly compute 3x3 minor");
     }
 }

@@ -145,7 +145,7 @@ public class RealSquareMatrix implements Matrix {
         return sub;
     }
 
-    double minor(int row, int col) {
-        return submatrix(row, col).det();
+    double cofactor(int row, int col) {
+        return Math.pow(-1, row + col)*submatrix(row, col).det();
     }
 }
