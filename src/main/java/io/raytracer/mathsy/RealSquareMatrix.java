@@ -131,8 +131,7 @@ public class RealSquareMatrix implements Matrix {
         }
     }
 
-    @Override
-    public Matrix submatrix(int rowToSkip, int colToSkip) {
+    RealSquareMatrix submatrix(int rowToSkip, int colToSkip) {
         RealSquareMatrix sub = new RealSquareMatrix(dim -1);
 
         for (int x = 0; x < dim - 1; x++) {

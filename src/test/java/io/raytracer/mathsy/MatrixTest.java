@@ -132,26 +132,26 @@ class MatrixTest {
 
     @Test
     void submatrix() {
-        Matrix A = new RealSquareMatrix(
+        RealSquareMatrix A = new RealSquareMatrix(
             1, 5, 0,
             -3, 2, 7,
             0, 6, -3
         );
-        Matrix expectedASubmatrix = new RealSquareMatrix(-3, 2, 0, 6);
-        Matrix subA = A.submatrix(0, 2);
+        RealSquareMatrix expectedASubmatrix = new RealSquareMatrix(-3, 2, 0, 6);
+        RealSquareMatrix subA = A.submatrix(0, 2);
 
-        Matrix B = new RealSquareMatrix(
+        RealSquareMatrix B = new RealSquareMatrix(
             -6, 1, 1, 6,
             -8, 5, 8, 6,
             -1, 0, 8, 2,
             -7, 1, -1, 1
         );
-        Matrix expectedBSubmatrix = new RealSquareMatrix(
+        RealSquareMatrix expectedBSubmatrix = new RealSquareMatrix(
             -6, 1, 6,
             -8, 8, 6,
             -7, -1, 1
         );
-        Matrix subB = B.submatrix(2, 1);
+        RealSquareMatrix subB = B.submatrix(2, 1);
 
         compareMatrices(expectedASubmatrix, subA);
         compareMatrices(expectedBSubmatrix, subB);
