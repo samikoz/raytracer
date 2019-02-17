@@ -123,11 +123,28 @@ class MatrixTest {
     }
 
     @Test
-    void twoByTwoDeterminant() {
+    void determinant() {
         Matrix A = new RealSquareMatrix(1, 5, -3, 2);
-        double expectedDeterminant = 17;
+        double expected2x2Determinant = 17;
 
-        assertEquals(expectedDeterminant, A.det(), "Should correctly compute 2x2 matrix determinant");
+        Matrix B = new RealSquareMatrix(
+            1, 2, 6,
+            -5, 8, -4,
+            2, 6, 4
+        );
+        double expected3x3Determinant = -196;
+
+        Matrix C = new RealSquareMatrix(
+            -2, -8, 3, 5,
+            -3, 1, 7, 3,
+            1, 2, -9, 6,
+            -6, 7, 7, -9
+        );
+        double expected4x4Determinant = -4071;
+
+        assertEquals(expected2x2Determinant, A.det(), "Should correctly compute 2x2 matrix determinant");
+        assertEquals(expected3x3Determinant, B.det(), "Should correctly compute 3x3 matrix determinant");
+        assertEquals(expected4x4Determinant, C.det(), "Should correctly compute 4x4 matrix determinant");
     }
 
     @Test
