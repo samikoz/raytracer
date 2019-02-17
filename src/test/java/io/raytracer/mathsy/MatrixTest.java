@@ -156,4 +156,17 @@ class MatrixTest {
         compareMatrices(expectedASubmatrix, subA);
         compareMatrices(expectedBSubmatrix, subB);
     }
+
+    @Test
+    void minor() {
+        RealSquareMatrix A = new RealSquareMatrix(
+            3, 5, 0,
+            2, -1, -7,
+            6, -1, 5
+        );
+        double expectedMinor = 25;
+        double minor = A.minor(1, 0);
+
+        assertEquals(expectedMinor, minor, "Should correctly compute 3x3 minor");
+    }
 }

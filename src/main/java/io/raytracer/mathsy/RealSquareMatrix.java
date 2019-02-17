@@ -144,4 +144,8 @@ public class RealSquareMatrix implements Matrix {
         }
         return sub;
     }
+
+    double minor(int row, int col) {
+        return submatrix(row, col).det();
+    }
 }
