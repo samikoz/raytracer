@@ -1,6 +1,7 @@
 package io.raytracer.mathsy;
 
 import java.util.Arrays;
+import java.util.stream.IntStream;
 
 class RealTuple implements Vector, Point {
     private int dim;
@@ -42,11 +43,7 @@ class RealTuple implements Vector, Point {
     private double distance(RealTuple them) {
         assert this.dim == them.dim;
 
-        double coordsDifferenceSquares = 0;
-        for (int coordIndex = 0; coordIndex < dim; coordIndex++) {
-            coordsDifferenceSquares += Math.pow(this.get(coordIndex) - them.get(coordIndex), 2);
-        }
-        return Math.sqrt(coordsDifferenceSquares);
+        return Math.sqrt(IntStream.range(0, dim).mapToDouble(i -> Math.pow(this.get(i) - them.get(i), 2)).sum());
     }
 
     @Override
@@ -72,11 +69,7 @@ class RealTuple implements Vector, Point {
     private RealTuple add(RealTuple them) {
         assert this.dim == them.dim;
 
-        double[] coordSum = new double[dim];
-        for (int coordIndex = 0; coordIndex < dim; coordIndex++) {
-            coordSum[coordIndex] += this.get(coordIndex) + them.get(coordIndex);
-        }
-        return new RealTuple(coordSum);
+        return new RealTuple(IntStream.range(0, dim).mapToDouble(i -> this.get(i) + them.get(i)).toArray());
     }
 
     @Override
@@ -87,11 +80,7 @@ class RealTuple implements Vector, Point {
     private RealTuple subtract(RealTuple them) {
         assert this.dim == them.dim;
 
-        double[] coordDiff = new double[dim];
-        for (int coordIndex = 0; coordIndex < dim; coordIndex++) {
-            coordDiff[coordIndex] += this.get(coordIndex) - them.get(coordIndex);
-        }
-        return new RealTuple(coordDiff);
+        return new RealTuple(IntStream.range(0, dim).mapToDouble(i -> this.get(i) - them.get(i)).toArray());
     }
 
     @Override
@@ -111,22 +100,14 @@ class RealTuple implements Vector, Point {
     }
 
     public RealTuple multiply(double scalar) {
-        double[] coordMult = new double[dim];
-        for (int coordIndex = 0; coordIndex < dim; coordIndex++) {
-            coordMult[coordIndex] += this.get(coordIndex)*scalar;
-        }
-        return new RealTuple(coordMult);
+        return new RealTuple(IntStream.range(0, dim).mapToDouble(i -> this.get(i)*scalar).toArray());
     }
 
     @Override
     public double dot(Vector them) {
         assert this.dim() == them.dim();
 
-        double product = 0;
-        for (int coordIndex = 0; coordIndex < dim; coordIndex++) {
-            product += this.get(coordIndex)*them.get(coordIndex);
-        }
-        return product;
+        return IntStream.range(0, dim).mapToDouble(i -> this.get(i)*them.get(i)).sum();
     }
 
     @Override

@@ -8,7 +8,7 @@ public class Unit3TupleColour implements Colour {
     private double green;
     private double blue;
 
-    private static int exportScale = 255;
+    final private static int exportScale = 255;
 
     public Unit3TupleColour(double red, double green, double blue) {
         this.red = red;
@@ -31,20 +31,20 @@ public class Unit3TupleColour implements Colour {
         return blue;
     }
 
-    private int normaliseComponent(double componentValue, int scaleFactor) {
+    private int normaliseComponent(double componentValue) {
         if (componentValue <= 0) {
             componentValue = 0;
         } else if (componentValue >= 1) {
             componentValue = 1;
         }
-        return (int) Math.round(componentValue * scaleFactor);
+        return (int) Math.round(componentValue * exportScale);
     }
 
     @Override
     public String exportNormalised() {
-        return Integer.toString(normaliseComponent(getRed(), exportScale)) + " " +
-            Integer.toString(normaliseComponent(getGreen(), exportScale)) + " " +
-            Integer.toString(normaliseComponent(getBlue(), exportScale));
+        return Integer.toString(normaliseComponent(getRed())) + " " +
+            Integer.toString(normaliseComponent(getGreen())) + " " +
+            Integer.toString(normaliseComponent(getBlue()));
     }
 
     private double distance(Unit3TupleColour them) {
