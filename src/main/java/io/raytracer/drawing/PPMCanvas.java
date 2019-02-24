@@ -1,20 +1,19 @@
 package io.raytracer.drawing;
 
 import java.util.*;
+import java.util.stream.Stream;
 
 public class PPMCanvas implements Canvas {
     private PPMCanvasRow[] pixelGrid;
     static private final Colour initialColour = new Unit3TupleColour(0 ,0,0);
-    static private final int exportedLineMaxLenght = 70;
+    static private final int exportedLineMaxLength = 70;
     private final String exportHeader;
 
     public PPMCanvas(int x, int y) {
         exportHeader = "P3\n" + x + " " + y + "\n255\n";
 
         pixelGrid = new PPMCanvasRow[y];
-        for (int i = 0; i < y; i++) {
-            pixelGrid[i] = new PPMCanvasRow(x);
-        }
+        Arrays.setAll(pixelGrid, i -> new PPMCanvasRow(x));
     }
 
     @Override
@@ -29,9 +28,9 @@ public class PPMCanvas implements Canvas {
 
     private String putLineBreaks(String exportRow) {
         StringBuilder rowToBreak = new StringBuilder(exportRow);
-        int numberOfBreaks = exportRow.length() / exportedLineMaxLenght;
+        int numberOfBreaks = exportRow.length() / exportedLineMaxLength;
         for (int breakNumber = 1; breakNumber <= numberOfBreaks; breakNumber++) {
-            int whitespacePosition = breakNumber*exportedLineMaxLenght;
+            int whitespacePosition = breakNumber*exportedLineMaxLength;
             while (rowToBreak.charAt(whitespacePosition) != ' ') whitespacePosition--;
             rowToBreak.setCharAt(whitespacePosition, '\n');
         }
@@ -43,8 +42,7 @@ public class PPMCanvas implements Canvas {
         StringBuilder exported = new StringBuilder(exportHeader);
 
         for (PPMCanvasRow row : rows()) {
-            exported.append(putLineBreaks(String.join(" ", row.export())));
-            exported.append("\n");
+            exported.append(putLineBreaks(String.join(" ", row.export()))).append("\n");
         }
         return exported.toString();
     }

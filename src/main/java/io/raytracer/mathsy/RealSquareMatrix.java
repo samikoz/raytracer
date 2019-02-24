@@ -1,6 +1,7 @@
 package io.raytracer.mathsy;
 
 import java.util.Arrays;
+import java.util.stream.IntStream;
 
 public class RealSquareMatrix implements Matrix {
     private int dim;
@@ -14,16 +15,12 @@ public class RealSquareMatrix implements Matrix {
     public RealSquareMatrix(double... entries) {
         double sizeRoot = Math.sqrt(entries.length);
         dim = (int) sizeRoot;
-        assert Math.abs(sizeRoot - dim) < 1e-3;
+        assert Math.abs(sizeRoot - dim) < 1e-3 && dim > 0;
 
         this.entries = new double[dim][dim];
-
-        int entriesIndex = 0;
-        for (int rowIndex = 0; rowIndex < dim; ++rowIndex) {
-            for (int i = 0; i < dim; ++i) {
-                this.entries[rowIndex][i] = entries[entriesIndex++];
-            }
-        }
+        IntStream.range(0, dim).forEach(rowIndex ->
+            Arrays.setAll(this.entries[rowIndex], colIndex -> entries[dim*rowIndex + colIndex])
+        );
     }
 
     @Override
@@ -51,40 +48,33 @@ public class RealSquareMatrix implements Matrix {
         Matrix themMatrix = (Matrix) them;
         if (this.dim() != themMatrix.dim()) return false;
 
-        double maxEntryDifference = 0;
-        for (int x = 0; x < dim; x++) {
-            for (int y = 0; y < dim; y++) {
-                double diff = Math.abs(this.get(x, y) - themMatrix.get(x, y));
-                if (diff > maxEntryDifference) maxEntryDifference = diff;
-            }
-        }
-        return (maxEntryDifference < 1e-3);
+        double allowedDifference = 1e-3;
+        double maxDifference = IntStream.range(0, dim).mapToDouble(x ->
+            IntStream.range(0, dim).mapToDouble(y ->
+                Math.abs(this.get(x, y) - themMatrix.get(x, y))
+            ).max().orElse(allowedDifference + 1)
+        ).max().orElse(allowedDifference + 1);
+
+        return (maxDifference < allowedDifference);
     }
 
     private static double dot(double[] row, double[] column) {
-        double dotted = 0;
-        for (int i = 0; i < row.length; i++) {
-            dotted += row[i]*column[i];
-        }
-        return dotted;
+        return IntStream.range(0, row.length).mapToDouble(i -> row[i]*column[i]).sum();
     }
 
     @Override
     public Matrix multiply(Matrix them) {
         assert this.dim() == them.dim();
-        int dim = this.dim();
 
         RealSquareMatrix product = new RealSquareMatrix(dim);
-        for (int y = 0; y < dim; y++) {
+        IntStream.range(0, dim).forEach(y -> {
             double[] theirColumn = new double[dim];
-            for (int i = 0; i < dim; i++) {
-                theirColumn[i] = them.get(i, y);
-            }
+            Arrays.setAll(theirColumn, i -> them.get(i, y));
+            IntStream.range(0, dim).forEach(x ->
+                product.set(x, y, RealSquareMatrix.dot(this.entries[x], theirColumn))
+            );
+        });
 
-            for (int x = 0; x < dim; x++) {
-                product.set(x, y, RealSquareMatrix.dot(this.entries[x], theirColumn));
-            }
-        }
         return product;
     }
 
@@ -92,20 +82,15 @@ public class RealSquareMatrix implements Matrix {
     public Vector multiply(Vector them) {
         assert this.dim() == them.dim();
 
-        double[] productCoords = new double[them.dim()];
-        for (int coordIndex = 0; coordIndex < them.dim(); coordIndex++) {
-            productCoords[coordIndex] = RealSquareMatrix.dot(entries[coordIndex], them.toArray());
-        }
-
-        return new RealTuple(productCoords);
+        return new RealTuple(IntStream.range(0, dim).mapToDouble(
+            coordinateIndex -> RealSquareMatrix.dot(entries[coordinateIndex], them.toArray())
+        ).toArray());
     }
 
     public static Matrix id (int dim) {
         RealSquareMatrix identity = new RealSquareMatrix(dim);
 
-        for (int diagonalIndex = 0; diagonalIndex < dim; diagonalIndex++) {
-            identity.set(diagonalIndex, diagonalIndex, 1);
-        }
+        IntStream.range(0, dim).forEach(diagonalIndex -> identity.set(diagonalIndex, diagonalIndex, 1));
 
         return identity;
     }
@@ -113,11 +98,9 @@ public class RealSquareMatrix implements Matrix {
     @Override
     public Matrix transpose() {
         RealSquareMatrix transposed = new RealSquareMatrix(dim);
-        for (int i = 0; i < dim; i++) {
-            for (int j = 0; j < dim; j++) {
-                transposed.set(i, j, this.get(j, i));
-            }
-        }
+        IntStream.range(0, dim).forEach(i ->
+            IntStream.range(0, dim).forEach(j -> transposed.set(i, j, this.get(j, i)))
+        );
         return transposed;
     }
 
@@ -132,25 +115,23 @@ public class RealSquareMatrix implements Matrix {
             return get(0,0)*get(1, 1) - get(0, 1)*get(1, 0);
         }
         else {
-            double det = 0;
-            for (int firstRowIndex = 0; firstRowIndex < dim; firstRowIndex++) {
-                det += get(0, firstRowIndex)*cofactor(0, firstRowIndex);
-            }
-            return det;
+            return IntStream.range(0, dim).mapToDouble(firstRowIndex ->
+                get(0, firstRowIndex)*cofactor(0, firstRowIndex)
+            ).sum();
         }
     }
 
     RealSquareMatrix submatrix(int rowToSkip, int colToSkip) {
         RealSquareMatrix sub = new RealSquareMatrix(dim -1);
 
-        for (int x = 0; x < dim - 1; x++) {
-            for (int y = 0; y < dim - 1; y++) {
+        IntStream.range(0, dim - 1).forEach(x ->
+            IntStream.range(0, dim - 1).forEach(y ->
                 sub.set(x, y, this.get(
                     x >= rowToSkip ? x + 1 : x,
                     y >= colToSkip ? y + 1 : y
-                ));
-            }
-        }
+                ))
+            )
+        );
         return sub;
     }
 
@@ -163,11 +144,11 @@ public class RealSquareMatrix implements Matrix {
         RealSquareMatrix inverted = new RealSquareMatrix(dim);
         double det = det();
 
-        for (int row = 0; row < dim; row++) {
-            for (int col = 0; col < dim; col++) {
-                inverted.set(col, row, cofactor(row, col)/det);
-            }
-        }
+        IntStream.range(0, dim).forEach(row ->
+            IntStream.range(0, dim).forEach(col ->
+                inverted.set(col, row, cofactor(row, col)/det)
+            )
+        );
         return inverted;
     }
 }
