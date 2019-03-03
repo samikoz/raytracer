@@ -1,9 +1,9 @@
 package io.raytracer.mathsy;
 
-public interface Point {
-    double get(int coordinate);
-
+public interface Point extends Tuple {
     double distance(Point them);
+
+    Point multiply(double scalar);
 
     Point add(Vector displacement);
 

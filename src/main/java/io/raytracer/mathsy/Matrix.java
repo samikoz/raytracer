@@ -5,7 +5,7 @@ public interface Matrix {
     double get(int x, int y);
 
     Matrix multiply(Matrix them);
-    Vector multiply(Vector them);
+    Tuple multiply(Tuple them);
 
     Matrix transpose();
 

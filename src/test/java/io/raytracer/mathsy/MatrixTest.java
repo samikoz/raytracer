@@ -80,9 +80,9 @@ class MatrixTest {
             2, 4, 4,
             8, 6, 4
         );
-        Vector x = new RealTuple(1, 2, 3);
-        Vector multiplied = A.multiply(x);
-        Vector expectedProduct = new RealTuple(14, 22, 32);
+        Tuple x = new RealTuple(1, 2, 3);
+        Tuple multiplied = A.multiply(x);
+        Vector expectedProduct = new RealVector(14, 22, 32);
 
         assertEquals(
             expectedProduct,

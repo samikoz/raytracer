@@ -7,33 +7,19 @@ import static org.junit.jupiter.api.Assertions.*;
 class TransformationsTest {
 
     @Test
-    void translatingPoint() {
-        Point p = new RealTuple(-3, 4, 5);
-        Transformation t = new Translation(5, -3, 2);
-        Point expectedPosition = new RealTuple(2, 1, 7);
-        Point translated = p.transform(t);
-
-        assertEquals(expectedPosition, translated, TupleComparator.compareCoordinates(expectedPosition, translated));
-        assertEquals(translated, t.act(p), "Point transformed should be equivalent to transformation acting on it");
-    }
-
-    @Test
-    void inverseTranslatingPoint() {
-        Point p = new RealTuple(-3, 4, 5);
-        Transformation t = new Translation(5, -3, 2).inverse();
-        Point expectedPosition = new RealTuple(-8, 7, 3);
-        Point translated = p.transform(t);
+    void translatingReal4Immersed3Point() {
+        TransformablePoint p = new Real4Immersed3Point(-3, 4, 5);
+        Point expectedPosition = new Real4Immersed3Point(2, 1, 7);
+        TransformablePoint translated = p.translate(new RealVector(5, -3, 2));
 
         assertEquals(expectedPosition, translated, TupleComparator.compareCoordinates(expectedPosition, translated));
     }
 
     @Test
-    void translatingVector() {
-        Vector v = new RealTuple(-3, 4, 5);
-        Transformation t = new Translation(5, -3, 2);
-        Vector translated = v.transform(t);
+    void translatingReal4Immersed3Vector() {
+        TransformableVector v = new Real4Immersed3Vector(-3, 4, 5);
+        Vector translated = v.translate(new RealVector(5, -3, 2));
 
         assertEquals(v, translated, TupleComparator.compareCoordinates(v, translated));
-        assertEquals(translated, t.act(v), "Vector transformed should be equivalent to transformation acting on it");
     }
 }
