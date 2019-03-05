@@ -31,20 +31,6 @@ class ColourTest {
     }
 
     @Test
-    void subtract() {
-        Colour first = new Unit3TupleColour(0.9, 0.6, 0.75);
-        Colour second = new Unit3TupleColour(0.7, 0.1, 0.25);
-        Colour expectedDifference = new Unit3TupleColour(0.2, 0.5, 0.5);
-        Colour subtracted = first.subtract(second);
-
-        assertEquals(
-            expectedDifference, subtracted,
-            () -> "Subtraction of Colours should be a colour. " +
-                ColourComparator.compareColourComponents(expectedDifference, subtracted)
-        );
-    }
-
-    @Test
     void multiply() {
         Colour first = new Unit3TupleColour(0.2, 0.3, 0.4);
         Colour expectedProduct = new Unit3TupleColour(0.4, 0.6, 0.8);

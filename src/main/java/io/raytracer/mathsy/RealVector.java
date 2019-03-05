@@ -8,8 +8,8 @@ public class RealVector extends RealTuple implements Vector {
         super(coordinates);
     }
 
-    RealVector(RealTuple them) {
-        this(IntStream.range(0, them.dim()).mapToDouble(them::get).toArray());
+    private RealVector(RealTuple them) {
+        this(them.toArray());
     }
 
     @Override
@@ -18,18 +18,8 @@ public class RealVector extends RealTuple implements Vector {
     }
 
     @Override
-    public RealVector negate() {
-        return new RealVector(super.negate());
-    }
-
-    @Override
     public RealVector add(Vector them) {
         return new RealVector(super.add(them));
-    }
-
-    @Override
-    public RealVector subtract(Vector them) {
-        return new RealVector(super.subtract(them));
     }
 
     @Override

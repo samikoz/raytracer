@@ -8,7 +8,7 @@ public class RealPoint extends RealTuple implements Point {
     }
 
     private RealPoint(RealTuple them) {
-        this(IntStream.range(0, them.dim()).mapToDouble(them::get).toArray());
+        this(them.toArray());
     }
 
     @Override
@@ -27,12 +27,11 @@ public class RealPoint extends RealTuple implements Point {
     }
 
     @Override
-    public RealPoint subtract(Vector them) {
-        return new RealPoint(super.subtract(them));
+    public RealVector subtract(Point toSubtract) {
+        Vector toMoveBack = new RealVector(
+            IntStream.range(0, toSubtract.dim()).mapToDouble(toSubtract::get).toArray()
+        );
+        Point movedBack = subtract(toMoveBack);
+        return new RealVector(IntStream.range(0, movedBack.dim()).mapToDouble(movedBack::get).toArray());
     }
-    @Override
-    public RealVector subtract(Point them) {
-        return new RealVector(super.subtract(them));
-    }
-
 }

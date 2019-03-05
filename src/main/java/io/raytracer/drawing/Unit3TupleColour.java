@@ -79,15 +79,6 @@ public class Unit3TupleColour implements Colour {
     }
 
     @Override
-    public Colour subtract(Colour them) {
-        return new Unit3TupleColour(
-            this.getRed() - them.getRed(),
-            this.getGreen() - them.getGreen(),
-            this.getBlue() - them.getBlue()
-        );
-    }
-
-    @Override
     public Colour multiply(double scalar) {
         return new Unit3TupleColour(
             scalar*this.getRed(),

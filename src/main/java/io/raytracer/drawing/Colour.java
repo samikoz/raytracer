@@ -5,9 +5,13 @@ public interface Colour {
     double getGreen();
     double getBlue();
 
-    Colour add(Colour them);
-    Colour subtract(Colour them);
     Colour multiply(double scalar);
+
+    Colour add(Colour them);
+    default Colour subtract(Colour them) {
+        return add(them.multiply(-1));
+    }
+
     Colour mix(Colour them);
 
     String exportNormalised();

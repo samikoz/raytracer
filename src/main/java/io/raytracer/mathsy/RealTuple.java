@@ -1,6 +1,7 @@
 package io.raytracer.mathsy;
 
 import java.util.Arrays;
+import java.util.function.IntToDoubleFunction;
 import java.util.stream.IntStream;
 
 class RealTuple implements Tuple {
@@ -20,6 +21,14 @@ class RealTuple implements Tuple {
     public double get(int coordinate) {
         assert coordinate < dim;
         return coords[coordinate];
+    }
+
+    double[] toArray() {
+        return IntStream.range(0, dim).mapToDouble(this::get).toArray();
+    }
+
+    RealTuple applyCoordinatewise(IntToDoubleFunction action) {
+        return new RealTuple(IntStream.range(0, dim).mapToDouble(action).toArray());
     }
 
     @Override
@@ -44,22 +53,10 @@ class RealTuple implements Tuple {
     RealTuple add(Tuple them) {
         assert this.dim == them.dim();
 
-        return new RealTuple(IntStream.range(0, dim).mapToDouble(i -> this.get(i) + them.get(i)).toArray());
+        return applyCoordinatewise(i -> this.get(i) + them.get(i));
     }
 
-    RealTuple subtract(Tuple them) {
-        assert this.dim == them.dim();
-
-        return new RealTuple(IntStream.range(0, dim).mapToDouble(i -> this.get(i) - them.get(i)).toArray());
-    }
-
-    @Override
     public RealTuple multiply(double scalar) {
-        return new RealTuple(IntStream.range(0, dim).mapToDouble(i -> this.get(i)*scalar).toArray());
-    }
-
-    @Override
-    public RealTuple negate() {
-        return this.multiply(-1);
+        return applyCoordinatewise(i -> get(i)*scalar);
     }
 }

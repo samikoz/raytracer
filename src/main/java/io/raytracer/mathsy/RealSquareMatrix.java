@@ -107,11 +107,6 @@ public class RealSquareMatrix implements Matrix {
     }
 
     @Override
-    public boolean isInvertible() {
-        return det() != 0;
-    }
-
-    @Override
     public double det() {
         if (dim == 2) {
             return get(0,0)*get(1, 1) - get(0, 1)*get(1, 0);

@@ -6,7 +6,9 @@ public interface Point extends Tuple {
     Point multiply(double scalar);
 
     Point add(Vector displacement);
+    default Point subtract(Vector displacement) {
+        return add(displacement.multiply(-1));
+    }
 
     Vector subtract(Point them);
-    Point subtract(Vector displacement);
 }

@@ -45,33 +45,6 @@ class RealVectorTest {
     }
 
     @Test
-    void subtract() {
-        Vector first = new RealVector(2.8, -0.001, 12.0);
-        Vector second = new RealVector(2.8, 0.001, 0.0);
-        Vector expectedDifference = new RealVector(0.0, -0.002, 12.0);
-        Vector subtracted = first.subtract(second);
-
-        assertEquals(
-                expectedDifference, subtracted,
-                () -> "Subtraction of two vectors should be a vector. " +
-                        TupleComparator.compareCoordinates(expectedDifference, subtracted)
-        );
-    }
-
-    @Test
-    void negate() {
-        Vector vector = new RealVector(0.0, 15.2, -5.8);
-        Vector expectedNegation = new RealVector(0.0, -15.2, 5.8);
-        Vector negated = vector.negate();
-
-        assertEquals(
-                expectedNegation, negated,
-                () -> "Negation of a vector should be a vector. " +
-                        TupleComparator.compareCoordinates(expectedNegation, negated)
-        );
-    }
-
-    @Test
     void multiply() {
         Vector vector = new RealVector(2.5, -0.4, 1);
         Vector expectedProduct = new RealVector(1.25, -0.2, 0.5);
@@ -164,20 +137,6 @@ class RealPointTest {
             expectedDifference, subtracted,
             () -> "Difference of two points should be a vector. " +
                 TupleComparator.compareCoordinates(expectedDifference, subtracted)
-        );
-    }
-
-    @Test
-    void subtractionOfPointAndVector() {
-        Point point = new RealPoint(3.5,0.0,0.0);
-        Vector displacement = new RealVector(0.0,0.0,-2.1);
-        Point expectedPosition = new RealPoint(3.5,0.0,2.1);
-        Point subtracted = point.subtract(displacement);
-
-        assertEquals(
-            expectedPosition, subtracted,
-            () -> "Difference of a point and a vector should be a point. " +
-                TupleComparator.compareCoordinates(expectedPosition, subtracted)
         );
     }
 }

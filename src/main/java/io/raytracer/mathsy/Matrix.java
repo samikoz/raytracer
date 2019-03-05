@@ -10,7 +10,9 @@ public interface Matrix {
     Matrix transpose();
 
     double det();
-    boolean isInvertible();
+    default boolean isInvertible() {
+        return det() != 0;
+    }
 
     Matrix inverse();
 }

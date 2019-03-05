@@ -4,13 +4,17 @@ public interface Vector extends Tuple{
     double distance(Vector them);
 
     Vector multiply(double scalar);
-    Vector negate();
+    default Vector negate() {
+        return multiply(-1);
+    }
 
     double norm();
     Vector normalise();
 
     Vector add(Vector them);
-    Vector subtract(Vector them);
+    default Vector subtract(Vector them) {
+        return add(them.negate());
+    }
 
     double dot(Vector them);
 }
