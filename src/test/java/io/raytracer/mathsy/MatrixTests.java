@@ -88,7 +88,7 @@ class RealSquareMatrixTest {
             expectedProduct,
             multiplied,
             "Product of a matrix and a vector should be a vector. " +
-                TupleComparator.compareCoordinates(expectedProduct, multiplied));
+                TupleComparator.messageComparingCoordinates(expectedProduct, multiplied));
     }
 
     @Test

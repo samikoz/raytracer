@@ -7,19 +7,30 @@ import java.util.Arrays;
 import static org.junit.jupiter.api.Assertions.*;
 
 class TupleComparator {
-    static String compareCoordinates(Tuple expected, Tuple actual) {
-        String[] coordComparison = new String[expected.dim()];
-        for (int coordIndex = 0; coordIndex < expected.dim(); coordIndex++) {
-            coordComparison[coordIndex] = expected.get(coordIndex) + " should be " + actual.get(coordIndex);
+    static void assertTuplesEqual(Tuple expected, Tuple actual, String message) {
+        assertEquals(expected.dim(), actual.dim(), "Should be of the same dimension");
+
+        assertEquals(
+            expected, actual,
+            () -> message + " " + messageComparingCoordinates(expected, actual)
+        );
+    }
+
+    static String messageComparingCoordinates(Tuple expected, Tuple actual) {
+        String[] coordinateComparisonMessages = new String[expected.dim()];
+
+        for (int coordinateIndex = 0; coordinateIndex < expected.dim(); coordinateIndex++) {
+            coordinateComparisonMessages[coordinateIndex] =
+                expected.get(coordinateIndex) + " should be " + actual.get(coordinateIndex);
         }
-        return String.join(", ", Arrays.asList(coordComparison));
+        return String.join(", ", Arrays.asList(coordinateComparisonMessages));
     }
 }
 
 class RealTupleTest {
 
     @Test
-    void testEqualityOfTuplesUpToADelta() {
+    void equalityOfTuplesUpToADelta() {
         Tuple first = new RealTuple(0.0, -2.0, 1e-4);
         Tuple second = new RealTuple(0.0, -2.0, 0.0);
 
@@ -31,30 +42,22 @@ class RealTupleTest {
 class RealVectorTest {
 
     @Test
-    void add() {
+    void additionOfTwoVectors() {
         Vector first = new RealVector(1.0, 1.0, 1.0);
         Vector second = new RealVector(1.0, 0.0, -1.0);
         Vector expectedSum = new RealVector(2.0, 1.0, 0.0);
-        Vector added = first.add(second);
+        Vector actualSum = first.add(second);
 
-        assertEquals(
-                expectedSum, added,
-                () -> "Sum of two vectors should be a vector. " +
-                        TupleComparator.compareCoordinates(expectedSum, added)
-        );
+        TupleComparator.assertTuplesEqual(expectedSum, actualSum, "Sum of two vectors should be a vector.");
     }
 
     @Test
-    void multiply() {
+    void multiplicationByScalar() {
         Vector vector = new RealVector(2.5, -0.4, 1);
         Vector expectedProduct = new RealVector(1.25, -0.2, 0.5);
-        Vector product = vector.multiply(0.5);
+        Vector actualProduct = vector.multiply(0.5);
 
-        assertEquals(
-                expectedProduct, product,
-                () -> "A vector times a scalar should be a vector. " +
-                        TupleComparator.compareCoordinates(expectedProduct, product)
-        );
+        TupleComparator.assertTuplesEqual(expectedProduct, actualProduct, "A vector times a scalar should be a vector.");
     }
 
     @Test
@@ -71,14 +74,11 @@ class RealVectorTest {
         Vector normalised = vector.normalise();
 
         assertAll(
-                "Should return a correctly normalised vector.",
-                () -> assertEquals(
-                        normalised.norm(), 1, 1e-3, "Normalised vector should have unit norm"
-                ),
-                () -> assertEquals(
-                        expectedNormalised, normalised,
-                        () -> TupleComparator.compareCoordinates(expectedNormalised, normalised)
-                )
+            "Should return a correctly normalised vector.",
+            () -> assertEquals(
+                    normalised.norm(), 1, 1e-3, "Normalised vector should have unit norm"
+            ),
+            () -> TupleComparator.assertTuplesEqual(expectedNormalised, normalised, "Should have appropriate coordinates")
         );
     }
 
@@ -93,20 +93,16 @@ class RealVectorTest {
 
 }
 
-class Real4Immersed3VectorTest {
+class Real3VectorTest {
 
     @Test
     void cross() {
-        ThreeVector first = new Real4Immersed3Vector(1, 2, 3);
-        ThreeVector second = new Real4Immersed3Vector(2, 3, 4);
-        ThreeVector expectedCrossProduct = new Real4Immersed3Vector(-1, 2, -1);
-        ThreeVector crossed = first.cross(second);
+        ThreeVector first = new Real3Vector(1, 2, 3);
+        ThreeVector second = new Real3Vector(2, 3, 4);
+        ThreeVector expectedCross = new Real3Vector(-1, 2, -1);
+        ThreeVector actualCross = first.cross(second);
 
-        assertEquals(
-            expectedCrossProduct, crossed,
-                () -> "(1, 2, 3) cross (2, 3, 4) should be a vector. " +
-                    TupleComparator.compareCoordinates(expectedCrossProduct, crossed)
-        );
+        TupleComparator.assertTuplesEqual(expectedCross, actualCross, "Cross of two vectors should be a vector.");
     }
 }
 
@@ -114,16 +110,12 @@ class RealPointTest {
 
     @Test
     void additionOfPointAndVector() {
-        Point point = new RealPoint(12.0, 3.7, -0.2);
-        Vector vector = new RealVector(-5.0, 0.2, 0.0);
+        Point aPoint = new RealPoint(12.0, 3.7, -0.2);
+        Vector aVector = new RealVector(-5.0, 0.2, 0.0);
         Point expectedSum = new RealPoint(7.0, 3.9, -0.2);
-        Point summed = point.add(vector);
+        Point actualSum = aPoint.add(aVector);
 
-        assertEquals(
-            expectedSum, summed,
-            () -> "Sum of a point and a vector should be a point. " +
-                TupleComparator.compareCoordinates(expectedSum, summed)
-        );
+        TupleComparator.assertTuplesEqual(expectedSum, actualSum, "Sum of a point and a vector should be a point.");
     }
 
     @Test
@@ -131,12 +123,8 @@ class RealPointTest {
         Point first = new RealPoint(-1.0,-1.0,0.0);
         Point second = new RealPoint(2.0,-2.0,5.0);
         Vector expectedDifference = new RealVector(-3.0,1.0,-5.0);
-        Vector subtracted = first.subtract(second);
+        Vector actualDifference = first.subtract(second);
 
-        assertEquals(
-            expectedDifference, subtracted,
-            () -> "Difference of two points should be a vector. " +
-                TupleComparator.compareCoordinates(expectedDifference, subtracted)
-        );
+        TupleComparator.assertTuplesEqual(expectedDifference, actualDifference, "Difference of two points should be a vector.");
     }
 }
