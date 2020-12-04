@@ -25,20 +25,17 @@ class TupleComparator {
     }
 }
 
-class RealTupleTest {
-
+class TupleTest {
     @Test
     void equalityOfTuplesUpToADelta() {
         Tuple first = new TupleImpl(0.0, -2.0, 1e-4);
         Tuple second = new TupleImpl(0.0, -2.0, 0.0);
 
-        assertEquals(first, second, "Equality of tuples should be up to a small delta");
+        TupleComparator.assertTuplesEqual(first, second, "Equality of tuples should be up to a small delta");
     }
-
 }
 
-class RealVectorTest {
-
+class VectorTest {
     @Test
     void additionOfTwoVectors() {
         Vector first = new VectorImpl(1.0, 1.0, 1.0);
@@ -63,7 +60,6 @@ class RealVectorTest {
         Vector vector = new VectorImpl(1, 2, 3);
         assertEquals(Math.sqrt(14), vector.norm(), 1e-3, "Norm of (1, 2, 3) should be sqrt(14)");
     }
-
 
     @Test
     void normalise() {
@@ -91,8 +87,7 @@ class RealVectorTest {
 
 }
 
-class Real3VectorTest {
-
+class ThreeVectorTest {
     @Test
     void cross() {
         ThreeVector first = new ThreeVectorImpl(1, 2, 3);
@@ -104,8 +99,7 @@ class Real3VectorTest {
     }
 }
 
-class RealPointTest {
-
+class PointTest {
     @Test
     void additionOfPointAndVector() {
         Point aPoint = new PointImpl(12.0, 3.7, -0.2);
