@@ -1,18 +1,18 @@
 package io.raytracer.mathsy;
 
-public interface Matrix {
+public interface SquareMatrix {
     int dim();
     double get(int x, int y);
 
-    Matrix multiply(Matrix them);
+    SquareMatrix multiply(SquareMatrix them);
     Tuple multiply(Tuple them);
 
-    Matrix transpose();
+    SquareMatrix transpose();
 
     double det();
     default boolean isInvertible() {
         return det() != 0;
     }
 
-    Matrix inverse();
+    SquareMatrix inverse();
 }

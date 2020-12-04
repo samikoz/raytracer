@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 class RealSquareMatrixTest {
-    private static void compareMatrices(Matrix expected, Matrix actual) {
+    private static void compareMatrices(SquareMatrix expected, SquareMatrix actual) {
         assertEquals(expected.dim(), actual.dim(), "Matrix dimensions should be the same");
 
         for (int x = 0; x < expected.dim(); x++) {
@@ -22,7 +22,7 @@ class RealSquareMatrixTest {
 
     @Test
     void correctEntryAccess() {
-        Matrix m = new RealSquareMatrix(
+        SquareMatrix m = new SquareMatrixImpl(
             -3, -5, 0,
             1, -2, -7,
             0, 1, 1
@@ -36,10 +36,10 @@ class RealSquareMatrixTest {
 
     @Test
     void equalityOfMatrices() {
-        Matrix first = new RealSquareMatrix(0.0, -2.0, 1e-4, 12);
-        Matrix second = new RealSquareMatrix(0.0, -2.0, 0.0, 12);
-        Matrix third = new RealSquareMatrix(0, -2, -2, 12, 1, 1, 1, 1, 1);
-        Matrix fourth = new RealSquareMatrix(0, 0, 0, 0);
+        SquareMatrix first = new SquareMatrixImpl(0.0, -2.0, 1e-4, 12);
+        SquareMatrix second = new SquareMatrixImpl(0.0, -2.0, 0.0, 12);
+        SquareMatrix third = new SquareMatrixImpl(0, -2, -2, 12, 1, 1, 1, 1, 1);
+        SquareMatrix fourth = new SquareMatrixImpl(0, 0, 0, 0);
 
         assertAll(
             "Equality of matrices should be coordinate-wise up to a small factor",
@@ -51,20 +51,20 @@ class RealSquareMatrixTest {
 
     @Test
     void matrixMultiplication() {
-        Matrix first = new RealSquareMatrix(
+        SquareMatrix first = new SquareMatrixImpl(
             1, 2, 3, 4,
             5, 6, 7, 8,
             9, 8, 7, 6,
             5, 4, 3, 2
         );
-        Matrix second = new RealSquareMatrix(
+        SquareMatrix second = new SquareMatrixImpl(
             -2, 1, 2, 3,
             3, 2, 1, -1,
             4, 3, 6, 5,
             1, 2, 7, 8
         );
-        Matrix product = first.multiply(second);
-        Matrix expectedProduct = new RealSquareMatrix(
+        SquareMatrix product = first.multiply(second);
+        SquareMatrix expectedProduct = new SquareMatrixImpl(
             20, 22, 50, 48,
             44, 54, 114, 108,
             40, 58, 110, 102,
@@ -76,7 +76,7 @@ class RealSquareMatrixTest {
 
     @Test
     void multiplicationByVector() {
-        Matrix A = new RealSquareMatrix(
+        SquareMatrix A = new SquareMatrixImpl(
             1, 2, 3,
             2, 4, 4,
             8, 6, 4
@@ -94,8 +94,8 @@ class RealSquareMatrixTest {
 
     @Test
     void multiplicationByIdentityMatrix() {
-        Matrix id = RealSquareMatrix.id(4);
-        Matrix A = new RealSquareMatrix(
+        SquareMatrix id = SquareMatrixImpl.id(4);
+        SquareMatrix A = new SquareMatrixImpl(
             0, 1, 2, 4,
             1, 2, 4, 8,
             2, 4, 8, 16,
@@ -107,14 +107,14 @@ class RealSquareMatrixTest {
 
     @Test
     void transpose() {
-        Matrix A = new RealSquareMatrix(
+        SquareMatrix A = new SquareMatrixImpl(
             0, 9, 3, 0,
             9, 8, 0, 8,
             1, 8, 5, 3,
             0, 0, 5, 8
         );
-        Matrix transposed = A.transpose();
-        Matrix expectedTranspose = new RealSquareMatrix(
+        SquareMatrix transposed = A.transpose();
+        SquareMatrix expectedTranspose = new SquareMatrixImpl(
             0, 9, 1, 0,
             9, 8, 8, 0,
             3, 0, 5, 5,
@@ -126,11 +126,11 @@ class RealSquareMatrixTest {
 
     @Test
     void determinant() {
-        Matrix A = new RealSquareMatrix(1, 5, -3, 2);
+        SquareMatrix A = new SquareMatrixImpl(1, 5, -3, 2);
         double expected2x2Determinant = 17;
         assertEquals(expected2x2Determinant, A.det(), "Should correctly compute 2x2 matrix determinant");
 
-        Matrix B = new RealSquareMatrix(
+        SquareMatrix B = new SquareMatrixImpl(
             1, 2, 6,
             -5, 8, -4,
             2, 6, 4
@@ -138,7 +138,7 @@ class RealSquareMatrixTest {
         double expected3x3Determinant = -196;
         assertEquals(expected3x3Determinant, B.det(), "Should correctly compute 3x3 matrix determinant");
 
-        Matrix C = new RealSquareMatrix(
+        SquareMatrix C = new SquareMatrixImpl(
             -2, -8, 3, 5,
             -3, 1, 7, 3,
             1, 2, -9, 6,
@@ -150,35 +150,35 @@ class RealSquareMatrixTest {
 
     @Test
     void submatrix() {
-        RealSquareMatrix A = new RealSquareMatrix(
+        SquareMatrixImpl A = new SquareMatrixImpl(
             1, 5, 0,
             -3, 2, 7,
             0, 6, -3
         );
-        RealSquareMatrix expectedASubmatrix = new RealSquareMatrix(-3, 2, 0, 6);
-        RealSquareMatrix subA = A.submatrix(0, 2);
+        SquareMatrixImpl expectedASubmatrix = new SquareMatrixImpl(-3, 2, 0, 6);
+        SquareMatrixImpl subA = A.submatrix(0, 2);
 
         compareMatrices(expectedASubmatrix, subA);
 
-        RealSquareMatrix B = new RealSquareMatrix(
+        SquareMatrixImpl B = new SquareMatrixImpl(
             -6, 1, 1, 6,
             -8, 5, 8, 6,
             -1, 0, 8, 2,
             -7, 1, -1, 1
         );
-        RealSquareMatrix expectedBSubmatrix = new RealSquareMatrix(
+        SquareMatrixImpl expectedBSubmatrix = new SquareMatrixImpl(
             -6, 1, 6,
             -8, 8, 6,
             -7, -1, 1
         );
-        RealSquareMatrix subB = B.submatrix(2, 1);
+        SquareMatrixImpl subB = B.submatrix(2, 1);
 
         compareMatrices(expectedBSubmatrix, subB);
     }
 
     @Test
     void cofactor() {
-        RealSquareMatrix A = new RealSquareMatrix(
+        SquareMatrixImpl A = new SquareMatrixImpl(
             3, 5, 0,
             2, -1, -7,
             6, -1, 5
@@ -191,7 +191,7 @@ class RealSquareMatrixTest {
 
     @Test
     void inverse() {
-        Matrix notInvertible = new RealSquareMatrix(
+        SquareMatrix notInvertible = new SquareMatrixImpl(
             -4, 2, -2, -3,
             9, 6, 2, 6,
             0, -5, 1, -5,
@@ -200,13 +200,13 @@ class RealSquareMatrixTest {
 
         assertFalse(notInvertible.isInvertible(), "Should recognise non-invertible matrices");
 
-        Matrix invertibleA = new RealSquareMatrix(
+        SquareMatrix invertibleA = new SquareMatrixImpl(
             -5, 2, 6, -8,
             1, -5, 1, 8,
             7, 7, -6, -7,
             1, -3, 7, 4
         );
-        Matrix expectedAInverse = new RealSquareMatrix(
+        SquareMatrix expectedAInverse = new SquareMatrixImpl(
             0.21805, 0.45113, 0.24060, -0.04511,
             -0.80827, -1.45677, -0.44361, 0.52068,
             -0.07895, -0.22368, -0.05263, 0.19737,
@@ -215,13 +215,13 @@ class RealSquareMatrixTest {
 
         compareMatrices(expectedAInverse, invertibleA.inverse());
 
-        Matrix invertibleB = new RealSquareMatrix(
+        SquareMatrix invertibleB = new SquareMatrixImpl(
             8, -5, 9, 2,
             7, 5, 6, 1,
             -6, 0, 9, 6,
             -3, 0, -9, -4
         );
-        Matrix expectedBInverse = new RealSquareMatrix(
+        SquareMatrix expectedBInverse = new SquareMatrixImpl(
             -0.15385, -0.15385, -0.28205, -0.53846,
             -0.07692, 0.12308, 0.02564, 0.03077,
             0.35897, 0.35897, 0.43590, 0.92308,
@@ -229,13 +229,13 @@ class RealSquareMatrixTest {
         );
         compareMatrices(expectedBInverse, invertibleB.inverse());
 
-        Matrix firstFactor = new RealSquareMatrix(
+        SquareMatrix firstFactor = new SquareMatrixImpl(
             9, 3, 0, 9,
             -5, -2, -6, -3,
             -4, 9, 6, 4,
             -7, 6, 6, 2
         );
-        Matrix secondFactor = new RealSquareMatrix(
+        SquareMatrix secondFactor = new SquareMatrixImpl(
             8, 2, 2, 2,
             3, -1, 7, 0,
             7, 0, 5, 4,

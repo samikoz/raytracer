@@ -3,16 +3,16 @@ package io.raytracer.mathsy;
 import java.util.Arrays;
 import java.util.stream.IntStream;
 
-public class RealSquareMatrix implements Matrix {
+public class SquareMatrixImpl implements SquareMatrix {
     private int dim;
     private double[][] entries;
 
-    private RealSquareMatrix(int dimension) {
+    private SquareMatrixImpl(int dimension) {
         dim = dimension;
         entries = new double[dim][dim];
     }
 
-    public RealSquareMatrix(double... entries) {
+    public SquareMatrixImpl(double... entries) {
         double sizeRoot = Math.sqrt(entries.length);
         dim = (int) sizeRoot;
         assert Math.abs(sizeRoot - dim) < 1e-3 && dim > 0;
@@ -45,7 +45,7 @@ public class RealSquareMatrix implements Matrix {
     @Override
     public boolean equals(Object them) {
         if (this.getClass() != them.getClass()) return false;
-        Matrix themMatrix = (Matrix) them;
+        SquareMatrix themMatrix = (SquareMatrix) them;
         if (this.dim() != themMatrix.dim()) return false;
 
         double allowedDifference = 1e-3;
@@ -63,15 +63,15 @@ public class RealSquareMatrix implements Matrix {
     }
 
     @Override
-    public Matrix multiply(Matrix them) {
+    public SquareMatrix multiply(SquareMatrix them) {
         assert this.dim() == them.dim();
 
-        RealSquareMatrix product = new RealSquareMatrix(dim);
+        SquareMatrixImpl product = new SquareMatrixImpl(dim);
         IntStream.range(0, dim).forEach(y -> {
             double[] theirColumn = new double[dim];
             Arrays.setAll(theirColumn, i -> them.get(i, y));
             IntStream.range(0, dim).forEach(x ->
-                product.set(x, y, RealSquareMatrix.dot(this.entries[x], theirColumn))
+                product.set(x, y, SquareMatrixImpl.dot(this.entries[x], theirColumn))
             );
         });
 
@@ -85,12 +85,12 @@ public class RealSquareMatrix implements Matrix {
         double[] themArray = IntStream.range(0, them.dim()).mapToDouble(them::get).toArray();
 
         return new VectorImpl(IntStream.range(0, dim).mapToDouble(
-            coordinateIndex -> RealSquareMatrix.dot(entries[coordinateIndex], themArray)
+            coordinateIndex -> SquareMatrixImpl.dot(entries[coordinateIndex], themArray)
         ).toArray());
     }
 
-    public static Matrix id (int dim) {
-        RealSquareMatrix identity = new RealSquareMatrix(dim);
+    public static SquareMatrix id (int dim) {
+        SquareMatrixImpl identity = new SquareMatrixImpl(dim);
 
         IntStream.range(0, dim).forEach(diagonalIndex -> identity.set(diagonalIndex, diagonalIndex, 1));
 
@@ -98,8 +98,8 @@ public class RealSquareMatrix implements Matrix {
     }
 
     @Override
-    public Matrix transpose() {
-        RealSquareMatrix transposed = new RealSquareMatrix(dim);
+    public SquareMatrix transpose() {
+        SquareMatrixImpl transposed = new SquareMatrixImpl(dim);
         IntStream.range(0, dim).forEach(i ->
             IntStream.range(0, dim).forEach(j -> transposed.set(i, j, this.get(j, i)))
         );
@@ -118,8 +118,8 @@ public class RealSquareMatrix implements Matrix {
         }
     }
 
-    RealSquareMatrix submatrix(int rowToSkip, int colToSkip) {
-        RealSquareMatrix sub = new RealSquareMatrix(dim -1);
+    SquareMatrixImpl submatrix(int rowToSkip, int colToSkip) {
+        SquareMatrixImpl sub = new SquareMatrixImpl(dim -1);
 
         IntStream.range(0, dim - 1).forEach(x ->
             IntStream.range(0, dim - 1).forEach(y ->
@@ -137,8 +137,8 @@ public class RealSquareMatrix implements Matrix {
     }
 
     @Override
-    public Matrix inverse() {
-        RealSquareMatrix inverted = new RealSquareMatrix(dim);
+    public SquareMatrix inverse() {
+        SquareMatrixImpl inverted = new SquareMatrixImpl(dim);
         double det = det();
 
         IntStream.range(0, dim).forEach(row ->
