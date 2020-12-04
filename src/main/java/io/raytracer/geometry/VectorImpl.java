@@ -1,4 +1,4 @@
-package io.raytracer.mathsy;
+package io.raytracer.geometry;
 
 import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;

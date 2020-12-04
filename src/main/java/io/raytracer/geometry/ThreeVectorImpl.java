@@ -1,4 +1,4 @@
-package io.raytracer.mathsy;
+package io.raytracer.geometry;
 
 public class ThreeVectorImpl extends VectorImpl implements ThreeVector{
     public ThreeVectorImpl(double x, double y, double z) {

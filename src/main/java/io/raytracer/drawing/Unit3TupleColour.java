@@ -1,12 +1,11 @@
 package io.raytracer.drawing;
 
 import java.util.Arrays;
-import java.util.List;
 
 public class Unit3TupleColour implements Colour {
-    private double red;
-    private double green;
-    private double blue;
+    private final double red;
+    private final double green;
+    private final double blue;
 
     final private static int exportScale = 255;
 

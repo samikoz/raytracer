@@ -1,9 +1,7 @@
-package io.raytracer.mathsy;
+package io.raytracer.geometry;
 
 import org.junit.jupiter.api.Test;
-
 import java.util.Arrays;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 class TupleComparator {

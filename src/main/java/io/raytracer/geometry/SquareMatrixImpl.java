@@ -1,11 +1,12 @@
-package io.raytracer.mathsy;
+package io.raytracer.geometry;
 
 import java.util.Arrays;
 import java.util.stream.IntStream;
 
 public class SquareMatrixImpl implements SquareMatrix {
-    private int dim;
-    private double[][] entries;
+    private final int dim;
+    private final double[][] entries;
+    private final static double equalityTolerance = 1e-3;
 
     private SquareMatrixImpl(int dimension) {
         dim = dimension;
@@ -15,12 +16,32 @@ public class SquareMatrixImpl implements SquareMatrix {
     public SquareMatrixImpl(double... entries) {
         double sizeRoot = Math.sqrt(entries.length);
         dim = (int) sizeRoot;
-        assert Math.abs(sizeRoot - dim) < 1e-3 && dim > 0;
+        assert Math.abs(sizeRoot - dim) < equalityTolerance && dim > 0;
 
         this.entries = new double[dim][dim];
         IntStream.range(0, dim).forEach(rowIndex ->
             Arrays.setAll(this.entries[rowIndex], colIndex -> entries[dim*rowIndex + colIndex])
         );
+    }
+
+    @Override
+    public int hashCode() {
+        return Arrays.hashCode(entries);
+    }
+
+    @Override
+    public boolean equals(Object them) {
+        if (this.getClass() != them.getClass()) return false;
+        SquareMatrix themMatrix = (SquareMatrix) them;
+        if (this.dim() != themMatrix.dim()) return false;
+
+        double maxEntryDifference = IntStream.range(0, dim).mapToDouble(x ->
+                IntStream.range(0, dim).mapToDouble(y ->
+                        Math.abs(this.get(x, y) - themMatrix.get(x, y))
+                ).max().orElse(1)
+        ).max().orElse(1);
+
+        return (maxEntryDifference < equalityTolerance);
     }
 
     @Override
@@ -37,29 +58,8 @@ public class SquareMatrixImpl implements SquareMatrix {
         entries[x][y] = element;
     }
 
-    @Override
-    public int hashCode() {
-        return Arrays.hashCode(entries);
-    }
-
-    @Override
-    public boolean equals(Object them) {
-        if (this.getClass() != them.getClass()) return false;
-        SquareMatrix themMatrix = (SquareMatrix) them;
-        if (this.dim() != themMatrix.dim()) return false;
-
-        double allowedDifference = 1e-3;
-        double maxDifference = IntStream.range(0, dim).mapToDouble(x ->
-            IntStream.range(0, dim).mapToDouble(y ->
-                Math.abs(this.get(x, y) - themMatrix.get(x, y))
-            ).max().orElse(allowedDifference + 1)
-        ).max().orElse(allowedDifference + 1);
-
-        return (maxDifference < allowedDifference);
-    }
-
     private static double dot(double[] row, double[] column) {
-        return IntStream.range(0, row.length).mapToDouble(i -> row[i]*column[i]).sum();
+        return (new VectorImpl(row)).dot(new VectorImpl(column));
     }
 
     @Override
@@ -68,8 +68,7 @@ public class SquareMatrixImpl implements SquareMatrix {
 
         SquareMatrixImpl product = new SquareMatrixImpl(dim);
         IntStream.range(0, dim).forEach(y -> {
-            double[] theirColumn = new double[dim];
-            Arrays.setAll(theirColumn, i -> them.get(i, y));
+            double[] theirColumn = IntStream.range(0, dim).mapToDouble(i -> them.get(i, y)).toArray();
             IntStream.range(0, dim).forEach(x ->
                 product.set(x, y, SquareMatrixImpl.dot(this.entries[x], theirColumn))
             );
@@ -118,6 +117,10 @@ public class SquareMatrixImpl implements SquareMatrix {
         }
     }
 
+    double cofactor(int row, int col) {
+        return Math.pow(-1, row + col)*submatrix(row, col).det();
+    }
+
     SquareMatrixImpl submatrix(int rowToSkip, int colToSkip) {
         SquareMatrixImpl sub = new SquareMatrixImpl(dim -1);
 
@@ -130,10 +133,6 @@ public class SquareMatrixImpl implements SquareMatrix {
             )
         );
         return sub;
-    }
-
-    double cofactor(int row, int col) {
-        return Math.pow(-1, row + col)*submatrix(row, col).det();
     }
 
     @Override

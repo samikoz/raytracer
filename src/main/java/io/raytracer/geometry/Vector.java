@@ -1,4 +1,4 @@
-package io.raytracer.mathsy;
+package io.raytracer.geometry;
 
 public interface Vector extends Tuple{
     double distance(Vector them);

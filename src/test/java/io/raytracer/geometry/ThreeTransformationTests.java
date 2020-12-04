@@ -1,6 +1,4 @@
-package io.raytracer.mathsy;
-
-import org.junit.jupiter.api.Test;
+package io.raytracer.geometry;
 
 class Immersing3TransformationTest {
 //    @Test
