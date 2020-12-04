@@ -97,9 +97,9 @@ class Real3VectorTest {
 
     @Test
     void cross() {
-        ThreeVector first = new Real3Vector(1, 2, 3);
-        ThreeVector second = new Real3Vector(2, 3, 4);
-        ThreeVector expectedCross = new Real3Vector(-1, 2, -1);
+        ThreeVector first = new ThreeVectorImpl(1, 2, 3);
+        ThreeVector second = new ThreeVectorImpl(2, 3, 4);
+        ThreeVector expectedCross = new ThreeVectorImpl(-1, 2, -1);
         ThreeVector actualCross = first.cross(second);
 
         TupleComparator.assertTuplesEqual(expectedCross, actualCross, "Cross of two vectors should be a vector.");
