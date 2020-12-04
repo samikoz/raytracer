@@ -1,6 +1,6 @@
 package io.raytracer.mathsy;
 
-public class Real3Vector extends RealVector implements ThreeVector{
+public class Real3Vector extends VectorImpl implements ThreeVector{
     public Real3Vector(double x, double y, double z) {
         super(x, y, z);
     }

@@ -27,11 +27,11 @@ public class PointImpl extends TupleImpl implements Point {
     }
 
     @Override
-    public RealVector subtract(Point toSubtract) {
-        Vector toMoveBack = new RealVector(
+    public VectorImpl subtract(Point toSubtract) {
+        Vector toMoveBack = new VectorImpl(
             IntStream.range(0, toSubtract.dim()).mapToDouble(toSubtract::get).toArray()
         );
         Point movedBack = subtract(toMoveBack);
-        return new RealVector(IntStream.range(0, movedBack.dim()).mapToDouble(movedBack::get).toArray());
+        return new VectorImpl(IntStream.range(0, movedBack.dim()).mapToDouble(movedBack::get).toArray());
     }
 }

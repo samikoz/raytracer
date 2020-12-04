@@ -83,7 +83,7 @@ class RealSquareMatrixTest {
         );
         Tuple x = new TupleImpl(1, 2, 3);
         Tuple multiplied = A.multiply(x);
-        Vector expectedProduct = new RealVector(14, 22, 32);
+        Vector expectedProduct = new VectorImpl(14, 22, 32);
 
         assertEquals(
             expectedProduct,

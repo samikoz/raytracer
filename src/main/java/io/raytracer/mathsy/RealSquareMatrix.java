@@ -79,12 +79,12 @@ public class RealSquareMatrix implements Matrix {
     }
 
     @Override
-    public RealVector multiply(Tuple them) {
+    public VectorImpl multiply(Tuple them) {
         assert this.dim() == them.dim();
 
         double[] themArray = IntStream.range(0, them.dim()).mapToDouble(them::get).toArray();
 
-        return new RealVector(IntStream.range(0, dim).mapToDouble(
+        return new VectorImpl(IntStream.range(0, dim).mapToDouble(
             coordinateIndex -> RealSquareMatrix.dot(entries[coordinateIndex], themArray)
         ).toArray());
     }
