@@ -2,12 +2,12 @@ package io.raytracer.mathsy;
 
 import java.util.stream.IntStream;
 
-public class RealPoint extends TupleImpl implements Point {
-    public RealPoint(double... coordinates) {
+public class PointImpl extends TupleImpl implements Point {
+    public PointImpl(double... coordinates) {
         super(coordinates);
     }
 
-    private RealPoint(TupleImpl them) {
+    private PointImpl(TupleImpl them) {
         this(them.toArray());
     }
 
@@ -17,13 +17,13 @@ public class RealPoint extends TupleImpl implements Point {
     }
 
     @Override
-    public RealPoint multiply(double scalar) {
-        return new RealPoint(super.multiply(scalar));
+    public PointImpl multiply(double scalar) {
+        return new PointImpl(super.multiply(scalar));
     }
 
     @Override
-    public RealPoint add(Vector them) {
-        return new RealPoint(super.add(them));
+    public PointImpl add(Vector them) {
+        return new PointImpl(super.add(them));
     }
 
     @Override

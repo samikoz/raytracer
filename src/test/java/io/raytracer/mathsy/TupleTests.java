@@ -110,9 +110,9 @@ class RealPointTest {
 
     @Test
     void additionOfPointAndVector() {
-        Point aPoint = new RealPoint(12.0, 3.7, -0.2);
+        Point aPoint = new PointImpl(12.0, 3.7, -0.2);
         Vector aVector = new RealVector(-5.0, 0.2, 0.0);
-        Point expectedSum = new RealPoint(7.0, 3.9, -0.2);
+        Point expectedSum = new PointImpl(7.0, 3.9, -0.2);
         Point actualSum = aPoint.add(aVector);
 
         TupleComparator.assertTuplesEqual(expectedSum, actualSum, "Sum of a point and a vector should be a point.");
@@ -120,8 +120,8 @@ class RealPointTest {
 
     @Test
     void subtractionOfTwoPoints() {
-        Point first = new RealPoint(-1.0,-1.0,0.0);
-        Point second = new RealPoint(2.0,-2.0,5.0);
+        Point first = new PointImpl(-1.0,-1.0,0.0);
+        Point second = new PointImpl(2.0,-2.0,5.0);
         Vector expectedDifference = new RealVector(-3.0,1.0,-5.0);
         Vector actualDifference = first.subtract(second);
 
