@@ -5,14 +5,29 @@ import java.util.function.IntToDoubleFunction;
 import java.util.stream.IntStream;
 
 class RealTuple implements Tuple {
-    private int dim;
-    private double[] coords;
+    private final int dim;
+    private final double[] coords;
+    private final static double equalityTolerance = 1e-3;
 
     public RealTuple(double... coordinates) {
         dim = coordinates.length;
         coords = coordinates;
     }
 
+    @Override
+    public int hashCode() {
+        return Arrays.hashCode(coords);
+    }
+
+    @Override
+    public boolean equals(Object them) {
+        if (this.getClass() != them.getClass()) return false;
+
+        Tuple themTuple = (Tuple) them;
+        return (this.dim == themTuple.dim() && this.euclideanDistance(themTuple) < equalityTolerance);
+    }
+
+    @Override
     public int dim() {
         return dim;
     }
@@ -29,19 +44,6 @@ class RealTuple implements Tuple {
 
     RealTuple applyCoordinatewise(IntToDoubleFunction action) {
         return new RealTuple(IntStream.range(0, dim).mapToDouble(action).toArray());
-    }
-
-    @Override
-    public int hashCode() {
-        return Arrays.hashCode(coords);
-    }
-
-    @Override
-    public boolean equals(Object them) {
-        if (this.getClass() != them.getClass()) return false;
-
-        Tuple themTuple = (Tuple) them;
-        return (this.dim == themTuple.dim() && this.euclideanDistance(themTuple) < 1e-3);
     }
 
     double euclideanDistance(Tuple them) {
