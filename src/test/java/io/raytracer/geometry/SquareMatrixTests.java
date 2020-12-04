@@ -1,10 +1,9 @@
 package io.raytracer.geometry;
 
 import org.junit.jupiter.api.Test;
-
 import static org.junit.jupiter.api.Assertions.*;
 
-class RealSquareMatrixTest {
+class SquareMatrixTest {
     private static void compareMatrices(SquareMatrix expected, SquareMatrix actual) {
         assertEquals(expected.dim(), actual.dim(), "Matrix dimensions should be the same");
 
@@ -35,18 +34,24 @@ class RealSquareMatrixTest {
     }
 
     @Test
-    void equalityOfMatrices() {
+    void equalityUpToADelta() {
         SquareMatrix first = new SquareMatrixImpl(0.0, -2.0, 1e-4, 12);
         SquareMatrix second = new SquareMatrixImpl(0.0, -2.0, 0.0, 12);
-        SquareMatrix third = new SquareMatrixImpl(0, -2, -2, 12, 1, 1, 1, 1, 1);
-        SquareMatrix fourth = new SquareMatrixImpl(0, 0, 0, 0);
+        assertEquals(first, second, "Equality of matrices should be up to a small delta");
+    }
 
-        assertAll(
-            "Equality of matrices should be coordinate-wise up to a small factor",
-            () -> assertEquals(first, second, "Equality of matrices should be up to a small delta"),
-            () -> assertNotEquals(second, third, "Matrices of different dimensions should be different"),
-            () -> assertNotEquals(second, fourth, "Should not give false equality for same dimensions")
-        );
+    @Test
+    void inequality() {
+        SquareMatrix first = new SquareMatrixImpl(0.0, -2.0, 1e-4, 12);
+        SquareMatrix second = new SquareMatrixImpl(0, 0, 0, 0);
+        assertNotEquals(first, second, "Should not give false equality for same dimensions");
+    }
+
+    @Test
+    void comparingDifferentDimensionMatrices() {
+        SquareMatrix first = new SquareMatrixImpl(0.0, -2.0, 1e-4, 12);
+        SquareMatrix second = new SquareMatrixImpl(0, -2, -2, 12, 1, 1, 1, 1, 1);
+        assertNotEquals(first, second, "Matrices of different dimensions should be different");
     }
 
     @Test
@@ -75,7 +80,7 @@ class RealSquareMatrixTest {
     }
 
     @Test
-    void multiplicationByVector() {
+    void multiplicationByTuple() {
         SquareMatrix A = new SquareMatrixImpl(
             1, 2, 3,
             2, 4, 4,
@@ -83,12 +88,12 @@ class RealSquareMatrixTest {
         );
         Tuple x = new TupleImpl(1, 2, 3);
         Tuple multiplied = A.multiply(x);
-        Vector expectedProduct = new VectorImpl(14, 22, 32);
+        Tuple expectedProduct = new TupleImpl(14, 22, 32);
 
         assertEquals(
             expectedProduct,
             multiplied,
-            "Product of a matrix and a vector should be a vector. " +
+            "Product of a matrix and a tuple should be a tuple. " +
                 TupleComparator.messageComparingCoordinates(expectedProduct, multiplied));
     }
 
@@ -125,19 +130,25 @@ class RealSquareMatrixTest {
     }
 
     @Test
-    void determinant() {
+    void determinant2x2() {
         SquareMatrix A = new SquareMatrixImpl(1, 5, -3, 2);
         double expected2x2Determinant = 17;
         assertEquals(expected2x2Determinant, A.det(), "Should correctly compute 2x2 matrix determinant");
+    }
 
+    @Test
+    void determinant3x3() {
         SquareMatrix B = new SquareMatrixImpl(
             1, 2, 6,
             -5, 8, -4,
-            2, 6, 4
+           2, 6, 4
         );
         double expected3x3Determinant = -196;
         assertEquals(expected3x3Determinant, B.det(), "Should correctly compute 3x3 matrix determinant");
+    }
 
+    @Test
+    void determinant4x4() {
         SquareMatrix C = new SquareMatrixImpl(
             -2, -8, 3, 5,
             -3, 1, 7, 3,
@@ -149,31 +160,34 @@ class RealSquareMatrixTest {
     }
 
     @Test
-    void submatrix() {
+    void submatrix3x3() {
         SquareMatrixImpl A = new SquareMatrixImpl(
             1, 5, 0,
             -3, 2, 7,
             0, 6, -3
         );
-        SquareMatrixImpl expectedASubmatrix = new SquareMatrixImpl(-3, 2, 0, 6);
         SquareMatrixImpl subA = A.submatrix(0, 2);
+        SquareMatrixImpl expectedSubmatrix = new SquareMatrixImpl(-3, 2, 0, 6);
 
-        compareMatrices(expectedASubmatrix, subA);
+        compareMatrices(expectedSubmatrix, subA);
+    }
 
+    @Test
+    void submatrix4x4() {
         SquareMatrixImpl B = new SquareMatrixImpl(
             -6, 1, 1, 6,
             -8, 5, 8, 6,
             -1, 0, 8, 2,
             -7, 1, -1, 1
         );
-        SquareMatrixImpl expectedBSubmatrix = new SquareMatrixImpl(
+        SquareMatrixImpl subB = B.submatrix(2, 1);
+        SquareMatrixImpl expectedSubmatrix = new SquareMatrixImpl(
             -6, 1, 6,
             -8, 8, 6,
             -7, -1, 1
         );
-        SquareMatrixImpl subB = B.submatrix(2, 1);
 
-        compareMatrices(expectedBSubmatrix, subB);
+        compareMatrices(expectedSubmatrix, subB);
     }
 
     @Test
@@ -186,11 +200,11 @@ class RealSquareMatrixTest {
         double expectedCofactor = -25;
         double cofactor = A.cofactor(1, 0);
 
-        assertEquals(expectedCofactor, cofactor, "Should correctly compute 3x3 minor");
+        assertEquals(expectedCofactor, cofactor, "Should correctly compute 3x3 cofactor");
     }
 
     @Test
-    void inverse() {
+    void isInvertible() {
         SquareMatrix notInvertible = new SquareMatrixImpl(
             -4, 2, -2, -3,
             9, 6, 2, 6,
@@ -199,36 +213,42 @@ class RealSquareMatrixTest {
         );
 
         assertFalse(notInvertible.isInvertible(), "Should recognise non-invertible matrices");
+    }
 
+    @Test
+    void inverse() {
         SquareMatrix invertibleA = new SquareMatrixImpl(
-            -5, 2, 6, -8,
-            1, -5, 1, 8,
-            7, 7, -6, -7,
-            1, -3, 7, 4
+                -5, 2, 6, -8,
+                1, -5, 1, 8,
+                7, 7, -6, -7,
+                1, -3, 7, 4
         );
         SquareMatrix expectedAInverse = new SquareMatrixImpl(
-            0.21805, 0.45113, 0.24060, -0.04511,
-            -0.80827, -1.45677, -0.44361, 0.52068,
-            -0.07895, -0.22368, -0.05263, 0.19737,
-            -0.52256, -0.81391, -0.30075, 0.30639
+                0.21805, 0.45113, 0.24060, -0.04511,
+                -0.80827, -1.45677, -0.44361, 0.52068,
+                -0.07895, -0.22368, -0.05263, 0.19737,
+                -0.52256, -0.81391, -0.30075, 0.30639
         );
 
         compareMatrices(expectedAInverse, invertibleA.inverse());
 
         SquareMatrix invertibleB = new SquareMatrixImpl(
-            8, -5, 9, 2,
-            7, 5, 6, 1,
-            -6, 0, 9, 6,
-            -3, 0, -9, -4
+                8, -5, 9, 2,
+                7, 5, 6, 1,
+                -6, 0, 9, 6,
+                -3, 0, -9, -4
         );
         SquareMatrix expectedBInverse = new SquareMatrixImpl(
-            -0.15385, -0.15385, -0.28205, -0.53846,
-            -0.07692, 0.12308, 0.02564, 0.03077,
-            0.35897, 0.35897, 0.43590, 0.92308,
-            -0.69231, -0.69231, -0.76923, -1.92308
+                -0.15385, -0.15385, -0.28205, -0.53846,
+                -0.07692, 0.12308, 0.02564, 0.03077,
+                0.35897, 0.35897, 0.43590, 0.92308,
+                -0.69231, -0.69231, -0.76923, -1.92308
         );
         compareMatrices(expectedBInverse, invertibleB.inverse());
+    }
 
+    @Test
+    void multiplyingInversesCancelsOut() {
         SquareMatrix firstFactor = new SquareMatrixImpl(
             9, 3, 0, 9,
             -5, -2, -6, -3,

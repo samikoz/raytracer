@@ -78,12 +78,12 @@ public class SquareMatrixImpl implements SquareMatrix {
     }
 
     @Override
-    public VectorImpl multiply(Tuple them) {
+    public TupleImpl multiply(Tuple them) {
         assert this.dim() == them.dim();
 
         double[] themArray = IntStream.range(0, them.dim()).mapToDouble(them::get).toArray();
 
-        return new VectorImpl(IntStream.range(0, dim).mapToDouble(
+        return new TupleImpl(IntStream.range(0, dim).mapToDouble(
             coordinateIndex -> SquareMatrixImpl.dot(entries[coordinateIndex], themArray)
         ).toArray());
     }
@@ -139,6 +139,7 @@ public class SquareMatrixImpl implements SquareMatrix {
     public SquareMatrix inverse() {
         SquareMatrixImpl inverted = new SquareMatrixImpl(dim);
         double det = det();
+        assert det != 0;
 
         IntStream.range(0, dim).forEach(row ->
             IntStream.range(0, dim).forEach(col ->
