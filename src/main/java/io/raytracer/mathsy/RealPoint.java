@@ -2,12 +2,12 @@ package io.raytracer.mathsy;
 
 import java.util.stream.IntStream;
 
-public class RealPoint extends RealTuple implements Point {
+public class RealPoint extends TupleImpl implements Point {
     public RealPoint(double... coordinates) {
         super(coordinates);
     }
 
-    private RealPoint(RealTuple them) {
+    private RealPoint(TupleImpl them) {
         this(them.toArray());
     }
 

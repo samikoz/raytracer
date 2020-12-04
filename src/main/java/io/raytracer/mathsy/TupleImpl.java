@@ -4,12 +4,12 @@ import java.util.Arrays;
 import java.util.function.IntToDoubleFunction;
 import java.util.stream.IntStream;
 
-class RealTuple implements Tuple {
+class TupleImpl implements Tuple {
     private final int dim;
     private final double[] coords;
     private final static double equalityTolerance = 1e-3;
 
-    public RealTuple(double... coordinates) {
+    public TupleImpl(double... coordinates) {
         dim = coordinates.length;
         coords = coordinates;
     }
@@ -42,8 +42,8 @@ class RealTuple implements Tuple {
         return IntStream.range(0, dim).mapToDouble(this::get).toArray();
     }
 
-    RealTuple applyCoordinatewise(IntToDoubleFunction action) {
-        return new RealTuple(IntStream.range(0, dim).mapToDouble(action).toArray());
+    TupleImpl applyCoordinatewise(IntToDoubleFunction action) {
+        return new TupleImpl(IntStream.range(0, dim).mapToDouble(action).toArray());
     }
 
     double euclideanDistance(Tuple them) {
@@ -52,13 +52,13 @@ class RealTuple implements Tuple {
         return Math.sqrt(IntStream.range(0, dim).mapToDouble(i -> Math.pow(this.get(i) - them.get(i), 2)).sum());
     }
 
-    RealTuple add(Tuple them) {
+    TupleImpl add(Tuple them) {
         assert this.dim == them.dim();
 
         return applyCoordinatewise(i -> this.get(i) + them.get(i));
     }
 
-    public RealTuple multiply(double scalar) {
+    public TupleImpl multiply(double scalar) {
         return applyCoordinatewise(i -> get(i)*scalar);
     }
 }

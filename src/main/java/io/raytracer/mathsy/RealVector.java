@@ -3,12 +3,12 @@ package io.raytracer.mathsy;
 import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
 
-public class RealVector extends RealTuple implements Vector {
+public class RealVector extends TupleImpl implements Vector {
     public RealVector(double... coordinates) {
         super(coordinates);
     }
 
-    private RealVector(RealTuple them) {
+    private RealVector(TupleImpl them) {
         this(them.toArray());
     }
 

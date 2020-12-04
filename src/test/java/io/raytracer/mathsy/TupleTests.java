@@ -31,8 +31,8 @@ class RealTupleTest {
 
     @Test
     void equalityOfTuplesUpToADelta() {
-        Tuple first = new RealTuple(0.0, -2.0, 1e-4);
-        Tuple second = new RealTuple(0.0, -2.0, 0.0);
+        Tuple first = new TupleImpl(0.0, -2.0, 1e-4);
+        Tuple second = new TupleImpl(0.0, -2.0, 0.0);
 
         assertEquals(first, second, "Equality of tuples should be up to a small delta");
     }
