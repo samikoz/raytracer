@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class RealSquareMatrixTest {
     private static void compareMatrices(Matrix expected, Matrix actual) {
         assertEquals(expected.dim(), actual.dim(), "Matrix dimensions should be the same");
+
         for (int x = 0; x < expected.dim(); x++) {
             for (int y = 0; y < expected.dim(); y++) {
                 assertEquals(
