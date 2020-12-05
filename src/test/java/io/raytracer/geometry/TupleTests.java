@@ -1,29 +1,7 @@
 package io.raytracer.geometry;
 
 import org.junit.jupiter.api.Test;
-import java.util.Arrays;
 import static org.junit.jupiter.api.Assertions.*;
-
-class TupleComparator {
-    static void assertTuplesEqual(Tuple expected, Tuple actual, String message) {
-        assertEquals(expected.dim(), actual.dim(), "Should be of the same dimension");
-
-        assertEquals(
-            expected, actual,
-            () -> message + " " + messageComparingCoordinates(expected, actual)
-        );
-    }
-
-    static String messageComparingCoordinates(Tuple expected, Tuple actual) {
-        String[] coordinateComparisonMessages = new String[expected.dim()];
-
-        for (int coordinateIndex = 0; coordinateIndex < expected.dim(); coordinateIndex++) {
-            coordinateComparisonMessages[coordinateIndex] =
-                expected.get(coordinateIndex) + " should be " + actual.get(coordinateIndex);
-        }
-        return String.join(", ", Arrays.asList(coordinateComparisonMessages));
-    }
-}
 
 class TupleTest {
     @Test

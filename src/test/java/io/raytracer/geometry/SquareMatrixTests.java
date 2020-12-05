@@ -3,22 +3,8 @@ package io.raytracer.geometry;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
+
 class SquareMatrixTest {
-    private static void compareMatrices(SquareMatrix expected, SquareMatrix actual) {
-        assertEquals(expected.dim(), actual.dim(), "Matrix dimensions should be the same");
-
-        for (int x = 0; x < expected.dim(); x++) {
-            for (int y = 0; y < expected.dim(); y++) {
-                assertEquals(
-                    expected.get(x, y),
-                    actual.get(x, y),
-                    1e-3,
-                    "(" + x + "," + y + ")-coordinates should be equal"
-                );
-            }
-        }
-    }
-
     @Test
     void correctEntryAccess() {
         SquareMatrix m = new SquareMatrixImpl(
@@ -76,7 +62,7 @@ class SquareMatrixTest {
             16, 26, 46, 42
         );
 
-        compareMatrices(expectedProduct, product);
+        MatrixComparator.compareMatrices(expectedProduct, product);
     }
 
     @Test
@@ -107,7 +93,7 @@ class SquareMatrixTest {
             4, 8, 16, 32
         );
 
-        compareMatrices(A, id.multiply(A));
+        MatrixComparator.compareMatrices(A, id.multiply(A));
     }
 
     @Test
@@ -126,7 +112,7 @@ class SquareMatrixTest {
             0, 8, 3, 8
         );
 
-        compareMatrices(expectedTranspose, transposed);
+        MatrixComparator.compareMatrices(expectedTranspose, transposed);
     }
 
     @Test
@@ -165,7 +151,7 @@ class SquareMatrixTest {
         SquareMatrixImpl subM = M.submatrix(1, 1);
         SquareMatrixImpl expectedSubmatrix = new SquareMatrixImpl(1);
 
-        compareMatrices(expectedSubmatrix, subM);
+        MatrixComparator.compareMatrices(expectedSubmatrix, subM);
     }
 
     @Test
@@ -178,7 +164,7 @@ class SquareMatrixTest {
         SquareMatrixImpl subA = A.submatrix(0, 2);
         SquareMatrixImpl expectedSubmatrix = new SquareMatrixImpl(-3, 2, 0, 6);
 
-        compareMatrices(expectedSubmatrix, subA);
+        MatrixComparator.compareMatrices(expectedSubmatrix, subA);
     }
 
     @Test
@@ -196,7 +182,7 @@ class SquareMatrixTest {
             -7, -1, 1
         );
 
-        compareMatrices(expectedSubmatrix, subB);
+        MatrixComparator.compareMatrices(expectedSubmatrix, subB);
     }
 
     @Test
@@ -239,7 +225,7 @@ class SquareMatrixTest {
                 -0.52256, -0.81391, -0.30075, 0.30639
         );
 
-        compareMatrices(expectedAInverse, invertibleA.inverse());
+        MatrixComparator.compareMatrices(expectedAInverse, invertibleA.inverse());
 
         SquareMatrix invertibleB = new SquareMatrixImpl(
                 8, -5, 9, 2,
@@ -253,7 +239,7 @@ class SquareMatrixTest {
                 0.35897, 0.35897, 0.43590, 0.92308,
                 -0.69231, -0.69231, -0.76923, -1.92308
         );
-        compareMatrices(expectedBInverse, invertibleB.inverse());
+        MatrixComparator.compareMatrices(expectedBInverse, invertibleB.inverse());
     }
 
     @Test
@@ -270,6 +256,6 @@ class SquareMatrixTest {
             7, 0, 5, 4,
             6, -2, 0, 5
         );
-        compareMatrices(firstFactor.multiply(secondFactor).multiply(secondFactor.inverse()), firstFactor);
+        MatrixComparator.compareMatrices(firstFactor.multiply(secondFactor).multiply(secondFactor.inverse()), firstFactor);
     }
 }
