@@ -9,6 +9,7 @@ public class SquareMatrixImpl implements SquareMatrix {
     private final static double equalityTolerance = 1e-3;
 
     private SquareMatrixImpl(int dimension) {
+        assert dimension > 0;
         dim = dimension;
         entries = new double[dim][dim];
     }
@@ -107,8 +108,8 @@ public class SquareMatrixImpl implements SquareMatrix {
 
     @Override
     public double det() {
-        if (dim == 2) {
-            return get(0,0)*get(1, 1) - get(0, 1)*get(1, 0);
+        if (dim == 1) {
+            return this.get(0, 0);
         }
         else {
             return IntStream.range(0, dim).mapToDouble(firstRowIndex ->

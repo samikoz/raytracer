@@ -160,6 +160,15 @@ class SquareMatrixTest {
     }
 
     @Test
+    void submatrix2x2() {
+        SquareMatrixImpl M = new SquareMatrixImpl(1, 2, 3, 4);
+        SquareMatrixImpl subM = M.submatrix(1, 1);
+        SquareMatrixImpl expectedSubmatrix = new SquareMatrixImpl(1);
+
+        compareMatrices(expectedSubmatrix, subM);
+    }
+
+    @Test
     void submatrix3x3() {
         SquareMatrixImpl A = new SquareMatrixImpl(
             1, 5, 0,
