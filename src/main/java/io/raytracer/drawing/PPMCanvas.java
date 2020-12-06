@@ -1,11 +1,11 @@
 package io.raytracer.drawing;
 
 import java.util.*;
-import java.util.stream.Stream;
+
 
 public class PPMCanvas implements Canvas {
-    private PPMCanvasRow[] pixelGrid;
-    static private final Colour initialColour = new Unit3TupleColour(0 ,0,0);
+    private final PPMCanvasRow[] pixelGrid;
+    static private final Colour initialColour = new ColourImpl(0 ,0,0);
     static private final int exportedLineMaxLength = 70;
     private final String exportHeader;
 
@@ -26,19 +26,8 @@ public class PPMCanvas implements Canvas {
         return pixelGrid[y].get(x);
     }
 
-    private String putLineBreaks(String exportRow) {
-        StringBuilder rowToBreak = new StringBuilder(exportRow);
-        int numberOfBreaks = exportRow.length() / exportedLineMaxLength;
-        for (int breakNumber = 1; breakNumber <= numberOfBreaks; breakNumber++) {
-            int whitespacePosition = breakNumber*exportedLineMaxLength;
-            while (rowToBreak.charAt(whitespacePosition) != ' ') whitespacePosition--;
-            rowToBreak.setCharAt(whitespacePosition, '\n');
-        }
-        return rowToBreak.toString();
-    }
-
     @Override
-    public String exportToPPM() {
+    public String export() {
         StringBuilder exported = new StringBuilder(exportHeader);
 
         for (PPMCanvasRow row : rows()) {
@@ -69,14 +58,25 @@ public class PPMCanvas implements Canvas {
         };
     }
 
-    private class PPMCanvasRow implements Iterable<Colour> {
-        private Colour[] rowColours;
-        private int size;
+    private String putLineBreaks(String exportRow) {
+        StringBuilder rowToBreak = new StringBuilder(exportRow);
+        int numberOfBreaks = exportRow.length() / exportedLineMaxLength;
+        for (int breakNumber = 1; breakNumber <= numberOfBreaks; breakNumber++) {
+            int whitespacePosition = breakNumber*exportedLineMaxLength;
+            while (rowToBreak.charAt(whitespacePosition) != ' ') whitespacePosition--;
+            rowToBreak.setCharAt(whitespacePosition, '\n');
+        }
+        return rowToBreak.toString();
+    }
+
+    private static class PPMCanvasRow implements Iterable<Colour> {
+        private final Colour[] rowColours;
+        private final int size;
 
         PPMCanvasRow(int size) {
             this.size = size;
 
-            rowColours = new Unit3TupleColour[size];
+            rowColours = new ColourImpl[size];
             Arrays.fill(rowColours, initialColour);
         }
 
