@@ -6,6 +6,21 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class ColourTest {
     @Test
+    void equalityUpToADelta() {
+        Colour first = new ColourImpl(0.5, 0.2, 0);
+        Colour second = new ColourImpl(0.5, 0.2 + 1e-4, 0);
+
+        assertEquals(first, second, "Equality of colours should be evaluated up to a small delta.");
+    }
+
+    @Test
+    void exportNormalised() {
+        Colour c = new ColourImpl(0, 0.5, 1);
+
+        assertEquals("0 128 255", c.exportNormalised(), "Exporting should integer-scale by 255");
+    }
+
+    @Test
     void add() {
         Colour first = new ColourImpl(0.9, 0.6, 0.75);
         Colour second = new ColourImpl(0.7, 0.1, 0.25);
@@ -14,8 +29,7 @@ class ColourTest {
 
         assertEquals(
             expectedSum, summed,
-            () -> "Sum of Colours should be a colour. " + ColourComparator.compareColourComponents(expectedSum, summed)
-        );
+            () -> "Sum of Colours should be a colour. " + ColourComparator.compareColourComponents(expectedSum, summed));
     }
 
     @Test
@@ -27,8 +41,7 @@ class ColourTest {
         assertEquals(
             expectedProduct, multiplied,
             () -> "Colour multiplied by scalar should be a colour. " +
-                ColourComparator.compareColourComponents(expectedProduct, multiplied)
-        );
+                ColourComparator.compareColourComponents(expectedProduct, multiplied));
     }
 
     @Test
@@ -41,7 +54,6 @@ class ColourTest {
         assertEquals(
             expectedProduct, mixed,
             () -> "Mixture of Colours should be a colour. " +
-                ColourComparator.compareColourComponents(expectedProduct, mixed)
-        );
+                ColourComparator.compareColourComponents(expectedProduct, mixed));
     }
 }

@@ -53,7 +53,7 @@ class CanvasTest{
     @Test
     void correctPPMExportPixelData() {
         Canvas canvas = new PPMCanvas(5, 3);
-        canvas.write(0, 0, new ColourImpl(1.5, 0,0));
+        canvas.write(0, 0, new ColourImpl(1, 0,0));
         canvas.write(2, 1, new ColourImpl(0, 0.5, 0));
         canvas.write(4, 2, new ColourImpl(-0.5, 0, 1));
 
