@@ -1,8 +1,8 @@
 package io.raytracer.geometry;
 
 import java.util.Arrays;
-import java.util.function.IntToDoubleFunction;
 import java.util.stream.IntStream;
+import java.util.function.IntToDoubleFunction;
 
 class TupleImpl implements Tuple {
     private final int dim;
@@ -59,6 +59,6 @@ class TupleImpl implements Tuple {
     }
 
     public TupleImpl multiply(double scalar) {
-        return applyCoordinatewise(i -> get(i)*scalar);
+        return applyCoordinatewise(i -> get(i) * scalar);
     }
 }

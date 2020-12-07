@@ -21,7 +21,7 @@ public class SquareMatrixImpl implements SquareMatrix {
 
         this.entries = new double[dim][dim];
         IntStream.range(0, dim).forEach(rowIndex ->
-            Arrays.setAll(this.entries[rowIndex], colIndex -> entries[dim*rowIndex + colIndex])
+                Arrays.setAll(this.entries[rowIndex], colIndex -> entries[dim * rowIndex + colIndex])
         );
     }
 
@@ -71,7 +71,7 @@ public class SquareMatrixImpl implements SquareMatrix {
         IntStream.range(0, dim).forEach(y -> {
             double[] theirColumn = IntStream.range(0, dim).mapToDouble(i -> them.get(i, y)).toArray();
             IntStream.range(0, dim).forEach(x ->
-                product.set(x, y, SquareMatrixImpl.dot(this.entries[x], theirColumn))
+                    product.set(x, y, SquareMatrixImpl.dot(this.entries[x], theirColumn))
             );
         });
 
@@ -85,11 +85,11 @@ public class SquareMatrixImpl implements SquareMatrix {
         double[] themArray = IntStream.range(0, them.dim()).mapToDouble(them::get).toArray();
 
         return new TupleImpl(IntStream.range(0, dim).mapToDouble(
-            coordinateIndex -> SquareMatrixImpl.dot(entries[coordinateIndex], themArray)
+                coordinateIndex -> SquareMatrixImpl.dot(entries[coordinateIndex], themArray)
         ).toArray());
     }
 
-    public static SquareMatrix id (int dim) {
+    public static SquareMatrix id(int dim) {
         SquareMatrixImpl identity = new SquareMatrixImpl(dim);
 
         IntStream.range(0, dim).forEach(diagonalIndex -> identity.set(diagonalIndex, diagonalIndex, 1));
@@ -101,7 +101,7 @@ public class SquareMatrixImpl implements SquareMatrix {
     public SquareMatrix transpose() {
         SquareMatrixImpl transposed = new SquareMatrixImpl(dim);
         IntStream.range(0, dim).forEach(i ->
-            IntStream.range(0, dim).forEach(j -> transposed.set(i, j, this.get(j, i)))
+                IntStream.range(0, dim).forEach(j -> transposed.set(i, j, this.get(j, i)))
         );
         return transposed;
     }
@@ -110,28 +110,27 @@ public class SquareMatrixImpl implements SquareMatrix {
     public double det() {
         if (dim == 1) {
             return this.get(0, 0);
-        }
-        else {
+        } else {
             return IntStream.range(0, dim).mapToDouble(firstRowIndex ->
-                get(0, firstRowIndex)*cofactor(0, firstRowIndex)
+                    get(0, firstRowIndex) * cofactor(0, firstRowIndex)
             ).sum();
         }
     }
 
     double cofactor(int row, int col) {
-        return Math.pow(-1, row + col)*submatrix(row, col).det();
+        return Math.pow(-1, row + col) * submatrix(row, col).det();
     }
 
     SquareMatrixImpl submatrix(int rowToSkip, int colToSkip) {
-        SquareMatrixImpl sub = new SquareMatrixImpl(dim -1);
+        SquareMatrixImpl sub = new SquareMatrixImpl(dim - 1);
 
         IntStream.range(0, dim - 1).forEach(x ->
-            IntStream.range(0, dim - 1).forEach(y ->
-                sub.set(x, y, this.get(
-                    x >= rowToSkip ? x + 1 : x,
-                    y >= colToSkip ? y + 1 : y
-                ))
-            )
+                IntStream.range(0, dim - 1).forEach(y ->
+                        sub.set(x, y, this.get(
+                                x >= rowToSkip ? x + 1 : x,
+                                y >= colToSkip ? y + 1 : y
+                        ))
+                )
         );
         return sub;
     }
@@ -143,9 +142,9 @@ public class SquareMatrixImpl implements SquareMatrix {
         assert det != 0;
 
         IntStream.range(0, dim).forEach(row ->
-            IntStream.range(0, dim).forEach(col ->
-                inverted.set(col, row, cofactor(row, col)/det)
-            )
+                IntStream.range(0, dim).forEach(col ->
+                        inverted.set(col, row, cofactor(row, col) / det)
+                )
         );
         return inverted;
     }

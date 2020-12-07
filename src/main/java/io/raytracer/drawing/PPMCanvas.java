@@ -1,11 +1,14 @@
 package io.raytracer.drawing;
 
-import java.util.*;
-
+import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.NoSuchElementException;
 
 public class PPMCanvas implements Canvas {
     private final PPMCanvasRow[] pixelGrid;
-    static private final Colour initialColour = new ColourImpl(0 ,0,0);
+    static private final Colour initialColour = new ColourImpl(0, 0, 0);
     static private final int exportedLineMaxLength = 70;
     private final String exportHeader;
 
@@ -40,7 +43,9 @@ public class PPMCanvas implements Canvas {
         return () -> new Iterator<PPMCanvasRow>() {
             private int rowIndex;
 
-            { rowIndex = 0; }
+            {
+                rowIndex = 0;
+            }
 
             @Override
             public boolean hasNext() {
@@ -62,7 +67,7 @@ public class PPMCanvas implements Canvas {
         StringBuilder rowToBreak = new StringBuilder(exportRow);
         int numberOfBreaks = exportRow.length() / exportedLineMaxLength;
         for (int breakNumber = 1; breakNumber <= numberOfBreaks; breakNumber++) {
-            int whitespacePosition = breakNumber*exportedLineMaxLength;
+            int whitespacePosition = breakNumber * exportedLineMaxLength;
             while (rowToBreak.charAt(whitespacePosition) != ' ') whitespacePosition--;
             rowToBreak.setCharAt(whitespacePosition, '\n');
         }
@@ -101,7 +106,9 @@ public class PPMCanvas implements Canvas {
             return new Iterator<Colour>() {
                 private int rowElementIndex;
 
-                { rowElementIndex = 0; }
+                {
+                    rowElementIndex = 0;
+                }
 
                 @Override
                 public boolean hasNext() {

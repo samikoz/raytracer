@@ -1,8 +1,10 @@
 package io.raytracer.geometry;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertAll;
+
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
-
+import io.raytracer.geometry.helpers.TupleComparator;
 
 class VectorTest {
     @Test
@@ -36,8 +38,7 @@ class VectorTest {
         Vector expectedNormalised = new VectorImpl(1 / Math.sqrt(14), 2 / Math.sqrt(14), 3 / Math.sqrt(14));
         Vector normalised = vector.normalise();
 
-        assertAll(
-                "Should return a correctly normalised vector.",
+        assertAll("Should return a correctly normalised vector.",
                 () -> assertEquals(
                         normalised.norm(), 1, 1e-3, "Normalised vector should have unit norm"
                 ),

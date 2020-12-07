@@ -32,7 +32,7 @@ public class ColourImpl implements Colour {
 
     @Override
     public int hashCode() {
-        return Arrays.hashCode(new double[] {this.getRed(), this.getGreen(), this.getBlue()});
+        return Arrays.hashCode(new double[]{this.getRed(), this.getGreen(), this.getBlue()});
     }
 
     @Override
@@ -45,9 +45,9 @@ public class ColourImpl implements Colour {
 
     private double distance(ColourImpl them) {
         return Math.sqrt(
-            Math.pow(this.getRed() - them.getRed(), 2) +
-                Math.pow(this.getGreen() - them.getGreen(), 2) +
-                Math.pow(this.getBlue() - them.getBlue(), 2)
+                Math.pow(this.getRed() - them.getRed(), 2) +
+                        Math.pow(this.getGreen() - them.getGreen(), 2) +
+                        Math.pow(this.getBlue() - them.getBlue(), 2)
         );
     }
 
@@ -63,34 +63,34 @@ public class ColourImpl implements Colour {
     @Override
     public String exportNormalised() {
         return normaliseComponent(getRed()) + " " +
-            normaliseComponent(getGreen()) + " " +
-            normaliseComponent(getBlue());
+                normaliseComponent(getGreen()) + " " +
+                normaliseComponent(getBlue());
     }
 
     @Override
     public ColourImpl add(Colour them) {
         return new ColourImpl(
-            this.getRed() + them.getRed(),
-            this.getGreen() + them.getGreen(),
-            this.getBlue() + them.getBlue()
+                this.getRed() + them.getRed(),
+                this.getGreen() + them.getGreen(),
+                this.getBlue() + them.getBlue()
         );
     }
 
     @Override
     public Colour multiply(double scalar) {
         return new ColourImpl(
-            scalar*this.getRed(),
-            scalar*this.getGreen(),
-            scalar*this.getBlue()
+                scalar * this.getRed(),
+                scalar * this.getGreen(),
+                scalar * this.getBlue()
         );
     }
 
     @Override
     public Colour mix(Colour them) {
         return new ColourImpl(
-            this.getRed()*them.getRed(),
-            this.getGreen()*them.getGreen(),
-            this.getBlue()*them.getBlue()
+                this.getRed() * them.getRed(),
+                this.getGreen() * them.getGreen(),
+                this.getBlue() * them.getBlue()
         );
     }
 }

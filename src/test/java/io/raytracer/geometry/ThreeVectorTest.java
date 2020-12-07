@@ -1,7 +1,7 @@
 package io.raytracer.geometry;
 
 import org.junit.jupiter.api.Test;
-
+import io.raytracer.geometry.helpers.TupleComparator;
 
 class ThreeVectorTest {
     @Test

@@ -1,8 +1,13 @@
 package io.raytracer.geometry;
 
-import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
+import io.raytracer.geometry.helpers.MatrixComparator;
+import org.junit.jupiter.api.Test;
+import io.raytracer.geometry.helpers.TupleComparator;
 
 class SquareMatrixTest {
     @Test
@@ -12,8 +17,7 @@ class SquareMatrixTest {
             1, -2, -7,
             0, 1, 1
         );
-        assertAll(
-            "Matrix indices should refer to row and column number respectively",
+        assertAll("Matrix indices should refer to row and column number respectively",
             () -> assertEquals(0, m.get(0, 2)),
             () -> assertEquals(1, m.get(1, 0))
         );
@@ -76,9 +80,7 @@ class SquareMatrixTest {
         Tuple multiplied = A.multiply(x);
         Tuple expectedProduct = new TupleImpl(14, 22, 32);
 
-        assertEquals(
-            expectedProduct,
-            multiplied,
+        assertEquals(expectedProduct, multiplied,
             "Product of a matrix and a tuple should be a tuple. " +
                 TupleComparator.messageComparingCoordinates(expectedProduct, multiplied));
     }

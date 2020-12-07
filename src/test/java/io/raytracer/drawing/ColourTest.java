@@ -1,8 +1,9 @@
 package io.raytracer.drawing;
 
-import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import io.raytracer.drawing.helpers.ColourComparator;
+import org.junit.jupiter.api.Test;
 
 class ColourTest {
     @Test
@@ -27,8 +28,7 @@ class ColourTest {
         Colour expectedSum = new ColourImpl(1.6, 0.7, 1);
         Colour summed = first.add(second);
 
-        assertEquals(
-            expectedSum, summed,
+        assertEquals(expectedSum, summed,
             () -> "Sum of Colours should be a colour. " + ColourComparator.compareColourComponents(expectedSum, summed));
     }
 
@@ -51,8 +51,7 @@ class ColourTest {
         Colour expectedProduct = new ColourImpl(0.9, 0.2, 0.04);
         Colour mixed = first.mix(second);
 
-        assertEquals(
-            expectedProduct, mixed,
+        assertEquals(expectedProduct, mixed,
             () -> "Mixture of Colours should be a colour. " +
                 ColourComparator.compareColourComponents(expectedProduct, mixed));
     }

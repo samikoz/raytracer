@@ -2,6 +2,7 @@ package io.raytracer.geometry;
 
 public interface SquareMatrix {
     int dim();
+
     double get(int x, int y);
 
     SquareMatrix multiply(SquareMatrix them);

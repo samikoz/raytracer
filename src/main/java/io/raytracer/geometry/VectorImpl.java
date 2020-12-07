@@ -34,13 +34,13 @@ public class VectorImpl extends TupleImpl implements Vector {
 
     @Override
     public VectorImpl normalise() {
-        return new VectorImpl(this.multiply(1/this.norm()));
+        return new VectorImpl(this.multiply(1 / this.norm()));
     }
 
     @Override
     public double dot(Vector them) {
         assert this.dim() == them.dim();
 
-        return IntStream.range(0, dim()).mapToDouble(i -> this.get(i)*them.get(i)).sum();
+        return IntStream.range(0, dim()).mapToDouble(i -> this.get(i) * them.get(i)).sum();
     }
 }
