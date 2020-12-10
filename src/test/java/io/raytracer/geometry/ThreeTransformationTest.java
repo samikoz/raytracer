@@ -73,7 +73,7 @@ class ThreeTransformationTest {
     void pointXRotation() {
         Transformation halfQuarterRotation = ThreeTransformation.rotation_x(Math.PI / 4);
         Point aPoint = new PointImpl(0, 1, 0);
-        Point expectedRotatedPoint = new PointImpl(0, Math.sqrt(2)/2, Math.sqrt(2)/2);
+        Point expectedRotatedPoint = new PointImpl(0, Math.sqrt(2) / 2, Math.sqrt(2) / 2);
         Point actualRotatedPoint = aPoint.transform(halfQuarterRotation);
 
         TupleComparator.assertTuplesEqual(expectedRotatedPoint, actualRotatedPoint,
@@ -84,10 +84,21 @@ class ThreeTransformationTest {
     void pointInverseXRotation() {
         Transformation halfQuarterRotation = ThreeTransformation.rotation_x(Math.PI / 4).inverse();
         Point aPoint = new PointImpl(0, 1, 0);
-        Point expectedRotatedPoint = new PointImpl(0, Math.sqrt(2)/2, -Math.sqrt(2)/2);
+        Point expectedRotatedPoint = new PointImpl(0, Math.sqrt(2) / 2, -Math.sqrt(2) / 2);
         Point actualRotatedPoint = aPoint.transform(halfQuarterRotation);
 
         TupleComparator.assertTuplesEqual(expectedRotatedPoint, actualRotatedPoint,
                 "Inverse rotation around x axis should rotate counterclockwise.");
+    }
+
+    @Test
+    void pointYRotation() {
+        Transformation halfQuarterRotation = ThreeTransformation.rotation_y(Math.PI / 4);
+        Point aPoint = new PointImpl(0, 0, 1);
+        Point expectedRotatedPoint = new PointImpl(Math.sqrt(2) / 2, 0, Math.sqrt(2) / 2);
+        Point actualRotatedPoint = aPoint.transform(halfQuarterRotation);
+
+        TupleComparator.assertTuplesEqual(expectedRotatedPoint, actualRotatedPoint,
+                "Should correctly rotate a point around the y axis.");
     }
 }
