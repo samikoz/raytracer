@@ -61,6 +61,15 @@ public class ThreeTransformation implements Transformation {
         ));
     }
 
+    static ThreeTransformation shear(double xy, double xz, double yx, double yz, double zx, double zy) {
+        return new ThreeTransformation(new SquareMatrixImpl(
+           1, xy, xz, 0,
+           yx, 1, yz, 0,
+           zx, zy, 1, 0,
+           0, 0, 0, 1
+        ));
+    }
+
     @Override
     public Transformation inverse() {
         return new ThreeTransformation(this.underlyingMatrix.inverse());

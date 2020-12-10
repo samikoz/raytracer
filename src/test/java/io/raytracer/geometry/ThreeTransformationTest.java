@@ -1,5 +1,9 @@
 package io.raytracer.geometry;
 
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.ParameterizedTest;
+import java.util.stream.Stream;
 import org.junit.jupiter.api.Test;
 import io.raytracer.geometry.helpers.TupleComparator;
 
@@ -111,5 +115,30 @@ class ThreeTransformationTest {
 
         TupleComparator.assertTuplesEqual(expectedRotatedPoint, actualRotatedPoint,
                 "Should correctly rotate a point around the z axis.");
+    }
+
+    private static Stream<Arguments> provideShearsAndExpectedPoints() {
+        return Stream.of(
+                Arguments.of(new int[] {1, 0, 0, 0, 0, 0}, new int[] {5, 3, 4}),
+                Arguments.of(new int[] {0, 1, 0, 0, 0, 0}, new int[] {6, 3, 4}),
+                Arguments.of(new int[] {0, 0, 1, 0, 0, 0}, new int[] {2, 5, 4}),
+                Arguments.of(new int[] {0, 0, 0, 1, 0, 0}, new int[] {2, 7, 4}),
+                Arguments.of(new int[] {0, 0, 0, 0, 1, 0}, new int[] {2, 3, 6}),
+                Arguments.of(new int[] {0, 0, 0, 0, 0, 1}, new int[] {2, 3, 7})
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource("provideShearsAndExpectedPoints")
+    void pointShear(int[] shearMatrix, int[] expectedShearedCoords) {
+        Transformation aShear = ThreeTransformation.shear(
+                shearMatrix[0], shearMatrix[1], shearMatrix[2], shearMatrix[3], shearMatrix[4], shearMatrix[5]);
+        Point aPoint = new PointImpl(2, 3, 4);
+        Point expectedShearedPoint = new PointImpl(
+                expectedShearedCoords[0], expectedShearedCoords[1], expectedShearedCoords[2]);
+        Point actualShearedPoint = aPoint.transform(aShear);
+
+        TupleComparator.assertTuplesEqual(expectedShearedPoint, actualShearedPoint,
+                "Should correctly shear points.");
     }
 }
