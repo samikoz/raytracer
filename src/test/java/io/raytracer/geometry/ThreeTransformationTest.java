@@ -101,4 +101,15 @@ class ThreeTransformationTest {
         TupleComparator.assertTuplesEqual(expectedRotatedPoint, actualRotatedPoint,
                 "Should correctly rotate a point around the y axis.");
     }
+
+    @Test
+    void pointZRotation() {
+        Transformation halfQuarterRotation = ThreeTransformation.rotation_z(Math.PI / 4);
+        Point aPoint = new PointImpl(0, 1, 0);
+        Point expectedRotatedPoint = new PointImpl(-Math.sqrt(2) / 2, Math.sqrt(2) / 2, 0);
+        Point actualRotatedPoint = aPoint.transform(halfQuarterRotation);
+
+        TupleComparator.assertTuplesEqual(expectedRotatedPoint, actualRotatedPoint,
+                "Should correctly rotate a point around the z axis.");
+    }
 }

@@ -47,7 +47,16 @@ public class ThreeTransformation implements Transformation {
         return new ThreeTransformation(new SquareMatrixImpl(
                 Math.cos(angle), 0, Math.sin(angle), 0,
                 0, 1, 0, 0,
-                - Math.sin(angle), 0, Math.cos(angle), 0,
+                -Math.sin(angle), 0, Math.cos(angle), 0,
+                0, 0, 0, 1
+        ));
+    }
+
+    static ThreeTransformation rotation_z(double angle) {
+        return new ThreeTransformation(new SquareMatrixImpl(
+                Math.cos(angle), -Math.sin(angle), 0, 0,
+                Math.sin(angle), Math.cos(angle), 0, 0,
+                0, 0, 1, 0,
                 0, 0, 0, 1
         ));
     }
