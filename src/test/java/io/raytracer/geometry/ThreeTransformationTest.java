@@ -141,4 +141,17 @@ class ThreeTransformationTest {
         TupleComparator.assertTuplesEqual(expectedShearedPoint, actualShearedPoint,
                 "Should correctly shear points.");
     }
+
+    @Test
+    void chainingTransformations() {
+        Transformation t = ThreeTransformation.rotation_x(Math.PI / 2)
+                .scale(5, 5, 5)
+                .translate(10, 5, 7);
+        Point aPoint = new PointImpl(1, 0, 1);
+        Point expectedTransformedPoint = new PointImpl(15, 0, 7);
+        Point actualTransformedPoint = aPoint.transform(t);
+
+        TupleComparator.assertTuplesEqual(expectedTransformedPoint, actualTransformedPoint,
+                "Should correctly chain transformations.");
+    }
 }

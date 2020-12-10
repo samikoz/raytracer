@@ -25,6 +25,15 @@ public class ThreeTransformation implements Transformation {
         ));
     }
 
+    public ThreeTransformation translate(double x, double y, double z) {
+        return new ThreeTransformation(new SquareMatrixImpl(
+                1, 0, 0, x,
+                0, 1, 0, y,
+                0, 0, 1, z,
+                0, 0, 0, 1
+        ).multiply(this.underlyingMatrix));
+    }
+
     static ThreeTransformation scaling(double x, double y, double z) {
         return new ThreeTransformation(new SquareMatrixImpl(
                 x, 0, 0, 0,
@@ -32,6 +41,15 @@ public class ThreeTransformation implements Transformation {
                 0, 0, z, 0,
                 0, 0, 0, 1
         ));
+    }
+
+    public ThreeTransformation scale(double x, double y, double z) {
+        return new ThreeTransformation(new SquareMatrixImpl(
+                x, 0, 0, 0,
+                0, y, 0, 0,
+                0, 0, z, 0,
+                0, 0, 0, 1
+        ).multiply(this.underlyingMatrix));
     }
 
     static ThreeTransformation rotation_x(double angle) {
@@ -43,6 +61,15 @@ public class ThreeTransformation implements Transformation {
         ));
     }
 
+    public ThreeTransformation rotate_x(double angle) {
+        return new ThreeTransformation(new SquareMatrixImpl(
+                1, 0, 0, 0,
+                0, Math.cos(angle), -Math.sin(angle), 0,
+                0, Math.sin(angle), Math.cos(angle), 0,
+                0, 0, 0, 1
+        ).multiply(this.underlyingMatrix));
+    }
+
     static ThreeTransformation rotation_y(double angle) {
         return new ThreeTransformation(new SquareMatrixImpl(
                 Math.cos(angle), 0, Math.sin(angle), 0,
@@ -50,6 +77,15 @@ public class ThreeTransformation implements Transformation {
                 -Math.sin(angle), 0, Math.cos(angle), 0,
                 0, 0, 0, 1
         ));
+    }
+
+    public ThreeTransformation rotate_y(double angle) {
+        return new ThreeTransformation(new SquareMatrixImpl(
+                Math.cos(angle), 0, Math.sin(angle), 0,
+                0, 1, 0, 0,
+                -Math.sin(angle), 0, Math.cos(angle), 0,
+                0, 0, 0, 1
+        ).multiply(this.underlyingMatrix));
     }
 
     static ThreeTransformation rotation_z(double angle) {
@@ -61,6 +97,15 @@ public class ThreeTransformation implements Transformation {
         ));
     }
 
+    public ThreeTransformation rotate_z(double angle) {
+        return new ThreeTransformation(new SquareMatrixImpl(
+                Math.cos(angle), -Math.sin(angle), 0, 0,
+                Math.sin(angle), Math.cos(angle), 0, 0,
+                0, 0, 1, 0,
+                0, 0, 0, 1
+        ).multiply(this.underlyingMatrix));
+    }
+
     static ThreeTransformation shear(double xy, double xz, double yx, double yz, double zx, double zy) {
         return new ThreeTransformation(new SquareMatrixImpl(
            1, xy, xz, 0,
@@ -68,6 +113,15 @@ public class ThreeTransformation implements Transformation {
            zx, zy, 1, 0,
            0, 0, 0, 1
         ));
+    }
+
+    public ThreeTransformation doShear(double xy, double xz, double yx, double yz, double zx, double zy) {
+        return new ThreeTransformation(new SquareMatrixImpl(
+                1, xy, xz, 0,
+                yx, 1, yz, 0,
+                zx, zy, 1, 0,
+                0, 0, 0, 1
+        ).multiply(this.underlyingMatrix));
     }
 
     @Override

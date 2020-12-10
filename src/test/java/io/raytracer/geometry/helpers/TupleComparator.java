@@ -9,8 +9,7 @@ public class TupleComparator {
     public static void assertTuplesEqual(Tuple expected, Tuple actual, String message) {
         assertEquals(expected.dim(), actual.dim(), "Should be of the same dimension");
 
-        assertEquals(expected, actual, () -> message + " " + messageComparingCoordinates(expected, actual)
-        );
+        assertEquals(expected, actual, () -> message + " " + messageComparingCoordinates(expected, actual));
     }
 
     public static String messageComparingCoordinates(Tuple expected, Tuple actual) {
@@ -18,7 +17,7 @@ public class TupleComparator {
 
         for (int coordinateIndex = 0; coordinateIndex < expected.dim(); coordinateIndex++) {
             coordinateComparisonMessages[coordinateIndex] =
-                    expected.get(coordinateIndex) + " should be " + actual.get(coordinateIndex);
+                    actual.get(coordinateIndex) + " should be " + expected.get(coordinateIndex);
         }
         return String.join(", ", Arrays.asList(coordinateComparisonMessages));
     }
