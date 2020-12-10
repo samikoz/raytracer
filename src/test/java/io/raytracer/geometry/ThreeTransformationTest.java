@@ -35,4 +35,37 @@ class ThreeTransformationTest {
         TupleComparator.assertTuplesEqual(aVector, actualTranslatedPoint,
                 "A translated vector should be a vector.");
     }
+
+    @Test
+    void pointScaling() {
+        Transformation aScaling = ThreeTransformation.scaling(2, 3, 4);
+        Point aPoint = new PointImpl(-4, 6, 8);
+        Point expectedScaledPoint = new PointImpl(-8, 18, 32);
+        Point actualScaledPoint = aPoint.transform(aScaling);
+
+        TupleComparator.assertTuplesEqual(expectedScaledPoint, actualScaledPoint,
+                "A scaled point should be a point.");
+    }
+
+    @Test
+    void vectorScaling() {
+        Transformation aScaling = ThreeTransformation.scaling(2, 3, 4);
+        Vector aVector = new VectorImpl(-4, 6, 8);
+        Vector expectedScaledVector = new VectorImpl(-8, 18, 32);
+        Vector actualScaledVector = aVector.transform(aScaling);
+
+        TupleComparator.assertTuplesEqual(expectedScaledVector, actualScaledVector,
+                "A scaled vector should be a vector.");
+    }
+
+    @Test
+    void vectorScalingByInverse() {
+        Transformation aScaling = ThreeTransformation.scaling(2, 3, 4).inverse();
+        Vector aVector = new VectorImpl(-4, 6, 8);
+        Vector expectedScaledVector = new VectorImpl(-2, 2, 2);
+        Vector actualScaledVector = aVector.transform(aScaling);
+
+        TupleComparator.assertTuplesEqual(expectedScaledVector, actualScaledVector,
+                "Scaling by an inverse scales in the opposite direction.");
+    }
 }
