@@ -13,7 +13,22 @@ public class RayImpl implements Ray{
     }
 
     @Override
+    public Vector getDirection() {
+        return this.direction;
+    }
+
+    @Override
+    public Point getOrigin() {
+        return this.origin;
+    }
+
+    @Override
     public Point position(double time) {
         return origin.add(direction.multiply(time));
+    }
+
+    @Override
+    public double[] intersect(Drawable object) {
+        return object.intersect(this);
     }
 }
