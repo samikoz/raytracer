@@ -11,4 +11,6 @@ public interface Point extends Tuple {
     }
 
     Vector subtract(Point them);
+
+    Point transform(Transformation t);
 }

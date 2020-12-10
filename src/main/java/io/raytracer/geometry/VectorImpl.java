@@ -43,4 +43,9 @@ public class VectorImpl extends TupleImpl implements Vector {
 
         return IntStream.range(0, dim()).mapToDouble(i -> this.get(i) * them.get(i)).sum();
     }
+
+    @Override
+    public Vector transform(Transformation t) {
+        return t.act(this);
+    }
 }

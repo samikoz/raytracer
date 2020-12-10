@@ -17,4 +17,6 @@ public interface Vector extends Tuple{
     }
 
     double dot(Vector them);
+
+    Vector transform(Transformation t);
 }

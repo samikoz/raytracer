@@ -34,4 +34,9 @@ public class PointImpl extends TupleImpl implements Point {
         Point movedBack = subtract(toMoveBack);
         return new VectorImpl(IntStream.range(0, movedBack.dim()).mapToDouble(movedBack::get).toArray());
     }
+
+    @Override
+    public Point transform(Transformation t) {
+        return t.act(this);
+    }
 }
