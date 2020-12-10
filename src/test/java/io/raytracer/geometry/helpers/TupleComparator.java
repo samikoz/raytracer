@@ -9,8 +9,7 @@ public class TupleComparator {
     public static void assertTuplesEqual(Tuple expected, Tuple actual, String message) {
         assertEquals(expected.dim(), actual.dim(), "Should be of the same dimension");
 
-        assertEquals(expected, actual,
-                () -> message + " " + messageComparingCoordinates(expected, actual)
+        assertEquals(expected, actual, () -> message + " " + messageComparingCoordinates(expected, actual)
         );
     }
 
