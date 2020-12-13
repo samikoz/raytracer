@@ -28,7 +28,7 @@ public class RayImpl implements Ray{
     }
 
     @Override
-    public double[] intersect(Drawable object) {
+    public IntersectionList intersect(Drawable object) {
         return object.intersect(this);
     }
 }

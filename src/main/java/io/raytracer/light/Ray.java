@@ -9,5 +9,5 @@ public interface Ray {
 
     Point position(double time);
 
-    double[] intersect(Drawable object);
+    IntersectionList intersect(Drawable object);
 }
