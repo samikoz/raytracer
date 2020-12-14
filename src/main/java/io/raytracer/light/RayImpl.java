@@ -1,6 +1,7 @@
 package io.raytracer.light;
 
 import io.raytracer.geometry.Point;
+import io.raytracer.geometry.Transformation;
 import io.raytracer.geometry.Vector;
 
 public class RayImpl implements Ray{
@@ -30,5 +31,10 @@ public class RayImpl implements Ray{
     @Override
     public IntersectionList intersect(Drawable object) {
         return object.intersect(this);
+    }
+
+    @Override
+    public Ray transform(Transformation t) {
+        return new RayImpl(this.origin.transform(t), this.direction.transform(t));
     }
 }

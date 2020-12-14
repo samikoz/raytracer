@@ -1,6 +1,7 @@
 package io.raytracer.light;
 
 import io.raytracer.geometry.Point;
+import io.raytracer.geometry.Transformation;
 import io.raytracer.geometry.Vector;
 
 public interface Ray {
@@ -10,4 +11,6 @@ public interface Ray {
     Point position(double time);
 
     IntersectionList intersect(Drawable object);
+
+    Ray transform(Transformation t);
 }

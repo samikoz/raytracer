@@ -16,7 +16,7 @@ public class ThreeTransformation implements Transformation {
         underlyingMatrix = m;
     }
 
-    static ThreeTransformation translation(double x, double y, double z) {
+    public static ThreeTransformation translation(double x, double y, double z) {
         return new ThreeTransformation(new SquareMatrixImpl(
                 1, 0, 0, x,
                 0, 1, 0, y,
@@ -34,7 +34,7 @@ public class ThreeTransformation implements Transformation {
         ).multiply(this.underlyingMatrix));
     }
 
-    static ThreeTransformation scaling(double x, double y, double z) {
+    public static ThreeTransformation scaling(double x, double y, double z) {
         return new ThreeTransformation(new SquareMatrixImpl(
                 x, 0, 0, 0,
                 0, y, 0, 0,
@@ -52,7 +52,7 @@ public class ThreeTransformation implements Transformation {
         ).multiply(this.underlyingMatrix));
     }
 
-    static ThreeTransformation rotation_x(double angle) {
+    public static ThreeTransformation rotation_x(double angle) {
         return new ThreeTransformation(new SquareMatrixImpl(
                 1, 0, 0, 0,
                 0, Math.cos(angle), -Math.sin(angle), 0,
@@ -70,7 +70,7 @@ public class ThreeTransformation implements Transformation {
         ).multiply(this.underlyingMatrix));
     }
 
-    static ThreeTransformation rotation_y(double angle) {
+    public static ThreeTransformation rotation_y(double angle) {
         return new ThreeTransformation(new SquareMatrixImpl(
                 Math.cos(angle), 0, Math.sin(angle), 0,
                 0, 1, 0, 0,
@@ -88,7 +88,7 @@ public class ThreeTransformation implements Transformation {
         ).multiply(this.underlyingMatrix));
     }
 
-    static ThreeTransformation rotation_z(double angle) {
+    public static ThreeTransformation rotation_z(double angle) {
         return new ThreeTransformation(new SquareMatrixImpl(
                 Math.cos(angle), -Math.sin(angle), 0, 0,
                 Math.sin(angle), Math.cos(angle), 0, 0,
@@ -106,7 +106,7 @@ public class ThreeTransformation implements Transformation {
         ).multiply(this.underlyingMatrix));
     }
 
-    static ThreeTransformation shear(double xy, double xz, double yx, double yz, double zx, double zy) {
+    public static ThreeTransformation shear(double xy, double xz, double yx, double yz, double zx, double zy) {
         return new ThreeTransformation(new SquareMatrixImpl(
            1, xy, xz, 0,
            yx, 1, yz, 0,
