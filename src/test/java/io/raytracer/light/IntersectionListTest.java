@@ -3,6 +3,7 @@ package io.raytracer.light;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -31,5 +32,34 @@ public class IntersectionListTest {
         String exceptionMessage = exception.getMessage();
 
         assertTrue(exceptionMessage.contains("Index out of bounds: 0"));
+    }
+
+    @Test
+    void hitWithPositiveIntersections() {
+        Intersection i1 = new Intersection(2.0, new Sphere());
+        Intersection i2 = new Intersection(0.1, new Sphere());
+        IntersectionList intersections = new IntersectionListImpl(i1, i2);
+
+        assertEquals(i2, intersections.hit().orElseThrow(NullPointerException::new),
+                "Hit should be with the lowest positive time value.");
+    }
+
+    @Test
+    void hitWithSomeNegativeIntersections() {
+        Intersection i1 = new Intersection(2.0, new Sphere());
+        Intersection i2 = new Intersection(-0.1, new Sphere());
+        IntersectionList intersections = new IntersectionListImpl(i1, i2);
+
+        assertEquals(i1, intersections.hit().orElseThrow(NullPointerException::new),
+                "Hit should be with the lowest positive time value.");
+    }
+
+    @Test
+    void hitWithAllNegativeIntersections() {
+        Intersection i1 = new Intersection(-2.0, new Sphere());
+        Intersection i2 = new Intersection(-0.1, new Sphere());
+        IntersectionList intersections = new IntersectionListImpl(i1, i2);
+
+        assertFalse(intersections.hit().isPresent(), "All negative intersections should produce no hit.");
     }
 }
