@@ -7,7 +7,26 @@ import java.util.stream.Stream;
 import org.junit.jupiter.api.Test;
 import io.raytracer.geometry.helpers.TupleComparator;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+
 class ThreeTransformationTest {
+    @Test
+    void equalityTest() {
+        Transformation t1 = ThreeTransformation.translation(1, 2, 3);
+        ThreeTransformation t2 = ThreeTransformation.translation(1, 2, 3);
+
+        assertEquals(t1, t2, "Same transformations should be equal.");
+    }
+
+    @Test
+    void inequalityTest() {
+        Transformation t1 = ThreeTransformation.translation(1, 2, 3);
+        Transformation t2 = ThreeTransformation.translation(0, 2, 3);
+
+        assertNotEquals(t1, t2, "Different transformations should not be equal.");
+    }
+
     @Test
     void pointTranslation() {
         Transformation aTranslation = ThreeTransformation.translation(5, -3, 2);

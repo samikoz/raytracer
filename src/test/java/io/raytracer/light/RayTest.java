@@ -24,7 +24,7 @@ class RayTest {
     @Test
     void sphereDoubleIntersectionTimes() {
         Ray ray = new RayImpl(new PointImpl(0, 0, -5), new VectorImpl(0, 0, 1));
-        Sphere sphere = new Sphere();
+        Sphere sphere = new SphereImpl();
         IntersectionList intersections = ray.intersect(sphere);
 
         assertEquals(2, intersections.count(), "Should have two intersections.");
@@ -34,7 +34,7 @@ class RayTest {
     @Test
     void sphereDoubleIntersectionObjects() {
         Ray ray = new RayImpl(new PointImpl(0, 0, -5), new VectorImpl(0, 0, 1));
-        Sphere sphere = new Sphere();
+        Sphere sphere = new SphereImpl();
         IntersectionList intersections = ray.intersect(sphere);
 
         assertEquals(sphere, intersections.get(0).object, "The first intersection should be with the sphere.");
@@ -43,7 +43,7 @@ class RayTest {
     @Test
     void sphereTangentIntersections() {
         Ray ray = new RayImpl(new PointImpl(0, 1, -5), new VectorImpl(0, 0, 1));
-        Sphere sphere = new Sphere();
+        Sphere sphere = new SphereImpl();
         IntersectionList intersections = ray.intersect(sphere);
 
         assertEquals(2, intersections.count(), "Should have two (tangent) intersections.");
@@ -53,7 +53,7 @@ class RayTest {
     @Test
     void sphereNoIntersections() {
         Ray ray = new RayImpl(new PointImpl(0, 2, -5), new VectorImpl(0, 0, 1));
-        Sphere sphere = new Sphere();
+        Sphere sphere = new SphereImpl();
         IntersectionList intersections = ray.intersect(sphere);
 
         assertEquals(0, intersections.count(), "Shouldn't have any intersections.");
@@ -62,7 +62,7 @@ class RayTest {
     @Test
     void sphereIntersectionsFromInside() {
         Ray ray = new RayImpl(new PointImpl(0, 0, 0), new VectorImpl(0, 0, 1));
-        Sphere sphere = new Sphere();
+        Sphere sphere = new SphereImpl();
         IntersectionList intersections = ray.intersect(sphere);
 
         assertEquals(2, intersections.count(), "Should have two intersections.");
@@ -72,7 +72,7 @@ class RayTest {
     @Test
     void sphereIntersectionsWithSphereBehind() {
         Ray ray = new RayImpl(new PointImpl(0, 0, 5), new VectorImpl(0, 0, 1));
-        Sphere sphere = new Sphere();
+        Sphere sphere = new SphereImpl();
         IntersectionList intersections = ray.intersect(sphere);
 
         assertEquals(2, intersections.count(), "Should have two intersections.");

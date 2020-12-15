@@ -125,6 +125,19 @@ public class ThreeTransformation implements Transformation {
     }
 
     @Override
+    public boolean equals(Object them) {
+        if (this.getClass() != them.getClass()) return false;
+
+        ThreeTransformation themTransformation = (ThreeTransformation) them;
+        return this.underlyingMatrix.equals(themTransformation.underlyingMatrix);
+    }
+
+    @Override
+    public int hashCode() {
+        return this.underlyingMatrix.hashCode();
+    }
+
+    @Override
     public Transformation inverse() {
         return new ThreeTransformation(this.underlyingMatrix.inverse());
     }

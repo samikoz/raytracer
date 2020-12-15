@@ -11,14 +11,14 @@ public class IntersectionListTest {
     @Test
     void intersectionCount() {
         IntersectionList intersections = new IntersectionListImpl(
-                new Intersection(2.0, new Sphere()), new Intersection(0, new Sphere()));
+                new Intersection(2.0, new SphereImpl()), new Intersection(0, new SphereImpl()));
 
         assertEquals(2, intersections.count(), "Should have two intersections.");
     }
 
     @Test
     void intersectionGet() {
-        Intersection i = new Intersection(2.0, new Sphere());
+        Intersection i = new Intersection(2.0, new SphereImpl());
         IntersectionList intersections = new IntersectionListImpl(i);
 
         assertEquals(i, intersections.get(0), "Should return the first intersection.");
@@ -36,8 +36,8 @@ public class IntersectionListTest {
 
     @Test
     void hitWithPositiveIntersections() {
-        Intersection i1 = new Intersection(2.0, new Sphere());
-        Intersection i2 = new Intersection(0.1, new Sphere());
+        Intersection i1 = new Intersection(2.0, new SphereImpl());
+        Intersection i2 = new Intersection(0.1, new SphereImpl());
         IntersectionList intersections = new IntersectionListImpl(i1, i2);
 
         assertEquals(i2, intersections.hit().orElseThrow(NullPointerException::new),
@@ -46,8 +46,8 @@ public class IntersectionListTest {
 
     @Test
     void hitWithSomeNegativeIntersections() {
-        Intersection i1 = new Intersection(2.0, new Sphere());
-        Intersection i2 = new Intersection(-0.1, new Sphere());
+        Intersection i1 = new Intersection(2.0, new SphereImpl());
+        Intersection i2 = new Intersection(-0.1, new SphereImpl());
         IntersectionList intersections = new IntersectionListImpl(i1, i2);
 
         assertEquals(i1, intersections.hit().orElseThrow(NullPointerException::new),
@@ -56,8 +56,8 @@ public class IntersectionListTest {
 
     @Test
     void hitWithAllNegativeIntersections() {
-        Intersection i1 = new Intersection(-2.0, new Sphere());
-        Intersection i2 = new Intersection(-0.1, new Sphere());
+        Intersection i1 = new Intersection(-2.0, new SphereImpl());
+        Intersection i2 = new Intersection(-0.1, new SphereImpl());
         IntersectionList intersections = new IntersectionListImpl(i1, i2);
 
         assertFalse(intersections.hit().isPresent(), "All negative intersections should produce no hit.");
