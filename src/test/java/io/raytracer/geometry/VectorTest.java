@@ -54,4 +54,14 @@ class VectorTest {
 
         assertEquals(expectedProduct, first.dot(second), "(1, 2, 3) dot (2, 3, 4) should equal 20.0");
     }
+
+    @Test
+    void reflect() {
+        Vector reflector = new VectorImpl(Math.sqrt(2) / 2, Math.sqrt(2) / 2, 0);
+        Vector reflectee = new VectorImpl(0, -1, 0);
+        Vector expectedReflected = new VectorImpl(1, 0, 0);
+        Vector actualReflected = reflectee.reflect(reflector);
+
+        assertEquals(expectedReflected, actualReflected, "Should correctly reflect vectors.");
+    }
 }

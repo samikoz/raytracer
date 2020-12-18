@@ -45,6 +45,11 @@ public class VectorImpl extends TupleImpl implements Vector {
     }
 
     @Override
+    public Vector reflect(Vector reflector) {
+        return this.subtract(reflector.multiply(2 * this.dot(reflector)));
+    }
+
+    @Override
     public Vector transform(Transformation t) {
         return t.act(this);
     }

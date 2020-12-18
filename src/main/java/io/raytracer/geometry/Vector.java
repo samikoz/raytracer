@@ -16,6 +16,8 @@ public interface Vector extends Tuple{
         return add(them.negate());
     }
 
+    Vector reflect(Vector reflector);
+
     double dot(Vector them);
 
     Vector transform(Transformation t);
