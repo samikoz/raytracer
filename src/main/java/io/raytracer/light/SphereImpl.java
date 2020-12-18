@@ -24,9 +24,10 @@ public class SphereImpl implements Sphere {
 
     @Override
     public IntersectionList intersect(Ray ray) {
-        Vector rayOrigin = ray.getOrigin().subtract(new PointImpl(0, 0, 0));
-        double a = ray.getDirection().dot(ray.getDirection());
-        double b = 2 * ray.getDirection().dot(rayOrigin);
+        Ray transformedRay = ray.transform(this.transform.inverse());
+        Vector rayOrigin = transformedRay.getOrigin().subtract(new PointImpl(0, 0, 0));
+        double a = transformedRay.getDirection().dot(transformedRay.getDirection());
+        double b = 2 * transformedRay.getDirection().dot(rayOrigin);
         double c = rayOrigin.dot(rayOrigin) - 1;
         double delta = Math.pow(b, 2) - 4 * a * c;
 

@@ -80,6 +80,27 @@ class RayTest {
     }
 
     @Test
+    void scaledSphereIntersections() {
+        Ray ray = new RayImpl(new PointImpl(0, 0, -5), new VectorImpl(0, 0, 1));
+        Sphere sphere = new SphereImpl();
+        sphere.setTransform(ThreeTransformation.scaling(2, 2, 2));
+        IntersectionList intersections = ray.intersect(sphere);
+
+        assertEquals(2, intersections.count(), "Should have two intersections.");
+        assertEquals(7, intersections.get(1).time, "The second intersection should be at 7.");
+    }
+
+    @Test
+    void translatedSphereIntersections() {
+        Ray ray = new RayImpl(new PointImpl(0, 0, -5), new VectorImpl(0, 0, 1));
+        Sphere sphere = new SphereImpl();
+        sphere.setTransform(ThreeTransformation.translation(5, 0, 0));
+        IntersectionList intersections = ray.intersect(sphere);
+
+        assertEquals(0, intersections.count(), "Should have no intersections.");
+    }
+
+    @Test
     void translatingARay() {
         Vector direction = new VectorImpl(0, 1, 0);
         Ray ray = new RayImpl(new PointImpl(1, 2, 3), direction);
