@@ -143,6 +143,11 @@ public class ThreeTransformation implements Transformation {
     }
 
     @Override
+    public Transformation transpose() {
+        return new ThreeTransformation(this.underlyingMatrix.transpose());
+    }
+
+    @Override
     public Point act(Point p) {
         Tuple higherTuple = underlyingMatrix.multiply(new PointImpl(p.get(0), p.get(1), p.get(2), 1));
         return new PointImpl(higherTuple.get(0), higherTuple.get(1), higherTuple.get(2));

@@ -1,5 +1,6 @@
 package io.raytracer.light;
 
+import io.raytracer.geometry.Point;
 import io.raytracer.geometry.PointImpl;
 import io.raytracer.geometry.ThreeTransformation;
 import io.raytracer.geometry.Transformation;
@@ -37,5 +38,13 @@ public class SphereImpl implements Sphere {
         return new IntersectionListImpl(
                 new Intersection((-b - Math.sqrt(delta))/(2*a), this),
                 new Intersection((-b + Math.sqrt(delta))/(2*a), this));
+    }
+
+    @Override
+    public Vector normal(Point p) {
+        Transformation inverseTransform = this.transform.inverse();
+        Point spherePoint = inverseTransform.act(p);
+        Vector sphereNormal = (spherePoint.subtract(new PointImpl(0, 0, 0))).normalise();
+        return inverseTransform.transpose().act(sphereNormal).normalise();
     }
 }
