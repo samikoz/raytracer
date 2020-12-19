@@ -8,5 +8,7 @@ public interface Sphere extends Drawable {
     Transformation getTransform();
     void setTransform(Transformation t);
 
+    Material getMaterial();
+
     Vector normal(Point p);
 }

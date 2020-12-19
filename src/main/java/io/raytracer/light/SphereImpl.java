@@ -8,9 +8,16 @@ import io.raytracer.geometry.Vector;
 
 public class SphereImpl implements Sphere {
     private Transformation transform;
+    private final Material material;
 
     public SphereImpl() {
         this.transform = new ThreeTransformation();
+        this.material = new Material();
+    }
+
+    public SphereImpl(Material material) {
+        super();
+        this.material = material;
     }
 
     @Override
@@ -21,6 +28,11 @@ public class SphereImpl implements Sphere {
     @Override
     public void setTransform(Transformation t) {
         this.transform = t;
+    }
+
+    @Override
+    public Material getMaterial() {
+        return this.material;
     }
 
     @Override

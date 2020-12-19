@@ -19,6 +19,14 @@ public class SphereTest {
     }
 
     @Test
+    void getDefaultMaterial() {
+        Sphere sphere = new SphereImpl();
+
+        assertEquals(new Material(), sphere.getMaterial(),
+                "Sphere's default material should be the default material.");
+    }
+
+    @Test
     void normalOnASphereOnXAxis() {
         Sphere sphere = new SphereImpl();
         Vector expectedNormal = new VectorImpl(1, 0, 0);
