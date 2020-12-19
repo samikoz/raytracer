@@ -5,7 +5,6 @@ import io.raytracer.geometry.ThreeTransformation;
 import io.raytracer.geometry.Transformation;
 import io.raytracer.geometry.Vector;
 import io.raytracer.geometry.VectorImpl;
-import io.raytracer.geometry.helpers.TupleComparator;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
