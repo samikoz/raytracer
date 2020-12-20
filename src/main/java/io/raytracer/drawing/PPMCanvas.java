@@ -1,5 +1,7 @@
 package io.raytracer.drawing;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -27,6 +29,12 @@ public class PPMCanvas implements Canvas {
     @Override
     public Colour read(int x, int y) {
         return pixelGrid[y].get(x);
+    }
+
+    @Override
+    public void export(FileWriter writer) throws IOException {
+        writer.write(this.export());
+        writer.close();
     }
 
     @Override
