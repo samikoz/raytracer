@@ -16,7 +16,7 @@ public class SphereImpl implements Sphere {
     }
 
     public SphereImpl(Material material) {
-        super();
+        this.transform = new ThreeTransformation();
         this.material = material;
     }
 

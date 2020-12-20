@@ -1,7 +1,7 @@
 package io.raytracer.drawing;
 
-import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -32,7 +32,7 @@ public class PPMCanvas implements Canvas {
     }
 
     @Override
-    public void export(FileWriter writer) throws IOException {
+    public void export(PrintWriter writer) throws IOException {
         writer.write(this.export());
         writer.close();
     }
@@ -73,7 +73,7 @@ public class PPMCanvas implements Canvas {
 
     private String putLineBreaks(String exportRow) {
         StringBuilder rowToBreak = new StringBuilder(exportRow);
-        int numberOfBreaks = exportRow.length() / exportedLineMaxLength;
+        int numberOfBreaks = (exportRow.length() - 1) / exportedLineMaxLength;
         for (int breakNumber = 1; breakNumber <= numberOfBreaks; breakNumber++) {
             int whitespacePosition = breakNumber * exportedLineMaxLength;
             while (rowToBreak.charAt(whitespacePosition) != ' ') whitespacePosition--;
