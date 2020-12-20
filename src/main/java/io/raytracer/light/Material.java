@@ -21,26 +21,6 @@ public class Material {
         this.shininess = 200.0;
     }
 
-    public void colour(Colour colour) {
-        this.colour = colour;
-    }
-
-    public void ambient(double ambient) {
-        this.ambient = ambient;
-    }
-
-    public void diffuse(double diffuse) {
-        this.diffuse = diffuse;
-    }
-
-    public void specular(double specular) {
-        this.specular = specular;
-    }
-
-    public void shininess(double shininess) {
-        this.shininess = shininess;
-    }
-
     @Override
     public int hashCode() {
         return Arrays.hashCode(new int[] {

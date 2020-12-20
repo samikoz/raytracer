@@ -10,9 +10,9 @@ public class MaterialTest {
     @Test
     void materialEquality() {
         Material material1 = new Material();
-        material1.diffuse(2.5);
+        material1.diffuse = 2.5;
         Material material2 = new Material();
-        material2.diffuse(2.5005);
+        material2.diffuse = 2.5005;
 
         assertEquals(material1, material2, "Should correctly determine material equality.");
     }
@@ -20,9 +20,9 @@ public class MaterialTest {
     @Test
     void materialInequality() {
         Material material1 = new Material();
-        material1.shininess(0.5);
+        material1.shininess = 0.5;
         Material material2 = new Material();
-        material2.ambient(0.2);
+        material2.ambient = 0.2;
 
         assertNotEquals(material1, material2, "Should correctly determine material inequality.");
     }
