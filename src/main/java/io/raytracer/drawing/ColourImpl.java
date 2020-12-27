@@ -1,7 +1,6 @@
 package io.raytracer.drawing;
 
 import lombok.Getter;
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 
@@ -30,7 +29,7 @@ public class ColourImpl implements Colour {
         return (this.distance(themColour) < equalityTolerance);
     }
 
-    private double distance(@NonNull ColourImpl them) {
+    private double distance(ColourImpl them) {
         return Math.sqrt(
                 Math.pow(this.getRed() - them.getRed(), 2) +
                         Math.pow(this.getGreen() - them.getGreen(), 2) +
@@ -55,7 +54,7 @@ public class ColourImpl implements Colour {
     }
 
     @Override
-    public ColourImpl add(@NonNull Colour them) {
+    public ColourImpl add(Colour them) {
         return new ColourImpl(
                 this.getRed() + them.getRed(),
                 this.getGreen() + them.getGreen(),
@@ -73,7 +72,7 @@ public class ColourImpl implements Colour {
     }
 
     @Override
-    public Colour mix(@NonNull Colour them) {
+    public Colour mix(Colour them) {
         return new ColourImpl(
                 this.getRed() * them.getRed(),
                 this.getGreen() * them.getGreen(),

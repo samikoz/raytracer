@@ -1,6 +1,7 @@
 package io.raytracer.drawing;
 
-import java.io.IOException;
+import lombok.NonNull;
+
 import java.io.PrintWriter;
 import java.util.Arrays;
 import java.util.ArrayList;
@@ -10,9 +11,10 @@ import java.util.NoSuchElementException;
 
 public class PPMCanvas implements Canvas {
     private final PPMCanvasRow[] pixelGrid;
+    private final String exportHeader;
+
     static private final Colour initialColour = new ColourImpl(0, 0, 0);
     static private final int exportedLineMaxLength = 70;
-    private final String exportHeader;
 
     public PPMCanvas(int x, int y) {
         exportHeader = "P3\n" + x + " " + y + "\n255\n";
@@ -22,7 +24,7 @@ public class PPMCanvas implements Canvas {
     }
 
     @Override
-    public void write(int x, int y, Colour colour) {
+    public void write(int x, int y, @NonNull Colour colour) {
         pixelGrid[y].set(x, colour);
     }
 
@@ -32,7 +34,7 @@ public class PPMCanvas implements Canvas {
     }
 
     @Override
-    public void export(PrintWriter writer) throws IOException {
+    public void export(PrintWriter writer) {
         writer.write(this.export());
         writer.close();
     }
