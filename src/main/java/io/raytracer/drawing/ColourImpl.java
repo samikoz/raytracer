@@ -1,34 +1,21 @@
 package io.raytracer.drawing;
 
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import lombok.ToString;
+
 import java.util.Arrays;
 
+@ToString
+@RequiredArgsConstructor
 public class ColourImpl implements Colour {
-    private final double red;
-    private final double green;
-    private final double blue;
+    @Getter private final double red;
+    @Getter private final double green;
+    @Getter private final double blue;
+
     private final static double equalityTolerance = 1e-3;
     private final static int exportScale = 255;
-
-    public ColourImpl(double red, double green, double blue) {
-        this.red = red;
-        this.green = green;
-        this.blue = blue;
-    }
-
-    @Override
-    public double getRed() {
-        return red;
-    }
-
-    @Override
-    public double getGreen() {
-        return green;
-    }
-
-    @Override
-    public double getBlue() {
-        return blue;
-    }
 
     @Override
     public int hashCode() {
@@ -37,13 +24,13 @@ public class ColourImpl implements Colour {
 
     @Override
     public boolean equals(Object them) {
-        if (this.getClass() != them.getClass()) return false;
+        if (them == null || this.getClass() != them.getClass()) return false;
 
         ColourImpl themColour = (ColourImpl) them;
         return (this.distance(themColour) < equalityTolerance);
     }
 
-    private double distance(ColourImpl them) {
+    private double distance(@NonNull ColourImpl them) {
         return Math.sqrt(
                 Math.pow(this.getRed() - them.getRed(), 2) +
                         Math.pow(this.getGreen() - them.getGreen(), 2) +
@@ -68,7 +55,7 @@ public class ColourImpl implements Colour {
     }
 
     @Override
-    public ColourImpl add(Colour them) {
+    public ColourImpl add(@NonNull Colour them) {
         return new ColourImpl(
                 this.getRed() + them.getRed(),
                 this.getGreen() + them.getGreen(),
@@ -86,7 +73,7 @@ public class ColourImpl implements Colour {
     }
 
     @Override
-    public Colour mix(Colour them) {
+    public Colour mix(@NonNull Colour them) {
         return new ColourImpl(
                 this.getRed() * them.getRed(),
                 this.getGreen() * them.getGreen(),
