@@ -5,38 +5,26 @@ import io.raytracer.geometry.PointImpl;
 import io.raytracer.geometry.ThreeTransformation;
 import io.raytracer.geometry.Transformation;
 import io.raytracer.geometry.Vector;
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.Setter;
 
 public class SphereImpl implements Sphere {
-    private Transformation transform;
-    private final Material material;
+    @Getter @Setter private Transformation transform;
+    @Getter private final Material material;
 
     public SphereImpl() {
         this.transform = new ThreeTransformation();
         this.material = new Material();
     }
 
-    public SphereImpl(Material material) {
+    public SphereImpl(@NonNull Material material) {
         this.transform = new ThreeTransformation();
         this.material = material;
     }
 
     @Override
-    public Transformation getTransform() {
-        return this.transform;
-    }
-
-    @Override
-    public void setTransform(Transformation t) {
-        this.transform = t;
-    }
-
-    @Override
-    public Material getMaterial() {
-        return this.material;
-    }
-
-    @Override
-    public IntersectionList intersect(Ray ray) {
+    public IntersectionList intersect(@NonNull Ray ray) {
         Ray transformedRay = ray.transform(this.transform.inverse());
         Vector rayOrigin = transformedRay.getOrigin().subtract(new PointImpl(0, 0, 0));
         double a = transformedRay.getDirection().dot(transformedRay.getDirection());
@@ -48,12 +36,12 @@ public class SphereImpl implements Sphere {
             return new IntersectionListImpl();
         }
         return new IntersectionListImpl(
-                new Intersection((-b - Math.sqrt(delta))/(2*a), this),
-                new Intersection((-b + Math.sqrt(delta))/(2*a), this));
+                new Intersection((-b - Math.sqrt(delta)) / (2 * a), this),
+                new Intersection((-b + Math.sqrt(delta)) / (2 * a), this));
     }
 
     @Override
-    public Vector normal(Point p) {
+    public Vector normal(@NonNull Point p) {
         Transformation inverseTransform = this.transform.inverse();
         Point spherePoint = inverseTransform.act(p);
         Vector sphereNormal = (spherePoint.subtract(new PointImpl(0, 0, 0))).normalise();
