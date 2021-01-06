@@ -1,8 +1,11 @@
 package io.raytracer.geometry;
 
+import lombok.ToString;
+
 import java.util.Arrays;
 import java.util.stream.IntStream;
 
+@ToString
 public class SquareMatrixImpl implements SquareMatrix {
     private final int dim;
     private final double[][] entries;
@@ -32,7 +35,7 @@ public class SquareMatrixImpl implements SquareMatrix {
 
     @Override
     public boolean equals(Object them) {
-        if (this.getClass() != them.getClass()) return false;
+        if (them == null || this.getClass() != them.getClass()) return false;
         SquareMatrix themMatrix = (SquareMatrix) them;
         if (this.dim() != themMatrix.dim()) return false;
 
@@ -122,17 +125,17 @@ public class SquareMatrixImpl implements SquareMatrix {
     }
 
     SquareMatrixImpl submatrix(int rowToSkip, int colToSkip) {
-        SquareMatrixImpl sub = new SquareMatrixImpl(dim - 1);
+        SquareMatrixImpl submatrix = new SquareMatrixImpl(dim - 1);
 
         IntStream.range(0, dim - 1).forEach(x ->
                 IntStream.range(0, dim - 1).forEach(y ->
-                        sub.set(x, y, this.get(
+                        submatrix.set(x, y, this.get(
                                 x >= rowToSkip ? x + 1 : x,
                                 y >= colToSkip ? y + 1 : y
                         ))
                 )
         );
-        return sub;
+        return submatrix;
     }
 
     @Override

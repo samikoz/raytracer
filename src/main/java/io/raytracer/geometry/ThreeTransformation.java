@@ -126,7 +126,7 @@ public class ThreeTransformation implements Transformation {
 
     @Override
     public boolean equals(Object them) {
-        if (this.getClass() != them.getClass()) return false;
+        if (them == null || this.getClass() != them.getClass()) return false;
 
         ThreeTransformation themTransformation = (ThreeTransformation) them;
         return this.underlyingMatrix.equals(themTransformation.underlyingMatrix);
