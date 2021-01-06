@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-import io.raytracer.drawing.helpers.ColourComparator;
 import org.junit.jupiter.api.Test;
 
 class CanvasTest {
@@ -30,13 +29,9 @@ class CanvasTest {
         Colour firstRead = canvas.read(0, 19);
         Colour secondRead = canvas.read(2, 0);
 
-        assertAll("Reading should return written objects.",
-                () -> assertEquals(firstRead, first,
-                        () -> ColourComparator.compareColourComponents(firstRead, first)
-                ),
-                () -> assertEquals(secondRead, second,
-                        () -> ColourComparator.compareColourComponents(secondRead, second)
-                )
+        assertAll("Reading from canvas should return written objects.",
+                () -> assertEquals(firstRead, first),
+                () -> assertEquals(secondRead, second)
         );
     }
 
@@ -46,7 +41,7 @@ class CanvasTest {
         String expectedPPMFileStart = "P3\n5 3\n255\n";
 
         assertTrue(canvas.export().startsWith(expectedPPMFileStart),
-                "Exported canvas header should have correct format"
+                "Exported canvas header should have the correct format"
         );
     }
 
@@ -62,9 +57,7 @@ class CanvasTest {
         String expectedThirdRowData = "0 0 0 0 0 0 0 0 0 0 0 0 0 0 255\n";
         String expectedPixelData = expectedFirstRowData + expectedSecondRowData + expectedThirdRowData;
 
-        assertTrue(canvas.export().endsWith(expectedPixelData),
-                "Canvas should export correct pixel data."
-        );
+        assertTrue(canvas.export().endsWith(expectedPixelData));
     }
 
     @Test

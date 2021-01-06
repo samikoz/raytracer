@@ -2,7 +2,6 @@ package io.raytracer.drawing;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import io.raytracer.drawing.helpers.ColourComparator;
 import org.junit.jupiter.api.Test;
 
 class ColourTest {
@@ -28,8 +27,7 @@ class ColourTest {
         Colour expectedSum = new ColourImpl(1.6, 0.7, 1);
         Colour summed = first.add(second);
 
-        assertEquals(expectedSum, summed,
-            () -> "Sum of Colours should be a colour. " + ColourComparator.compareColourComponents(expectedSum, summed));
+        assertEquals(expectedSum, summed);
     }
 
     @Test
@@ -38,10 +36,7 @@ class ColourTest {
         Colour expectedProduct = new ColourImpl(0.4, 0.6, 0.8);
         Colour multiplied = first.multiply(2);
 
-        assertEquals(
-            expectedProduct, multiplied,
-            () -> "Colour multiplied by scalar should be a colour. " +
-                ColourComparator.compareColourComponents(expectedProduct, multiplied));
+        assertEquals(expectedProduct, multiplied);
     }
 
     @Test
@@ -51,8 +46,6 @@ class ColourTest {
         Colour expectedProduct = new ColourImpl(0.9, 0.2, 0.04);
         Colour mixed = first.mix(second);
 
-        assertEquals(expectedProduct, mixed,
-            () -> "Mixture of Colours should be a colour. " +
-                ColourComparator.compareColourComponents(expectedProduct, mixed));
+        assertEquals(expectedProduct, mixed);
     }
 }
