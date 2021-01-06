@@ -1,7 +1,11 @@
 package io.raytracer.geometry;
 
+import lombok.NonNull;
+import lombok.ToString;
+
 import java.util.stream.IntStream;
 
+@ToString
 public class PointImpl extends TupleImpl implements Point {
     public PointImpl(double... coordinates) {
         super(coordinates);
@@ -27,7 +31,7 @@ public class PointImpl extends TupleImpl implements Point {
     }
 
     @Override
-    public VectorImpl subtract(Point toSubtract) {
+    public VectorImpl subtract(@NonNull Point toSubtract) {
         Vector toMoveBack = new VectorImpl(
                 IntStream.range(0, toSubtract.dim()).mapToDouble(toSubtract::get).toArray()
         );

@@ -1,5 +1,8 @@
 package io.raytracer.geometry;
 
+import lombok.ToString;
+
+@ToString
 public class ThreeVectorImpl extends VectorImpl implements ThreeVector {
     public ThreeVectorImpl(double x, double y, double z) {
         super(x, y, z);

@@ -1,8 +1,11 @@
 package io.raytracer.geometry;
 
+import lombok.ToString;
+
 import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
 
+@ToString
 public class VectorImpl extends TupleImpl implements Vector {
     public VectorImpl(double... coordinates) {
         super(coordinates);

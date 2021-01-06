@@ -1,9 +1,12 @@
 package io.raytracer.geometry;
 
+import lombok.ToString;
+
 import java.util.Arrays;
 import java.util.stream.IntStream;
 import java.util.function.IntToDoubleFunction;
 
+@ToString
 class TupleImpl implements Tuple {
     private final int dim;
     private final double[] coords;
@@ -21,7 +24,7 @@ class TupleImpl implements Tuple {
 
     @Override
     public boolean equals(Object them) {
-        if (this.getClass() != them.getClass()) return false;
+        if (them == null || this.getClass() != them.getClass()) return false;
 
         Tuple themTuple = (Tuple) them;
         return (this.dim == themTuple.dim() && this.euclideanDistance(themTuple) < equalityTolerance);
