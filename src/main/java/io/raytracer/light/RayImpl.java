@@ -3,15 +3,13 @@ package io.raytracer.light;
 import io.raytracer.geometry.Point;
 import io.raytracer.geometry.Transformation;
 import io.raytracer.geometry.Vector;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 
-public class RayImpl implements Ray{
-    private final Point origin;
-    private final Vector direction;
-
-    public RayImpl(Point origin, Vector direction) {
-        this.origin = origin;
-        this.direction = direction;
-    }
+@RequiredArgsConstructor
+public class RayImpl implements Ray {
+    @NonNull private final Point origin;
+    @NonNull private final Vector direction;
 
     @Override
     public Vector getDirection() {
