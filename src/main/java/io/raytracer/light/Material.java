@@ -30,13 +30,13 @@ public class Material {
 
     @Override
     public boolean equals(Object them) {
-        if (this.getClass() != them.getClass()) return false;
+        if (them == null || this.getClass() != them.getClass()) return false;
 
         Material themMaterial = (Material) them;
         return (this.colour.equals(themMaterial.colour)
-            && Math.abs(this.ambient - themMaterial.ambient) < this.equalityTolerance
-            && Math.abs(this.diffuse - themMaterial.diffuse) < this.equalityTolerance
-            && Math.abs(this.specular - themMaterial.specular) < this.equalityTolerance
-            && Math.abs(this.shininess - themMaterial.shininess) < this.equalityTolerance);
+            && Math.abs(this.ambient - themMaterial.ambient) < equalityTolerance
+            && Math.abs(this.diffuse - themMaterial.diffuse) < equalityTolerance
+            && Math.abs(this.specular - themMaterial.specular) < equalityTolerance
+            && Math.abs(this.shininess - themMaterial.shininess) < equalityTolerance);
     }
 }

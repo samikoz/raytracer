@@ -1,11 +1,13 @@
 package io.raytracer.light;
 
+import lombok.NonNull;
+
 import io.raytracer.drawing.Colour;
 import io.raytracer.drawing.ColourImpl;
 import io.raytracer.geometry.Vector;
 
 public class Lighting {
-    public static Colour illuminate(LightSource source, Vector eyeVector, IlluminatedPoint illuminated) {
+    public static Colour illuminate(@NonNull LightSource source, @NonNull Vector eyeVector, @NonNull IlluminatedPoint illuminated) {
         Colour effectiveColour = illuminated.material.colour.mix(source.colour);
         Vector sourceDirection = source.position.subtract(illuminated.point).normalise();
         Colour ambientContribution = effectiveColour.multiply(illuminated.material.ambient);

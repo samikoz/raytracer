@@ -1,11 +1,10 @@
 package io.raytracer.light;
 
+import lombok.AllArgsConstructor;
+import lombok.NonNull;
+
+@AllArgsConstructor
 public class Intersection {
     public double time;
-    public Drawable object;
-
-    public Intersection(double time, Drawable object) {
-        this.time = time;
-        this.object = object;
-    }
+    @NonNull public Drawable object;
 }

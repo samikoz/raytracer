@@ -1,16 +1,14 @@
 package io.raytracer.light;
 
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+
 import io.raytracer.geometry.Point;
 import io.raytracer.geometry.Vector;
 
+@RequiredArgsConstructor
 public class IlluminatedPoint {
-    public Point point;
-    public Vector normalVector;
-    public Material material;
-
-    public IlluminatedPoint(Point point, Vector normalVector, Material material) {
-        this.point = point;
-        this.normalVector = normalVector;
-        this.material = material;
-    }
+    @NonNull public Point point;
+    @NonNull public Vector normalVector;
+    @NonNull public Material material;
 }
