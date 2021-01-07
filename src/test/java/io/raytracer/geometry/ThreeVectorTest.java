@@ -1,7 +1,8 @@
 package io.raytracer.geometry;
 
 import org.junit.jupiter.api.Test;
-import io.raytracer.geometry.helpers.TupleComparator;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class ThreeVectorTest {
     @Test
@@ -11,6 +12,6 @@ class ThreeVectorTest {
         ThreeVector expectedCross = new ThreeVectorImpl(-1, 2, -1);
         ThreeVector actualCross = first.cross(second);
 
-        TupleComparator.assertTuplesEqual(expectedCross, actualCross, "Cross of two vectors should be a vector.");
+        assertEquals(expectedCross, actualCross);
     }
 }

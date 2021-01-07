@@ -5,7 +5,6 @@ import io.raytracer.geometry.PointImpl;
 import io.raytracer.geometry.ThreeTransformation;
 import io.raytracer.geometry.Vector;
 import io.raytracer.geometry.VectorImpl;
-import io.raytracer.geometry.helpers.TupleComparator;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -17,8 +16,7 @@ class RayTest {
         Point expectedPosition = new PointImpl(3, 3, 4);
         Point actualPosition = ray.position(1);
 
-        TupleComparator.assertTuplesEqual(expectedPosition, actualPosition,
-                "Should correctly compute position of a ray.");
+        assertEquals(expectedPosition, actualPosition);
     }
 
     @Test

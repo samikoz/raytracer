@@ -5,7 +5,6 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.ParameterizedTest;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.Test;
-import io.raytracer.geometry.helpers.TupleComparator;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
@@ -16,7 +15,7 @@ class ThreeTransformationTest {
         Transformation t1 = ThreeTransformation.translation(1, 2, 3);
         ThreeTransformation t2 = ThreeTransformation.translation(1, 2, 3);
 
-        assertEquals(t1, t2, "Same transformations should be equal.");
+        assertEquals(t1, t2);
     }
 
     @Test
@@ -24,7 +23,7 @@ class ThreeTransformationTest {
         Transformation t1 = ThreeTransformation.translation(1, 2, 3);
         Transformation t2 = ThreeTransformation.translation(0, 2, 3);
 
-        assertNotEquals(t1, t2, "Different transformations should not be equal.");
+        assertNotEquals(t1, t2);
     }
 
     @Test
@@ -34,8 +33,7 @@ class ThreeTransformationTest {
         Point expectedTranslatedPoint = new PointImpl(8, 1, 7);
         Point actualTranslatedPoint = aPoint.transform(aTranslation);
 
-        TupleComparator.assertTuplesEqual(expectedTranslatedPoint, actualTranslatedPoint,
-                "Should correctly translate a point.");
+        assertEquals(expectedTranslatedPoint, actualTranslatedPoint);
     }
 
     @Test
@@ -45,8 +43,8 @@ class ThreeTransformationTest {
         Point expectedTranslatedPoint = new PointImpl(-2, 7, 3);
         Point actualTranslatedPoint = aPoint.transform(aTranslation);
 
-        TupleComparator.assertTuplesEqual(expectedTranslatedPoint, actualTranslatedPoint,
-                "Translation by inverse translates in the opposite direction.");
+        assertEquals(expectedTranslatedPoint, actualTranslatedPoint,
+                "Translation by inverse should translate in the opposite direction.");
     }
 
     @Test
@@ -55,8 +53,7 @@ class ThreeTransformationTest {
         Vector aVector = new VectorImpl(3, 4, 5);
         Vector actualTranslatedPoint = aVector.transform(aTranslation);
 
-        TupleComparator.assertTuplesEqual(aVector, actualTranslatedPoint,
-                "Should correctly translate a vector.");
+        assertEquals(aVector, actualTranslatedPoint);
     }
 
     @Test
@@ -66,8 +63,7 @@ class ThreeTransformationTest {
         Point expectedScaledPoint = new PointImpl(-8, 18, 32);
         Point actualScaledPoint = aPoint.transform(aScaling);
 
-        TupleComparator.assertTuplesEqual(expectedScaledPoint, actualScaledPoint,
-                "Should correctly scale a point.");
+        assertEquals(expectedScaledPoint, actualScaledPoint);
     }
 
     @Test
@@ -77,8 +73,7 @@ class ThreeTransformationTest {
         Vector expectedScaledVector = new VectorImpl(-8, 18, 32);
         Vector actualScaledVector = aVector.transform(aScaling);
 
-        TupleComparator.assertTuplesEqual(expectedScaledVector, actualScaledVector,
-                "Should correctly scale a vector.");
+        assertEquals(expectedScaledVector, actualScaledVector);
     }
 
     @Test
@@ -88,7 +83,7 @@ class ThreeTransformationTest {
         Vector expectedScaledVector = new VectorImpl(-2, 2, 2);
         Vector actualScaledVector = aVector.transform(aScaling);
 
-        TupleComparator.assertTuplesEqual(expectedScaledVector, actualScaledVector,
+        assertEquals(expectedScaledVector, actualScaledVector,
                 "Scaling by an inverse scales in the opposite direction.");
     }
 
@@ -99,8 +94,7 @@ class ThreeTransformationTest {
         Point expectedRotatedPoint = new PointImpl(0, Math.sqrt(2) / 2, Math.sqrt(2) / 2);
         Point actualRotatedPoint = aPoint.transform(halfQuarterRotation);
 
-        TupleComparator.assertTuplesEqual(expectedRotatedPoint, actualRotatedPoint,
-                "Should correctly rotate a point around the x axis.");
+        assertEquals(expectedRotatedPoint, actualRotatedPoint);
     }
 
     @Test
@@ -110,7 +104,7 @@ class ThreeTransformationTest {
         Point expectedRotatedPoint = new PointImpl(0, Math.sqrt(2) / 2, -Math.sqrt(2) / 2);
         Point actualRotatedPoint = aPoint.transform(halfQuarterRotation);
 
-        TupleComparator.assertTuplesEqual(expectedRotatedPoint, actualRotatedPoint,
+        assertEquals(expectedRotatedPoint, actualRotatedPoint,
                 "Inverse rotation around x axis should rotate counterclockwise.");
     }
 
@@ -121,7 +115,7 @@ class ThreeTransformationTest {
         Point expectedRotatedPoint = new PointImpl(Math.sqrt(2) / 2, 0, Math.sqrt(2) / 2);
         Point actualRotatedPoint = aPoint.transform(halfQuarterRotation);
 
-        TupleComparator.assertTuplesEqual(expectedRotatedPoint, actualRotatedPoint,
+        assertEquals(expectedRotatedPoint, actualRotatedPoint,
                 "Should correctly rotate a point around the y axis.");
     }
 
@@ -132,7 +126,7 @@ class ThreeTransformationTest {
         Point expectedRotatedPoint = new PointImpl(-Math.sqrt(2) / 2, Math.sqrt(2) / 2, 0);
         Point actualRotatedPoint = aPoint.transform(halfQuarterRotation);
 
-        TupleComparator.assertTuplesEqual(expectedRotatedPoint, actualRotatedPoint,
+        assertEquals(expectedRotatedPoint, actualRotatedPoint,
                 "Should correctly rotate a point around the z axis.");
     }
 
@@ -157,8 +151,7 @@ class ThreeTransformationTest {
                 expectedShearedCoords[0], expectedShearedCoords[1], expectedShearedCoords[2]);
         Point actualShearedPoint = aPoint.transform(aShear);
 
-        TupleComparator.assertTuplesEqual(expectedShearedPoint, actualShearedPoint,
-                "Should correctly shear points.");
+        assertEquals(expectedShearedPoint, actualShearedPoint);
     }
 
     @Test
@@ -170,7 +163,6 @@ class ThreeTransformationTest {
         Point expectedTransformedPoint = new PointImpl(15, 0, 7);
         Point actualTransformedPoint = aPoint.transform(t);
 
-        TupleComparator.assertTuplesEqual(expectedTransformedPoint, actualTransformedPoint,
-                "Should correctly chain transformations.");
+        assertEquals(expectedTransformedPoint, actualTransformedPoint);
     }
 }

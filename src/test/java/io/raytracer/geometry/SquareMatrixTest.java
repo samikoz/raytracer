@@ -5,9 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
-import io.raytracer.geometry.helpers.MatrixComparator;
 import org.junit.jupiter.api.Test;
-import io.raytracer.geometry.helpers.TupleComparator;
 
 class SquareMatrixTest {
     @Test
@@ -66,7 +64,7 @@ class SquareMatrixTest {
             16, 26, 46, 42
         );
 
-        MatrixComparator.compareMatrices(expectedProduct, product);
+        assertEquals(expectedProduct, product);
     }
 
     @Test
@@ -80,9 +78,7 @@ class SquareMatrixTest {
         Tuple multiplied = A.multiply(x);
         Tuple expectedProduct = new TupleImpl(14, 22, 32);
 
-        assertEquals(expectedProduct, multiplied,
-            "Product of a matrix and a tuple should be a tuple. " +
-                TupleComparator.messageComparingCoordinates(expectedProduct, multiplied));
+        assertEquals(expectedProduct, multiplied);
     }
 
     @Test
@@ -95,7 +91,7 @@ class SquareMatrixTest {
             4, 8, 16, 32
         );
 
-        MatrixComparator.compareMatrices(A, id.multiply(A));
+        assertEquals(A, id.multiply(A));
     }
 
     @Test
@@ -114,14 +110,14 @@ class SquareMatrixTest {
             0, 8, 3, 8
         );
 
-        MatrixComparator.compareMatrices(expectedTranspose, transposed);
+        assertEquals(expectedTranspose, transposed);
     }
 
     @Test
     void determinant2x2() {
         SquareMatrix A = new SquareMatrixImpl(1, 5, -3, 2);
         double expected2x2Determinant = 17;
-        assertEquals(expected2x2Determinant, A.det(), "Should correctly compute 2x2 matrix determinant");
+        assertEquals(expected2x2Determinant, A.det());
     }
 
     @Test
@@ -132,7 +128,7 @@ class SquareMatrixTest {
            2, 6, 4
         );
         double expected3x3Determinant = -196;
-        assertEquals(expected3x3Determinant, B.det(), "Should correctly compute 3x3 matrix determinant");
+        assertEquals(expected3x3Determinant, B.det());
     }
 
     @Test
@@ -144,7 +140,7 @@ class SquareMatrixTest {
             -6, 7, 7, -9
         );
         double expected4x4Determinant = -4071;
-        assertEquals(expected4x4Determinant, C.det(), "Should correctly compute 4x4 matrix determinant");
+        assertEquals(expected4x4Determinant, C.det());
     }
 
     @Test
@@ -153,7 +149,7 @@ class SquareMatrixTest {
         SquareMatrixImpl subM = M.submatrix(1, 1);
         SquareMatrixImpl expectedSubmatrix = new SquareMatrixImpl(1);
 
-        MatrixComparator.compareMatrices(expectedSubmatrix, subM);
+        assertEquals(expectedSubmatrix, subM);
     }
 
     @Test
@@ -166,7 +162,7 @@ class SquareMatrixTest {
         SquareMatrixImpl subA = A.submatrix(0, 2);
         SquareMatrixImpl expectedSubmatrix = new SquareMatrixImpl(-3, 2, 0, 6);
 
-        MatrixComparator.compareMatrices(expectedSubmatrix, subA);
+        assertEquals(expectedSubmatrix, subA);
     }
 
     @Test
@@ -184,7 +180,7 @@ class SquareMatrixTest {
             -7, -1, 1
         );
 
-        MatrixComparator.compareMatrices(expectedSubmatrix, subB);
+        assertEquals(expectedSubmatrix, subB);
     }
 
     @Test
@@ -197,7 +193,7 @@ class SquareMatrixTest {
         double expectedCofactor = -25;
         double cofactor = A.cofactor(1, 0);
 
-        assertEquals(expectedCofactor, cofactor, "Should correctly compute 3x3 cofactor");
+        assertEquals(expectedCofactor, cofactor);
     }
 
     @Test
@@ -209,7 +205,7 @@ class SquareMatrixTest {
             0, 0, 0, 0
         );
 
-        assertFalse(notInvertible.isInvertible(), "Should recognise non-invertible matrices");
+        assertFalse(notInvertible.isInvertible());
     }
 
     @Test
@@ -227,7 +223,7 @@ class SquareMatrixTest {
                 -0.52256, -0.81391, -0.30075, 0.30639
         );
 
-        MatrixComparator.compareMatrices(expectedAInverse, invertibleA.inverse());
+        assertEquals(expectedAInverse, invertibleA.inverse());
 
         SquareMatrix invertibleB = new SquareMatrixImpl(
                 8, -5, 9, 2,
@@ -241,7 +237,7 @@ class SquareMatrixTest {
                 0.35897, 0.35897, 0.43590, 0.92308,
                 -0.69231, -0.69231, -0.76923, -1.92308
         );
-        MatrixComparator.compareMatrices(expectedBInverse, invertibleB.inverse());
+        assertEquals(expectedBInverse, invertibleB.inverse());
     }
 
     @Test
@@ -258,6 +254,6 @@ class SquareMatrixTest {
             7, 0, 5, 4,
             6, -2, 0, 5
         );
-        MatrixComparator.compareMatrices(firstFactor.multiply(secondFactor).multiply(secondFactor.inverse()), firstFactor);
+        assertEquals(firstFactor.multiply(secondFactor).multiply(secondFactor.inverse()), firstFactor);
     }
 }

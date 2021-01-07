@@ -1,10 +1,8 @@
 package io.raytracer.geometry;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertAll;
 
 import org.junit.jupiter.api.Test;
-import io.raytracer.geometry.helpers.TupleComparator;
 
 class VectorTest {
     @Test
@@ -14,7 +12,7 @@ class VectorTest {
         Vector expectedSum = new VectorImpl(2.0, 1.0, 0.0);
         Vector actualSum = first.add(second);
 
-        TupleComparator.assertTuplesEqual(expectedSum, actualSum, "Sum of two vectors should be a vector.");
+        assertEquals(expectedSum, actualSum);
     }
 
     @Test
@@ -23,27 +21,30 @@ class VectorTest {
         Vector expectedProduct = new VectorImpl(1.25, -0.2, 0.5);
         Vector actualProduct = vector.multiply(0.5);
 
-        TupleComparator.assertTuplesEqual(expectedProduct, actualProduct, "A vector times a scalar should be a vector.");
+        assertEquals(expectedProduct, actualProduct);
     }
 
     @Test
     void norm() {
         Vector vector = new VectorImpl(1, 2, 3);
-        assertEquals(Math.sqrt(14), vector.norm(), 1e-3, "Norm of (1, 2, 3) should be sqrt(14)");
+        assertEquals(Math.sqrt(14), vector.norm(), 1e-3);
     }
 
     @Test
-    void normalise() {
+    void normalisedVectorHasUnitNorm() {
+        Vector vector = new VectorImpl(1, 2, 3);
+        Vector normalised = vector.normalise();
+
+        assertEquals(normalised.norm(), 1, 1e-3);
+    }
+
+    @Test
+    void normalisedVectorHasCorrectCoordinates() {
         Vector vector = new VectorImpl(1, 2, 3);
         Vector expectedNormalised = new VectorImpl(1 / Math.sqrt(14), 2 / Math.sqrt(14), 3 / Math.sqrt(14));
         Vector normalised = vector.normalise();
 
-        assertAll("Should return a correctly normalised vector.",
-                () -> assertEquals(
-                        normalised.norm(), 1, 1e-3, "Normalised vector should have unit norm"
-                ),
-                () -> TupleComparator.assertTuplesEqual(expectedNormalised, normalised, "Should have appropriate coordinates")
-        );
+        assertEquals(expectedNormalised, normalised);
     }
 
     @Test
@@ -52,7 +53,7 @@ class VectorTest {
         Vector second = new VectorImpl(2, 3, 4);
         double expectedProduct = 20;
 
-        assertEquals(expectedProduct, first.dot(second), "(1, 2, 3) dot (2, 3, 4) should equal 20.0");
+        assertEquals(expectedProduct, first.dot(second));
     }
 
     @Test
@@ -62,6 +63,6 @@ class VectorTest {
         Vector expectedReflected = new VectorImpl(1, 0, 0);
         Vector actualReflected = reflectee.reflect(reflector);
 
-        assertEquals(expectedReflected, actualReflected, "Should correctly reflect vectors.");
+        assertEquals(expectedReflected, actualReflected);
     }
 }

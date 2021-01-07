@@ -60,7 +60,7 @@ public class SphereTest {
         Vector actualNormal = sphere.normal(new PointImpl(0, 1.70711, -0.70711));
         Vector expectedNormal = new VectorImpl(0, 0.70711, -0.70711);
 
-        assertEquals(expectedNormal, actualNormal, "Should correctly compute normals to a translated sphere.");
+        assertEquals(expectedNormal, actualNormal);
     }
 
     @Test
@@ -71,6 +71,6 @@ public class SphereTest {
         Vector actualNormal = sphere.normal(new PointImpl(0, Math.sqrt(2) / 2, -Math.sqrt(2) / 2));
         Vector expectedNormal = new VectorImpl(0, 0.97014, -0.24254);
 
-        assertEquals(expectedNormal, actualNormal, "Should correctly compute normals to a transformed sphere.");
+        assertEquals(expectedNormal, actualNormal);
     }
 }

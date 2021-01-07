@@ -14,7 +14,7 @@ public class MaterialTest {
         Material material2 = new Material();
         material2.diffuse = 2.5005;
 
-        assertEquals(material1, material2, "Should correctly determine material equality.");
+        assertEquals(material1, material2);
     }
 
     @Test
@@ -24,7 +24,7 @@ public class MaterialTest {
         Material material2 = new Material();
         material2.ambient = 0.2;
 
-        assertNotEquals(material1, material2, "Should correctly determine material inequality.");
+        assertNotEquals(material1, material2);
     }
 
     @Test
