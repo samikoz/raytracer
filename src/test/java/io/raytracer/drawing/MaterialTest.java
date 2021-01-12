@@ -1,6 +1,7 @@
-package io.raytracer.light;
+package io.raytracer.drawing;
 
 import io.raytracer.drawing.ColourImpl;
+import io.raytracer.drawing.Material;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

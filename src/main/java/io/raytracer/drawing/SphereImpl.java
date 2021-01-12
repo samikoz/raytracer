@@ -1,14 +1,18 @@
-package io.raytracer.light;
+package io.raytracer.drawing;
 
-import lombok.Getter;
-import lombok.NonNull;
-import lombok.Setter;
-
+import io.raytracer.light.Intersection;
+import io.raytracer.light.IntersectionList;
+import io.raytracer.light.IntersectionListImpl;
+import io.raytracer.light.Ray;
 import io.raytracer.geometry.Point;
 import io.raytracer.geometry.PointImpl;
 import io.raytracer.geometry.ThreeTransformation;
 import io.raytracer.geometry.Transformation;
 import io.raytracer.geometry.Vector;
+
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.Setter;
 
 public class SphereImpl implements Sphere {
     @Getter @Setter private Transformation transform;

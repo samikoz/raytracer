@@ -1,5 +1,6 @@
 package io.raytracer.light;
 
+import io.raytracer.drawing.Material;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 

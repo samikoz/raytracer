@@ -1,4 +1,4 @@
-package io.raytracer.light;
+package io.raytracer.drawing;
 
 import io.raytracer.geometry.Point;
 import io.raytracer.geometry.Transformation;

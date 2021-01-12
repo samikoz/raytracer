@@ -1,5 +1,8 @@
-package io.raytracer.light;
+package io.raytracer.drawing;
 
+import io.raytracer.drawing.Material;
+import io.raytracer.drawing.Sphere;
+import io.raytracer.drawing.SphereImpl;
 import io.raytracer.geometry.PointImpl;
 import io.raytracer.geometry.ThreeTransformation;
 import io.raytracer.geometry.Transformation;

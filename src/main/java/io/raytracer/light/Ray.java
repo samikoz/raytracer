@@ -1,5 +1,6 @@
 package io.raytracer.light;
 
+import io.raytracer.drawing.Drawable;
 import io.raytracer.geometry.Point;
 import io.raytracer.geometry.Transformation;
 import io.raytracer.geometry.Vector;

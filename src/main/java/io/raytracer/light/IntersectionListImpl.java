@@ -7,7 +7,7 @@ import java.util.Optional;
 public class IntersectionListImpl implements IntersectionList {
     private final Intersection[] intersections;
 
-    IntersectionListImpl(Intersection... intersections) {
+    public IntersectionListImpl(Intersection... intersections) {
         this.intersections = intersections;
     }
 

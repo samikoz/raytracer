@@ -2,6 +2,7 @@ package io.raytracer.light;
 
 import io.raytracer.drawing.Colour;
 import io.raytracer.drawing.ColourImpl;
+import io.raytracer.drawing.Material;
 import io.raytracer.geometry.Point;
 import io.raytracer.geometry.PointImpl;
 import io.raytracer.geometry.Vector;

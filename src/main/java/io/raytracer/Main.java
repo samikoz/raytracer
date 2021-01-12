@@ -11,11 +11,11 @@ import io.raytracer.light.IlluminatedPoint;
 import io.raytracer.light.IntersectionList;
 import io.raytracer.light.LightSource;
 import io.raytracer.light.Lighting;
-import io.raytracer.light.Material;
+import io.raytracer.drawing.Material;
 import io.raytracer.light.Ray;
 import io.raytracer.light.RayImpl;
-import io.raytracer.light.Sphere;
-import io.raytracer.light.SphereImpl;
+import io.raytracer.drawing.Sphere;
+import io.raytracer.drawing.SphereImpl;
 
 import java.io.FileWriter;
 import java.io.IOException;

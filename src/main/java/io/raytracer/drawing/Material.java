@@ -1,7 +1,4 @@
-package io.raytracer.light;
-
-import io.raytracer.drawing.Colour;
-import io.raytracer.drawing.ColourImpl;
+package io.raytracer.drawing;
 
 import java.util.Arrays;
 
