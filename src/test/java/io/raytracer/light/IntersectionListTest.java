@@ -26,6 +26,49 @@ public class IntersectionListTest {
     }
 
     @Test
+    void intersectionCombineWithEmpty() {
+        Intersection i = new Intersection(2.0, new SphereImpl());
+        IntersectionListImpl intersections = new IntersectionListImpl(i);
+        IntersectionList finalIntersections = intersections.combine(new IntersectionListImpl());
+
+        assertEquals( 1, intersections.count());
+        assertEquals(i, finalIntersections.get(0), "The only intersection should be the first one");
+    }
+
+    @Test
+    void intersectionCombineEmptyItself() {
+        Intersection i = new Intersection(2.0, new SphereImpl());
+        IntersectionListImpl intersections = new IntersectionListImpl();
+        IntersectionList finalIntersections = intersections.combine(new IntersectionListImpl(i));
+
+        assertEquals( 1, finalIntersections.count());
+        assertEquals(i, finalIntersections.get(0), "The only intersection should be the first one");
+    }
+
+    @Test
+    void intersectionCombine() {
+        Intersection i = new Intersection(2.0, new SphereImpl());
+        IntersectionListImpl firstIntersections = new IntersectionListImpl(i);
+        IntersectionListImpl secondIntersections = new IntersectionListImpl(i);
+        IntersectionList finalIntersections = firstIntersections.combine(secondIntersections);
+
+        assertEquals(2, finalIntersections.count());
+        assertEquals(i, finalIntersections.get(0));
+        assertEquals(i, finalIntersections.get(1));
+    }
+
+    @Test
+    void intersectionCombineSorts() {
+        Intersection iEarly = new Intersection(2.0, new SphereImpl());
+        Intersection iLate = new Intersection(3.0, new SphereImpl());
+        IntersectionListImpl firstIntersections = new IntersectionListImpl(iLate);
+        IntersectionListImpl secondIntersections = new IntersectionListImpl(iEarly);
+        IntersectionList finalIntersections = firstIntersections.combine(secondIntersections);
+
+        assertEquals(iEarly, finalIntersections.get(0), "The first intersection should be the earliest one.");
+    }
+
+    @Test
     void intersectionGetBeyondCount() {
         IntersectionList intersections = new IntersectionListImpl();
 

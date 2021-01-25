@@ -7,4 +7,6 @@ public interface World {
 
     void put(Drawable object);
     boolean contains(Drawable object);
+
+    IntersectionList intersect(Ray ray);
 }
