@@ -4,5 +4,5 @@ import io.raytracer.light.IntersectionList;
 import io.raytracer.light.Ray;
 
 public interface Drawable {
-    public IntersectionList intersect(Ray ray);
+    IntersectionList intersect(Ray ray);
 }
