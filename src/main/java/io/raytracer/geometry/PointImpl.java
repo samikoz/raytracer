@@ -1,11 +1,9 @@
 package io.raytracer.geometry;
 
 import lombok.NonNull;
-import lombok.ToString;
 
 import java.util.stream.IntStream;
 
-@ToString
 public class PointImpl extends TupleImpl implements Point {
     public PointImpl(double... coordinates) {
         super(coordinates);

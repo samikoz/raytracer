@@ -13,4 +13,5 @@ public class IlluminatedPoint {
     @NonNull public Point point;
     @NonNull public Vector normalVector;
     @NonNull public Vector eyeVector;
+    public boolean inside;
 }

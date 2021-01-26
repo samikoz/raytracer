@@ -36,13 +36,19 @@ public class RayImpl implements Ray {
     @Override
     public IlluminatedPoint getIlluminatedPoint(Intersection intersection) {
         Point intersectionPoint = position(intersection.time);
-        return new IlluminatedPoint(
+        IlluminatedPoint illuminated = new IlluminatedPoint(
                 intersection.time,
                 intersection.object,
                 intersectionPoint,
+                intersection.object.normal(intersectionPoint),
                 this.direction.negate(),
-                intersection.object.normal(intersectionPoint)
+                false
         );
+        if (illuminated.normalVector.dot(illuminated.eyeVector) < 0) {
+            illuminated.inside = true;
+            illuminated.normalVector = illuminated.normalVector.negate();
+        }
+        return illuminated;
     }
 
     @Override

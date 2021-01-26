@@ -1,12 +1,9 @@
 package io.raytracer.geometry;
 
-import lombok.ToString;
-
 import java.util.Arrays;
 import java.util.stream.IntStream;
 import java.util.function.IntToDoubleFunction;
 
-@ToString
 class TupleImpl implements Tuple {
     private final int dim;
     private final double[] coords;
@@ -63,5 +60,10 @@ class TupleImpl implements Tuple {
 
     public TupleImpl multiply(double scalar) {
         return applyCoordinatewise(i -> get(i) * scalar);
+    }
+
+    @Override
+    public String toString() {
+        return this.getClass().getName() + Arrays.toString(this.coords);
     }
 }

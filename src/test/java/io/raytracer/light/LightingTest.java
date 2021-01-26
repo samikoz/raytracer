@@ -29,7 +29,8 @@ public class LightingTest {
         Vector normalVector = new VectorImpl(0, 0, -1);
         LightSource source = new LightSource(
                 new ColourImpl(1, 1, 1), new PointImpl(0, 0, -10));
-        IlluminatedPoint illuminated = new IlluminatedPoint(0, new SphereImpl(), position, normalVector, eyeVector);
+        IlluminatedPoint illuminated = new IlluminatedPoint(
+                0, new SphereImpl(), position, normalVector, eyeVector, false);
         Colour expectedResult = new ColourImpl(1.9, 1.9, 1.9);
         Colour actualResult = Lighting.illuminate(source, material, illuminated);
 
@@ -43,7 +44,8 @@ public class LightingTest {
         Vector normalVector = new VectorImpl(0, 0, -1);
         LightSource source = new LightSource(
                 new ColourImpl(1, 1, 1), new PointImpl(0, 0, -10));
-        IlluminatedPoint illuminated = new IlluminatedPoint(0, new SphereImpl(), position, normalVector, eyeVector);
+        IlluminatedPoint illuminated = new IlluminatedPoint(
+                0, new SphereImpl(), position, normalVector, eyeVector, false);
         Colour expectedResult = new ColourImpl(1, 1, 1);
         Colour actualResult = Lighting.illuminate(source, material, illuminated);
 
@@ -57,7 +59,7 @@ public class LightingTest {
         Vector normalVector = new VectorImpl(0, 0, -1);
         LightSource source = new LightSource(
                 new ColourImpl(1, 1, 1), new PointImpl(0, 10, -10));
-        IlluminatedPoint illuminated = new IlluminatedPoint(0, new SphereImpl(), position, normalVector, eyeVector);
+        IlluminatedPoint illuminated = new IlluminatedPoint(0, new SphereImpl(), position, normalVector, eyeVector, false);
         Colour expectedResult = new ColourImpl(0.7364, 0.7364, 0.7364);
         Colour actualResult = Lighting.illuminate(source, material, illuminated);
 
@@ -71,7 +73,8 @@ public class LightingTest {
         Vector normalVector = new VectorImpl(0, 0, -1);
         LightSource source = new LightSource(
                 new ColourImpl(1, 1, 1), new PointImpl(0, 10, -10));
-        IlluminatedPoint illuminated = new IlluminatedPoint(0, new SphereImpl(), position, normalVector, eyeVector);
+        IlluminatedPoint illuminated = new IlluminatedPoint(
+                0, new SphereImpl(), position, normalVector, eyeVector, false);
         Colour expectedResult = new ColourImpl(1.6364, 1.6364, 1.6364);
         Colour actualResult = Lighting.illuminate(source, material, illuminated);
 
@@ -85,7 +88,8 @@ public class LightingTest {
         Vector normalVector = new VectorImpl(0, 0, -1);
         LightSource source = new LightSource(
                 new ColourImpl(1, 1, 1), new PointImpl(0, 0, 10));
-        IlluminatedPoint illuminated = new IlluminatedPoint(0, new SphereImpl(), position, normalVector, eyeVector);
+        IlluminatedPoint illuminated = new IlluminatedPoint(
+                0, new SphereImpl(), position, normalVector, eyeVector, false);
         Colour expectedResult = new ColourImpl(0.1, 0.1, 0.1);
         Colour actualResult = Lighting.illuminate(source, material, illuminated);
 
