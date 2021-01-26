@@ -2,6 +2,7 @@ package io.raytracer.light;
 
 import io.raytracer.drawing.Drawable;
 import lombok.Getter;
+import lombok.NonNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +14,7 @@ public class WorldImpl implements World {
 
     public WorldImpl(LightSource lightsource) {
         this.lightSource = lightsource;
-        this.contents = new ArrayList<Drawable>();
+        this.contents = new ArrayList<>();
     }
 
     @Override
@@ -27,7 +28,7 @@ public class WorldImpl implements World {
     }
 
     @Override
-    public IntersectionList intersect(Ray ray) {
+    public IntersectionList intersect(@NonNull Ray ray) {
         Stream<IntersectionListImpl> s = contents.stream().map(object -> (IntersectionListImpl) object.intersect(ray));
         return s.reduce(IntersectionListImpl::combine).orElse(new IntersectionListImpl());
     }

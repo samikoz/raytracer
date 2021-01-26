@@ -6,7 +6,6 @@ import io.raytracer.drawing.ColourImpl;
 import io.raytracer.drawing.PPMCanvas;
 import io.raytracer.geometry.Point;
 import io.raytracer.geometry.PointImpl;
-import io.raytracer.geometry.Vector;
 import io.raytracer.light.IlluminatedPoint;
 import io.raytracer.light.IntersectionList;
 import io.raytracer.light.LightSource;
@@ -50,12 +49,8 @@ public class Main {
                 IntersectionList intersections = sphere.intersect(ray);
 
                 if (intersections.hit().isPresent()) {
-                    Point hitPoint = ray.position(intersections.hit().get().time);
-                    Vector normal = sphere.normal(hitPoint);
-                    Vector eyeVector = ray.getDirection().negate();
-                    IlluminatedPoint illuminated = new IlluminatedPoint(
-                            hitPoint, normal, sphere.getMaterial());
-                    Colour pointColour = Lighting.illuminate(source, eyeVector, illuminated);
+                    IlluminatedPoint illuminated = ray.getIlluminatedPoint(intersections.hit().get());
+                    Colour pointColour = Lighting.illuminate(source, sphere.getMaterial(), illuminated);
                     canvas.write(xPixel, yPixel, pointColour);
                 }
             }

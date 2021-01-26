@@ -1,15 +1,16 @@
 package io.raytracer.light;
 
-import io.raytracer.drawing.Material;
+import io.raytracer.drawing.Drawable;
+import lombok.AllArgsConstructor;
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-
 import io.raytracer.geometry.Point;
 import io.raytracer.geometry.Vector;
 
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class IlluminatedPoint {
+    public double time;
+    @NonNull public Drawable object;
     @NonNull public Point point;
     @NonNull public Vector normalVector;
-    @NonNull public Material material;
+    @NonNull public Vector eyeVector;
 }
