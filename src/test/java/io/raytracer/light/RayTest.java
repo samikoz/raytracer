@@ -101,6 +101,20 @@ class RayTest {
     }
 
     @Test
+    void gettingIlluminatedPoint() {
+        RayImpl ray = new RayImpl(new PointImpl(0, 0, -5), new VectorImpl(0, 0, 1));
+        Sphere sphere = new SphereImpl();
+        Intersection intersection = new Intersection(4, sphere);
+        IlluminatedPoint illuminated = ray.getIlluminatedPoint(intersection);
+
+        assertEquals(intersection.time, illuminated.time);
+        assertEquals(sphere, illuminated.object);
+        assertEquals(new PointImpl(0, 0, -1), illuminated.point);
+        assertEquals(new VectorImpl(0, 0, -1), illuminated.eyeVector);
+        assertEquals(new VectorImpl(0, 0, -1), illuminated.normalVector);
+    }
+
+    @Test
     void translatingARay() {
         Vector direction = new VectorImpl(0, 1, 0);
         Ray ray = new RayImpl(new PointImpl(1, 2, 3), direction);

@@ -34,6 +34,18 @@ public class RayImpl implements Ray {
     }
 
     @Override
+    public IlluminatedPoint getIlluminatedPoint(Intersection intersection) {
+        Point intersectionPoint = position(intersection.time);
+        return new IlluminatedPoint(
+                intersection.time,
+                intersection.object,
+                intersectionPoint,
+                this.direction.negate(),
+                intersection.object.normal(intersectionPoint)
+        );
+    }
+
+    @Override
     public Ray transform(Transformation t) {
         return new RayImpl(this.origin.transform(t), this.direction.transform(t));
     }

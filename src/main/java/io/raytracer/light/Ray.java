@@ -12,6 +12,7 @@ public interface Ray {
     Point position(double time);
 
     IntersectionList intersect(Drawable object);
+    IlluminatedPoint getIlluminatedPoint(Intersection intersection);
 
     Ray transform(Transformation t);
 }
