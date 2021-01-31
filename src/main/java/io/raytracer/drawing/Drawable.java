@@ -6,6 +6,8 @@ import io.raytracer.light.IntersectionList;
 import io.raytracer.light.Ray;
 
 public interface Drawable {
+    Material getMaterial();
+
     IntersectionList intersect(Ray ray);
     Vector normal(Point point);
 }

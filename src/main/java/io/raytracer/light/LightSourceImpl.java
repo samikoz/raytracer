@@ -1,16 +1,23 @@
 package io.raytracer.light;
 
+import io.raytracer.drawing.ColourImpl;
 import io.raytracer.drawing.Material;
+import io.raytracer.geometry.Vector;
 import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 
 import io.raytracer.drawing.Colour;
-import io.raytracer.drawing.ColourImpl;
-import io.raytracer.geometry.Vector;
+import io.raytracer.geometry.Point;
 
-public class Lighting {
-    public static Colour illuminate(@NonNull LightSource source, @NonNull Material material, @NonNull IlluminatedPoint illuminated) {
-        Colour effectiveColour = material.colour.mix(source.colour);
-        Vector sourceDirection = source.position.subtract(illuminated.point).normalise();
+@RequiredArgsConstructor
+public class LightSourceImpl implements LightSource {
+    @NonNull public final Colour colour;
+    @NonNull public final Point position;
+
+    public Colour illuminate(@NonNull IlluminatedPoint illuminated) {
+        Material material = illuminated.object.getMaterial();
+        Colour effectiveColour = material.colour.mix(this.colour);
+        Vector sourceDirection = this.position.subtract(illuminated.point).normalise();
         Colour ambientContribution = effectiveColour.multiply(material.ambient);
         double lightNormalCosine = sourceDirection.dot(illuminated.normalVector);
 
@@ -28,7 +35,7 @@ public class Lighting {
                 specularContribution = new ColourImpl(0, 0, 0);
             } else {
                 double specularFactor = Math.pow(reflectionEyeCosine, material.shininess);
-                specularContribution = source.colour.multiply(material.specular).multiply(specularFactor);
+                specularContribution = this.colour.multiply(material.specular).multiply(specularFactor);
             }
         }
         return ambientContribution.add(diffuseContribution).add(specularContribution);

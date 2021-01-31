@@ -9,10 +9,10 @@ import java.util.List;
 import java.util.stream.Stream;
 
 public class WorldImpl implements World {
-    @Getter private final LightSource lightSource;
+    @Getter private final LightSourceImpl lightSource;
     private final List<Drawable> contents;
 
-    public WorldImpl(LightSource lightsource) {
+    public WorldImpl(LightSourceImpl lightsource) {
         this.lightSource = lightsource;
         this.contents = new ArrayList<>();
     }

@@ -8,8 +8,7 @@ import io.raytracer.geometry.Point;
 import io.raytracer.geometry.PointImpl;
 import io.raytracer.light.IlluminatedPoint;
 import io.raytracer.light.IntersectionList;
-import io.raytracer.light.LightSource;
-import io.raytracer.light.Lighting;
+import io.raytracer.light.LightSourceImpl;
 import io.raytracer.drawing.Material;
 import io.raytracer.light.Ray;
 import io.raytracer.light.RayImpl;
@@ -33,7 +32,7 @@ public class Main {
         Point rayOrigin = new PointImpl(0, 0, -5);
         Point lightPosition = new PointImpl(-10, 10, -10);
         Colour lightColour = new ColourImpl(1, 1, 1);
-        LightSource source = new LightSource(lightColour, lightPosition);
+        LightSourceImpl source = new LightSourceImpl(lightColour, lightPosition);
 
         Canvas canvas = new PPMCanvas(canvasSidePixels, canvasSidePixels);
         Material material = new Material();
@@ -50,7 +49,7 @@ public class Main {
 
                 if (intersections.hit().isPresent()) {
                     IlluminatedPoint illuminated = ray.getIlluminatedPoint(intersections.hit().get());
-                    Colour pointColour = Lighting.illuminate(source, sphere.getMaterial(), illuminated);
+                    Colour pointColour = source.illuminate(illuminated);
                     canvas.write(xPixel, yPixel, pointColour);
                 }
             }
