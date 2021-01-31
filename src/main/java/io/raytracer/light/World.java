@@ -1,5 +1,6 @@
 package io.raytracer.light;
 
+import io.raytracer.drawing.Colour;
 import io.raytracer.drawing.Drawable;
 
 public interface World {
@@ -9,4 +10,5 @@ public interface World {
     boolean contains(Drawable object);
 
     IntersectionList intersect(Ray ray);
+    Colour illuminate(Ray ray);
 }

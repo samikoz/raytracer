@@ -1,11 +1,14 @@
 package io.raytracer.light;
 
+import io.raytracer.drawing.Colour;
+import io.raytracer.drawing.ColourImpl;
 import io.raytracer.drawing.Drawable;
 import lombok.Getter;
 import lombok.NonNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 public class WorldImpl implements World {
@@ -31,5 +34,15 @@ public class WorldImpl implements World {
     public IntersectionList intersect(@NonNull Ray ray) {
         Stream<IntersectionListImpl> s = contents.stream().map(object -> (IntersectionListImpl) object.intersect(ray));
         return s.reduce(IntersectionListImpl::combine).orElse(new IntersectionListImpl());
+    }
+
+    @Override
+    public Colour illuminate(@NonNull Ray ray) {
+        Optional<Intersection> hit = intersect(ray).hit();
+        if (hit.isPresent()) {
+            return lightSource.illuminate(ray.getIlluminatedPoint(hit.get()));
+        } else {
+            return new ColourImpl(0, 0, 0);
+        }
     }
 }

@@ -1,7 +1,9 @@
 package io.raytracer.light;
 
 
+import io.raytracer.drawing.Colour;
 import io.raytracer.drawing.ColourImpl;
+import io.raytracer.drawing.Drawable;
 import io.raytracer.drawing.Material;
 import io.raytracer.drawing.Sphere;
 import io.raytracer.drawing.SphereImpl;
@@ -58,5 +60,37 @@ public class WorldTest {
         assertEquals(intersections.get(1).time, 4.5);
         assertEquals(intersections.get(2).time, 5.5);
         assertEquals(intersections.get(3).time, 6);
+    }
+
+    @Test
+    void illuminatingWhenRayMisses() {
+        Ray ray = new RayImpl(new PointImpl(0, 0, -5), new VectorImpl(0, 1, 0));
+        Colour illuminated = defaultWorld.illuminate(ray);
+        Colour expectedColour = new ColourImpl(0, 0, 0);
+
+        assertEquals(expectedColour, illuminated, "A ray that misses should return black");
+    }
+
+    @Test
+    void illuminatingWhenRayHits() {
+        Ray ray = new RayImpl(new PointImpl(0, 0, -5), new VectorImpl(0, 0, 1));
+        Colour illuminated = defaultWorld.illuminate(ray);
+        Colour expectedColour = new ColourImpl(0.38066, 0.47583, 0.2855);
+
+        assertEquals(expectedColour, illuminated);
+    }
+
+    @Test
+    void illuminatingWhenIntersectionIsBehindRay() {
+        Drawable outerObject = secondSphere;
+        Drawable innerObject = firstSphere;
+        outerObject.getMaterial().ambient = 1;
+        innerObject.getMaterial().ambient = 1;
+
+        Ray ray = new RayImpl(new PointImpl(0, 0, 0.75), new VectorImpl(0, 0, -1));
+        Colour illuminated = defaultWorld.illuminate(ray);
+
+        assertEquals(innerObject.getMaterial().colour, illuminated,
+                "Illuminate should use the hit with the inner sphere");
     }
 }
