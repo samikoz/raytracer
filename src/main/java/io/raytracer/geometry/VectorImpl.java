@@ -45,6 +45,19 @@ public class VectorImpl extends TupleImpl implements Vector {
     }
 
     @Override
+    public VectorImpl cross(Vector them) {
+        assert this.dim() == 3;
+        assert them.dim() == 3;
+
+        return new VectorImpl(
+                this.get(1) * them.get(2) - this.get(2) * them.get(1),
+                this.get(2) * them.get(0) - this.get(0) * them.get(2),
+                this.get(0) * them.get(1) - this.get(1) * them.get(0)
+        );
+    }
+
+
+    @Override
     public Vector reflect(Vector reflector) {
         return this.subtract(reflector.multiply(2 * this.dot(reflector)));
     }

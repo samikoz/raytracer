@@ -57,6 +57,16 @@ class VectorTest {
     }
 
     @Test
+    void cross() {
+        Vector first = new VectorImpl(1, 2, 3);
+        Vector second = new VectorImpl(2, 3, 4);
+        Vector expectedCross = new VectorImpl(-1, 2, -1);
+        Vector actualCross = first.cross(second);
+
+        assertEquals(expectedCross, actualCross);
+    }
+
+    @Test
     void reflect() {
         Vector reflector = new VectorImpl(Math.sqrt(2) / 2, Math.sqrt(2) / 2, 0);
         Vector reflectee = new VectorImpl(0, -1, 0);

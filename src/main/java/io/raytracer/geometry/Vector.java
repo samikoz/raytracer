@@ -19,6 +19,7 @@ public interface Vector extends Tuple{
     Vector reflect(Vector reflector);
 
     double dot(Vector them);
+    Vector cross(Vector them);
 
     Vector transform(Transformation t);
 }
