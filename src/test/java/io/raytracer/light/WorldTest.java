@@ -7,8 +7,13 @@ import io.raytracer.drawing.Drawable;
 import io.raytracer.drawing.Material;
 import io.raytracer.drawing.Sphere;
 import io.raytracer.drawing.SphereImpl;
+import io.raytracer.geometry.Point;
 import io.raytracer.geometry.PointImpl;
+import io.raytracer.geometry.SquareMatrix;
+import io.raytracer.geometry.SquareMatrixImpl;
 import io.raytracer.geometry.ThreeTransformation;
+import io.raytracer.geometry.Transformation;
+import io.raytracer.geometry.Vector;
 import io.raytracer.geometry.VectorImpl;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -92,5 +97,17 @@ public class WorldTest {
 
         assertEquals(innerObject.getMaterial().colour, illuminated,
                 "Illuminate should use the hit with the inner sphere");
+    }
+
+    @Test
+    void getDefaultOrientationViewTransformation() {
+        Point eyePosition = new PointImpl(0, 0, 0);
+        Point lookPosition = new PointImpl(0, 0, -1);
+        Vector upDirection = new VectorImpl(0, 1, 0);
+
+        Transformation viewTransformation = defaultWorld.getViewTransformation(eyePosition, lookPosition, upDirection);
+        Transformation identity = new ThreeTransformation();
+
+        assertEquals(identity, viewTransformation, "Default view transformation is the identity");
     }
 }

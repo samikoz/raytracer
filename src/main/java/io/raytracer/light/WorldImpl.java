@@ -3,6 +3,9 @@ package io.raytracer.light;
 import io.raytracer.drawing.Colour;
 import io.raytracer.drawing.ColourImpl;
 import io.raytracer.drawing.Drawable;
+import io.raytracer.geometry.Point;
+import io.raytracer.geometry.Transformation;
+import io.raytracer.geometry.Vector;
 import lombok.Getter;
 import lombok.NonNull;
 
@@ -44,5 +47,10 @@ public class WorldImpl implements World {
         } else {
             return new ColourImpl(0, 0, 0);
         }
+    }
+
+    @Override
+    public Transformation getViewTransformation(Point eyePosition, Point lookPosition, Vector upDirection) {
+        return null;
     }
 }
