@@ -15,7 +15,7 @@ public class ThreeTransformation implements Transformation {
         );
     }
 
-    public ThreeTransformation(SquareMatrix m) {
+    private ThreeTransformation(SquareMatrix m) {
         underlyingMatrix = m;
     }
 
@@ -125,6 +125,14 @@ public class ThreeTransformation implements Transformation {
                 zx, zy, 1, 0,
                 0, 0, 0, 1
         ).multiply(this.underlyingMatrix));
+    }
+    
+    public static ThreeTransformation transformation(SquareMatrix m) {
+        return new ThreeTransformation(m);
+    }
+    
+    public ThreeTransformation transform(SquareMatrix m) {
+        return new ThreeTransformation(m.multiply(this.underlyingMatrix));
     }
 
     @Override

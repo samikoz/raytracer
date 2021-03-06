@@ -9,7 +9,6 @@ import io.raytracer.drawing.Sphere;
 import io.raytracer.drawing.SphereImpl;
 import io.raytracer.geometry.Point;
 import io.raytracer.geometry.PointImpl;
-import io.raytracer.geometry.SquareMatrix;
 import io.raytracer.geometry.SquareMatrixImpl;
 import io.raytracer.geometry.ThreeTransformation;
 import io.raytracer.geometry.Transformation;
@@ -142,7 +141,7 @@ public class WorldTest {
         Vector upDirection = new VectorImpl(1, 1, 0);
 
         Transformation viewTransformation = defaultWorld.getViewTransformation(eyePosition, lookPosition, upDirection);
-        Transformation expectedViewTransformation = new ThreeTransformation(new SquareMatrixImpl(
+        Transformation expectedViewTransformation = ThreeTransformation.transformation(new SquareMatrixImpl(
                 -0.50709, 0.50709, 0.67612, -2.36643,
                 0.76772, 0.60609, 0.12122, -2.82843,
                 -0.35857, 0.59761, -0.71714, 0.00000,
