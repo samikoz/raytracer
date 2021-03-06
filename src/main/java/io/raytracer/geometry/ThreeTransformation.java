@@ -12,7 +12,7 @@ public class ThreeTransformation implements Transformation {
         );
     }
 
-    private ThreeTransformation(SquareMatrix m) {
+    public ThreeTransformation(SquareMatrix m) {
         underlyingMatrix = m;
     }
 
