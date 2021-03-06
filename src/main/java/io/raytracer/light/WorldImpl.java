@@ -4,6 +4,9 @@ import io.raytracer.drawing.Colour;
 import io.raytracer.drawing.ColourImpl;
 import io.raytracer.drawing.Drawable;
 import io.raytracer.geometry.Point;
+import io.raytracer.geometry.SquareMatrix;
+import io.raytracer.geometry.SquareMatrixImpl;
+import io.raytracer.geometry.ThreeTransformation;
 import io.raytracer.geometry.Transformation;
 import io.raytracer.geometry.Vector;
 import lombok.Getter;
@@ -51,6 +54,22 @@ public class WorldImpl implements World {
 
     @Override
     public Transformation getViewTransformation(Point eyePosition, Point lookPosition, Vector upDirection) {
-        return null;
+        Vector forwardDirection = lookPosition.subtract(eyePosition).normalise();
+        Vector upNormalised = upDirection.normalise();
+        Vector leftDirection = forwardDirection.cross(upNormalised);
+        Vector realUpDirection = leftDirection.cross(forwardDirection);
+
+        SquareMatrix initialTranslation = new SquareMatrixImpl(
+                1, 0, 0, -eyePosition.get(0),
+                0, 1, 0, -eyePosition.get(1),
+                0, 0, 1, -eyePosition.get(2),
+                0, 0, 0, 1);
+        SquareMatrix originTransformation = new SquareMatrixImpl(
+                leftDirection.get(0), leftDirection.get(1), leftDirection.get(2), 0,
+                realUpDirection.get(0), realUpDirection.get(1), realUpDirection.get(2), 0,
+                -forwardDirection.get(0), -forwardDirection.get(1), -forwardDirection.get(2), 0,
+                0, 0, 0, 1);
+
+        return new ThreeTransformation(originTransformation.multiply(initialTranslation));
     }
 }

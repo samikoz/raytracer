@@ -1,5 +1,8 @@
 package io.raytracer.geometry;
 
+import lombok.ToString;
+
+@ToString
 public class ThreeTransformation implements Transformation {
     private final SquareMatrix underlyingMatrix;
 

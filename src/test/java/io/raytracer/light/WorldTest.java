@@ -118,7 +118,7 @@ public class WorldTest {
         Vector upDirection = new VectorImpl(0, 1, 0);
 
         Transformation viewTransformation = defaultWorld.getViewTransformation(eyePosition, lookPosition, upDirection);
-        Transformation reflectionXZ = ThreeTransformation.scaling(-1, 0, -1);
+        Transformation reflectionXZ = ThreeTransformation.scaling(-1, 1, -1);
 
         assertEquals(reflectionXZ, viewTransformation, "Look in the positive z direction should swap XZ axes");
     }
@@ -146,7 +146,7 @@ public class WorldTest {
                 -0.50709, 0.50709, 0.67612, -2.36643,
                 0.76772, 0.60609, 0.12122, -2.82843,
                 -0.35857, 0.59761, -0.71714, 0.00000,
-                0.00000, 0.00000, 0.00000,1.00000
+                0.00000, 0.00000, 0.00000, 1.00000
         ));
 
         assertEquals(expectedViewTransformation, viewTransformation);
