@@ -1,6 +1,9 @@
 package io.raytracer.light;
 
 
+import io.raytracer.drawing.Camera;
+import io.raytracer.drawing.CameraImpl;
+import io.raytracer.drawing.Canvas;
 import io.raytracer.drawing.Colour;
 import io.raytracer.drawing.ColourImpl;
 import io.raytracer.drawing.Drawable;
@@ -149,5 +152,19 @@ public class WorldTest {
         ));
 
         assertEquals(expectedViewTransformation, viewTransformation);
+    }
+
+    @Test
+    void renderDefaultWorld() {
+        Point eyePosition = new PointImpl(0, 0, -5);
+        Point lookPosition = new PointImpl(0, 0, 0);
+        Vector upDirection = new VectorImpl(0, 1, 0);
+        Transformation transform = defaultWorld.getViewTransformation(eyePosition, lookPosition, upDirection);
+        Camera camera = new CameraImpl(11, 11, Math.PI / 2, transform);
+
+        Canvas canvas = defaultWorld.render(camera);
+
+        assertEquals(new ColourImpl(0.38066, 0.47583, 0.2855), canvas.read(5, 5),
+                "Pixel in the middle of the canvas has correct colour.");
     }
 }

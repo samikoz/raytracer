@@ -1,5 +1,7 @@
 package io.raytracer.light;
 
+import io.raytracer.drawing.Camera;
+import io.raytracer.drawing.Canvas;
 import io.raytracer.drawing.Colour;
 import io.raytracer.drawing.ColourImpl;
 import io.raytracer.drawing.Drawable;
@@ -67,5 +69,10 @@ public class WorldImpl implements World {
 
         return ThreeTransformation.translation(-eyePosition.get(0), -eyePosition.get(1), -eyePosition.get(2))
                 .transform(originTransformation);
+    }
+
+    @Override
+    public Canvas render(Camera camera) {
+        return null;
     }
 }

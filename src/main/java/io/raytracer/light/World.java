@@ -1,5 +1,7 @@
 package io.raytracer.light;
 
+import io.raytracer.drawing.Camera;
+import io.raytracer.drawing.Canvas;
 import io.raytracer.drawing.Colour;
 import io.raytracer.drawing.Drawable;
 import io.raytracer.geometry.Point;
@@ -16,4 +18,6 @@ public interface World {
     Colour illuminate(Ray ray);
 
     Transformation getViewTransformation(Point eyePosition, Point lookPosition, Vector upDirection);
+
+    Canvas render(Camera camera);
 }
