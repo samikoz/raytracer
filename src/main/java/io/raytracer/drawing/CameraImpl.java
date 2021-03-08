@@ -1,8 +1,13 @@
 package io.raytracer.drawing;
 
+import io.raytracer.geometry.Point;
+import io.raytracer.geometry.PointImpl;
 import io.raytracer.geometry.ThreeTransformation;
 import io.raytracer.geometry.Transformation;
+import io.raytracer.geometry.Vector;
+import io.raytracer.geometry.VectorImpl;
 import io.raytracer.light.Ray;
+import io.raytracer.light.RayImpl;
 
 public class CameraImpl implements Camera {
     private final int hsize;
@@ -18,6 +23,8 @@ public class CameraImpl implements Camera {
         this.vsize = vsize;
         this.fieldOfView = fieldOfView;
         this.transformation = new ThreeTransformation();
+
+        computePixelSize();
     }
 
     public CameraImpl(int hsize, int vsize, double fieldOfView, Transformation transformation) {
@@ -25,6 +32,8 @@ public class CameraImpl implements Camera {
         this.vsize = vsize;
         this.fieldOfView = fieldOfView;
         this.transformation = transformation;
+
+        computePixelSize();
     }
 
     @Override
@@ -34,7 +43,19 @@ public class CameraImpl implements Camera {
 
     @Override
     public Ray rayThrough(int x, int y) {
-        return null;
+        double canvasXOffset = (x + 0.5) * this.pixelSize;
+        double canvasYOffset = (y + 0.5) * this.pixelSize;
+
+        double worldXCoordinate = this.halfWidth - canvasXOffset;
+        double worldYCoordinate = this.halfHeight - canvasYOffset;
+
+        Transformation worldTransformation = this.transformation.inverse();
+
+        Point pixel = worldTransformation.act(new PointImpl(worldXCoordinate, worldYCoordinate, -1));
+        Point origin = worldTransformation.act(new PointImpl(0, 0, 0));
+        Vector direction = (pixel.subtract(origin)).normalise();
+
+        return new RayImpl(origin, direction);
     }
 
     private void computePixelSize() {
