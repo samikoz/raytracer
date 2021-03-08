@@ -1,7 +1,10 @@
 package io.raytracer.drawing;
 
-import io.raytracer.geometry.ThreeTransformation;
+import io.raytracer.geometry.Transformation;
+import io.raytracer.light.Ray;
 
 public interface Camera {
-    ThreeTransformation getTransformation();
+    Transformation getTransformation();
+
+    Ray rayThrough(int x, int y);
 }
