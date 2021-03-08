@@ -28,7 +28,7 @@
                         </execution>
                     </executions>
                     <configuration>
-                        <mainClass>io.raytracer.Main</mainClass>
+                        <mainClass>io.raytracer.DrawBasicWorld</mainClass>
                     </configuration>
                 </plugin>
             </plugins>
