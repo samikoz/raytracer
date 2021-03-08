@@ -1,10 +1,12 @@
 package io.raytracer.light;
 
 import io.raytracer.drawing.Camera;
+import io.raytracer.drawing.CameraImpl;
 import io.raytracer.drawing.Canvas;
 import io.raytracer.drawing.Colour;
 import io.raytracer.drawing.ColourImpl;
 import io.raytracer.drawing.Drawable;
+import io.raytracer.drawing.PPMCanvas;
 import io.raytracer.geometry.Point;
 import io.raytracer.geometry.SquareMatrix;
 import io.raytracer.geometry.SquareMatrixImpl;
@@ -73,6 +75,16 @@ public class WorldImpl implements World {
 
     @Override
     public Canvas render(Camera camera) {
-        return null;
+        Canvas canvas  = new PPMCanvas(camera.getHsize(), camera.getVsize());
+
+        for (int y = 0; y < camera.getVsize() - 1; y++) {
+            for (int x = 0; x < camera.getVsize() -1; x++) {
+                Ray ray = camera.rayThrough(x, y);
+                Colour colour = this.illuminate(ray);
+                canvas.write(x, y, colour);
+            }
+        }
+
+        return canvas;
     }
 }

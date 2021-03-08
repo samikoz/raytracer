@@ -5,15 +5,15 @@ import io.raytracer.geometry.PointImpl;
 import io.raytracer.geometry.ThreeTransformation;
 import io.raytracer.geometry.Transformation;
 import io.raytracer.geometry.Vector;
-import io.raytracer.geometry.VectorImpl;
 import io.raytracer.light.Ray;
 import io.raytracer.light.RayImpl;
+import lombok.Getter;
 
 public class CameraImpl implements Camera {
-    private final int hsize;
-    private final int vsize;
+    @Getter private final int hsize;
+    @Getter private final int vsize;
     private final double fieldOfView;
-    private final Transformation transformation;
+    @Getter private final Transformation transformation;
     private double halfWidth;
     private double halfHeight;
     private double pixelSize;
@@ -34,11 +34,6 @@ public class CameraImpl implements Camera {
         this.transformation = transformation;
 
         computePixelSize();
-    }
-
-    @Override
-    public Transformation getTransformation() {
-        return transformation;
     }
 
     @Override
