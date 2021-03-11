@@ -35,8 +35,7 @@ public class DrawSingleSphere {
         LightSourceImpl source = new LightSourceImpl(lightColour, lightPosition);
 
         Canvas canvas = new PPMCanvas(canvasSidePixels, canvasSidePixels);
-        Material material = new Material();
-        material.colour = new ColourImpl(1, 0.2, 1);
+        Material material = Material.builder().colour(new ColourImpl(1, 0.2, 1)).build();
         Sphere sphere = new SphereImpl(material);
 
         for (int yPixel = 0; yPixel < canvasSidePixels; yPixel++) {

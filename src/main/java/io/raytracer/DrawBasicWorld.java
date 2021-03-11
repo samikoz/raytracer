@@ -21,9 +21,8 @@ import java.io.PrintWriter;
 
 public class DrawBasicWorld {
     public static void main(String[] args) throws IOException {
-        Material wallMaterial = new Material();
-        wallMaterial.colour = new ColourImpl(1, 0.9, 0.9);
-        wallMaterial.specular = 0;
+        Material wallMaterial = Material.builder()
+                .colour(new ColourImpl(1, 0.9, 0.9)).specular(0).build();
         Sphere floor = new SphereImpl(wallMaterial);
         floor.setTransform(ThreeTransformation.scaling(10, 0.01, 10));
 
@@ -42,26 +41,21 @@ public class DrawBasicWorld {
                 .translate(0, 0, 5)
         );
 
-        Material middleMaterial = new Material();
-        middleMaterial.colour = new ColourImpl(0.1, 1, 0.5);
-        middleMaterial.diffuse = 0.7;
-        middleMaterial.specular = 0.3;
+        Material middleMaterial = Material.builder()
+                .colour(new ColourImpl(0.1, 1, 0.5)).diffuse(0.7).specular(0.3).build();
         Sphere middleSphere = new SphereImpl(middleMaterial);
         middleSphere.setTransform(ThreeTransformation.translation(-0.5, 1, 0.5));
 
-        Material rightMaterial = new Material();
-        rightMaterial.colour = new ColourImpl(0.2, 0.1, 1);
-        rightMaterial.diffuse = 0.7;
-        rightMaterial.specular = 0.3;
+        Material rightMaterial = Material.builder()
+                .colour(new ColourImpl(0.2, 0.1, 1)).diffuse(0.7).specular(0.3).build();
         Sphere rightSphere = new SphereImpl(rightMaterial);
         rightSphere.setTransform(ThreeTransformation.scaling(0.5, 0.5, 0.5).translate(2, 0.5, -0.5));
 
-        Material leftMaterial = new Material();
-        leftMaterial.colour = new ColourImpl(1, 0.8, 1);
-        leftMaterial.diffuse = 0.7;
-        leftMaterial.specular = 0.3;
+        Material leftMaterial = Material.builder()
+                .colour(new ColourImpl(1, 0.8, 1)).diffuse(0.7).specular(0.3).build();
         Sphere leftSphere = new SphereImpl(leftMaterial);
-        leftSphere.setTransform(ThreeTransformation.scaling(0.33, 0.33, 0.33).translate(-1.5, 0.33, -0.75));
+        leftSphere.setTransform(ThreeTransformation
+                .scaling(0.33, 0.33, 0.33).translate(-1.5, 0.33, -0.75));
 
         World world = new WorldImpl(
                 new LightSourceImpl(new ColourImpl(1, 1, 1), new PointImpl(-10, 10, -10)));

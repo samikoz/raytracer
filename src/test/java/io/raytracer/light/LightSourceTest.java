@@ -19,7 +19,9 @@ public class LightSourceTest {
 
     @BeforeEach
     void setupMaterialAndPosition() {
-        material = new Material();
+        material = Material.builder()
+                .colour(new ColourImpl(1, 1, 1)).ambient(0.1).diffuse(0.9).specular(0.9).shininess(200)
+                .build();
         position = new PointImpl(0, 0, 0);
     }
 
@@ -27,8 +29,8 @@ public class LightSourceTest {
     void eyeBetweenLightAndSurface() {
         Vector eyeVector = new VectorImpl(0, 0, -1);
         Vector normalVector = new VectorImpl(0, 0, -1);
-        LightSource source = new LightSourceImpl(new ColourImpl(
-                1, 1, 1), new PointImpl(0, 0, -10));
+        LightSource source = new LightSourceImpl(
+                new ColourImpl(1, 1, 1), new PointImpl(0, 0, -10));
         IlluminatedPoint illuminated = new IlluminatedPoint(
                 0, new SphereImpl(material), position, normalVector, eyeVector, false);
         Colour expectedResult = new ColourImpl(1.9, 1.9, 1.9);

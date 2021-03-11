@@ -30,18 +30,16 @@ public class WorldTest {
 
     @BeforeAll
     static void setupMaterialAndPosition() {
-        Material defaultMaterial = new Material();
-        defaultMaterial.colour = new ColourImpl(0.8, 1.0, 0.6);
-        defaultMaterial.diffuse = 0.7;
-        defaultMaterial.specular = 0.2;
+        Material defaultMaterial = Material.builder()
+                .colour(new ColourImpl(0.8, 1.0, 0.6)).diffuse(0.7).specular(0.2)
+                .ambient(0.1).shininess(200).build();
         firstSphere = new SphereImpl(defaultMaterial);
         secondSphere = new SphereImpl(defaultMaterial);
         secondSphere.setTransform(ThreeTransformation.scaling(0.5, 0.5, 0.5));
 
         defaultWorld = new WorldImpl(
                 new LightSourceImpl(new ColourImpl(1, 1, 1), new PointImpl(-10, 10, -10)));
-        defaultWorld.put(firstSphere);
-        defaultWorld.put(secondSphere);
+        defaultWorld.put(firstSphere).put(secondSphere);
     }
 
     @Test
@@ -89,13 +87,20 @@ public class WorldTest {
 
     @Test
     void illuminatingWhenIntersectionIsBehindRay() {
-        Drawable outerObject = secondSphere;
-        Drawable innerObject = firstSphere;
-        outerObject.getMaterial().ambient = 1;
-        innerObject.getMaterial().ambient = 1;
+        Material material = Material.builder()
+                .colour(new ColourImpl(0.8, 1.0, 0.6)).diffuse(0.7).specular(0.2)
+                .ambient(1).shininess(200).build();
+        Sphere outerObject = new SphereImpl(material);
+
+        Sphere innerObject = new SphereImpl(material);
+        innerObject.setTransform(ThreeTransformation.scaling(0.5, 0.5, 0.5));
+
+        World world = new WorldImpl(
+                new LightSourceImpl(new ColourImpl(1, 1, 1), new PointImpl(-10, 10, -10)));
+        world.put(innerObject).put(outerObject);
 
         Ray ray = new RayImpl(new PointImpl(0, 0, 0.75), new VectorImpl(0, 0, -1));
-        Colour illuminated = defaultWorld.illuminate(ray);
+        Colour illuminated = world.illuminate(ray);
 
         assertEquals(innerObject.getMaterial().colour, illuminated,
                 "Illuminate should use the hit with the inner sphere");

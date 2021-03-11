@@ -1,22 +1,17 @@
 package io.raytracer.drawing;
 
+import lombok.Builder;
+
 import java.util.Arrays;
 
+@Builder
 public class Material {
-    public Colour colour;
-    public double ambient;
-    public double diffuse;
-    public double specular;
-    public double shininess;
+    @Builder.Default public final Colour colour = new ColourImpl(0, 0, 0);
+    @Builder.Default public final double ambient = 0.1;
+    @Builder.Default public final double diffuse = 0.9;
+    @Builder.Default public final double specular = 0.9;
+    @Builder.Default public final double shininess = 200;
     private static final double equalityTolerance = 1e-3;
-
-    public Material() {
-        this.colour = new ColourImpl(1, 1, 1);
-        this.ambient = 0.1;
-        this.diffuse = 0.9;
-        this.specular = 0.9;
-        this.shininess = 200.0;
-    }
 
     @Override
     public int hashCode() {

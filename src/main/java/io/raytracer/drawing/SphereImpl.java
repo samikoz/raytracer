@@ -20,7 +20,7 @@ public class SphereImpl implements Sphere {
 
     public SphereImpl() {
         this.transform = new ThreeTransformation();
-        this.material = new Material();
+        this.material = Material.builder().build();
     }
 
     public SphereImpl(@NonNull Material material) {
