@@ -21,10 +21,10 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 public class WorldImpl implements World {
-    @Getter private final LightSourceImpl lightSource;
+    @Getter private final LightSource lightSource;
     private final List<Drawable> contents;
 
-    public WorldImpl(LightSourceImpl lightsource) {
+    public WorldImpl(LightSource lightsource) {
         this.lightSource = lightsource;
         this.contents = new ArrayList<>();
     }
