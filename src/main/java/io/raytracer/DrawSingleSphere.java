@@ -14,6 +14,7 @@ import io.raytracer.light.Ray;
 import io.raytracer.light.RayImpl;
 import io.raytracer.drawing.Sphere;
 import io.raytracer.drawing.SphereImpl;
+import lombok.Builder;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -35,7 +36,13 @@ public class DrawSingleSphere {
         LightSourceImpl source = new LightSourceImpl(lightColour, lightPosition);
 
         Canvas canvas = new PPMCanvas(canvasSidePixels, canvasSidePixels);
-        Material material = Material.builder().colour(new ColourImpl(1, 0.2, 1)).build();
+        Material material = Material.builder()
+                .colour(new ColourImpl(1, 0.2, 1))
+                .ambient(0.1)
+                .diffuse(0.9)
+                .specular(0.9)
+                .shininess(200)
+                .build();
         Sphere sphere = new SphereImpl(material);
 
         for (int yPixel = 0; yPixel < canvasSidePixels; yPixel++) {

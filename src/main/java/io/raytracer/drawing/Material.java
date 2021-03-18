@@ -4,13 +4,13 @@ import lombok.Builder;
 
 import java.util.Arrays;
 
-@Builder
+@Builder(toBuilder = true)
 public class Material {
     @Builder.Default public final Colour colour = new ColourImpl(0, 0, 0);
-    @Builder.Default public final double ambient = 0.1;
-    @Builder.Default public final double diffuse = 0.9;
-    @Builder.Default public final double specular = 0.9;
-    @Builder.Default public final double shininess = 200;
+    public final double ambient;
+    public final double diffuse;
+    public final double specular;
+    public final double shininess;
     private static final double equalityTolerance = 1e-3;
 
     @Override
