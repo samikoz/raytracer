@@ -11,7 +11,6 @@ import io.raytracer.geometry.Vector;
 public interface World {
     World put(LightSource source);
     World put(Drawable object);
-    boolean contains(Drawable object);
 
     IntersectionList intersect(Ray ray);
     Colour illuminate(Ray ray);

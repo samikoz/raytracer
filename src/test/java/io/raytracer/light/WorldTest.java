@@ -43,11 +43,6 @@ public class WorldTest {
     }
 
     @Test
-    void containsObjectsThatWerePut() {
-        assertTrue(defaultWorld.contains(firstSphere) && defaultWorld.contains(secondSphere));
-    }
-
-    @Test
     void intersectingEmptyWorld() {
         Ray ray = new RayImpl(new PointImpl(0, 0, -5), new VectorImpl(0, 0, 1));
         World world = new WorldImpl();

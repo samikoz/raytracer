@@ -41,11 +41,6 @@ public class WorldImpl implements World {
     }
 
     @Override
-    public boolean contains(Drawable object) {
-        return this.contents.contains(object);
-    }
-
-    @Override
     public IntersectionList intersect(@NonNull Ray ray) {
         Stream<IntersectionListImpl> s = contents.stream().map(object -> (IntersectionListImpl) object.intersect(ray));
         return s.reduce(IntersectionListImpl::combine).orElse(new IntersectionListImpl());
