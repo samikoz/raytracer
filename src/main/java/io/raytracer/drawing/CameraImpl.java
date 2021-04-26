@@ -15,7 +15,7 @@ public class CameraImpl implements Camera {
     @Getter private final int hsize;
     @Getter private final int vsize;
     private final double fieldOfView;
-    private final Transformation transformation;
+    private final Transformation worldTransformation;
     private double halfWidth;
     private double halfHeight;
     private double pixelSize;
@@ -24,7 +24,7 @@ public class CameraImpl implements Camera {
         this.hsize = hsize;
         this.vsize = vsize;
         this.fieldOfView = fieldOfView;
-        this.transformation = new ThreeTransformation();
+        this.worldTransformation = new ThreeTransformation();
 
         computePixelSize();
     }
@@ -33,7 +33,7 @@ public class CameraImpl implements Camera {
         this.hsize = hsize;
         this.vsize = vsize;
         this.fieldOfView = fieldOfView;
-        this.transformation = this.makeViewTransformation(eyePosition, lookDirection, upDirection);
+        this.worldTransformation = this.makeViewTransformation(eyePosition, lookDirection, upDirection).inverse();
 
         computePixelSize();
     }
@@ -45,8 +45,6 @@ public class CameraImpl implements Camera {
 
         double worldXCoordinate = this.halfWidth - canvasXOffset;
         double worldYCoordinate = this.halfHeight - canvasYOffset;
-
-        Transformation worldTransformation = this.transformation.inverse();
 
         Point pixel = worldTransformation.act(new PointImpl(worldXCoordinate, worldYCoordinate, -1));
         Point origin = worldTransformation.act(new PointImpl(0, 0, 0));
