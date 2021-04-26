@@ -21,12 +21,17 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 public class WorldImpl implements World {
-    private final LightSource lightSource;
+    private LightSource lightSource;
     private final List<Drawable> contents;
 
-    public WorldImpl(LightSource lightsource) {
-        this.lightSource = lightsource;
+    public WorldImpl() {
         this.contents = new ArrayList<>();
+    }
+
+    @Override
+    public World put(LightSource source) {
+        this.lightSource = source;
+        return this;
     }
 
     @Override

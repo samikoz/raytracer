@@ -62,8 +62,8 @@ public class DrawBasicWorld {
         leftSphere.setTransform(ThreeTransformation
                 .scaling(0.33, 0.33, 0.33).translate(-1.5, 0.33, -0.75));
 
-        World world = new WorldImpl(
-                new LightSourceImpl(new ColourImpl(1, 1, 1), new PointImpl(-10, 10, -10)));
+        World world = new WorldImpl();
+        world.put(new LightSourceImpl(new ColourImpl(1, 1, 1), new PointImpl(-10, 10, -10)));
         world.put(floor).put(leftWall).put(rightWall).put(middleSphere).put(leftSphere).put(rightSphere);
 
         Transformation cameraTransform = world.getViewTransformation(

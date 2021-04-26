@@ -9,6 +9,7 @@ import io.raytracer.geometry.Transformation;
 import io.raytracer.geometry.Vector;
 
 public interface World {
+    World put(LightSource source);
     World put(Drawable object);
     boolean contains(Drawable object);
 

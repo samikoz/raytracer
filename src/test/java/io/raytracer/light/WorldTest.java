@@ -37,8 +37,8 @@ public class WorldTest {
         secondSphere = new SphereImpl(defaultMaterial);
         secondSphere.setTransform(ThreeTransformation.scaling(0.5, 0.5, 0.5));
 
-        defaultWorld = new WorldImpl(
-                new LightSourceImpl(new ColourImpl(1, 1, 1), new PointImpl(-10, 10, -10)));
+        defaultWorld = new WorldImpl();
+        defaultWorld.put(new LightSourceImpl(new ColourImpl(1, 1, 1), new PointImpl(-10, 10, -10)));
         defaultWorld.put(firstSphere).put(secondSphere);
     }
 
@@ -50,8 +50,8 @@ public class WorldTest {
     @Test
     void intersectingEmptyWorld() {
         Ray ray = new RayImpl(new PointImpl(0, 0, -5), new VectorImpl(0, 0, 1));
-        World world = new WorldImpl(
-                new LightSourceImpl(new ColourImpl(1, 1, 1), new PointImpl(-10, 10, -10)));
+        World world = new WorldImpl();
+        world.put(new LightSourceImpl(new ColourImpl(1, 1, 1), new PointImpl(-10, 10, -10)));
 
         assertEquals(0, world.intersect(ray).count(), "Empty world should have no intersections.");
     }
@@ -95,8 +95,8 @@ public class WorldTest {
         Sphere innerObject = new SphereImpl(material);
         innerObject.setTransform(ThreeTransformation.scaling(0.5, 0.5, 0.5));
 
-        World world = new WorldImpl(
-                new LightSourceImpl(new ColourImpl(1, 1, 1), new PointImpl(-10, 10, -10)));
+        World world = new WorldImpl();
+        world.put(new LightSourceImpl(new ColourImpl(1, 1, 1), new PointImpl(-10, 10, -10)));
         world.put(innerObject).put(outerObject);
 
         Ray ray = new RayImpl(new PointImpl(0, 0, 0.75), new VectorImpl(0, 0, -1));
