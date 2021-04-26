@@ -1,8 +1,10 @@
 package io.raytracer.drawing;
 
+import io.raytracer.geometry.Point;
 import io.raytracer.geometry.PointImpl;
 import io.raytracer.geometry.ThreeTransformation;
 import io.raytracer.geometry.Transformation;
+import io.raytracer.geometry.Vector;
 import io.raytracer.geometry.VectorImpl;
 import io.raytracer.light.Ray;
 import org.junit.jupiter.api.Test;
@@ -38,8 +40,10 @@ public class CameraTest {
 
     @Test
     void getRayForATransformedCamera() {
-        Transformation transform = ThreeTransformation.translation(0, -2, 5).rotate_y(Math.PI / 4);
-        Camera camera = new CameraImpl(201, 101, Math.PI / 2, transform);
+        Point eyePosition = new PointImpl(0, 2, -5);
+        Vector lookDirection = ThreeTransformation.rotation_y(-Math.PI / 4).act(new VectorImpl(0, 0, -1));
+        Vector upDirection = new VectorImpl(0, 1, 0);
+        Camera camera = new CameraImpl(201, 101, Math.PI / 2, eyePosition, lookDirection, upDirection);
         Ray ray = camera.rayThrough(100, 50);
 
         assertEquals(new PointImpl(0, 2, -5), ray.getOrigin(),

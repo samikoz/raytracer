@@ -7,14 +7,15 @@ import io.raytracer.drawing.ColourImpl;
 import io.raytracer.drawing.Material;
 import io.raytracer.drawing.Sphere;
 import io.raytracer.drawing.SphereImpl;
+import io.raytracer.geometry.Point;
 import io.raytracer.geometry.PointImpl;
 import io.raytracer.geometry.ThreeTransformation;
 import io.raytracer.geometry.Transformation;
+import io.raytracer.geometry.Vector;
 import io.raytracer.geometry.VectorImpl;
 import io.raytracer.light.LightSourceImpl;
 import io.raytracer.light.World;
 import io.raytracer.light.WorldImpl;
-import lombok.Builder;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -66,11 +67,10 @@ public class DrawBasicWorld {
         world.put(new LightSourceImpl(new ColourImpl(1, 1, 1), new PointImpl(-10, 10, -10)));
         world.put(floor).put(leftWall).put(rightWall).put(middleSphere).put(leftSphere).put(rightSphere);
 
-        Transformation cameraTransform = world.getViewTransformation(
-                new PointImpl(0, 1.5, -5),
-                new PointImpl(0, 1, 0),
-                new VectorImpl(0, 1, 0));
-        Camera camera = new CameraImpl(600, 300, Math.PI / 3, cameraTransform);
+        Point eyePosition = new PointImpl(0, 1.5, -5);
+        Vector lookDirection = new PointImpl(0, 1, 0).subtract(eyePosition);
+        Vector upDirection = new VectorImpl(0, 1, 0);
+        Camera camera = new CameraImpl(600, 300, Math.PI / 3, eyePosition, lookDirection, upDirection);
 
         String filename = "basic_world.ppm";
         PrintWriter writer = new PrintWriter(new FileWriter(filename));

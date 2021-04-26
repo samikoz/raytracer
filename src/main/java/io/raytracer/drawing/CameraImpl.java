@@ -2,6 +2,8 @@ package io.raytracer.drawing;
 
 import io.raytracer.geometry.Point;
 import io.raytracer.geometry.PointImpl;
+import io.raytracer.geometry.SquareMatrix;
+import io.raytracer.geometry.SquareMatrixImpl;
 import io.raytracer.geometry.ThreeTransformation;
 import io.raytracer.geometry.Transformation;
 import io.raytracer.geometry.Vector;
@@ -27,11 +29,11 @@ public class CameraImpl implements Camera {
         computePixelSize();
     }
 
-    public CameraImpl(int hsize, int vsize, double fieldOfView, Transformation transformation) {
+    public CameraImpl(int hsize, int vsize, double fieldOfView, Point eyePosition, Vector lookDirection, Vector upDirection) {
         this.hsize = hsize;
         this.vsize = vsize;
         this.fieldOfView = fieldOfView;
-        this.transformation = transformation;
+        this.transformation = this.makeViewTransformation(eyePosition, lookDirection, upDirection);
 
         computePixelSize();
     }
@@ -66,5 +68,21 @@ public class CameraImpl implements Camera {
         }
 
         pixelSize = halfWidth * 2 / hsize;
+    }
+
+    private ThreeTransformation makeViewTransformation(Point eyePosition, Vector lookDirection, Vector upDirection) {
+        Vector forwardDirection = lookDirection.normalise();
+        Vector upNormalised = upDirection.normalise();
+        Vector leftDirection = forwardDirection.cross(upNormalised);
+        Vector realUpDirection = leftDirection.cross(forwardDirection);
+
+        SquareMatrix originTransformation = new SquareMatrixImpl(
+                leftDirection.get(0), leftDirection.get(1), leftDirection.get(2), 0,
+                realUpDirection.get(0), realUpDirection.get(1), realUpDirection.get(2), 0,
+                -forwardDirection.get(0), -forwardDirection.get(1), -forwardDirection.get(2), 0,
+                0, 0, 0, 1);
+
+        return ThreeTransformation.translation(-eyePosition.get(0), -eyePosition.get(1), -eyePosition.get(2))
+                .transform(originTransformation);
     }
 }

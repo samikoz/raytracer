@@ -6,7 +6,6 @@ import io.raytracer.drawing.CameraImpl;
 import io.raytracer.drawing.Canvas;
 import io.raytracer.drawing.Colour;
 import io.raytracer.drawing.ColourImpl;
-import io.raytracer.drawing.Drawable;
 import io.raytracer.drawing.Material;
 import io.raytracer.drawing.Sphere;
 import io.raytracer.drawing.SphereImpl;
@@ -21,7 +20,6 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class WorldTest {
     static Sphere firstSphere;
@@ -157,10 +155,9 @@ public class WorldTest {
     @Test
     void renderDefaultWorld() {
         Point eyePosition = new PointImpl(0, 0, -5);
-        Point lookPosition = new PointImpl(0, 0, 0);
+        Vector lookDirection = new VectorImpl(0, 0, 1);
         Vector upDirection = new VectorImpl(0, 1, 0);
-        Transformation transform = defaultWorld.getViewTransformation(eyePosition, lookPosition, upDirection);
-        Camera camera = new CameraImpl(11, 11, Math.PI / 2, transform);
+        Camera camera = new CameraImpl(11, 11, Math.PI / 2, eyePosition, lookDirection, upDirection);
 
         Canvas canvas = defaultWorld.render(camera);
 
