@@ -29,11 +29,6 @@ public class RayImpl implements Ray {
     }
 
     @Override
-    public IntersectionList intersect(Drawable object) {
-        return object.intersect(this);
-    }
-
-    @Override
     public IlluminatedPoint getIlluminatedPoint(Intersection intersection) {
         Point intersectionPoint = position(intersection.time);
         IlluminatedPoint illuminated = new IlluminatedPoint(
