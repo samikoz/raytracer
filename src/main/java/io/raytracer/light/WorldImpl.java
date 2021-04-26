@@ -21,7 +21,7 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 public class WorldImpl implements World {
-    @Getter private final LightSource lightSource;
+    private final LightSource lightSource;
     private final List<Drawable> contents;
 
     public WorldImpl(LightSource lightsource) {
