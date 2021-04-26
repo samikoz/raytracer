@@ -100,59 +100,6 @@ public class WorldTest {
     }
 
     @Test
-    void getDefaultOrientationViewTransformation() {
-        Point eyePosition = new PointImpl(0, 0, 0);
-        Point lookPosition = new PointImpl(0, 0, -1);
-        Vector upDirection = new VectorImpl(0, 1, 0);
-
-        Transformation viewTransformation = defaultWorld.getViewTransformation(eyePosition, lookPosition, upDirection);
-        Transformation identity = new ThreeTransformation();
-
-        assertEquals(identity, viewTransformation, "Default view transformation is the identity");
-    }
-
-    @Test
-    void getViewInPositiveZDirection() {
-        Point eyePosition = new PointImpl(0, 0, 0);
-        Point lookPosition = new PointImpl(0, 0, 1);
-        Vector upDirection = new VectorImpl(0, 1, 0);
-
-        Transformation viewTransformation = defaultWorld.getViewTransformation(eyePosition, lookPosition, upDirection);
-        Transformation reflectionXZ = ThreeTransformation.scaling(-1, 1, -1);
-
-        assertEquals(reflectionXZ, viewTransformation, "Look in the positive z direction should swap XZ axes");
-    }
-
-    @Test
-    void getViewTransformationMovedBack() {
-        Point eyePosition = new PointImpl(0, 0, 8);
-        Point lookPosition = new PointImpl(0, 0, 0);
-        Vector upDirection = new VectorImpl(0, 1, 0);
-
-        Transformation viewTransformation = defaultWorld.getViewTransformation(eyePosition, lookPosition, upDirection);
-        Transformation moveBackTranslation = ThreeTransformation.translation(0, 0, -8);
-
-        assertEquals(moveBackTranslation, viewTransformation, "Moving the should move the world the other way");
-    }
-
-    @Test
-    void getGeneralViewTransformation() {
-        Point eyePosition = new PointImpl(1, 3, 2);
-        Point lookPosition = new PointImpl(4, -2, 8);
-        Vector upDirection = new VectorImpl(1, 1, 0);
-
-        Transformation viewTransformation = defaultWorld.getViewTransformation(eyePosition, lookPosition, upDirection);
-        Transformation expectedViewTransformation = ThreeTransformation.transformation(new SquareMatrixImpl(
-                -0.50709, 0.50709, 0.67612, -2.36643,
-                0.76772, 0.60609, 0.12122, -2.82843,
-                -0.35857, 0.59761, -0.71714, 0.00000,
-                0.00000, 0.00000, 0.00000, 1.00000
-        ));
-
-        assertEquals(expectedViewTransformation, viewTransformation);
-    }
-
-    @Test
     void renderDefaultWorld() {
         Point eyePosition = new PointImpl(0, 0, -5);
         Vector lookDirection = new VectorImpl(0, 0, 1);
