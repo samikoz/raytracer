@@ -13,14 +13,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class CameraTest {
     @Test
-    void defaultCameraTransformationIsIdentity() {
-        Camera camera = new CameraImpl(160, 120, Math.PI / 2);
-
-        assertEquals(new ThreeTransformation(), camera.getTransformation(),
-                "Default transformation should be the identity");
-    }
-
-    @Test
     void getRayThroughTheCentreOfCanvas() {
         Camera camera = new CameraImpl(201, 101, Math.PI / 2);
         Ray ray = camera.rayThrough(100, 50);

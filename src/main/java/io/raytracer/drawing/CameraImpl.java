@@ -15,7 +15,7 @@ public class CameraImpl implements Camera {
     @Getter private final int hsize;
     @Getter private final int vsize;
     private final double fieldOfView;
-    @Getter private final Transformation transformation;
+    private final Transformation transformation;
     private double halfWidth;
     private double halfHeight;
     private double pixelSize;
