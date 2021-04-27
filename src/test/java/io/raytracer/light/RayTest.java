@@ -10,8 +10,6 @@ import io.raytracer.geometry.VectorImpl;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class RayTest {
     @Test
@@ -37,15 +35,6 @@ class RayTest {
     }
 
     @Test
-    void pointIlluminatedFromOutside() {
-        RayImpl ray = new RayImpl(new PointImpl(0, 0, -5), new VectorImpl(0, 0, 1));
-        Sphere sphere = new SphereImpl();
-        Intersection intersection = new Intersection(4, sphere);
-
-        assertFalse(ray.getIlluminatedPoint(intersection).inside);
-    }
-
-    @Test
     void pointIlluminatedFromInside() {
         RayImpl ray = new RayImpl(new PointImpl(0, 0, 0), new VectorImpl(0, 0, 1));
         Sphere sphere = new SphereImpl();
@@ -56,7 +45,6 @@ class RayTest {
         assertEquals(new VectorImpl(0, 0, -1), illuminated.eyeVector);
         assertEquals(new VectorImpl(0, 0, -1), illuminated.normalVector,
                 "Normal vector should be inverted");
-        assertTrue(illuminated.inside);
     }
 
     @Test

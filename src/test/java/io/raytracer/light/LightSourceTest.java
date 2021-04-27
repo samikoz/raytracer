@@ -32,7 +32,7 @@ public class LightSourceTest {
         LightSource source = new LightSourceImpl(
                 new ColourImpl(1, 1, 1), new PointImpl(0, 0, -10));
         IlluminatedPoint illuminated = new IlluminatedPoint(
-                new SphereImpl(material), position, normalVector, eyeVector, false);
+                new SphereImpl(material), position, normalVector, eyeVector);
         Colour expectedResult = new ColourImpl(1.9, 1.9, 1.9);
         Colour actualResult = source.illuminate(illuminated);
 
@@ -47,7 +47,7 @@ public class LightSourceTest {
         LightSource source = new LightSourceImpl(
                 new ColourImpl(1, 1, 1), new PointImpl(0, 0, -10));
         IlluminatedPoint illuminated = new IlluminatedPoint(
-                new SphereImpl(material), position, normalVector, eyeVector, false);
+                new SphereImpl(material), position, normalVector, eyeVector);
         Colour expectedResult = new ColourImpl(1, 1, 1);
         Colour actualResult = source.illuminate(illuminated);
 
@@ -62,7 +62,7 @@ public class LightSourceTest {
         LightSource source = new LightSourceImpl(
                 new ColourImpl(1, 1, 1), new PointImpl(0, 10, -10));
         IlluminatedPoint illuminated = new IlluminatedPoint(
-                new SphereImpl(material), position, normalVector, eyeVector, false);
+                new SphereImpl(material), position, normalVector, eyeVector);
         Colour expectedResult = new ColourImpl(0.7364, 0.7364, 0.7364);
         Colour actualResult = source.illuminate(illuminated);
 
@@ -77,7 +77,7 @@ public class LightSourceTest {
         LightSource source = new LightSourceImpl(
                 new ColourImpl(1, 1, 1), new PointImpl(0, 10, -10));
         IlluminatedPoint illuminated = new IlluminatedPoint(
-                new SphereImpl(material), position, normalVector, eyeVector, false);
+                new SphereImpl(material), position, normalVector, eyeVector);
         Colour expectedResult = new ColourImpl(1.6364, 1.6364, 1.6364);
         Colour actualResult = source.illuminate(illuminated);
 
@@ -92,7 +92,7 @@ public class LightSourceTest {
         LightSource source = new LightSourceImpl(
                 new ColourImpl(1, 1, 1), new PointImpl(0, 0, 10));
         IlluminatedPoint illuminated = new IlluminatedPoint(
-                new SphereImpl(material), position, normalVector, eyeVector, false);
+                new SphereImpl(material), position, normalVector, eyeVector);
         Colour expectedResult = new ColourImpl(0.1, 0.1, 0.1);
         Colour actualResult = source.illuminate(illuminated);
 

@@ -1,6 +1,5 @@
 package io.raytracer.light;
 
-import io.raytracer.drawing.Drawable;
 import io.raytracer.geometry.Point;
 import io.raytracer.geometry.Transformation;
 import io.raytracer.geometry.Vector;
@@ -35,11 +34,9 @@ public class RayImpl implements Ray {
                 intersection.object,
                 intersectionPoint,
                 intersection.object.normal(intersectionPoint),
-                this.direction.negate(),
-                false
+                this.direction.negate()
         );
         if (illuminated.normalVector.dot(illuminated.eyeVector) < 0) {
-            illuminated.inside = true;
             illuminated.normalVector = illuminated.normalVector.negate();
         }
         return illuminated;
