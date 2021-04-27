@@ -54,7 +54,7 @@ public class WorldImpl implements World {
 
         for (int y = 0; y < camera.getPictureHeight() - 1; y++) {
             for (int x = 0; x < camera.getPictureWidth() -1; x++) {
-                Ray ray = camera.rayThrough(x, y);
+                Ray ray = camera.rayThroughPixel(x, y);
                 Colour colour = this.illuminate(ray);
                 canvas.write(x, y, colour);
             }
