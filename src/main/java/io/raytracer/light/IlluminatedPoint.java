@@ -8,7 +8,6 @@ import io.raytracer.geometry.Vector;
 
 @AllArgsConstructor
 public class IlluminatedPoint {
-    public double time;
     @NonNull public Drawable object;
     @NonNull public Point point;
     @NonNull public Vector normalVector;

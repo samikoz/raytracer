@@ -32,7 +32,6 @@ public class RayImpl implements Ray {
     public IlluminatedPoint getIlluminatedPoint(Intersection intersection) {
         Point intersectionPoint = position(intersection.time);
         IlluminatedPoint illuminated = new IlluminatedPoint(
-                intersection.time,
                 intersection.object,
                 intersectionPoint,
                 intersection.object.normal(intersectionPoint),

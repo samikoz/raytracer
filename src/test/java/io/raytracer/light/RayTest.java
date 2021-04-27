@@ -30,7 +30,6 @@ class RayTest {
         Intersection intersection = new Intersection(4, sphere);
         IlluminatedPoint illuminated = ray.getIlluminatedPoint(intersection);
 
-        assertEquals(intersection.time, illuminated.time);
         assertEquals(sphere, illuminated.object);
         assertEquals(new PointImpl(0, 0, -1), illuminated.point);
         assertEquals(new VectorImpl(0, 0, -1), illuminated.eyeVector);
