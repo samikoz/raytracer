@@ -12,8 +12,8 @@ import io.raytracer.light.RayImpl;
 import lombok.Getter;
 
 public class CameraImpl implements Camera {
-    @Getter private final int hsize;
-    @Getter private final int vsize;
+    @Getter private final int pictureWidth;
+    @Getter private final int pictureHeight;
     private final double fieldOfView;
     private final Transformation worldTransformation;
     private double halfWidth;
@@ -21,8 +21,8 @@ public class CameraImpl implements Camera {
     private double pixelSize;
 
     public CameraImpl(int hsize, int vsize, double fieldOfView) {
-        this.hsize = hsize;
-        this.vsize = vsize;
+        this.pictureWidth = hsize;
+        this.pictureHeight = vsize;
         this.fieldOfView = fieldOfView;
         this.worldTransformation = new ThreeTransformation();
 
@@ -30,8 +30,8 @@ public class CameraImpl implements Camera {
     }
 
     public CameraImpl(int hsize, int vsize, double fieldOfView, Point eyePosition, Vector lookDirection, Vector upDirection) {
-        this.hsize = hsize;
-        this.vsize = vsize;
+        this.pictureWidth = hsize;
+        this.pictureHeight = vsize;
         this.fieldOfView = fieldOfView;
         this.worldTransformation = this.makeViewTransformation(eyePosition, lookDirection, upDirection).inverse();
 
@@ -55,7 +55,7 @@ public class CameraImpl implements Camera {
 
     private void computePixelSize() {
         double halfView = Math.tan(fieldOfView / 2);
-        double ratio = (double) hsize / vsize;
+        double ratio = (double) pictureWidth / pictureHeight;
 
         if (ratio >= 1) {
             halfWidth = halfView;
@@ -65,7 +65,7 @@ public class CameraImpl implements Camera {
             halfHeight = halfView;
         }
 
-        pixelSize = halfWidth * 2 / hsize;
+        pixelSize = halfWidth * 2 / pictureWidth;
     }
 
     private ThreeTransformation makeViewTransformation(Point eyePosition, Vector lookDirection, Vector upDirection) {

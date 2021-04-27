@@ -50,10 +50,10 @@ public class WorldImpl implements World {
 
     @Override
     public Canvas render(Camera camera) {
-        Canvas canvas  = new PPMCanvas(camera.getHsize(), camera.getVsize());
+        Canvas canvas  = new PPMCanvas(camera.getPictureWidth(), camera.getPictureHeight());
 
-        for (int y = 0; y < camera.getVsize() - 1; y++) {
-            for (int x = 0; x < camera.getHsize() -1; x++) {
+        for (int y = 0; y < camera.getPictureHeight() - 1; y++) {
+            for (int x = 0; x < camera.getPictureWidth() -1; x++) {
                 Ray ray = camera.rayThrough(x, y);
                 Colour colour = this.illuminate(ray);
                 canvas.write(x, y, colour);
