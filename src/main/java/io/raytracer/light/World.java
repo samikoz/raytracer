@@ -9,7 +9,6 @@ public interface World {
     World put(LightSource source);
     World put(Drawable object);
 
-    IntersectionList intersect(Ray ray);
     Colour illuminate(Ray ray);
 
     Canvas render(Camera camera);

@@ -34,12 +34,6 @@ public class WorldImpl implements World {
     }
 
     @Override
-    public IntersectionList intersect(@NonNull Ray ray) {
-        Stream<IntersectionListImpl> s = contents.stream().map(object -> (IntersectionListImpl) object.intersect(ray));
-        return s.reduce(IntersectionListImpl::combine).orElse(new IntersectionListImpl());
-    }
-
-    @Override
     public Colour illuminate(@NonNull Ray ray) {
         Optional<Intersection> hit = intersect(ray).hit();
         if (hit.isPresent()) {
@@ -47,6 +41,11 @@ public class WorldImpl implements World {
         } else {
             return new ColourImpl(0, 0, 0);
         }
+    }
+
+    private IntersectionList intersect(@NonNull Ray ray) {
+        Stream<IntersectionListImpl> s = contents.stream().map(object -> (IntersectionListImpl) object.intersect(ray));
+        return s.reduce(IntersectionListImpl::combine).orElse(new IntersectionListImpl());
     }
 
     @Override

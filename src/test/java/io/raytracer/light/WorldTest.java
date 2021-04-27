@@ -41,23 +41,13 @@ public class WorldTest {
     }
 
     @Test
-    void intersectingEmptyWorld() {
+    void illuminatingEmptyWorld() {
         Ray ray = new RayImpl(new PointImpl(0, 0, -5), new VectorImpl(0, 0, 1));
         World world = new WorldImpl();
         world.put(new LightSourceImpl(new ColourImpl(1, 1, 1), new PointImpl(-10, 10, -10)));
+        Colour expectedColour = new ColourImpl(0, 0, 0);
 
-        assertEquals(0, world.intersect(ray).count(), "Empty world should have no intersections.");
-    }
-
-    @Test
-    void intersecting() {
-        Ray ray = new RayImpl(new PointImpl(0, 0, -5), new VectorImpl(0, 0, 1));
-        IntersectionList intersections = defaultWorld.intersect(ray);
-
-        assertEquals(intersections.get(0).time, 4);
-        assertEquals(intersections.get(1).time, 4.5);
-        assertEquals(intersections.get(2).time, 5.5);
-        assertEquals(intersections.get(3).time, 6);
+        assertEquals(expectedColour, world.illuminate(ray), "Empty world has no illumination");
     }
 
     @Test
