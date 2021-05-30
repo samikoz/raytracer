@@ -6,5 +6,5 @@ public interface Camera {
     int getPictureWidth();
     int getPictureHeight();
 
-    Ray rayThroughPixel(int x, int y);
+    Ray getRayThroughPixel(int x, int y);
 }

@@ -39,7 +39,7 @@ public class CameraImpl implements Camera {
     }
 
     @Override
-    public Ray rayThroughPixel(int x, int y) {
+    public Ray getRayThroughPixel(int x, int y) {
         double canvasXOffset = (x + 0.5) * this.pixelSize;
         double canvasYOffset = (y + 0.5) * this.pixelSize;
 

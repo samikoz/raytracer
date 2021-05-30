@@ -1,9 +1,9 @@
 package io.raytracer;
 
-import io.raytracer.drawing.Canvas;
+import io.raytracer.drawing.Picture;
 import io.raytracer.drawing.Colour;
 import io.raytracer.drawing.ColourImpl;
-import io.raytracer.drawing.PPMCanvas;
+import io.raytracer.drawing.PPMPicture;
 import io.raytracer.geometry.Point;
 import io.raytracer.geometry.PointImpl;
 import io.raytracer.light.IlluminatedPoint;
@@ -14,7 +14,6 @@ import io.raytracer.light.Ray;
 import io.raytracer.light.RayImpl;
 import io.raytracer.drawing.Sphere;
 import io.raytracer.drawing.SphereImpl;
-import lombok.Builder;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -35,7 +34,7 @@ public class DrawSingleSphere {
         Colour lightColour = new ColourImpl(1, 1, 1);
         LightSourceImpl source = new LightSourceImpl(lightColour, lightPosition);
 
-        Canvas canvas = new PPMCanvas(canvasSidePixels, canvasSidePixels);
+        Picture picture = new PPMPicture(canvasSidePixels, canvasSidePixels);
         Material material = Material.builder()
                 .colour(new ColourImpl(1, 0.2, 1))
                 .ambient(0.1)
@@ -56,11 +55,11 @@ public class DrawSingleSphere {
                 if (intersections.hit().isPresent()) {
                     IlluminatedPoint illuminated = ray.getIlluminatedPoint(intersections.hit().get());
                     Colour pointColour = source.illuminate(illuminated);
-                    canvas.write(xPixel, yPixel, pointColour);
+                    picture.write(xPixel, yPixel, pointColour);
                 }
             }
         }
 
-        canvas.export(writer);
+        picture.export(writer);
     }
 }

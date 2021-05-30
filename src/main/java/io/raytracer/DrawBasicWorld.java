@@ -2,7 +2,7 @@ package io.raytracer;
 
 import io.raytracer.drawing.Camera;
 import io.raytracer.drawing.CameraImpl;
-import io.raytracer.drawing.Canvas;
+import io.raytracer.drawing.Picture;
 import io.raytracer.drawing.ColourImpl;
 import io.raytracer.drawing.Material;
 import io.raytracer.drawing.Sphere;
@@ -10,7 +10,6 @@ import io.raytracer.drawing.SphereImpl;
 import io.raytracer.geometry.Point;
 import io.raytracer.geometry.PointImpl;
 import io.raytracer.geometry.ThreeTransformation;
-import io.raytracer.geometry.Transformation;
 import io.raytracer.geometry.Vector;
 import io.raytracer.geometry.VectorImpl;
 import io.raytracer.light.LightSourceImpl;
@@ -74,7 +73,7 @@ public class DrawBasicWorld {
 
         String filename = "basic_world.ppm";
         PrintWriter writer = new PrintWriter(new FileWriter(filename));
-        Canvas canvas = world.render(camera);
-        canvas.export(writer);
+        Picture picture = world.render(camera);
+        picture.export(writer);
     }
 }

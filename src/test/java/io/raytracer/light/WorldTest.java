@@ -3,7 +3,7 @@ package io.raytracer.light;
 
 import io.raytracer.drawing.Camera;
 import io.raytracer.drawing.CameraImpl;
-import io.raytracer.drawing.Canvas;
+import io.raytracer.drawing.Picture;
 import io.raytracer.drawing.Colour;
 import io.raytracer.drawing.ColourImpl;
 import io.raytracer.drawing.Material;
@@ -11,9 +11,7 @@ import io.raytracer.drawing.Sphere;
 import io.raytracer.drawing.SphereImpl;
 import io.raytracer.geometry.Point;
 import io.raytracer.geometry.PointImpl;
-import io.raytracer.geometry.SquareMatrixImpl;
 import io.raytracer.geometry.ThreeTransformation;
-import io.raytracer.geometry.Transformation;
 import io.raytracer.geometry.Vector;
 import io.raytracer.geometry.VectorImpl;
 import org.junit.jupiter.api.BeforeAll;
@@ -96,9 +94,9 @@ public class WorldTest {
         Vector upDirection = new VectorImpl(0, 1, 0);
         Camera camera = new CameraImpl(11, 11, Math.PI / 2, eyePosition, lookDirection, upDirection);
 
-        Canvas canvas = defaultWorld.render(camera);
+        Picture picture = defaultWorld.render(camera);
 
-        assertEquals(new ColourImpl(0.38066, 0.47583, 0.2855), canvas.read(5, 5),
+        assertEquals(new ColourImpl(0.38066, 0.47583, 0.2855), picture.read(5, 5),
                 "Pixel in the middle of the canvas has correct colour.");
     }
 }

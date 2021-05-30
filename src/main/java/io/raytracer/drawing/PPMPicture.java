@@ -9,14 +9,14 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-public class PPMCanvas implements Canvas {
+public class PPMPicture implements Picture {
     private final PPMCanvasRow[] pixelGrid;
     private final String exportHeader;
 
     static private final Colour initialColour = new ColourImpl(0, 0, 0);
     static private final int exportedLineMaxLength = 70;
 
-    public PPMCanvas(int x, int y) {
+    public PPMPicture(int x, int y) {
         exportHeader = "P3\n" + x + " " + y + "\n255\n";
 
         pixelGrid = new PPMCanvasRow[y];

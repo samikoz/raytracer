@@ -3,7 +3,7 @@ package io.raytracer.drawing;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-public interface Canvas {
+public interface Picture {
     void write(int x, int y, Colour colour);
     Colour read(int x, int y);
 

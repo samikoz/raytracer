@@ -1,7 +1,7 @@
 package io.raytracer.light;
 
 import io.raytracer.drawing.Camera;
-import io.raytracer.drawing.Canvas;
+import io.raytracer.drawing.Picture;
 import io.raytracer.drawing.Colour;
 import io.raytracer.drawing.Drawable;
 
@@ -11,5 +11,5 @@ public interface World {
 
     Colour illuminate(Ray ray);
 
-    Canvas render(Camera camera);
+    Picture render(Camera camera);
 }
