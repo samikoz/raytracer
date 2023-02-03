@@ -12,36 +12,36 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 class ThreeTransformationTest {
     @Test
     void equalityTest() {
-        Transformation t1 = ThreeTransformation.translation(1, 2, 3);
-        ThreeTransformation t2 = ThreeTransformation.translation(1, 2, 3);
+        ITransform t1 = ThreeTransform.translation(1, 2, 3);
+        ThreeTransform t2 = ThreeTransform.translation(1, 2, 3);
 
         assertEquals(t1, t2);
     }
 
     @Test
     void inequalityTest() {
-        Transformation t1 = ThreeTransformation.translation(1, 2, 3);
-        Transformation t2 = ThreeTransformation.translation(0, 2, 3);
+        ITransform t1 = ThreeTransform.translation(1, 2, 3);
+        ITransform t2 = ThreeTransform.translation(0, 2, 3);
 
         assertNotEquals(t1, t2);
     }
 
     @Test
     void pointTranslation() {
-        Transformation aTranslation = ThreeTransformation.translation(5, -3, 2);
-        Point aPoint = new PointImpl(3, 4, 5);
-        Point expectedTranslatedPoint = new PointImpl(8, 1, 7);
-        Point actualTranslatedPoint = aPoint.transform(aTranslation);
+        ITransform aTranslation = ThreeTransform.translation(5, -3, 2);
+        IPoint aPoint = new Point(3, 4, 5);
+        IPoint expectedTranslatedPoint = new Point(8, 1, 7);
+        IPoint actualTranslatedPoint = aPoint.transform(aTranslation);
 
         assertEquals(expectedTranslatedPoint, actualTranslatedPoint);
     }
 
     @Test
     void pointTranslationByInverse() {
-        Transformation aTranslation = ThreeTransformation.translation(5, -3, 2).inverse();
-        Point aPoint = new PointImpl(3, 4, 5);
-        Point expectedTranslatedPoint = new PointImpl(-2, 7, 3);
-        Point actualTranslatedPoint = aPoint.transform(aTranslation);
+        ITransform aTranslation = ThreeTransform.translation(5, -3, 2).inverse();
+        IPoint aPoint = new Point(3, 4, 5);
+        IPoint expectedTranslatedPoint = new Point(-2, 7, 3);
+        IPoint actualTranslatedPoint = aPoint.transform(aTranslation);
 
         assertEquals(expectedTranslatedPoint, actualTranslatedPoint,
                 "Translation by inverse should translate in the opposite direction.");
@@ -49,39 +49,39 @@ class ThreeTransformationTest {
 
     @Test
     void vectorTranslation() {
-        Transformation aTranslation = ThreeTransformation.translation(5, -3, 2);
-        Vector aVector = new VectorImpl(3, 4, 5);
-        Vector actualTranslatedPoint = aVector.transform(aTranslation);
+        ITransform aTranslation = ThreeTransform.translation(5, -3, 2);
+        IVector aVector = new Vector(3, 4, 5);
+        IVector actualTranslatedPoint = aVector.transform(aTranslation);
 
         assertEquals(aVector, actualTranslatedPoint);
     }
 
     @Test
     void pointScaling() {
-        Transformation aScaling = ThreeTransformation.scaling(2, 3, 4);
-        Point aPoint = new PointImpl(-4, 6, 8);
-        Point expectedScaledPoint = new PointImpl(-8, 18, 32);
-        Point actualScaledPoint = aPoint.transform(aScaling);
+        ITransform aScaling = ThreeTransform.scaling(2, 3, 4);
+        IPoint aPoint = new Point(-4, 6, 8);
+        IPoint expectedScaledPoint = new Point(-8, 18, 32);
+        IPoint actualScaledPoint = aPoint.transform(aScaling);
 
         assertEquals(expectedScaledPoint, actualScaledPoint);
     }
 
     @Test
     void vectorScaling() {
-        Transformation aScaling = ThreeTransformation.scaling(2, 3, 4);
-        Vector aVector = new VectorImpl(-4, 6, 8);
-        Vector expectedScaledVector = new VectorImpl(-8, 18, 32);
-        Vector actualScaledVector = aVector.transform(aScaling);
+        ITransform aScaling = ThreeTransform.scaling(2, 3, 4);
+        IVector aVector = new Vector(-4, 6, 8);
+        IVector expectedScaledVector = new Vector(-8, 18, 32);
+        IVector actualScaledVector = aVector.transform(aScaling);
 
         assertEquals(expectedScaledVector, actualScaledVector);
     }
 
     @Test
     void vectorScalingByInverse() {
-        Transformation aScaling = ThreeTransformation.scaling(2, 3, 4).inverse();
-        Vector aVector = new VectorImpl(-4, 6, 8);
-        Vector expectedScaledVector = new VectorImpl(-2, 2, 2);
-        Vector actualScaledVector = aVector.transform(aScaling);
+        ITransform aScaling = ThreeTransform.scaling(2, 3, 4).inverse();
+        IVector aVector = new Vector(-4, 6, 8);
+        IVector expectedScaledVector = new Vector(-2, 2, 2);
+        IVector actualScaledVector = aVector.transform(aScaling);
 
         assertEquals(expectedScaledVector, actualScaledVector,
                 "Scaling by an inverse scales in the opposite direction.");
@@ -89,20 +89,20 @@ class ThreeTransformationTest {
 
     @Test
     void pointXRotation() {
-        Transformation halfQuarterRotation = ThreeTransformation.rotation_x(Math.PI / 4);
-        Point aPoint = new PointImpl(0, 1, 0);
-        Point expectedRotatedPoint = new PointImpl(0, Math.sqrt(2) / 2, Math.sqrt(2) / 2);
-        Point actualRotatedPoint = aPoint.transform(halfQuarterRotation);
+        ITransform halfQuarterRotation = ThreeTransform.rotation_x(Math.PI / 4);
+        IPoint aPoint = new Point(0, 1, 0);
+        IPoint expectedRotatedPoint = new Point(0, Math.sqrt(2) / 2, Math.sqrt(2) / 2);
+        IPoint actualRotatedPoint = aPoint.transform(halfQuarterRotation);
 
         assertEquals(expectedRotatedPoint, actualRotatedPoint);
     }
 
     @Test
     void pointInverseXRotation() {
-        Transformation halfQuarterRotation = ThreeTransformation.rotation_x(Math.PI / 4).inverse();
-        Point aPoint = new PointImpl(0, 1, 0);
-        Point expectedRotatedPoint = new PointImpl(0, Math.sqrt(2) / 2, -Math.sqrt(2) / 2);
-        Point actualRotatedPoint = aPoint.transform(halfQuarterRotation);
+        ITransform halfQuarterRotation = ThreeTransform.rotation_x(Math.PI / 4).inverse();
+        IPoint aPoint = new Point(0, 1, 0);
+        IPoint expectedRotatedPoint = new Point(0, Math.sqrt(2) / 2, -Math.sqrt(2) / 2);
+        IPoint actualRotatedPoint = aPoint.transform(halfQuarterRotation);
 
         assertEquals(expectedRotatedPoint, actualRotatedPoint,
                 "Inverse rotation around x axis should rotate counterclockwise.");
@@ -110,10 +110,10 @@ class ThreeTransformationTest {
 
     @Test
     void pointYRotation() {
-        Transformation halfQuarterRotation = ThreeTransformation.rotation_y(Math.PI / 4);
-        Point aPoint = new PointImpl(0, 0, 1);
-        Point expectedRotatedPoint = new PointImpl(Math.sqrt(2) / 2, 0, Math.sqrt(2) / 2);
-        Point actualRotatedPoint = aPoint.transform(halfQuarterRotation);
+        ITransform halfQuarterRotation = ThreeTransform.rotation_y(Math.PI / 4);
+        IPoint aPoint = new Point(0, 0, 1);
+        IPoint expectedRotatedPoint = new Point(Math.sqrt(2) / 2, 0, Math.sqrt(2) / 2);
+        IPoint actualRotatedPoint = aPoint.transform(halfQuarterRotation);
 
         assertEquals(expectedRotatedPoint, actualRotatedPoint,
                 "Should correctly rotate a point around the y axis.");
@@ -121,10 +121,10 @@ class ThreeTransformationTest {
 
     @Test
     void pointZRotation() {
-        Transformation halfQuarterRotation = ThreeTransformation.rotation_z(Math.PI / 4);
-        Point aPoint = new PointImpl(0, 1, 0);
-        Point expectedRotatedPoint = new PointImpl(-Math.sqrt(2) / 2, Math.sqrt(2) / 2, 0);
-        Point actualRotatedPoint = aPoint.transform(halfQuarterRotation);
+        ITransform halfQuarterRotation = ThreeTransform.rotation_z(Math.PI / 4);
+        IPoint aPoint = new Point(0, 1, 0);
+        IPoint expectedRotatedPoint = new Point(-Math.sqrt(2) / 2, Math.sqrt(2) / 2, 0);
+        IPoint actualRotatedPoint = aPoint.transform(halfQuarterRotation);
 
         assertEquals(expectedRotatedPoint, actualRotatedPoint,
                 "Should correctly rotate a point around the z axis.");
@@ -144,24 +144,24 @@ class ThreeTransformationTest {
     @ParameterizedTest
     @MethodSource("provideShearsAndExpectedPoints")
     void pointShear(int[] shearMatrix, int[] expectedShearedCoords) {
-        Transformation aShear = ThreeTransformation.shear(
+        ITransform aShear = ThreeTransform.shear(
                 shearMatrix[0], shearMatrix[1], shearMatrix[2], shearMatrix[3], shearMatrix[4], shearMatrix[5]);
-        Point aPoint = new PointImpl(2, 3, 4);
-        Point expectedShearedPoint = new PointImpl(
+        IPoint aPoint = new Point(2, 3, 4);
+        IPoint expectedShearedPoint = new Point(
                 expectedShearedCoords[0], expectedShearedCoords[1], expectedShearedCoords[2]);
-        Point actualShearedPoint = aPoint.transform(aShear);
+        IPoint actualShearedPoint = aPoint.transform(aShear);
 
         assertEquals(expectedShearedPoint, actualShearedPoint);
     }
 
     @Test
     void chainingTransformations() {
-        Transformation t = ThreeTransformation.rotation_x(Math.PI / 2)
+        ITransform t = ThreeTransform.rotation_x(Math.PI / 2)
                 .scale(5, 5, 5)
                 .translate(10, 5, 7);
-        Point aPoint = new PointImpl(1, 0, 1);
-        Point expectedTransformedPoint = new PointImpl(15, 0, 7);
-        Point actualTransformedPoint = aPoint.transform(t);
+        IPoint aPoint = new Point(1, 0, 1);
+        IPoint expectedTransformedPoint = new Point(15, 0, 7);
+        IPoint actualTransformedPoint = aPoint.transform(t);
 
         assertEquals(expectedTransformedPoint, actualTransformedPoint);
     }

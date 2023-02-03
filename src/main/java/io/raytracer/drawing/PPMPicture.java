@@ -9,11 +9,11 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-public class PPMPicture implements Picture {
+public class PPMPicture implements IPicture {
     private final PPMCanvasRow[] pixelGrid;
     private final String exportHeader;
 
-    static private final Colour initialColour = new ColourImpl(0, 0, 0);
+    static private final IColour initialColour = new Colour(0, 0, 0);
     static private final int exportedLineMaxLength = 70;
 
     public PPMPicture(int x, int y) {
@@ -24,12 +24,12 @@ public class PPMPicture implements Picture {
     }
 
     @Override
-    public void write(int x, int y, @NonNull Colour colour) {
+    public void write(int x, int y, @NonNull IColour colour) {
         pixelGrid[y].set(x, colour);
     }
 
     @Override
-    public Colour read(int x, int y) {
+    public IColour read(int x, int y) {
         return pixelGrid[y].get(x);
     }
 
@@ -84,36 +84,36 @@ public class PPMPicture implements Picture {
         return rowToBreak.toString();
     }
 
-    private static class PPMCanvasRow implements Iterable<Colour> {
-        private final Colour[] rowColours;
+    private static class PPMCanvasRow implements Iterable<IColour> {
+        private final IColour[] rowColours;
         private final int size;
 
         PPMCanvasRow(int size) {
             this.size = size;
 
-            rowColours = new ColourImpl[size];
+            rowColours = new Colour[size];
             Arrays.fill(rowColours, initialColour);
         }
 
-        Colour get(int x) {
+        IColour get(int x) {
             return rowColours[x];
         }
 
-        void set(int x, Colour colour) {
+        void set(int x, IColour colour) {
             rowColours[x] = colour;
         }
 
         List<String> export() {
             List<String> exported = new ArrayList<>(size);
-            for (Colour rowElement : this) {
+            for (IColour rowElement : this) {
                 exported.add(rowElement.exportNormalised());
             }
             return exported;
         }
 
         @Override
-        public Iterator<Colour> iterator() {
-            return new Iterator<Colour>() {
+        public Iterator<IColour> iterator() {
+            return new Iterator<IColour>() {
                 private int rowElementIndex;
 
                 {
@@ -126,7 +126,7 @@ public class PPMPicture implements Picture {
                 }
 
                 @Override
-                public Colour next() {
+                public IColour next() {
                     if (hasNext()) {
                         return rowColours[rowElementIndex++];
                     } else {

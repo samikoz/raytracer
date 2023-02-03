@@ -1,5 +1,6 @@
 package io.raytracer.drawing;
 
+import io.raytracer.worldly.Material;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

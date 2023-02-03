@@ -1,12 +1,14 @@
-package io.raytracer.drawing;
+package io.raytracer.worldly;
 
+import io.raytracer.drawing.IColour;
+import io.raytracer.drawing.Colour;
 import lombok.Builder;
 
 import java.util.Arrays;
 
 @Builder(toBuilder = true)
 public class Material {
-    @Builder.Default public final Colour colour = new ColourImpl(0, 0, 0);
+    @Builder.Default public final IColour colour = new Colour(0, 0, 0);
     public final double ambient;
     public final double diffuse;
     public final double specular;

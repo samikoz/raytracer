@@ -1,4 +1,4 @@
-package io.raytracer.light;
+package io.raytracer.worldly;
 
 import org.apache.commons.lang3.ArrayUtils;
 
@@ -6,10 +6,10 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Optional;
 
-public class IntersectionListImpl implements IntersectionList {
+public class Intersections implements IIntersections {
     private final Intersection[] intersections;
 
-    public IntersectionListImpl(Intersection... intersections) {
+    public Intersections(Intersection... intersections) {
         this.intersections = intersections;
     }
 
@@ -27,14 +27,14 @@ public class IntersectionListImpl implements IntersectionList {
         }
     }
 
-    IntersectionListImpl combine(IntersectionListImpl others) {
+    Intersections combine(Intersections others) {
         Intersection[] allIntersections = ArrayUtils.addAll(this.intersections, others.intersections);
-        Arrays.sort(allIntersections, Comparator.comparingDouble(i -> i.time));
-        return new IntersectionListImpl(allIntersections);
+        Arrays.sort(allIntersections, Comparator.comparingDouble(i -> i.rayParameter));
+        return new Intersections(allIntersections);
     }
 
     @Override
-    public Optional<Intersection> hit() {
-        return Arrays.stream(intersections).filter(i -> i.time > 0).min(Comparator.comparingDouble(i -> i.time));
+    public Optional<Intersection> getHit() {
+        return Arrays.stream(intersections).filter(i -> i.rayParameter > 0).min(Comparator.comparingDouble(i -> i.rayParameter));
     }
 }
