@@ -15,14 +15,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class SphereTest {
     @Test
-    void getDefaultTransform() {
-        Sphere sphere = new Sphere();
-
-        assertEquals(new ThreeTransform(), sphere.getTransform(),
-                "Default transformation should be the identity.");
-    }
-
-    @Test
     void normalOnASphereOnXAxis() {
         Sphere sphere = new Sphere();
         IVector expectedNormal = new Vector(1, 0, 0);
@@ -71,7 +63,7 @@ public class SphereTest {
     }
 
     @Test
-    void intersectCorrectTimes() {
+    void intersectCorrectParameters() {
         IRay ray = new Ray(new Point(0, 0, -5), new Vector(0, 0, 1));
         Sphere sphere = new Sphere();
         IIntersections intersections = sphere.intersect(ray);

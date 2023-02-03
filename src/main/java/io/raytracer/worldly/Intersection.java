@@ -10,7 +10,7 @@ import lombok.NonNull;
 public class Intersection {
     public IRay ray;
     public double rayParameter;
-    @NonNull public IDrawable object;
+    @NonNull public Drawable object;
 
     MaterialPoint getMaterialPoint() {
         IPoint intersectionPoint = this.ray.position(this.rayParameter);

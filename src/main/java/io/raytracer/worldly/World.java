@@ -7,7 +7,6 @@ import io.raytracer.drawing.Colour;
 import io.raytracer.drawing.PPMPicture;
 import io.raytracer.geometry.IPoint;
 import io.raytracer.geometry.IVector;
-import io.raytracer.geometry.Point;
 import lombok.NonNull;
 
 import java.util.ArrayList;
@@ -17,7 +16,7 @@ import java.util.stream.Stream;
 
 public class World implements IWorld {
     private ILightSource lightSource;
-    private final List<IDrawable> contents;
+    private final List<Drawable> contents;
     private final double acneTolerance = 1e-6;
 
     public World() {
@@ -31,7 +30,7 @@ public class World implements IWorld {
     }
 
     @Override
-    public IWorld put(IDrawable object) {
+    public IWorld put(Drawable object) {
         this.contents.add(object);
         return this;
     }

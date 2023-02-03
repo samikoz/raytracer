@@ -5,7 +5,7 @@ import io.raytracer.drawing.IPicture;
 
 public interface IWorld {
     IWorld put(ILightSource source);
-    IWorld put(IDrawable object);
+    IWorld put(Drawable object);
 
     IPicture render(ICamera camera);
 }
