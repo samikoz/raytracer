@@ -5,6 +5,8 @@ import io.raytracer.drawing.IPicture;
 import io.raytracer.drawing.IColour;
 import io.raytracer.drawing.Colour;
 import io.raytracer.drawing.PPMPicture;
+import io.raytracer.geometry.IPoint;
+import io.raytracer.geometry.IVector;
 import lombok.NonNull;
 
 import java.util.ArrayList;
@@ -44,6 +46,14 @@ public class World implements IWorld {
     private IIntersections intersect(@NonNull IRay ray) {
         Stream<Intersections> s = contents.stream().map(object -> (Intersections) object.intersect(ray));
         return s.reduce(Intersections::combine).orElse(new Intersections());
+    }
+
+    boolean isShadowed(IPoint point) {
+        IVector lightDistance = this.lightSource.getPosition().subtract(point);
+        IVector lightDirection = lightDistance.normalise();
+        IRay lightRay = new Ray(point, lightDirection);
+        Optional<Intersection> shadowingHit = this.intersect(lightRay).getHit();
+        return (shadowingHit.isPresent() && shadowingHit.get().getMaterialPoint().point.distance(point) < lightDistance.norm());
     }
 
     @Override

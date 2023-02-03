@@ -2,6 +2,7 @@ package io.raytracer.worldly;
 
 import io.raytracer.drawing.Colour;
 import io.raytracer.geometry.IVector;
+import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
@@ -11,7 +12,7 @@ import io.raytracer.geometry.IPoint;
 @RequiredArgsConstructor
 public class LightSource implements ILightSource {
     @NonNull public final IColour colour;
-    @NonNull public final IPoint position;
+    @Getter @NonNull private final IPoint position;
 
     public IColour illuminate(MaterialPoint illuminated) {
         Material material = illuminated.object.getMaterial();

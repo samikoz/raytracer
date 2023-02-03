@@ -29,7 +29,7 @@ public class Point extends Tuple implements IPoint {
     }
 
     @Override
-    public Vector subtract(@NonNull IPoint toSubtract) {
+    public IVector subtract(@NonNull IPoint toSubtract) {
         IVector toMoveBack = new Vector(
                 IntStream.range(0, toSubtract.dim()).mapToDouble(toSubtract::get).toArray()
         );

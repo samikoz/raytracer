@@ -15,6 +15,8 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class WorldTest {
     static Sphere firstSphere;
@@ -95,5 +97,33 @@ public class WorldTest {
 
         assertEquals(new Colour(0.38066, 0.47583, 0.2855), picture.read(5, 5),
                 "Pixel in the middle of the canvas has correct colour.");
+    }
+
+    @Test
+    void noShadowWhenNothingBetweenPointAndLight() {
+        IPoint point = new Point(0, 10, 0);
+
+        assertFalse(defaultWorld.isShadowed(point));
+    }
+
+    @Test
+    void shadowWhenSphereBetweenPointAndLight() {
+        IPoint point = new Point(10, -10, 10);
+
+        assertTrue(defaultWorld.isShadowed(point));
+    }
+
+    @Test
+    void shadowWhenLightBetweenPointAndSphere() {
+        IPoint point = new Point(-20, 20, -20);
+
+        assertFalse(defaultWorld.isShadowed(point));
+    }
+
+    @Test
+    void shadowWhenPointBetweenTheLightAndSphere() {
+        IPoint point = new Point(-2, 2, -2);
+
+        assertFalse(defaultWorld.isShadowed(point));
     }
 }
