@@ -7,6 +7,7 @@ import io.raytracer.drawing.Colour;
 import io.raytracer.drawing.PPMPicture;
 import io.raytracer.geometry.IPoint;
 import io.raytracer.geometry.IVector;
+import io.raytracer.geometry.Point;
 import lombok.NonNull;
 
 import java.util.ArrayList;
@@ -17,6 +18,7 @@ import java.util.stream.Stream;
 public class World implements IWorld {
     private ILightSource lightSource;
     private final List<IDrawable> contents;
+    private final double acneTolerance = 1e-6;
 
     public World() {
         this.contents = new ArrayList<>();
@@ -37,7 +39,10 @@ public class World implements IWorld {
     IColour illuminate(@NonNull IRay ray) {
         Optional<Intersection> hit = this.intersect(ray).getHit();
         if (hit.isPresent()) {
-            return lightSource.illuminate(hit.get().getMaterialPoint());
+            MaterialPoint realPoint = hit.get().getMaterialPoint();
+            IPoint normalOffset = realPoint.point.add(realPoint.object.normal(realPoint.point).multiply(1e-6));
+            realPoint.shadowed = this.isShadowed(normalOffset);
+            return lightSource.illuminate(realPoint);
         } else {
             return new Colour(0, 0, 0);
         }

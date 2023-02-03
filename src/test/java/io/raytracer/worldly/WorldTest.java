@@ -87,6 +87,24 @@ public class WorldTest {
     }
 
     @Test
+    void illuminatingWhenIntersectionIsInTheShadow() {
+        Material material = Material.builder().colour(new Colour(1, 1, 1)).ambient(0.1).diffuse(0.9)
+                .specular(0.9).shininess(200).build();
+        Sphere firstSphere = new Sphere(material);
+        Sphere secondSphere = new Sphere(material);
+        secondSphere.setTransform(ThreeTransform.translation(0, 0, 10));
+        ILightSource light = new LightSource(new Colour(1, 1, 1), new Point(0, 0, -10));
+        World world = new World();
+        world.put(firstSphere).put(secondSphere).put(light);
+
+        IRay ray = new Ray(new Point(0, 0, 5), new Vector(0, 0, 1));
+        IColour expectedColour = new Colour(0.1, 0.1, 0.1);
+        IColour actualColour = world.illuminate(ray);
+
+        assertEquals(expectedColour, actualColour, "Illuminate shaded point should return only ambient value");
+    }
+
+    @Test
     void renderDefaultWorld() {
         IPoint eyePosition = new Point(0, 0, -5);
         IVector lookDirection = new Vector(0, 0, 1);
