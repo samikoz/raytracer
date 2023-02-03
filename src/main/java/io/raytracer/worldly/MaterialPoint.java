@@ -11,4 +11,5 @@ public class MaterialPoint {
     @NonNull public IPoint point;
     @NonNull public IVector normalVector;
     @NonNull public IVector eyeVector;
+    @NonNull public boolean shadowed;
 }

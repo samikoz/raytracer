@@ -26,11 +26,15 @@ public class LightSource implements ILightSource {
             diffuseContribution = new Colour(0, 0, 0);
             specularContribution = new Colour(0, 0, 0);
         } else {
-            diffuseContribution = effectiveColour.multiply(material.diffuse).multiply(lightNormalCosine);
+            if (illuminated.shadowed) {
+                diffuseContribution = new Colour(0, 0, 0);
+            } else {
+                diffuseContribution = effectiveColour.multiply(material.diffuse).multiply(lightNormalCosine);
+            }
             IVector reflectionVector = sourceDirection.negate().reflect(illuminated.normalVector);
             double reflectionEyeCosine = reflectionVector.dot(illuminated.eyeVector);
 
-            if (reflectionEyeCosine <= 0) {
+            if (reflectionEyeCosine <= 0 || illuminated.shadowed) {
                 specularContribution = new Colour(0, 0, 0);
             } else {
                 double specularFactor = Math.pow(reflectionEyeCosine, material.shininess);

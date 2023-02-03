@@ -18,7 +18,8 @@ public class Intersection {
                 this.object,
                 intersectionPoint,
                 this.object.normal(intersectionPoint),
-                this.ray.getDirection().negate()
+                this.ray.getDirection().negate(),
+                false
         );
         if (illuminated.normalVector.dot(illuminated.eyeVector) < 0) {
             illuminated.normalVector = illuminated.normalVector.negate();
