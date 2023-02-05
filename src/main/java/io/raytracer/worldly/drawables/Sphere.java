@@ -1,9 +1,11 @@
-package io.raytracer.worldly;
+package io.raytracer.worldly.drawables;
 
 import io.raytracer.geometry.IPoint;
 import io.raytracer.geometry.Point;
 import io.raytracer.geometry.IVector;
 
+import io.raytracer.worldly.IRay;
+import io.raytracer.worldly.Material;
 import lombok.NonNull;
 
 public class Sphere extends Drawable {

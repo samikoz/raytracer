@@ -6,6 +6,7 @@ import io.raytracer.geometry.IPoint;
 import io.raytracer.geometry.Point;
 import io.raytracer.geometry.IVector;
 import io.raytracer.geometry.Vector;
+import io.raytracer.worldly.drawables.Sphere;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

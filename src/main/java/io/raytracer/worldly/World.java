@@ -7,6 +7,7 @@ import io.raytracer.drawing.Colour;
 import io.raytracer.drawing.PPMPicture;
 import io.raytracer.geometry.IPoint;
 import io.raytracer.geometry.IVector;
+import io.raytracer.worldly.drawables.Drawable;
 import lombok.NonNull;
 
 import java.util.ArrayList;

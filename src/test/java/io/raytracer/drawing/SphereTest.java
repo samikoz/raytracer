@@ -8,7 +8,7 @@ import io.raytracer.geometry.Vector;
 import io.raytracer.worldly.IIntersections;
 import io.raytracer.worldly.IRay;
 import io.raytracer.worldly.Ray;
-import io.raytracer.worldly.Sphere;
+import io.raytracer.worldly.drawables.Sphere;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

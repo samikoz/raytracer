@@ -1,9 +1,14 @@
-package io.raytracer.worldly;
+package io.raytracer.worldly.drawables;
 
 import io.raytracer.geometry.IPoint;
 import io.raytracer.geometry.ITransform;
 import io.raytracer.geometry.IVector;
 import io.raytracer.geometry.ThreeTransform;
+import io.raytracer.worldly.IIntersections;
+import io.raytracer.worldly.IRay;
+import io.raytracer.worldly.Intersection;
+import io.raytracer.worldly.Intersections;
+import io.raytracer.worldly.Material;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;

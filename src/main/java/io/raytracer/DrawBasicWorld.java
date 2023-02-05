@@ -5,7 +5,7 @@ import io.raytracer.drawing.Camera;
 import io.raytracer.drawing.IPicture;
 import io.raytracer.drawing.Colour;
 import io.raytracer.worldly.Material;
-import io.raytracer.worldly.Sphere;
+import io.raytracer.worldly.drawables.Sphere;
 import io.raytracer.geometry.IPoint;
 import io.raytracer.geometry.Point;
 import io.raytracer.geometry.ThreeTransform;
