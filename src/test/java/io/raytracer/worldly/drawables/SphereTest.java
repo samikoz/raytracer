@@ -1,4 +1,4 @@
-package io.raytracer.drawing;
+package io.raytracer.worldly.drawables;
 
 import io.raytracer.geometry.Point;
 import io.raytracer.geometry.ThreeTransform;

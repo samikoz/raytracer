@@ -1,4 +1,4 @@
-package io.raytracer.drawing;
+package io.raytracer.worldly;
 
 import io.raytracer.worldly.Material;
 import org.junit.jupiter.api.Test;
