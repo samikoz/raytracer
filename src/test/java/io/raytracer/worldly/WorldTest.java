@@ -6,6 +6,7 @@ import io.raytracer.drawing.Camera;
 import io.raytracer.drawing.IPicture;
 import io.raytracer.drawing.IColour;
 import io.raytracer.drawing.Colour;
+import io.raytracer.drawing.patterns.Monopattern;
 import io.raytracer.geometry.IPoint;
 import io.raytracer.geometry.Point;
 import io.raytracer.geometry.ThreeTransform;
@@ -27,7 +28,7 @@ public class WorldTest {
     @BeforeAll
     static void setupMaterialAndPosition() {
         Material defaultMaterial = Material.builder()
-                .colour(new Colour(0.8, 1.0, 0.6)).diffuse(0.7).specular(0.2)
+                .pattern(new Monopattern(new Colour(0.8, 1.0, 0.6))).diffuse(0.7).specular(0.2)
                 .ambient(0.1).shininess(200).build();
         firstSphere = new Sphere(defaultMaterial);
         secondSphere = new Sphere(defaultMaterial);
@@ -69,7 +70,7 @@ public class WorldTest {
     @Test
     void illuminatingWhenIntersectionIsBehindRay() {
         Material material = Material.builder()
-                .colour(new Colour(0.8, 1.0, 0.6)).diffuse(0.7).specular(0.2)
+                .pattern(new Monopattern(new Colour(0.8, 1.0, 0.6))).diffuse(0.7).specular(0.2)
                 .ambient(1).shininess(200).build();
         Sphere outerObject = new Sphere(material);
 
@@ -83,13 +84,13 @@ public class WorldTest {
         IRay ray = new Ray(new Point(0, 0, 0.75), new Vector(0, 0, -1));
         IColour illuminated = world.illuminate(ray);
 
-        assertEquals(innerObject.getMaterial().colour, illuminated,
+        assertEquals(innerObject.getMaterial().pattern.colourAt(new Point(0, 0, 0)), illuminated,
                 "Illuminate should use the hit with the inner sphere");
     }
 
     @Test
     void illuminatingWhenIntersectionIsInTheShadow() {
-        Material material = Material.builder().colour(new Colour(1, 1, 1)).ambient(0.1).diffuse(0.9)
+        Material material = Material.builder().pattern(new Monopattern(new Colour(1, 1, 1))).ambient(0.1).diffuse(0.9)
                 .specular(0.9).shininess(200).build();
         Sphere firstSphere = new Sphere(material);
         Sphere secondSphere = new Sphere(material);

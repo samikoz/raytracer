@@ -16,7 +16,7 @@ public class LightSource implements ILightSource {
 
     public IColour illuminate(MaterialPoint illuminated) {
         Material material = illuminated.object.getMaterial();
-        IColour effectiveColour = material.colour.mix(this.colour);
+        IColour effectiveColour = material.pattern.colourAt(illuminated.point).mix(this.colour);
         IVector sourceDirection = this.position.subtract(illuminated.point).normalise();
         IColour ambientContribution = effectiveColour.multiply(material.ambient);
         double lightNormalCosine = sourceDirection.dot(illuminated.normalVector);

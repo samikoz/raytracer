@@ -2,13 +2,15 @@ package io.raytracer.worldly;
 
 import io.raytracer.drawing.IColour;
 import io.raytracer.drawing.Colour;
+import io.raytracer.drawing.patterns.IPattern;
+import io.raytracer.drawing.patterns.Monopattern;
 import lombok.Builder;
 
 import java.util.Arrays;
 
 @Builder(toBuilder = true)
 public class Material {
-    @Builder.Default public final IColour colour = new Colour(0, 0, 0);
+    @Builder.Default public final IPattern pattern = new Monopattern(new Colour(0, 0, 0));
     public final double ambient;
     public final double diffuse;
     public final double specular;
@@ -18,7 +20,7 @@ public class Material {
     @Override
     public int hashCode() {
         return Arrays.hashCode(new int[] {
-                this.colour.hashCode(),
+                this.pattern.getHashCode(),
                 Arrays.hashCode(new double[] {this.ambient, this.diffuse, this.specular, this.shininess})});
     }
 
@@ -27,7 +29,7 @@ public class Material {
         if (them == null || this.getClass() != them.getClass()) return false;
 
         Material themMaterial = (Material) them;
-        return (this.colour.equals(themMaterial.colour)
+        return (this.pattern.equals(themMaterial.pattern)
             && Math.abs(this.ambient - themMaterial.ambient) < equalityTolerance
             && Math.abs(this.diffuse - themMaterial.diffuse) < equalityTolerance
             && Math.abs(this.specular - themMaterial.specular) < equalityTolerance

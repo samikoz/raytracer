@@ -4,6 +4,7 @@ import io.raytracer.drawing.ICamera;
 import io.raytracer.drawing.Camera;
 import io.raytracer.drawing.IPicture;
 import io.raytracer.drawing.Colour;
+import io.raytracer.drawing.patterns.Monopattern;
 import io.raytracer.worldly.Material;
 import io.raytracer.worldly.drawables.Plane;
 import io.raytracer.worldly.drawables.Sphere;
@@ -23,7 +24,7 @@ import java.io.PrintWriter;
 public class DrawBasicWorld {
     public static void main(String[] args) throws IOException {
         Material wallMaterial = Material.builder()
-                .colour(new Colour(1, 0.9, 0.9))
+                .pattern(new Monopattern(new Colour(1, 0.9, 0.9)))
                 .specular(0)
                 .ambient(0.1)
                 .diffuse(0.9)
@@ -33,11 +34,11 @@ public class DrawBasicWorld {
 
         Material sphereMaterial = Material.builder().diffuse(0.7).specular(0.3).ambient(0.1).shininess(200).build();
 
-        Material leftMaterial = sphereMaterial.toBuilder().colour(new Colour(0.1, 1, 0.5)).build();
+        Material leftMaterial = sphereMaterial.toBuilder().pattern(new Monopattern(new Colour(0.1, 1, 0.5))).build();
         Sphere leftSphere = new Sphere(leftMaterial);
         leftSphere.setTransform(ThreeTransform.translation(-1, 1, -1));
 
-        Material rightMaterial = sphereMaterial.toBuilder().colour(new Colour(0.2, 0.1, 1)).build();
+        Material rightMaterial = sphereMaterial.toBuilder().pattern(new Monopattern(new Colour(0.2, 0.1, 1))).build();
         Sphere rightSphere = new Sphere(rightMaterial);
         rightSphere.setTransform(ThreeTransform.scaling(0.5, 0.5, 0.5).translate(1, 0.5, 1));
 

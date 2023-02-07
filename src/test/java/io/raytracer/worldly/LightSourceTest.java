@@ -2,6 +2,7 @@ package io.raytracer.worldly;
 
 import io.raytracer.drawing.IColour;
 import io.raytracer.drawing.Colour;
+import io.raytracer.drawing.patterns.Monopattern;
 import io.raytracer.geometry.IPoint;
 import io.raytracer.geometry.Point;
 import io.raytracer.geometry.IVector;
@@ -19,7 +20,7 @@ public class LightSourceTest {
     @BeforeEach
     void setupMaterialAndPosition() {
         material = Material.builder()
-                .colour(new Colour(1, 1, 1)).ambient(0.1).diffuse(0.9).specular(0.9).shininess(200)
+                .pattern(new Monopattern(new Colour(1, 1, 1))).ambient(0.1).diffuse(0.9).specular(0.9).shininess(200)
                 .build();
         position = new Point(0, 0, 0);
     }
