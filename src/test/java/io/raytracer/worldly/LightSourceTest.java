@@ -3,6 +3,7 @@ package io.raytracer.worldly;
 import io.raytracer.drawing.IColour;
 import io.raytracer.drawing.Colour;
 import io.raytracer.drawing.patterns.Monopattern;
+import io.raytracer.drawing.patterns.StripedPattern;
 import io.raytracer.geometry.IPoint;
 import io.raytracer.geometry.Point;
 import io.raytracer.geometry.IVector;
@@ -117,5 +118,24 @@ public class LightSourceTest {
         IColour actualResult = source.illuminate(illuminated);
 
         assertEquals(expectedResult, actualResult, "Should correctly compute illumination for points in shadows.");
+    }
+
+    @Test
+    void lightWithPatternApplied() {
+        IColour black = new Colour(0, 0, 0);
+        IColour white = new Colour(1, 1,1);
+        IVector eyeVector = new Vector(0, 0, -1);
+        IVector normal = new Vector(0, 0, -1);
+        boolean shadowed = false;
+        Material patternedMaterial = Material.builder()
+                .pattern(new StripedPattern(white, black))
+                .ambient(1).diffuse(0).specular(0).shininess(200)
+                .build();
+        ILightSource source = new LightSource(new Colour(1, 1, 1), new Point(0, 0, -10));
+        MaterialPoint firstIlluminated = new MaterialPoint(new Sphere(patternedMaterial), new Point(0.9, 0, 0), normal, eyeVector, shadowed);
+        MaterialPoint secondIlluminated = new MaterialPoint(new Sphere(patternedMaterial), new Point(1.1, 0, 0), normal, eyeVector, shadowed);
+
+        assertEquals(white, source.illuminate(firstIlluminated));
+        assertEquals(black, source.illuminate(secondIlluminated));
     }
 }

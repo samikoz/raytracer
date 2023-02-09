@@ -1,8 +1,7 @@
 package io.raytracer.worldly;
 
-import io.raytracer.drawing.IColour;
 import io.raytracer.drawing.Colour;
-import io.raytracer.drawing.patterns.IPattern;
+import io.raytracer.drawing.patterns.Pattern;
 import io.raytracer.drawing.patterns.Monopattern;
 import lombok.Builder;
 
@@ -10,7 +9,7 @@ import java.util.Arrays;
 
 @Builder(toBuilder = true)
 public class Material {
-    @Builder.Default public final IPattern pattern = new Monopattern(new Colour(0, 0, 0));
+    @Builder.Default public final Pattern pattern = new Monopattern(new Colour(0, 0, 0));
     public final double ambient;
     public final double diffuse;
     public final double specular;

@@ -1,27 +1,20 @@
 package io.raytracer.drawing.patterns;
 
-import io.raytracer.drawing.Colour;
+import io.raytracer.drawing.IColour;
 import io.raytracer.geometry.IPoint;
-import io.raytracer.geometry.Point;
+import lombok.AllArgsConstructor;
+import lombok.NonNull;
 
-public class Monopattern implements IPattern {
-    private final Colour monocolour;
+@AllArgsConstructor
+public class Monopattern extends Pattern {
+    @NonNull private final IColour monocolour;
 
-    public Monopattern(Colour monocolour) {
-        this.monocolour = monocolour;
-    }
-
-    public Colour colourAt(IPoint point) {
+    public IColour colourAt(IPoint point) {
         return this.monocolour;
     }
 
     public int getHashCode() {
         return this.monocolour.hashCode();
-    }
-
-    @Override
-    public int hashCode() {
-        return this.getHashCode();
     }
 
     @Override
