@@ -14,7 +14,7 @@ public class StripedPattern extends Pattern {
 
     @Override
     public IColour colourAt(IPoint p) {
-        return (new IColour[] { firstColour, secondColour })[(int)Math.floor(p.get(0)) % 2];
+        return (int)Math.floor(p.get(0)) % 2 == 0 ? firstColour : secondColour;
     }
 
     @Override

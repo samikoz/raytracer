@@ -5,6 +5,7 @@ import io.raytracer.drawing.Camera;
 import io.raytracer.drawing.IPicture;
 import io.raytracer.drawing.Colour;
 import io.raytracer.drawing.patterns.Monopattern;
+import io.raytracer.drawing.patterns.StripedPattern;
 import io.raytracer.worldly.Material;
 import io.raytracer.worldly.drawables.Plane;
 import io.raytracer.worldly.drawables.Sphere;
@@ -34,7 +35,7 @@ public class DrawBasicWorld {
 
         Material sphereMaterial = Material.builder().diffuse(0.7).specular(0.3).ambient(0.1).shininess(200).build();
 
-        Material leftMaterial = sphereMaterial.toBuilder().pattern(new Monopattern(new Colour(0.1, 1, 0.5))).build();
+        Material leftMaterial = sphereMaterial.toBuilder().pattern(new StripedPattern(new Colour(1, 1, 1), new Colour(0, 1, 0))).build();
         Sphere leftSphere = new Sphere(leftMaterial);
         leftSphere.setTransform(ThreeTransform.translation(-1, 1, -1));
 
