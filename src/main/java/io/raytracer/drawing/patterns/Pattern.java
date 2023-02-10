@@ -6,6 +6,8 @@ import io.raytracer.geometry.ITransform;
 import io.raytracer.geometry.ThreeTransform;
 import lombok.Getter;
 
+import java.util.Arrays;
+
 public abstract class Pattern {
     @Getter private ITransform inverseTransform;
     public abstract IColour colourAt(IPoint p);
@@ -19,6 +21,10 @@ public abstract class Pattern {
     }
 
     public abstract int getHashCode();
+
+    protected int getTwoColourHashCode(IColour first, IColour second) {
+        return Arrays.hashCode(new IColour[]{first, second});
+    }
 
     @Override
     public int hashCode() {

@@ -23,7 +23,7 @@ public class StripedPattern extends Pattern {
 
     @Override
     public int getHashCode() {
-        return Arrays.hashCode(new IColour[]{this.firstColour, this.secondColour});
+        return this.getTwoColourHashCode(this.firstColour, this.secondColour);
     }
 
     @Override
