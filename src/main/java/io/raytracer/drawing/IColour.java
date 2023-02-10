@@ -14,5 +14,7 @@ public interface IColour {
 
     IColour mix(IColour them);
 
+    IColour interpolate(IColour them, double factor);
+
     String exportNormalised();
 }

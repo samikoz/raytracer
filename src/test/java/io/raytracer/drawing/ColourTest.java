@@ -48,4 +48,23 @@ class ColourTest {
 
         assertEquals(expectedProduct, mixed);
     }
+
+    @Test
+    void interpolate() {
+        IColour first = new Colour(1, 0, 0.2);
+        IColour second = new Colour(1, 1, 0.6);
+
+        IColour expectedInterpolation = new Colour(1, 0.5, 0.4);
+
+        assertEquals(expectedInterpolation, first.interpolate(second, 0.5));
+    }
+
+    @Test
+    void interpolateOutsideZeroOneRange() {
+        IColour first = new Colour(1, 0, 0.2);
+        IColour second = new Colour(1, 1, 0.6);
+
+        assertEquals(first, first.interpolate(second, -1));
+        assertEquals(second, first.interpolate(second, 2));
+    }
 }
