@@ -77,4 +77,21 @@ class PatternsTest {
         assertEquals(black, ringed.colourAt(new Point(Math.sqrt(2) / 2, 0, Math.sqrt(2) / 2)));
 
     }
+
+    @Test
+    void checkerPatternRepeatsInThreeDimensions() {
+        Pattern checker = new CheckerPattern(white, black);
+        double belowOne = 0.99;
+        double aboveOne = 1.01;
+
+        assertEquals(white, checker.colourAt(new Point(0, 0, 0)));
+        assertEquals(white, checker.colourAt(new Point(belowOne, 0, 0)));
+        assertEquals(black, checker.colourAt(new Point(aboveOne, 0, 0)));
+
+        assertEquals(white, checker.colourAt(new Point(0, belowOne, 0)));
+        assertEquals(black, checker.colourAt(new Point(0, aboveOne, 0)));
+
+        assertEquals(white, checker.colourAt(new Point(0, 0, belowOne)));
+        assertEquals(black, checker.colourAt(new Point(0, 0, aboveOne)));
+    }
 }
