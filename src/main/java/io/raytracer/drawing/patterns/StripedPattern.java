@@ -2,15 +2,19 @@ package io.raytracer.drawing.patterns;
 
 import io.raytracer.drawing.IColour;
 import io.raytracer.geometry.IPoint;
-import lombok.AllArgsConstructor;
 import lombok.NonNull;
 
 import java.util.Arrays;
 
-@AllArgsConstructor
 public class StripedPattern extends Pattern {
-    @NonNull private IColour firstColour;
-    @NonNull private IColour secondColour;
+    @NonNull private final IColour firstColour;
+    @NonNull private final IColour secondColour;
+
+    public StripedPattern(IColour firstColour, IColour secondColour) {
+        super();
+        this.firstColour = firstColour;
+        this.secondColour = secondColour;
+    }
 
     @Override
     public IColour colourAt(IPoint p) {

@@ -3,11 +3,14 @@ package io.raytracer.worldly;
 import io.raytracer.drawing.IColour;
 import io.raytracer.drawing.Colour;
 import io.raytracer.drawing.patterns.Monopattern;
+import io.raytracer.drawing.patterns.Pattern;
 import io.raytracer.drawing.patterns.StripedPattern;
 import io.raytracer.geometry.IPoint;
 import io.raytracer.geometry.Point;
 import io.raytracer.geometry.IVector;
+import io.raytracer.geometry.ThreeTransform;
 import io.raytracer.geometry.Vector;
+import io.raytracer.worldly.drawables.Drawable;
 import io.raytracer.worldly.drawables.Sphere;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -128,14 +131,72 @@ public class LightSourceTest {
         IVector normal = new Vector(0, 0, -1);
         boolean shadowed = false;
         Material patternedMaterial = Material.builder()
-                .pattern(new StripedPattern(white, black))
-                .ambient(1).diffuse(0).specular(0).shininess(200)
-                .build();
+            .pattern(new StripedPattern(white, black))
+            .ambient(1).diffuse(0).specular(0).shininess(200)
+            .build();
         ILightSource source = new LightSource(new Colour(1, 1, 1), new Point(0, 0, -10));
-        MaterialPoint firstIlluminated = new MaterialPoint(new Sphere(patternedMaterial), new Point(0.9, 0, 0), normal, eyeVector, shadowed);
-        MaterialPoint secondIlluminated = new MaterialPoint(new Sphere(patternedMaterial), new Point(1.1, 0, 0), normal, eyeVector, shadowed);
+        MaterialPoint firstIlluminated = new MaterialPoint(
+            new Sphere(patternedMaterial), new Point(0.9, 0, 0), normal, eyeVector, shadowed);
+        MaterialPoint secondIlluminated = new MaterialPoint(
+            new Sphere(patternedMaterial), new Point(1.1, 0, 0), normal, eyeVector, shadowed);
 
         assertEquals(white, source.illuminate(firstIlluminated));
         assertEquals(black, source.illuminate(secondIlluminated));
+    }
+
+    @Test
+    void getObjectColourForTransformedObject() {
+        IColour white = new Colour(1, 1, 1);
+        IColour black = new Colour(0, 0, 0);
+        Material patternedMaterial = Material.builder()
+                .pattern(new StripedPattern(white, black))
+                .ambient(1).diffuse(0).specular(0).shininess(200)
+                .build();
+        Drawable sphere = new Sphere(patternedMaterial);
+        sphere.setTransform(ThreeTransform.scaling(2, 2, 2));
+        LightSource source = new LightSource(new Colour(1, 1, 1), new Point(0, 0, -10));
+
+        IColour colour = source.getObjectColour(sphere, new Point(1.5, 0, 0));
+
+        assertEquals(white, colour);
+    }
+
+    @Test
+    void getObjectColourForTransformedPattern() {
+        IColour white = new Colour(1, 1, 1);
+        IColour black = new Colour(0, 0, 0);
+        Pattern stripedPattern = new StripedPattern(white, black);
+        stripedPattern.setTransform(ThreeTransform.scaling(2, 2, 2));
+        Material patternedMaterial = Material.builder()
+                .pattern(stripedPattern)
+                .ambient(1).diffuse(0).specular(0).shininess(200)
+                .build();
+        Drawable sphere = new Sphere(patternedMaterial);
+        LightSource source = new LightSource(new Colour(1, 1, 1), new Point(0, 0, -10));
+
+        IColour colour = source.getObjectColour(sphere, new Point(1.5, 0, 0));
+
+        assertEquals(white, colour);
+    }
+
+    @Test
+    void getObjectColourForBothTransformedObjectAndPattern() {
+        IColour white = new Colour(1, 1, 1);
+        IColour black = new Colour(0, 0, 0);
+        Pattern stripedPattern = new StripedPattern(white, black);
+        stripedPattern.setTransform(ThreeTransform.translation(0.5, 0, 0));
+        Material patternedMaterial = Material.builder()
+                .pattern(stripedPattern)
+                .ambient(1).diffuse(0).specular(0).shininess(200)
+                .build();
+        Drawable sphere = new Sphere(patternedMaterial);
+        sphere.setTransform(ThreeTransform.scaling(2, 2, 2));
+        LightSource source = new LightSource(new Colour(1, 1, 1), new Point(0, 0, -10));
+
+        IColour firstColour = source.getObjectColour(sphere, new Point(1.6, 0, 0));
+        IColour secondColour = source.getObjectColour(sphere, new Point(3.1, 0, 0));
+
+        assertEquals(white, firstColour);
+        assertEquals(black, secondColour);
     }
 }

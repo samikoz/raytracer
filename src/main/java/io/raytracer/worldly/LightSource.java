@@ -2,6 +2,7 @@ package io.raytracer.worldly;
 
 import io.raytracer.drawing.Colour;
 import io.raytracer.geometry.IVector;
+import io.raytracer.worldly.drawables.Drawable;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +17,7 @@ public class LightSource implements ILightSource {
 
     public IColour illuminate(MaterialPoint illuminated) {
         Material material = illuminated.object.getMaterial();
-        IColour effectiveColour = material.pattern.colourAt(illuminated.point).mix(this.colour);
+        IColour effectiveColour = this.getObjectColour(illuminated.object, illuminated.point).mix(this.colour);
         IVector sourceDirection = this.position.subtract(illuminated.point).normalise();
         IColour ambientContribution = effectiveColour.multiply(material.ambient);
         double lightNormalCosine = sourceDirection.dot(illuminated.normalVector);
@@ -43,5 +44,12 @@ public class LightSource implements ILightSource {
             }
         }
         return ambientContribution.add(diffuseContribution).add(specularContribution);
+    }
+
+    IColour getObjectColour(Drawable object, IPoint point) {
+        IPoint objectPoint = object.getInverseTransform().act(point);
+        Material material = object.getMaterial();
+        IPoint patternPoint = material.pattern.getInverseTransform().act(objectPoint);
+        return material.pattern.colourAt(patternPoint);
     }
 }

@@ -37,7 +37,7 @@ public class DrawBasicWorld {
 
         Material leftMaterial = sphereMaterial.toBuilder().pattern(new StripedPattern(new Colour(1, 1, 1), new Colour(0, 1, 0))).build();
         Sphere leftSphere = new Sphere(leftMaterial);
-        leftSphere.setTransform(ThreeTransform.translation(-1, 1, -1));
+        leftSphere.setTransform(ThreeTransform.rotation_z(Math.PI / 4).translate(-1, 1, -1));
 
         Material rightMaterial = sphereMaterial.toBuilder().pattern(new Monopattern(new Colour(0.2, 0.1, 1))).build();
         Sphere rightSphere = new Sphere(rightMaterial);

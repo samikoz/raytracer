@@ -2,12 +2,15 @@ package io.raytracer.drawing.patterns;
 
 import io.raytracer.drawing.IColour;
 import io.raytracer.geometry.IPoint;
-import lombok.AllArgsConstructor;
 import lombok.NonNull;
 
-@AllArgsConstructor
 public class Monopattern extends Pattern {
     @NonNull private final IColour monocolour;
+
+    public Monopattern(IColour colour) {
+        super();
+        this.monocolour = colour;
+    }
 
     public IColour colourAt(IPoint point) {
         return this.monocolour;

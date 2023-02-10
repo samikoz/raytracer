@@ -11,32 +11,35 @@ import io.raytracer.worldly.Intersections;
 import io.raytracer.worldly.Material;
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.Setter;
 
 import java.util.Arrays;
 
 public abstract class Drawable {
-    @Setter private ITransform transform;
+    @Getter private ITransform inverseTransform;
     @Getter private final Material material;
 
+    public void setTransform(ITransform transform) {
+        this.inverseTransform = transform.inverse();
+    }
+
     Drawable() {
-        this.transform = new ThreeTransform();
+        this.setTransform(new ThreeTransform());
         this.material = Material.builder().build();
     }
 
     Drawable(@NonNull Material material) {
-        this.transform = new ThreeTransform();
+        this.setTransform(new ThreeTransform());
         this.material = material;
     }
 
     public IIntersections intersect(IRay ray) {
-        IRay transformedRay = ray.transform(this.transform.inverse());
+        IRay transformedRay = ray.transform(this.inverseTransform);
         return new Intersections(Arrays.stream(this.getLocalIntersectionPositions(transformedRay)).
             mapToObj(position -> new Intersection(ray, position, this)).toArray(Intersection[]::new));
     }
 
     public IVector normal(IPoint point) {
-        ITransform inverseTransform = this.transform.inverse();
+        ITransform inverseTransform = this.inverseTransform;
         IPoint transformedPoint = inverseTransform.act(point);
         IVector normal = this.normalLocally(transformedPoint);
         return inverseTransform.transpose().act(normal).normalise();
