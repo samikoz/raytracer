@@ -4,7 +4,9 @@ import io.raytracer.drawing.ICamera;
 import io.raytracer.drawing.Camera;
 import io.raytracer.drawing.IPicture;
 import io.raytracer.drawing.Colour;
+import io.raytracer.drawing.patterns.GradientPattern;
 import io.raytracer.drawing.patterns.Monopattern;
+import io.raytracer.drawing.patterns.Pattern;
 import io.raytracer.drawing.patterns.StripedPattern;
 import io.raytracer.worldly.Material;
 import io.raytracer.worldly.drawables.Plane;
@@ -39,9 +41,11 @@ public class DrawBasicWorld {
         Sphere leftSphere = new Sphere(leftMaterial);
         leftSphere.setTransform(ThreeTransform.rotation_z(Math.PI / 4).translate(-1, 1, -1));
 
-        Material rightMaterial = sphereMaterial.toBuilder().pattern(new Monopattern(new Colour(0.2, 0.1, 1))).build();
+        Pattern rightPattern = new GradientPattern(new Colour(1, 0, 0), new Colour(0, 0, 1));
+        rightPattern.setTransform(ThreeTransform.translation(-0.5,0 ,0 ).rotate_z(Math.PI / 2).scale(2, 2, 2));
+        Material rightMaterial = sphereMaterial.toBuilder().pattern(rightPattern).build();
         Sphere rightSphere = new Sphere(rightMaterial);
-        rightSphere.setTransform(ThreeTransform.scaling(0.5, 0.5, 0.5).translate(1, 0.5, 1));
+        rightSphere.setTransform(ThreeTransform.scaling(0.5, 0.5, 0.5).translate(2, 0.5, 1));
 
         IWorld world = new World();
         world.put(new LightSource(new Colour(1, 1, 1), new Point(-10, 10, -10)));

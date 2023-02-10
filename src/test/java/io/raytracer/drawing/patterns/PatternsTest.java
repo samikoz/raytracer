@@ -58,4 +58,12 @@ class PatternsTest {
         assertEquals(black, secondColour);
         assertEquals(white, thirdColour);
     }
+
+    @Test
+    void gradientPatternLinearlyInterpolatesInX() {
+        Pattern gradient = new GradientPattern(black, white);
+
+        assertEquals(black, gradient.colourAt(new Point(0, 0, 0)));
+        assertEquals(new Colour(0.2, 0.2, 0.2), gradient.colourAt(new Point(0.2, 0, 0)));
+    }
 }
