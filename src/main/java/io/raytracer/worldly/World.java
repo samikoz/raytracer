@@ -40,8 +40,7 @@ public class World implements IWorld {
         Optional<Intersection> hit = this.intersect(ray).getHit();
         if (hit.isPresent()) {
             MaterialPoint realPoint = hit.get().getMaterialPoint();
-            IPoint normalOffset = realPoint.point.add(realPoint.object.normal(realPoint.point).multiply(1e-6));
-            realPoint.shadowed = this.isShadowed(normalOffset);
+            realPoint.shadowed = this.isShadowed(realPoint.offsetPoint);
             return lightSource.illuminate(realPoint);
         } else {
             return new Colour(0, 0, 0);

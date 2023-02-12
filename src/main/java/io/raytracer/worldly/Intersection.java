@@ -17,17 +17,17 @@ public class Intersection {
     MaterialPoint getMaterialPoint() {
         IPoint intersectionPoint = this.ray.position(this.rayParameter);
         IVector surfaceNormal = this.object.normal(intersectionPoint);
-        MaterialPoint illuminated = new MaterialPoint(
-                this.object,
-                intersectionPoint,
-                surfaceNormal,
-                this.ray.direction().reflect(surfaceNormal),
-                this.ray.direction().negate(),
-                false
-        );
-        if (illuminated.normalVector.dot(illuminated.eyeVector) < 0) {
-            illuminated.normalVector = illuminated.normalVector.negate();
+        IVector eyeVector = this.ray.direction().negate();
+        if (surfaceNormal.dot(eyeVector) < 0) {
+            surfaceNormal = surfaceNormal.negate();
         }
-        return illuminated;
+        return new MaterialPoint(
+            this.object,
+            intersectionPoint,
+            surfaceNormal,
+            this.ray.direction().reflect(surfaceNormal),
+            eyeVector,
+            false
+        );
     }
 }
