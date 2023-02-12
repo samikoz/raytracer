@@ -16,8 +16,8 @@ public class CameraTest {
         ICamera camera = new Camera(201, 101, Math.PI / 2);
         IRay ray = camera.getRayThroughPixel(100, 50);
 
-        assertEquals(new Point(0, 0, 0), ray.getOrigin());
-        assertEquals(new Vector(0, 0, -1), ray.getDirection());
+        assertEquals(new Point(0, 0, 0), ray.origin());
+        assertEquals(new Vector(0, 0, -1), ray.direction());
     }
 
     @Test
@@ -25,8 +25,8 @@ public class CameraTest {
         ICamera camera = new Camera(201, 101, Math.PI / 2);
         IRay ray = camera.getRayThroughPixel(0, 0);
 
-        assertEquals(new Point(0, 0, 0), ray.getOrigin());
-        assertEquals(new Vector(0.66519, 0.33259, -0.66851), ray.getDirection());
+        assertEquals(new Point(0, 0, 0), ray.origin());
+        assertEquals(new Vector(0.66519, 0.33259, -0.66851), ray.direction());
     }
 
     @Test
@@ -37,8 +37,8 @@ public class CameraTest {
         ICamera camera = new Camera(201, 101, Math.PI / 2, eyePosition, lookDirection, upDirection);
         IRay ray = camera.getRayThroughPixel(100, 50);
 
-        assertEquals(new Point(0, 2, -5), ray.getOrigin(),
+        assertEquals(new Point(0, 2, -5), ray.origin(),
                 "Ray's origin should be transformed accordingly to the camera's transformation");
-        assertEquals(new Vector(Math.sqrt(2) / 2, 0, -Math.sqrt(2) / 2), ray.getDirection());
+        assertEquals(new Vector(Math.sqrt(2) / 2, 0, -Math.sqrt(2) / 2), ray.direction());
     }
 }

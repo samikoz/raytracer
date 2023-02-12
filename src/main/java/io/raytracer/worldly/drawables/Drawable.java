@@ -33,7 +33,7 @@ public abstract class Drawable {
     }
 
     public IIntersections intersect(IRay ray) {
-        IRay transformedRay = ray.transform(this.inverseTransform);
+        IRay transformedRay = ray.getTransformed(this.inverseTransform);
         return new Intersections(Arrays.stream(this.getLocalIntersectionPositions(transformedRay)).
             mapToObj(position -> new Intersection(ray, position, this)).toArray(Intersection[]::new));
     }

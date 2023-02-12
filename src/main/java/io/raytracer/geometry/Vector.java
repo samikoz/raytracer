@@ -57,8 +57,8 @@ public class Vector extends Tuple implements IVector {
     }
 
     @Override
-    public IVector reflect(IVector reflector) {
-        return this.subtract(reflector.multiply(2 * this.dot(reflector)));
+    public IVector reflect(IVector normal) {
+        return this.subtract(normal.multiply(2 * this.dot(normal)));
     }
 
     @Override

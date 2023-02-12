@@ -5,10 +5,10 @@ import io.raytracer.geometry.ITransform;
 import io.raytracer.geometry.IVector;
 
 public interface IRay {
-    IVector getDirection();
-    IPoint getOrigin();
+    IVector direction();
+    IPoint origin();
 
     IPoint position(double parameter);
 
-    IRay transform(ITransform t);
+    IRay getTransformed(ITransform t);
 }

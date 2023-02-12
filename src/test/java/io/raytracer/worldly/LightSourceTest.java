@@ -30,14 +30,15 @@ public class LightSourceTest {
     }
 
     @Test
-    void eyeBetweenLightAndSurface() {
+    void illuminateWithLightEyeSurfaceNormalInLine() {
         IVector eyeVector = new Vector(0, 0, -1);
         IVector normalVector = new Vector(0, 0, -1);
+        IVector reflectionVector = normalVector;
         boolean shadowed = false;
         ILightSource source = new LightSource(
                 new Colour(1, 1, 1), new Point(0, 0, -10));
         MaterialPoint illuminated = new MaterialPoint(
-                new Sphere(material), position, normalVector, eyeVector, shadowed);
+                new Sphere(material), position, normalVector, reflectionVector, eyeVector, shadowed);
         IColour expectedResult = new Colour(1.9, 1.9, 1.9);
         IColour actualResult = source.illuminate(illuminated);
 
@@ -46,14 +47,15 @@ public class LightSourceTest {
     }
 
     @Test
-    void eyeBetweenLightAndSurfaceEyeOffset45Deg() {
+    void illuminateWithLightOppositeSurfaceEyeOffset45Degrees() {
         IVector eyeVector = new Vector(0, Math.sqrt(2) / 2, -Math.sqrt(2) / 2);
         IVector normalVector = new Vector(0, 0, -1);
+        IVector reflectionVector = normalVector;
         boolean shadowed = false;
         ILightSource source = new LightSource(
                 new Colour(1, 1, 1), new Point(0, 0, -10));
         MaterialPoint illuminated = new MaterialPoint(
-                new Sphere(material), position, normalVector, eyeVector, shadowed);
+                new Sphere(material), position, normalVector, reflectionVector, eyeVector, shadowed);
         IColour expectedResult = new Colour(1, 1, 1);
         IColour actualResult = source.illuminate(illuminated);
 
@@ -62,14 +64,15 @@ public class LightSourceTest {
     }
 
     @Test
-    void eyeOppositeSurfaceSourceOffset45Deg() {
+    void illuminateWithEyeOppositeSurfaceLightOffset45Degrees() {
         IVector eyeVector = new Vector(0, 0, -1);
         IVector normalVector = new Vector(0, 0, -1);
+        IVector reflectionVector = new Vector(-1, -1, 0);
         boolean shadowed = false;
         ILightSource source = new LightSource(
                 new Colour(1, 1, 1), new Point(0, 10, -10));
         MaterialPoint illuminated = new MaterialPoint(
-                new Sphere(material), position, normalVector, eyeVector, shadowed);
+                new Sphere(material), position, normalVector, reflectionVector, eyeVector, shadowed);
         IColour expectedResult = new Colour(0.7364, 0.7364, 0.7364);
         IColour actualResult = source.illuminate(illuminated);
 
@@ -78,14 +81,15 @@ public class LightSourceTest {
     }
 
     @Test
-    void eyeInThePathOfTheReflectionVector() {
+    void illuminateWithEyeInThePathOfReflectionVector() {
         IVector eyeVector = new Vector(0, -Math.sqrt(2) / 2, -Math.sqrt(2) / 2);
         IVector normalVector = new Vector(0, 0, -1);
+        IVector reflectionVector = new Vector(-1, -1, 0);
         boolean shadowed = false;
         ILightSource source = new LightSource(
                 new Colour(1, 1, 1), new Point(0, 10, -10));
         MaterialPoint illuminated = new MaterialPoint(
-                new Sphere(material), position, normalVector, eyeVector, shadowed);
+                new Sphere(material), position, normalVector, reflectionVector, eyeVector, shadowed);
         IColour expectedResult = new Colour(1.6364, 1.6364, 1.6364);
         IColour actualResult = source.illuminate(illuminated);
 
@@ -94,14 +98,15 @@ public class LightSourceTest {
     }
 
     @Test
-    void lightBehindTheSurface() {
+    void illuminateWithLightBehindTheSurface() {
         IVector eyeVector = new Vector(0, Math.sqrt(2) / 2, -Math.sqrt(2) / 2);
         IVector normalVector = new Vector(0, 0, -1);
+        IVector reflectionVector = normalVector.negate();
         boolean shadowed = false;
         ILightSource source = new LightSource(
                 new Colour(1, 1, 1), new Point(0, 0, 10));
         MaterialPoint illuminated = new MaterialPoint(
-                new Sphere(material), position, normalVector, eyeVector, shadowed);
+                new Sphere(material), position, normalVector, reflectionVector, eyeVector, shadowed);
         IColour expectedResult = new Colour(0.1, 0.1, 0.1);
         IColour actualResult = source.illuminate(illuminated);
 
@@ -110,12 +115,13 @@ public class LightSourceTest {
     }
 
     @Test
-    void lightWithTheSurfaceInTheShadow() {
+    void illuminateWithTheSurfaceInTheShadow() {
         IVector eyeVector = new Vector(0, 0, -1);
         IVector normal = new Vector(0, 0, -1);
+        IVector reflection = normal;
         boolean shadowed = true;
         ILightSource source = new LightSource(new Colour(1, 1, 1), new Point(0, 0, -10));
-        MaterialPoint illuminated = new MaterialPoint(new Sphere(material), position, normal, eyeVector, shadowed);
+        MaterialPoint illuminated = new MaterialPoint(new Sphere(material), position, normal, reflection, eyeVector, shadowed);
 
         IColour expectedResult = new Colour(0.1, 0.1, 0.1);
         IColour actualResult = source.illuminate(illuminated);
@@ -124,11 +130,12 @@ public class LightSourceTest {
     }
 
     @Test
-    void lightWithPatternApplied() {
+    void illuminateWithPatternApplied() {
         IColour black = new Colour(0, 0, 0);
         IColour white = new Colour(1, 1,1);
         IVector eyeVector = new Vector(0, 0, -1);
         IVector normal = new Vector(0, 0, -1);
+        IVector reflection = normal;
         boolean shadowed = false;
         Material patternedMaterial = Material.builder()
             .pattern(new StripedPattern(white, black))
@@ -136,9 +143,9 @@ public class LightSourceTest {
             .build();
         ILightSource source = new LightSource(new Colour(1, 1, 1), new Point(0, 0, -10));
         MaterialPoint firstIlluminated = new MaterialPoint(
-            new Sphere(patternedMaterial), new Point(0.9, 0, 0), normal, eyeVector, shadowed);
+            new Sphere(patternedMaterial), new Point(0.9, 0, 0), normal, reflection, eyeVector, shadowed);
         MaterialPoint secondIlluminated = new MaterialPoint(
-            new Sphere(patternedMaterial), new Point(1.1, 0, 0), normal, eyeVector, shadowed);
+            new Sphere(patternedMaterial), new Point(1.1, 0, 0), normal, reflection, eyeVector, shadowed);
 
         assertEquals(white, source.illuminate(firstIlluminated));
         assertEquals(black, source.illuminate(secondIlluminated));

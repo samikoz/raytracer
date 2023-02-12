@@ -14,6 +14,7 @@ public class Material {
     public final double diffuse;
     public final double specular;
     public final double shininess;
+    public final double reflectivity;
     private static final double equalityTolerance = 1e-3;
 
     @Override

@@ -13,12 +13,12 @@ public class Ray implements IRay {
     @NonNull private final IVector direction;
 
     @Override
-    public IVector getDirection() {
+    public IVector direction() {
         return this.direction;
     }
 
     @Override
-    public IPoint getOrigin() {
+    public IPoint origin() {
         return this.origin;
     }
 
@@ -28,7 +28,7 @@ public class Ray implements IRay {
     }
 
     @Override
-    public IRay transform(ITransform t) {
+    public IRay getTransformed(ITransform t) {
         return new Ray(this.origin.transform(t), this.direction.transform(t));
     }
 }

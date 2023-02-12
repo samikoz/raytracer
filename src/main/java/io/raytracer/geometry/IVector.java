@@ -16,7 +16,7 @@ public interface IVector extends ITuple {
         return add(them.negate());
     }
 
-    IVector reflect(IVector reflector);
+    IVector reflect(IVector normal);
 
     double dot(IVector them);
     IVector cross(IVector them);
