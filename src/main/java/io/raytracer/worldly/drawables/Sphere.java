@@ -19,9 +19,9 @@ public class Sphere extends Drawable {
 
     @Override
     protected double[] getLocalIntersectionPositions(IRay ray) {
-        IVector rayOrigin = ray.origin().subtract(new Point(0, 0, 0));
-        double a = ray.direction().dot(ray.direction());
-        double b = 2 * ray.direction().dot(rayOrigin);
+        IVector rayOrigin = ray.getOrigin().subtract(new Point(0, 0, 0));
+        double a = ray.getDirection().dot(ray.getDirection());
+        double b = 2 * ray.getDirection().dot(rayOrigin);
         double c = rayOrigin.dot(rayOrigin) - 1;
         double delta = Math.pow(b, 2) - 4 * a * c;
 

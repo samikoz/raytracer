@@ -14,7 +14,7 @@ class RayTest {
     void rayPosition() {
         IRay ray = new Ray(new Point(2, 3, 4), new Vector(1, 0, 0));
         IPoint expectedPosition = new Point(3, 3, 4);
-        IPoint actualPosition = ray.position(1);
+        IPoint actualPosition = ray.getPosition(1);
 
         assertEquals(expectedPosition, actualPosition);
     }
@@ -26,8 +26,8 @@ class RayTest {
         IRay translatedRay = ray.getTransformed(ThreeTransform.translation(3, 4, 5));
         IPoint expectedOrigin = new Point(4, 6, 8);
 
-        assertEquals(expectedOrigin, translatedRay.origin(), "Translation should translate ray's origin.");
-        assertEquals(direction, translatedRay.direction(),
+        assertEquals(expectedOrigin, translatedRay.getOrigin(), "Translation should translate ray's origin.");
+        assertEquals(direction, translatedRay.getDirection(),
                 "Translation should not affect ray's direction.");
     }
 
@@ -38,7 +38,7 @@ class RayTest {
         IPoint expectedOrigin = new Point(2, 6, 12);
         IVector expectedDirection = new Vector(0, 3, 0);
 
-        assertEquals(expectedOrigin, scaledRay.origin(), "Scaling should scale ray's origin.");
-        assertEquals(expectedDirection, scaledRay.direction(), "Scaling should scale ray's direction.");
+        assertEquals(expectedOrigin, scaledRay.getOrigin(), "Scaling should scale ray's origin.");
+        assertEquals(expectedDirection, scaledRay.getDirection(), "Scaling should scale ray's direction.");
     }
 }

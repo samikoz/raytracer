@@ -15,9 +15,9 @@ public class Intersection {
     @NonNull public Drawable object;
 
     MaterialPoint getMaterialPoint() {
-        IPoint intersectionPoint = this.ray.position(this.rayParameter);
+        IPoint intersectionPoint = this.ray.getPosition(this.rayParameter);
         IVector surfaceNormal = this.object.normal(intersectionPoint);
-        IVector eyeVector = this.ray.direction().negate();
+        IVector eyeVector = this.ray.getDirection().negate();
         if (surfaceNormal.dot(eyeVector) < 0) {
             surfaceNormal = surfaceNormal.negate();
         }
@@ -25,7 +25,7 @@ public class Intersection {
             this.object,
             intersectionPoint,
             surfaceNormal,
-            this.ray.direction().reflect(surfaceNormal),
+            this.ray.getDirection().reflect(surfaceNormal),
             eyeVector,
             false
         );

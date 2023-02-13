@@ -36,30 +36,6 @@ public class World implements IWorld {
         return this;
     }
 
-    IColour illuminate(@NonNull IRay ray) {
-        Optional<Intersection> hit = this.intersect(ray).getHit();
-        if (hit.isPresent()) {
-            MaterialPoint realPoint = hit.get().getMaterialPoint();
-            realPoint.shadowed = this.isShadowed(realPoint.offsetPoint);
-            return lightSource.illuminate(realPoint);
-        } else {
-            return new Colour(0, 0, 0);
-        }
-    }
-
-    private IIntersections intersect(@NonNull IRay ray) {
-        Stream<Intersections> s = contents.stream().map(object -> (Intersections) object.intersect(ray));
-        return s.reduce(Intersections::combine).orElse(new Intersections());
-    }
-
-    boolean isShadowed(IPoint point) {
-        IVector lightDistance = this.lightSource.getPosition().subtract(point);
-        IVector lightDirection = lightDistance.normalise();
-        IRay lightRay = new Ray(point, lightDirection);
-        Optional<Intersection> shadowingHit = this.intersect(lightRay).getHit();
-        return (shadowingHit.isPresent() && shadowingHit.get().getMaterialPoint().point.distance(point) < lightDistance.norm());
-    }
-
     @Override
     public IPicture render(ICamera camera) {
         IPicture picture = new PPMPicture(camera.getPictureWidthPixels(), camera.getPictureHeightPixels());
@@ -73,5 +49,40 @@ public class World implements IWorld {
         }
 
         return picture;
+    }
+
+    IColour illuminate(@NonNull IRay ray) {
+        Optional<Intersection> hit = this.intersect(ray).getHit();
+        if (hit.isPresent()) {
+            MaterialPoint realPoint = hit.get().getMaterialPoint();
+            realPoint.shadowed = this.isShadowed(realPoint.offsetPoint);
+            IColour surfaceColour = lightSource.illuminate(realPoint);
+            IColour reflectedColour = this.getReflectedColour(realPoint);
+            return surfaceColour.add(reflectedColour);
+        } else {
+            return new Colour(0, 0, 0);
+        }
+    }
+
+    IIntersections intersect(@NonNull IRay ray) {
+        Stream<Intersections> s = contents.stream().map(object -> (Intersections) object.intersect(ray));
+        return s.reduce(Intersections::combine).orElse(new Intersections());
+    }
+
+    boolean isShadowed(IPoint point) {
+        IVector lightDistance = this.lightSource.getPosition().subtract(point);
+        IVector lightDirection = lightDistance.normalise();
+        IRay lightRay = new Ray(point, lightDirection);
+        Optional<Intersection> shadowingHit = this.intersect(lightRay).getHit();
+        return (shadowingHit.isPresent() && shadowingHit.get().getMaterialPoint().point.distance(point) < lightDistance.norm());
+    }
+
+    IColour getReflectedColour(MaterialPoint point) {
+        if (point.object.getMaterial().reflectivity == 0) {
+            return new Colour(0, 0, 0);
+        }
+        IRay reflectedRay = new Ray(point.offsetPoint, point.reflectionVector);
+        IColour reflectedColour = this.illuminate(reflectedRay);
+        return reflectedColour.multiply(point.object.getMaterial().reflectivity);
     }
 }

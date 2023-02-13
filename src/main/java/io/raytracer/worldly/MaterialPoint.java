@@ -1,7 +1,6 @@
 package io.raytracer.worldly;
 
 import io.raytracer.worldly.drawables.Drawable;
-import lombok.Getter;
 import lombok.NonNull;
 import io.raytracer.geometry.IPoint;
 import io.raytracer.geometry.IVector;

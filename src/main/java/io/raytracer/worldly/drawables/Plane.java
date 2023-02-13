@@ -22,10 +22,10 @@ public class Plane extends Drawable {
 
     @Override
     protected double[] getLocalIntersectionPositions(IRay ray) {
-        if (abs(ray.direction().get(1)) < parallelTolerance) {
+        if (abs(ray.getDirection().get(1)) < parallelTolerance) {
             return new double[] {};
         } else {
-            return new double[] { -ray.origin().get(1) / ray.direction().get(1) };
+            return new double[] { -ray.getOrigin().get(1) / ray.getDirection().get(1) };
         }
     }
 

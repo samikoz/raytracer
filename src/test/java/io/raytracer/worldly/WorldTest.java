@@ -12,9 +12,13 @@ import io.raytracer.geometry.Point;
 import io.raytracer.geometry.ThreeTransform;
 import io.raytracer.geometry.IVector;
 import io.raytracer.geometry.Vector;
+import io.raytracer.worldly.drawables.Drawable;
+import io.raytracer.worldly.drawables.Plane;
 import io.raytracer.worldly.drawables.Sphere;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -146,4 +150,82 @@ public class WorldTest {
 
         assertFalse(defaultWorld.isShadowed(point));
     }
+
+    @Test
+    void getReflectedColourFromNonReflectiveSurface() {
+        IRay ray = new Ray(new Point(0, 0, 0), new Vector(0, 0, 1));
+        Material material = Material.builder()
+                .pattern(new Monopattern(new Colour(0.8, 1.0, 0.6))).diffuse(0.7).specular(0.2)
+                .ambient(1).shininess(200).build();
+        Sphere sphere = new Sphere(material);
+        sphere.setTransform(ThreeTransform.scaling(0.5, 0.5, 0.5));
+        World testWorld = new World();
+        testWorld.put(new LightSource(new Colour(1, 1, 1), new Point(-10, 10, -10)));
+        testWorld.put(sphere);
+
+        Optional<Intersection> hit = testWorld.intersect(ray).getHit();
+        assertTrue(hit.isPresent());
+        MaterialPoint realPoint = hit.get().getMaterialPoint();
+        
+        assertEquals(new Colour(0, 0, 0), testWorld.getReflectedColour(realPoint));
+    }
+
+    @Test
+    void getReflectedColourFromReflectiveSurface() {
+        IRay ray = new Ray(new Point(0, 0, -3), new Vector(0, -Math.sqrt(2)/2, Math.sqrt(2)/2));
+        Material sphereMaterial = Material.builder()
+                .pattern(new Monopattern(new Colour(0.8, 1.0, 0.6)))
+                .diffuse(0.7).specular(0.2).ambient(0.1).shininess(200).build();
+        Drawable sphere = new Sphere(sphereMaterial);
+        Material planeMaterial = Material.builder()
+                .diffuse(0.9).specular(0.9).ambient(0.1).shininess(200).reflectivity(0.5)
+                .pattern(new Monopattern(new Colour(1, 1, 1))).build();
+        Drawable plane = new Plane(planeMaterial);
+        plane.setTransform(ThreeTransform.translation(0, -1, 0));
+        
+        World testWorld = new World();
+        testWorld.put(new LightSource(new Colour(1, 1, 1), new Point(-10, 10, -10)));
+        testWorld.put(sphere).put(plane);
+
+        Optional<Intersection> hit = testWorld.intersect(ray).getHit();
+        assertTrue(hit.isPresent());
+        MaterialPoint realPoint = hit.get().getMaterialPoint();
+
+        assertEquals(new Colour(0.19032, 0.2379, 0.14274), testWorld.getReflectedColour(realPoint));
+    }
+
+    @Test
+    void illuminatingWithReflectiveMaterial() {
+        IRay ray = new Ray(new Point(0, 0, -3), new Vector(0, -Math.sqrt(2)/2, Math.sqrt(2)/2));
+        Material sphereMaterial = Material.builder()
+                .diffuse(0.7).specular(0.2).ambient(0.1).shininess(200)
+                .pattern(new Monopattern(new Colour(0.8, 1.0, 0.6))).build();
+        Drawable sphere = new Sphere(sphereMaterial);
+        Material planeMaterial = Material.builder()
+                .diffuse(0.9).specular(0.9).ambient(0.1).shininess(200).reflectivity(0.5)
+                .pattern(new Monopattern(new Colour(1, 1, 1))).build();
+        Drawable plane = new Plane(planeMaterial);
+        plane.setTransform(ThreeTransform.translation(0, -1, 0));
+
+        World testWorld = new World();
+        testWorld.put(new LightSource(new Colour(1, 1, 1), new Point(-10, 10, -10)));
+        testWorld.put(sphere).put(plane);
+
+        assertEquals(new Colour(0.87677, 0.92436, 0.82918), testWorld.illuminate(ray));
+    }
+
+/*    @Test
+    void illuminatingTwoParallelMirrors() {
+        Material planeMaterial = Material.builder().reflectivity(1).build();
+        Drawable leftPlane = new Plane(planeMaterial);
+        leftPlane.setTransform(ThreeTransform.translation(0, -1, 0));
+        Drawable rightPlane = new Plane(planeMaterial);
+        rightPlane.setTransform(ThreeTransform.translation(0, 1, 0));
+        World world = new World();
+        world.put(new LightSource(new Colour(1, 1, 1), new Point(0, 0, 0)));
+        world.put(leftPlane).put(rightPlane);
+        IRay ray = new Ray(new Point(0, 0, 0), new Vector(0, 1, 0));
+
+        assertEquals(new Colour(1, 1, 1), world.illuminate(ray));
+    }*/
 }
