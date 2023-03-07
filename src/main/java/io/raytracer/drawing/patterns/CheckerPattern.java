@@ -14,7 +14,7 @@ public class CheckerPattern extends Pattern {
 
     @Override
     public IColour colourAt(IPoint p) {
-        return Math.floor(p.get(0)) + Math.floor(p.get(1)) + Math.floor(p.get(2)) % 2 == 0 ? this.firstColour : this.secondColour;
+        return (Math.floor(p.get(0)) + Math.floor(p.get(1)) + Math.floor(p.get(2))) % 2 == 0 ? this.firstColour : this.secondColour;
     }
 
     @Override
