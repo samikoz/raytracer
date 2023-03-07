@@ -9,6 +9,7 @@ import io.raytracer.geometry.IPoint;
 import io.raytracer.geometry.IVector;
 import io.raytracer.worldly.drawables.Drawable;
 import lombok.NonNull;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +19,7 @@ import java.util.stream.Stream;
 public class World implements IWorld {
     private ILightSource lightSource;
     private final List<Drawable> contents;
-    private final double acneTolerance = 1e-6;
+    private final int recursionDepth = 4;
 
     public World() {
         this.contents = new ArrayList<>();
@@ -77,11 +78,11 @@ public class World implements IWorld {
         return (shadowingHit.isPresent() && shadowingHit.get().getMaterialPoint().point.distance(point) < lightDistance.norm());
     }
 
-    IColour getReflectedColour(MaterialPoint point) {
-        if (point.object.getMaterial().reflectivity == 0) {
+    IColour getReflectedColour(@NotNull MaterialPoint point) {
+        if (point.object.getMaterial().reflectivity == 0 || point.inRay.getReflectionDepth() > this.recursionDepth) {
             return new Colour(0, 0, 0);
         }
-        IRay reflectedRay = new Ray(point.offsetPoint, point.reflectionVector);
+        IRay reflectedRay = Ray.reflectFrom(point);
         IColour reflectedColour = this.illuminate(reflectedRay);
         return reflectedColour.multiply(point.object.getMaterial().reflectivity);
     }

@@ -9,6 +9,7 @@ public interface IRay {
     IPoint getOrigin();
 
     IPoint getPosition(double parameter);
+    int getReflectionDepth();
 
     IRay getTransformed(ITransform t);
 }

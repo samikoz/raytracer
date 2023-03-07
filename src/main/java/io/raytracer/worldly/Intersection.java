@@ -24,8 +24,8 @@ public class Intersection {
         return new MaterialPoint(
             this.object,
             intersectionPoint,
+            this.ray,
             surfaceNormal,
-            this.ray.getDirection().reflect(surfaceNormal),
             eyeVector,
             false
         );

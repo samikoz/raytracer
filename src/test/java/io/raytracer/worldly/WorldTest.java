@@ -214,7 +214,7 @@ public class WorldTest {
         assertEquals(new Colour(0.87677, 0.92436, 0.82918), testWorld.illuminate(ray));
     }
 
-/*    @Test
+    @Test
     void illuminatingTwoParallelMirrors() {
         Material planeMaterial = Material.builder().reflectivity(1).build();
         Drawable leftPlane = new Plane(planeMaterial);
@@ -226,6 +226,6 @@ public class WorldTest {
         world.put(leftPlane).put(rightPlane);
         IRay ray = new Ray(new Point(0, 0, 0), new Vector(0, 1, 0));
 
-        assertEquals(new Colour(1, 1, 1), world.illuminate(ray));
-    }*/
+        assertEquals(new Colour(0, 0, 0), world.illuminate(ray));
+    }
 }

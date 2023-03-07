@@ -6,12 +6,24 @@ import io.raytracer.geometry.IVector;
 
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
-@RequiredArgsConstructor
 public class Ray implements IRay {
-    @Getter @NonNull private final IPoint origin;
-    @Getter @NonNull private final IVector direction;
+    @Getter private final IPoint origin;
+    @Getter private final IVector direction;
+    @Getter @Setter private int reflectionDepth;
+
+    public Ray(@NonNull IPoint origin, @NonNull IVector direction) {
+        this.origin = origin;
+        this.direction = direction;
+        this.reflectionDepth = 0;
+    }
+
+    public static Ray reflectFrom(MaterialPoint point) {
+        Ray reflectedRay = new Ray(point.offsetPoint, point.reflectionVector);
+        reflectedRay.reflectionDepth = point.inRay.getReflectionDepth() + 1;
+        return reflectedRay;
+    }
 
     @Override
     public IPoint getPosition(double parameter) {
