@@ -15,6 +15,7 @@ import io.raytracer.geometry.Vector;
 import io.raytracer.worldly.drawables.Drawable;
 import io.raytracer.worldly.drawables.Plane;
 import io.raytracer.worldly.drawables.Sphere;
+import io.raytracer.worldly.materials.Material;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 

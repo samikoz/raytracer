@@ -3,8 +3,6 @@ package io.raytracer.drawing.patterns;
 import io.raytracer.drawing.IColour;
 import io.raytracer.geometry.IPoint;
 
-import java.security.PublicKey;
-import java.util.Arrays;
 
 public class GradientPattern extends Pattern {
     private final IColour firstColour;

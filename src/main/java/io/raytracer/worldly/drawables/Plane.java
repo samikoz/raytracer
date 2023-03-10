@@ -4,7 +4,7 @@ import io.raytracer.geometry.IPoint;
 import io.raytracer.geometry.IVector;
 import io.raytracer.geometry.Vector;
 import io.raytracer.worldly.IRay;
-import io.raytracer.worldly.Material;
+import io.raytracer.worldly.materials.Material;
 import lombok.NonNull;
 
 import static java.lang.Math.abs;

@@ -5,7 +5,7 @@ import io.raytracer.geometry.Point;
 import io.raytracer.geometry.IVector;
 
 import io.raytracer.worldly.IRay;
-import io.raytracer.worldly.Material;
+import io.raytracer.worldly.materials.Material;
 import lombok.NonNull;
 
 public class Sphere extends Drawable {

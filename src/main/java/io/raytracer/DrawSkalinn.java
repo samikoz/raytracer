@@ -6,7 +6,7 @@ import io.raytracer.drawing.IPicture;
 import io.raytracer.drawing.Colour;
 import io.raytracer.drawing.patterns.CheckerPattern;
 import io.raytracer.drawing.patterns.Monopattern;
-import io.raytracer.worldly.Material;
+import io.raytracer.worldly.materials.Material;
 import io.raytracer.worldly.drawables.Drawable;
 import io.raytracer.worldly.drawables.Plane;
 import io.raytracer.worldly.drawables.Sphere;

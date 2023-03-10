@@ -3,6 +3,7 @@ package io.raytracer.worldly;
 import io.raytracer.drawing.Colour;
 import io.raytracer.geometry.IVector;
 import io.raytracer.worldly.drawables.Drawable;
+import io.raytracer.worldly.materials.Material;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;

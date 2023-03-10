@@ -8,7 +8,7 @@ import io.raytracer.worldly.IIntersections;
 import io.raytracer.worldly.IRay;
 import io.raytracer.worldly.Intersection;
 import io.raytracer.worldly.Intersections;
-import io.raytracer.worldly.Material;
+import io.raytracer.worldly.materials.Material;
 import lombok.Getter;
 import lombok.NonNull;
 

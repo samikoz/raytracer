@@ -8,7 +8,7 @@ import io.raytracer.drawing.patterns.GradientPattern;
 import io.raytracer.drawing.patterns.Monopattern;
 import io.raytracer.drawing.patterns.Pattern;
 import io.raytracer.drawing.patterns.StripedPattern;
-import io.raytracer.worldly.Material;
+import io.raytracer.worldly.materials.Material;
 import io.raytracer.worldly.drawables.Plane;
 import io.raytracer.worldly.drawables.Sphere;
 import io.raytracer.geometry.IPoint;

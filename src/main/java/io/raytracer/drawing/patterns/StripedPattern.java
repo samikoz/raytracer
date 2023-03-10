@@ -7,10 +7,10 @@ import lombok.NonNull;
 import java.util.Arrays;
 
 public class StripedPattern extends Pattern {
-    @NonNull private final IColour firstColour;
-    @NonNull private final IColour secondColour;
+    private final IColour firstColour;
+    private final IColour secondColour;
 
-    public StripedPattern(IColour firstColour, IColour secondColour) {
+    public StripedPattern(@NonNull IColour firstColour, @NonNull IColour secondColour) {
         super();
         this.firstColour = firstColour;
         this.secondColour = secondColour;

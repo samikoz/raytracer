@@ -1,13 +1,14 @@
-package io.raytracer.worldly;
+package io.raytracer.worldly.materials;
 
 import io.raytracer.drawing.Colour;
 import io.raytracer.drawing.patterns.Pattern;
 import io.raytracer.drawing.patterns.Monopattern;
 import lombok.Builder;
+import lombok.experimental.SuperBuilder;
 
 import java.util.Arrays;
 
-@Builder(toBuilder = true)
+@SuperBuilder(toBuilder = true)
 public class Material {
     @Builder.Default public final Pattern pattern = new Monopattern(new Colour(0, 0, 0));
     public final double ambient;
@@ -15,6 +16,9 @@ public class Material {
     public final double specular;
     public final double shininess;
     public final double reflectivity;
+    public final double transparency;
+    @Builder.Default
+    public final double refractive_index = 1;
     private static final double equalityTolerance = 1e-3;
 
     @Override
