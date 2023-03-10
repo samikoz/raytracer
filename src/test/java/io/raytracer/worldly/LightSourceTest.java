@@ -25,7 +25,7 @@ public class LightSourceTest {
     @BeforeEach
     void setupMaterialAndPosition() {
         material = Material.builder()
-                .pattern(new Monopattern(new Colour(1, 1, 1))).ambient(0.1).diffuse(0.9).specular(0.9).shininess(200)
+                .pattern(new Monopattern(new Colour(1, 1, 1))).ambient(0.1).diffuse(0.9).specular(0.9).shininess(200.0)
                 .build();
         position = new Point(0, 0, 0);
     }
@@ -140,7 +140,7 @@ public class LightSourceTest {
         boolean shadowed = false;
         Material patternedMaterial = Material.builder()
             .pattern(new StripedPattern(white, black))
-            .ambient(1).diffuse(0).specular(0).shininess(200)
+            .ambient(1.0).diffuse(0.0).specular(0.0).shininess(200.0)
             .build();
         ILightSource source = new LightSource(new Colour(1, 1, 1), new Point(0, 0, -10));
         MaterialPoint firstIlluminated = new MaterialPoint(
@@ -158,7 +158,7 @@ public class LightSourceTest {
         IColour black = new Colour(0, 0, 0);
         Material patternedMaterial = Material.builder()
                 .pattern(new StripedPattern(white, black))
-                .ambient(1).diffuse(0).specular(0).shininess(200)
+                .ambient(1.0).diffuse(0.0).specular(0.0).shininess(200.0)
                 .build();
         Drawable sphere = new Sphere(patternedMaterial);
         sphere.setTransform(ThreeTransform.scaling(2, 2, 2));
@@ -177,7 +177,7 @@ public class LightSourceTest {
         stripedPattern.setTransform(ThreeTransform.scaling(2, 2, 2));
         Material patternedMaterial = Material.builder()
                 .pattern(stripedPattern)
-                .ambient(1).diffuse(0).specular(0).shininess(200)
+                .ambient(1.0).diffuse(0.0).specular(0.0).shininess(200.0)
                 .build();
         Drawable sphere = new Sphere(patternedMaterial);
         LightSource source = new LightSource(new Colour(1, 1, 1), new Point(0, 0, -10));
@@ -195,7 +195,7 @@ public class LightSourceTest {
         stripedPattern.setTransform(ThreeTransform.translation(0.5, 0, 0));
         Material patternedMaterial = Material.builder()
                 .pattern(stripedPattern)
-                .ambient(1).diffuse(0).specular(0).shininess(200)
+                .ambient(1.0).diffuse(0.0).specular(0.0).shininess(200.0)
                 .build();
         Drawable sphere = new Sphere(patternedMaterial);
         sphere.setTransform(ThreeTransform.scaling(2, 2, 2));

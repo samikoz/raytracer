@@ -28,14 +28,14 @@ public class DrawBasicWorld {
     public static void main(String[] args) throws IOException {
         Material wallMaterial = Material.builder()
                 .pattern(new Monopattern(new Colour(1, 0.9, 0.9)))
-                .specular(0)
+                .specular(0.0)
                 .ambient(0.1)
                 .diffuse(0.9)
-                .shininess(200)
+                .shininess(200.0)
                 .build();
         Plane floor = new Plane(wallMaterial);
 
-        Material sphereMaterial = Material.builder().diffuse(0.7).specular(0.3).ambient(0.1).shininess(200).build();
+        Material sphereMaterial = Material.builder().diffuse(0.7).specular(0.3).ambient(0.1).shininess(200.0).build();
 
         Material leftMaterial = sphereMaterial.toBuilder().pattern(new StripedPattern(new Colour(1, 1, 1), new Colour(0, 1, 0))).build();
         Sphere leftSphere = new Sphere(leftMaterial);

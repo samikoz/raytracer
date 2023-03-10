@@ -33,10 +33,10 @@ public class DrawSkalinn {
 
         Material floorMaterial = Material.builder()
                 .pattern(new CheckerPattern(new Colour(0, 0, 0), new Colour(1, 1, 1)))
-                .specular(0)
+                .specular(0.0)
                 .ambient(0.1)
                 .diffuse(0.9)
-                .shininess(200)
+                .shininess(200.0)
                 .reflectivity(0.5)
                 .build();
         Plane floor = new Plane(floorMaterial);
@@ -44,7 +44,7 @@ public class DrawSkalinn {
 
         Material.MaterialBuilder sphereMaterialBuilder = Material.builder()
                 .pattern(new Monopattern(new Colour(1, 0, 0)))
-                .specular(0.3).ambient(0.1).shininess(100);
+                .specular(0.3).ambient(0.1).shininess(100.0);
 
         for (int sphereIndex = 0; sphereIndex < spheresCount; sphereIndex++) {
             Material sphereMaterial = sphereMaterialBuilder.diffuse(0.7 - 0.35*(sphereIndex/(float)spheresCount)).build();
