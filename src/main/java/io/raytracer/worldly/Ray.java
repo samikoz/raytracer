@@ -22,7 +22,7 @@ public class Ray implements IRay {
     }
 
     public static Ray reflectFrom(MaterialPoint point) {
-        Ray reflectedRay = new Ray(point.offsetPoint, point.reflectionVector);
+        Ray reflectedRay = new Ray(point.offsetAbove, point.reflectionVector);
         reflectedRay.reflectionDepth = point.inRay.getReflectionDepth() + 1;
         return reflectedRay;
     }

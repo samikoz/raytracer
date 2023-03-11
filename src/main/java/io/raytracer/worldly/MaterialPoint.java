@@ -8,7 +8,8 @@ import io.raytracer.geometry.IVector;
 public class MaterialPoint {
     public final Drawable object;
     public final IPoint point;
-    public final IPoint offsetPoint;
+    public final IPoint offsetAbove;
+    public final IPoint offsetBelow;
     public final IRay inRay;
     public final IVector eyeVector;
     public final IVector normalVector;
@@ -24,7 +25,8 @@ public class MaterialPoint {
         this.object = object;
         this.point = point;
         this.normalVector = normal;
-        this.offsetPoint = this.point.add(this.normalVector.multiply(1e-6));
+        this.offsetAbove = this.point.add(this.normalVector.multiply(1e-6));
+        this.offsetBelow = this.point.subtract(this.normalVector.multiply(1e-6));
         this.inRay = incomingRay;
         this.eyeVector = eyeVector;
         this.reflectionVector = this.inRay.getDirection().reflect(normalVector);
