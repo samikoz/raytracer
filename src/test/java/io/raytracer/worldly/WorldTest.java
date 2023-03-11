@@ -161,8 +161,9 @@ public class WorldTest {
         Optional<Hit> hit = Hit.fromIntersections(defaultWorld.intersect(ray));
         assertTrue(hit.isPresent());
         MaterialPoint realPoint = hit.get().getMaterialPoint();
+        IColour reflectedColour = defaultWorld.getReflectedColour(realPoint);
         
-        assertEquals(new Colour(0, 0, 0), defaultWorld.getReflectedColour(realPoint));
+        assertEquals(new Colour(0, 0, 0), reflectedColour);
     }
 
     @Test
@@ -219,5 +220,17 @@ public class WorldTest {
         IRay ray = new Ray(new Point(0, 0, 0), new Vector(0, 1, 0));
 
         assertEquals(new Colour(0, 0, 0), world.illuminate(ray));
+    }
+
+    @Test
+    void getRefractedColourFromOpaqueSurface() {
+        IRay ray = new Ray(new Point(0, 0, -5), new Vector(0, 0, 1));
+
+        Optional<Hit> hit = Hit.fromIntersections(defaultWorld.intersect(ray));
+        assertTrue(hit.isPresent());
+        MaterialPoint realPoint = hit.get().getMaterialPoint();
+        IColour refractedColour = defaultWorld.getReflectedColour(realPoint);
+
+        assertEquals(new Colour(0, 0, 0), refractedColour);
     }
 }

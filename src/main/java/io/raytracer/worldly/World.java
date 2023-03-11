@@ -5,6 +5,7 @@ import io.raytracer.drawing.Colour;
 import io.raytracer.geometry.IPoint;
 import io.raytracer.geometry.IVector;
 import io.raytracer.worldly.drawables.Drawable;
+import io.raytracer.worldly.materials.Material;
 import lombok.NonNull;
 import org.jetbrains.annotations.NotNull;
 
@@ -68,5 +69,12 @@ public class World implements IWorld {
         IRay reflectedRay = Ray.reflectFrom(point);
         IColour reflectedColour = this.illuminate(reflectedRay);
         return reflectedColour.multiply(point.object.getMaterial().reflectivity);
+    }
+
+    IColour getRefractedColour(@NonNull MaterialPoint point) {
+        if (point.object.getMaterial().transparency == 0) {
+            return new Colour(0, 0, 0);
+        }
+        return new Colour(1, 1, 1);
     }
 }
