@@ -5,10 +5,9 @@ import io.raytracer.geometry.ThreeTransform;
 import io.raytracer.geometry.ITransform;
 import io.raytracer.geometry.IVector;
 import io.raytracer.geometry.Vector;
-import io.raytracer.worldly.IIntersections;
 import io.raytracer.worldly.IRay;
+import io.raytracer.worldly.Intersection;
 import io.raytracer.worldly.Ray;
-import io.raytracer.worldly.drawables.Sphere;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -66,58 +65,58 @@ public class SphereTest {
     void intersectCorrectParameters() {
         IRay ray = new Ray(new Point(0, 0, -5), new Vector(0, 0, 1));
         Sphere sphere = new Sphere();
-        IIntersections intersections = sphere.intersect(ray);
+        Intersection[] intersections = sphere.intersect(ray);
 
-        assertEquals(2, intersections.count(), "Should have two intersections.");
-        assertEquals(4.0, intersections.get(0).rayParameter, "The first intersection should be at 4.0.");
+        assertEquals(2, intersections.length, "Should have two intersections.");
+        assertEquals(4.0, intersections[0].rayParameter, "The first intersection should be at 4.0.");
     }
 
     @Test
     void intersectionCorrectObject() {
         IRay ray = new Ray(new Point(0, 0, -5), new Vector(0, 0, 1));
         Sphere sphere = new Sphere();
-        IIntersections intersections = sphere.intersect(ray);
+        Intersection[] intersections = sphere.intersect(ray);
 
-        assertEquals(sphere, intersections.get(0).object, "The first intersection should be with the sphere.");
+        assertEquals(sphere, intersections[0].object, "The first intersection should be with the sphere.");
     }
 
     @Test
     void intersectWhenRayTangent() {
         IRay ray = new Ray(new Point(0, 1, -5), new Vector(0, 0, 1));
         Sphere sphere = new Sphere();
-        IIntersections intersections = sphere.intersect(ray);
+        Intersection[] intersections = sphere.intersect(ray);
 
-        assertEquals(2, intersections.count(), "Should have two (tangent) intersections.");
-        assertEquals(5.0, intersections.get(1).rayParameter, "The second intersection should be at 5.0.");
+        assertEquals(2, intersections.length, "Should have two (tangent) intersections.");
+        assertEquals(5.0, intersections[1].rayParameter, "The second intersection should be at 5.0.");
     }
 
     @Test
     void intersectWhenRayMisses() {
         IRay ray = new Ray(new Point(0, 2, -5), new Vector(0, 0, 1));
         Sphere sphere = new Sphere();
-        IIntersections intersections = sphere.intersect(ray);
+        Intersection[] intersections = sphere.intersect(ray);
 
-        assertEquals(0, intersections.count(), "Shouldn't have any intersections.");
+        assertEquals(0, intersections.length, "Shouldn't have any intersections.");
     }
 
     @Test
     void intersectRayInside() {
         IRay ray = new Ray(new Point(0, 0, 0), new Vector(0, 0, 1));
         Sphere sphere = new Sphere();
-        IIntersections intersections = sphere.intersect(ray);
+        Intersection[] intersections = sphere.intersect(ray);
 
-        assertEquals(2, intersections.count(), "Should have two intersections.");
-        assertEquals(-1, intersections.get(0).rayParameter, "The first intersection should be at -1.0.");
+        assertEquals(2, intersections.length, "Should have two intersections.");
+        assertEquals(-1, intersections[0].rayParameter, "The first intersection should be at -1.0.");
     }
 
     @Test
     void intersectionBehindRay() {
         IRay ray = new Ray(new Point(0, 0, 5), new Vector(0, 0, 1));
         Sphere sphere = new Sphere();
-        IIntersections intersections = sphere.intersect(ray);
+        Intersection[] intersections = sphere.intersect(ray);
 
-        assertEquals(2, intersections.count(), "Should have two intersections.");
-        assertEquals(-4.0, intersections.get(1).rayParameter, "The second intersection should be at -4.0.");
+        assertEquals(2, intersections.length, "Should have two intersections.");
+        assertEquals(-4.0, intersections[1].rayParameter, "The second intersection should be at -4.0.");
     }
 
     @Test
@@ -125,10 +124,10 @@ public class SphereTest {
         IRay ray = new Ray(new Point(0, 0, -5), new Vector(0, 0, 1));
         Sphere sphere = new Sphere();
         sphere.setTransform(ThreeTransform.scaling(2, 2, 2));
-        IIntersections intersections = sphere.intersect(ray);
+        Intersection[] intersections = sphere.intersect(ray);
 
-        assertEquals(2, intersections.count(), "Should have two intersections.");
-        assertEquals(7, intersections.get(1).rayParameter, "The second intersection should be at 7.");
+        assertEquals(2, intersections.length, "Should have two intersections.");
+        assertEquals(7, intersections[1].rayParameter, "The second intersection should be at 7.");
     }
 
     @Test
@@ -136,9 +135,9 @@ public class SphereTest {
         IRay ray = new Ray(new Point(0, 0, -5), new Vector(0, 0, 1));
         Sphere sphere = new Sphere();
         sphere.setTransform(ThreeTransform.translation(5, 0, 0));
-        IIntersections intersections = sphere.intersect(ray);
+        Intersection[] intersections = sphere.intersect(ray);
 
-        assertEquals(0, intersections.count(), "Should have no intersections.");
+        assertEquals(0, intersections.length, "Should have no intersections.");
     }
 
 }

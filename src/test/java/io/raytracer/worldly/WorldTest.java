@@ -158,7 +158,7 @@ public class WorldTest {
     void getReflectedColourFromNonReflectiveSurface() {
         IRay ray = new Ray(new Point(0, 0, 0), new Vector(0, 0, 1));
 
-        Optional<Hit> hit = defaultWorld.intersect(ray).getHit();
+        Optional<Hit> hit = Hit.fromIntersections(defaultWorld.intersect(ray));
         assertTrue(hit.isPresent());
         MaterialPoint realPoint = hit.get().getMaterialPoint();
         
@@ -179,7 +179,7 @@ public class WorldTest {
         testWorld.put(new LightSource(new Colour(1, 1, 1), new Point(-10, 10, -10)));
         testWorld.put(sphere).put(plane);
 
-        Optional<Hit> hit = testWorld.intersect(ray).getHit();
+        Optional<Hit> hit = Hit.fromIntersections(testWorld.intersect(ray));
         assertTrue(hit.isPresent());
         MaterialPoint realPoint = hit.get().getMaterialPoint();
 

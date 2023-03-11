@@ -12,6 +12,7 @@ import lombok.NonNull;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -53,7 +54,7 @@ public class World implements IWorld {
     }
 
     IColour illuminate(@NonNull IRay ray) {
-        Optional<Hit> hit = this.intersect(ray).getHit();
+        Optional<Hit> hit = Hit.fromIntersections(this.intersect(ray));
         if (hit.isPresent()) {
             MaterialPoint realPoint = hit.get().getMaterialPoint();
             realPoint.shadowed = this.isShadowed(realPoint.offsetPoint);
@@ -65,16 +66,16 @@ public class World implements IWorld {
         }
     }
 
-    IIntersections intersect(@NonNull IRay ray) {
-        Stream<Intersections> s = contents.stream().map(object -> (Intersections) object.intersect(ray));
-        return s.reduce(Intersections::combine).orElse(new Intersections());
+    Intersection[] intersect(@NonNull IRay ray) {
+        Stream<Intersection> s = contents.stream().map(object -> object.intersect(ray)).flatMap(Arrays::stream);
+        return s.sorted().toArray(Intersection[]::new);
     }
 
     boolean isShadowed(IPoint point) {
         IVector lightDistance = this.lightSource.getPosition().subtract(point);
         IVector lightDirection = lightDistance.normalise();
         IRay lightRay = new Ray(point, lightDirection);
-        Optional<Hit> shadowingHit = this.intersect(lightRay).getHit();
+        Optional<Hit> shadowingHit = Hit.fromIntersections(this.intersect(lightRay));
         return (shadowingHit.isPresent() && shadowingHit.get().getMaterialPoint().point.distance(point) < lightDistance.norm());
     }
 

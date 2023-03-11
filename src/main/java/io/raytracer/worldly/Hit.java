@@ -5,16 +5,23 @@ import lombok.NonNull;
 import lombok.ToString;
 
 import java.util.Arrays;
+import java.util.Comparator;
+import java.util.Optional;
 
 
 @ToString
 public class Hit extends Intersection {
-    private Hit(IRay ray, double rayParameter, @NonNull Drawable object) {
+    public final double refractiveFrom;
+    public final double refractiveTo;
+    private Hit(IRay ray, double rayParameter, @NonNull Drawable object, double refractiveFrom, double refractiveTo) {
         super(ray, rayParameter, object);
+        this.refractiveFrom = refractiveFrom;
+        this.refractiveTo = refractiveTo;
     }
 
-    static Hit fromIntersection(Intersection inter) {
-        return new Hit(inter.ray, inter.rayParameter, inter.object);
+    static Optional<Hit> fromIntersections(Intersection[] inters) {
+        Optional<Intersection> firstPositive = Arrays.stream(inters).filter(i -> i.rayParameter > 0).min(Comparator.comparingDouble(i -> i.rayParameter));
+        return firstPositive.map(inter -> new Hit(inter.ray, inter.rayParameter, inter.object, 1, 1));
     }
 
     @Override

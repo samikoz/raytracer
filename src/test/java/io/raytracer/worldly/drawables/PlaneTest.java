@@ -3,7 +3,6 @@ package io.raytracer.worldly.drawables;
 import io.raytracer.geometry.Point;
 import io.raytracer.geometry.Vector;
 import io.raytracer.worldly.IRay;
-import io.raytracer.worldly.Intersections;
 import io.raytracer.worldly.Ray;
 import org.junit.jupiter.api.Test;
 
