@@ -7,16 +7,19 @@ import java.util.function.IntToDoubleFunction;
 class Tuple implements ITuple {
     private final int dim;
     private final double[] coords;
-    private final static double equalityTolerance = 1e-3;
 
     public Tuple(double... coordinates) {
         dim = coordinates.length;
         coords = coordinates;
     }
 
+    private int[] roundCoordinates(ITuple t) {
+        return IntStream.range(0, dim).map(i -> (int)t.get(i)*1000).toArray();
+    }
+
     @Override
     public int hashCode() {
-        return Arrays.hashCode(coords);
+        return Arrays.hashCode(this.roundCoordinates(this));
     }
 
     @Override
@@ -24,7 +27,7 @@ class Tuple implements ITuple {
         if (them == null || this.getClass() != them.getClass()) return false;
 
         ITuple themTuple = (ITuple) them;
-        return (this.dim == themTuple.dim() && this.euclideanDistance(themTuple) < equalityTolerance);
+        return (this.dim == themTuple.dim() && Arrays.equals(this.roundCoordinates(this), this.roundCoordinates(themTuple)));
     }
 
     @Override

@@ -19,7 +19,7 @@ import java.util.stream.Stream;
 public class World implements IWorld {
     private ILightSource lightSource;
     private final List<Drawable> contents;
-    private final int recursionDepth = 4;
+    private static final int recursionDepth = 4;
 
     public World() {
         this.contents = new ArrayList<>();
@@ -53,7 +53,7 @@ public class World implements IWorld {
     }
 
     IColour illuminate(@NonNull IRay ray) {
-        Optional<Intersection> hit = this.intersect(ray).getHit();
+        Optional<Hit> hit = this.intersect(ray).getHit();
         if (hit.isPresent()) {
             MaterialPoint realPoint = hit.get().getMaterialPoint();
             realPoint.shadowed = this.isShadowed(realPoint.offsetPoint);
@@ -74,12 +74,12 @@ public class World implements IWorld {
         IVector lightDistance = this.lightSource.getPosition().subtract(point);
         IVector lightDirection = lightDistance.normalise();
         IRay lightRay = new Ray(point, lightDirection);
-        Optional<Intersection> shadowingHit = this.intersect(lightRay).getHit();
+        Optional<Hit> shadowingHit = this.intersect(lightRay).getHit();
         return (shadowingHit.isPresent() && shadowingHit.get().getMaterialPoint().point.distance(point) < lightDistance.norm());
     }
 
     IColour getReflectedColour(@NotNull MaterialPoint point) {
-        if (point.object.getMaterial().reflectivity == 0 || point.inRay.getReflectionDepth() > this.recursionDepth) {
+        if (point.object.getMaterial().reflectivity == 0 || point.inRay.getReflectionDepth() > World.recursionDepth) {
             return new Colour(0, 0, 0);
         }
         IRay reflectedRay = Ray.reflectFrom(point);

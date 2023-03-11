@@ -4,7 +4,6 @@ import org.apache.commons.lang3.ArrayUtils;
 
 import java.util.Arrays;
 import java.util.Comparator;
-import java.util.List;
 import java.util.Optional;
 
 public class Intersections implements IIntersections {
@@ -35,7 +34,8 @@ public class Intersections implements IIntersections {
     }
 
     @Override
-    public Optional<Intersection> getHit() {
-        return Arrays.stream(intersections).filter(i -> i.rayParameter > 0).min(Comparator.comparingDouble(i -> i.rayParameter));
+    public Optional<Hit> getHit() {
+        Optional<Intersection> firstPositive = Arrays.stream(intersections).filter(i -> i.rayParameter > 0).min(Comparator.comparingDouble(i -> i.rayParameter));
+        return firstPositive.map(Hit::fromIntersection);
     }
 }

@@ -8,6 +8,8 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
 
+import java.util.Arrays;
+
 public class Ray implements IRay {
     @Getter private final IPoint origin;
     @Getter private final IVector direction;
@@ -33,5 +35,21 @@ public class Ray implements IRay {
     @Override
     public IRay getTransformed(ITransform t) {
         return new Ray(this.origin.transform(t), this.direction.transform(t));
+    }
+
+    @Override
+    public boolean equals(Object them) {
+        if (them == null || this.getClass() != them.getClass()) return false;
+
+        Ray themRay = (Ray) them;
+        return (
+            this.origin.equals(themRay.origin) && this.direction.equals(themRay.direction) &&
+            this.reflectionDepth == themRay.reflectionDepth
+        );
+    }
+
+    @Override
+    public int hashCode() {
+        return Arrays.hashCode(new int[] { this.origin.hashCode(), this.direction.hashCode(), this.reflectionDepth });
     }
 }

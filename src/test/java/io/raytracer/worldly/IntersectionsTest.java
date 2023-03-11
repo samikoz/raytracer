@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class IntersectionListTest {
+public class IntersectionsTest {
 
     static IRay testRay;
 
@@ -93,8 +93,9 @@ public class IntersectionListTest {
         Intersection i1 = new Intersection(testRay,2.0, new Sphere());
         Intersection i2 = new Intersection(testRay,0.1, new Sphere());
         IIntersections intersections = new Intersections(i1, i2);
+        Hit expectedHit = Hit.fromIntersection(i2);
 
-        assertEquals(i2, intersections.getHit().orElseThrow(NullPointerException::new),
+        assertEquals(expectedHit, intersections.getHit().orElseThrow(NullPointerException::new),
                 "Hit should be with the lowest positive time value.");
     }
 
@@ -103,8 +104,9 @@ public class IntersectionListTest {
         Intersection i1 = new Intersection(testRay,2.0, new Sphere());
         Intersection i2 = new Intersection(testRay,-0.1, new Sphere());
         IIntersections intersections = new Intersections(i1, i2);
+        Hit expectedHit = Hit.fromIntersection(i1);
 
-        assertEquals(i1, intersections.getHit().orElseThrow(NullPointerException::new),
+        assertEquals(expectedHit, intersections.getHit().orElseThrow(NullPointerException::new),
                 "Hit should be with the lowest positive time value.");
     }
 
