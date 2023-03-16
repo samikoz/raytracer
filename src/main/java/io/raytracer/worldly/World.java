@@ -5,7 +5,6 @@ import io.raytracer.drawing.Colour;
 import io.raytracer.geometry.IPoint;
 import io.raytracer.geometry.IVector;
 import io.raytracer.worldly.drawables.Drawable;
-import io.raytracer.worldly.materials.Material;
 import lombok.NonNull;
 import org.jetbrains.annotations.NotNull;
 
@@ -43,7 +42,8 @@ public class World implements IWorld {
             realPoint.shadowed = this.isShadowed(realPoint.offsetAbove);
             IColour surfaceColour = lightSource.illuminate(realPoint);
             IColour reflectedColour = this.getReflectedColour(realPoint);
-            return surfaceColour.add(reflectedColour);
+            IColour refractedColour = this.getRefractedColour(realPoint);
+            return surfaceColour.add(reflectedColour).add(refractedColour);
         } else {
             return new Colour(0, 0, 0);
         }
@@ -63,7 +63,7 @@ public class World implements IWorld {
     }
 
     IColour getReflectedColour(@NotNull MaterialPoint point) {
-        if (point.object.getMaterial().reflectivity == 0 || point.inRay.getReflectionDepth() > World.recursionDepth) {
+        if (point.object.getMaterial().reflectivity == 0 || point.inRay.getRecast() > World.recursionDepth) {
             return new Colour(0, 0, 0);
         }
         IRay reflectedRay = Ray.reflectFrom(point);
@@ -77,12 +77,15 @@ public class World implements IWorld {
         }
 
         double refractedRatio = point.refractiveIndexFrom / point.refractiveIndexTo;
-        double cosIncident = point.eyeVector.normalise().dot(point.normalVector.normalise());
+        double cosIncident = point.eyeVector.dot(point.normalVector);
         double sinRefractedSquared = Math.pow(refractedRatio, 2)*(1 - Math.pow(cosIncident, 2));
         if (sinRefractedSquared > 1) {
             //total internal reflection
             return new Colour(0, 0, 0);
         }
-        return new Colour(1, 1, 1);
+
+        IRay refractedRay = Ray.refractFrom(point);
+        IColour refractedColour = this.illuminate(refractedRay);
+        return refractedColour.multiply(point.object.getMaterial().transparency);
     }
 }

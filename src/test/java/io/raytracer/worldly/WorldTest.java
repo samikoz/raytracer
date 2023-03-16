@@ -7,6 +7,7 @@ import io.raytracer.drawing.IPicture;
 import io.raytracer.drawing.IColour;
 import io.raytracer.drawing.Colour;
 import io.raytracer.drawing.patterns.Monopattern;
+import io.raytracer.drawing.patterns.TestPattern;
 import io.raytracer.geometry.IPoint;
 import io.raytracer.geometry.Point;
 import io.raytracer.geometry.ThreeTransform;
@@ -250,5 +251,42 @@ public class WorldTest {
         IColour refractedColour = world.getRefractedColour(realPoint);
 
         assertEquals(new Colour(0, 0, 0), refractedColour);
+    }
+
+    @Test
+    void getRefractedColour() {
+        Drawable outer = new Sphere(outerMaterial.toBuilder().ambient(1.0).pattern(new TestPattern()).build());
+        Drawable inner = new Sphere(innerMaterial.toBuilder().transparency(1.0).refractiveIndex(1.5).build());
+        inner.setTransform(ThreeTransform.scaling(0.5, 0.5, 0.5));
+        World world = new World();
+        world.put(outer).put(inner).put(new LightSource(new Colour(1, 1, 1), new Point(-10, 10, -10)));
+        IRay ray = new Ray(new Point(0, 0, 0.1), new Vector(0, 1, 0));
+
+        Optional<Hit> hit = Hit.fromIntersections(world.intersect(ray));
+        assertTrue(hit.isPresent());
+        MaterialPoint realPoint = hit.get().getMaterialPoint();
+        IColour refractedColour = world.getRefractedColour(realPoint);
+
+        assertEquals(new Colour(0, 0.99888, 0.04725), refractedColour);
+    }
+
+    @Test
+    void illuminatingWithRefractiveMaterial() {
+        Material planeMaterial = Material.builder().pattern(new Monopattern(new Colour(1, 1, 1)))
+            .diffuse(0.9).specular(0.9).shininess(200.0).ambient(0.1).transparency(0.5).refractiveIndex(1.5).build();
+        Drawable floor = new Plane(planeMaterial);
+        floor.setTransform(ThreeTransform.translation(0, -1, 0));
+        Material belowMaterial = Material.builder().pattern(new Monopattern(new Colour(1, 0, 0)))
+                .diffuse(0.9).specular(0.9).shininess(200.0).ambient(0.5).build();
+        Drawable below = new Sphere(belowMaterial);
+        below.setTransform(ThreeTransform.translation(0, -3.5, -0.5));
+        IWorld world = new World().put(new LightSource(new Colour(1, 1, 1), new Point(-10, 10, -10)));
+        world.put(floor).put(below);
+        IRay ray = new Ray(new Point(0, 0, -3), new Vector(0, -Math.sqrt(2)/2, Math.sqrt(2)/2));
+
+        IColour expectedColor = new Colour(0.93642, 0.68642, 0.68642);
+        IColour actualColor = world.illuminate(ray);
+
+        assertEquals(expectedColor, actualColor);
     }
 }

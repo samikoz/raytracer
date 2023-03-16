@@ -24,11 +24,11 @@ public class MaterialPoint {
 
         this.object = object;
         this.point = point;
-        this.normalVector = normal;
+        this.normalVector = normal.normalise();
         this.offsetAbove = this.point.add(this.normalVector.multiply(1e-6));
         this.offsetBelow = this.point.subtract(this.normalVector.multiply(1e-6));
         this.inRay = incomingRay;
-        this.eyeVector = eyeVector;
+        this.eyeVector = eyeVector.normalise();
         this.reflectionVector = this.inRay.getDirection().reflect(normalVector);
         this.refractiveIndexFrom = refractiveIndexFrom;
         this.refractiveIndexTo = refractiveIndexTo;

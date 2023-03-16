@@ -14,7 +14,7 @@ class Tuple implements ITuple {
     }
 
     private int[] roundCoordinates(ITuple t) {
-        return IntStream.range(0, dim).map(i -> (int)t.get(i)*1000).toArray();
+        return IntStream.range(0, dim).map(i -> (int)(t.get(i)*1000)).toArray();
     }
 
     @Override
