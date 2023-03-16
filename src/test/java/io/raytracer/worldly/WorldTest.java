@@ -229,7 +229,25 @@ public class WorldTest {
         Optional<Hit> hit = Hit.fromIntersections(defaultWorld.intersect(ray));
         assertTrue(hit.isPresent());
         MaterialPoint realPoint = hit.get().getMaterialPoint();
-        IColour refractedColour = defaultWorld.getReflectedColour(realPoint);
+        IColour refractedColour = defaultWorld.getRefractedColour(realPoint);
+
+        assertEquals(new Colour(0, 0, 0), refractedColour);
+    }
+
+    @Test
+    void getRefractedColourForTotalInternalReflection() {
+        IRay ray = new Ray(new Point(0, 0, Math.sqrt(2) / 2), new Vector(0, 1, 0));
+        Material sphereMaterial = Material.builder()
+                .diffuse(0.7).specular(0.2).ambient(0.1).shininess(200.0).transparency(1.0).refractiveIndex(1.5)
+                .pattern(new Monopattern(new Colour(0.8, 1.0, 0.6))).build();
+        Drawable sphere = new Sphere(sphereMaterial);
+        World world = new World();
+        world.put(new LightSource(new Colour(1, 1, 1), new Point(0, 0, 0))).put(sphere);
+
+        Optional<Hit> hit = Hit.fromIntersections(world.intersect(ray));
+        assertTrue(hit.isPresent());
+        MaterialPoint realPoint = hit.get().getMaterialPoint();
+        IColour refractedColour = world.getRefractedColour(realPoint);
 
         assertEquals(new Colour(0, 0, 0), refractedColour);
     }

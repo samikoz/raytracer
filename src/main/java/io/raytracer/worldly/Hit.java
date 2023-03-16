@@ -67,13 +67,13 @@ public class Hit extends Intersection {
             surfaceNormal = surfaceNormal.negate();
         }
         return new MaterialPoint(
-                this.object,
-                intersectionPoint,
-                this.ray,
-                eyeVector,
-                surfaceNormal, this.refractiveFrom,
-                this.refractiveTo,
-                false
+            this.object,
+            intersectionPoint,
+            this.ray,
+            eyeVector,
+            surfaceNormal, this.refractiveFrom,
+            this.refractiveTo,
+            false
         );
     }
 
