@@ -243,7 +243,7 @@ public class WorldTest {
                 .pattern(new Monopattern(new Colour(0.8, 1.0, 0.6))).build();
         Drawable sphere = new Sphere(sphereMaterial);
         World world = new World();
-        world.put(new LightSource(new Colour(1, 1, 1), new Point(0, 0, 0))).put(sphere);
+        world.put(new LightSource(new Colour(1, 1, 1), new Point(-10, 10, -10))).put(sphere);
 
         Optional<Hit> hit = Hit.fromIntersections(world.intersect(ray));
         assertTrue(hit.isPresent());

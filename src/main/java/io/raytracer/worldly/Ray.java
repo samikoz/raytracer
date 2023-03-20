@@ -31,6 +31,7 @@ public class Ray implements IRay {
         double refractedRatio = point.refractiveIndexFrom / point.refractiveIndexTo;
         double cosIncident = point.eyeVector.dot(point.normalVector);
         double sinRefractedSquared = Math.pow(refractedRatio, 2)*(1 - Math.pow(cosIncident, 2));
+        assert sinRefractedSquared <= 1;
         double cosRefracted = Math.sqrt(1 - sinRefractedSquared);
         IVector refractedDirection = point.normalVector.multiply(refractedRatio*cosIncident - cosRefracted)
                 .subtract(point.eyeVector.multiply(refractedRatio));

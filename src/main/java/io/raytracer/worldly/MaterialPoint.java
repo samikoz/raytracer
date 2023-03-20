@@ -16,6 +16,7 @@ public class MaterialPoint {
     public final IVector reflectionVector;
     public final double refractiveIndexFrom;
     public final double refractiveIndexTo;
+    public final double reflectance;
     public boolean shadowed;
 
     public MaterialPoint(@NonNull Drawable object, @NonNull IPoint point, @NonNull IRay incomingRay,
@@ -33,5 +34,19 @@ public class MaterialPoint {
         this.refractiveIndexFrom = refractiveIndexFrom;
         this.refractiveIndexTo = refractiveIndexTo;
         this.shadowed = shadowed;
+
+        this.reflectance = this.getReflectance();
+    }
+
+    private double getReflectance() {
+        double cosIncident = this.eyeVector.dot(this.normalVector);
+        if (this.refractiveIndexFrom > this.refractiveIndexTo) {
+            double refractiveRatio = this.refractiveIndexFrom / this.refractiveIndexTo;
+            double sinRefractedSquared = Math.pow(refractiveRatio, 2)*(1 - Math.pow(cosIncident, 2));
+            if (sinRefractedSquared > 1) {
+                return 1;
+            }
+        }
+        return 0;
     }
 }

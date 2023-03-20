@@ -76,11 +76,7 @@ public class World implements IWorld {
             return new Colour(0, 0, 0);
         }
 
-        double refractedRatio = point.refractiveIndexFrom / point.refractiveIndexTo;
-        double cosIncident = point.eyeVector.dot(point.normalVector);
-        double sinRefractedSquared = Math.pow(refractedRatio, 2)*(1 - Math.pow(cosIncident, 2));
-        if (sinRefractedSquared > 1) {
-            //total internal reflection
+        if (point.reflectance == 1.0) {
             return new Colour(0, 0, 0);
         }
 
