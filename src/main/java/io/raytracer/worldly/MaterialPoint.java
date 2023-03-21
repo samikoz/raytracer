@@ -39,14 +39,16 @@ public class MaterialPoint {
     }
 
     private double getReflectance() {
-        double cosIncident = this.eyeVector.dot(this.normalVector);
+        double cos = this.eyeVector.dot(this.normalVector);
         if (this.refractiveIndexFrom > this.refractiveIndexTo) {
             double refractiveRatio = this.refractiveIndexFrom / this.refractiveIndexTo;
-            double sinRefractedSquared = Math.pow(refractiveRatio, 2)*(1 - Math.pow(cosIncident, 2));
+            double sinRefractedSquared = Math.pow(refractiveRatio, 2)*(1 - Math.pow(cos, 2));
             if (sinRefractedSquared > 1) {
                 return 1;
             }
+            cos = Math.sqrt(1 - sinRefractedSquared);
         }
-        return 0;
+        double r = Math.pow(((this.refractiveIndexFrom - this.refractiveIndexTo) / (this.refractiveIndexFrom + this.refractiveIndexTo)), 2);
+        return r + (1-r)*Math.pow(1-cos, 5);
     }
 }
