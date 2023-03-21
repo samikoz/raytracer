@@ -1,4 +1,4 @@
-package io.raytracer;
+package io.raytracer.demos;
 
 import io.raytracer.drawing.ICamera;
 import io.raytracer.drawing.Camera;
