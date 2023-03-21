@@ -5,6 +5,7 @@ import io.raytracer.drawing.Colour;
 import io.raytracer.geometry.IPoint;
 import io.raytracer.geometry.IVector;
 import io.raytracer.worldly.drawables.Drawable;
+import io.raytracer.worldly.materials.Material;
 import lombok.NonNull;
 import org.jetbrains.annotations.NotNull;
 
@@ -43,7 +44,15 @@ public class World implements IWorld {
             IColour surfaceColour = lightSource.illuminate(realPoint);
             IColour reflectedColour = this.getReflectedColour(realPoint);
             IColour refractedColour = this.getRefractedColour(realPoint);
-            return surfaceColour.add(reflectedColour).add(refractedColour);
+            Material pointMaterial = realPoint.object.getMaterial();
+            if (pointMaterial.reflectivity > 0 && pointMaterial.transparency > 0) {
+                //Schlick approximation
+                return surfaceColour
+                    .add(reflectedColour.multiply(realPoint.reflectance))
+                    .add(refractedColour.multiply(1-realPoint.reflectance));
+            } else {
+                return surfaceColour.add(reflectedColour).add(refractedColour);
+            }
         } else {
             return new Colour(0, 0, 0);
         }

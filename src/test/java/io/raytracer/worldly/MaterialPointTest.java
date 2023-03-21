@@ -7,8 +7,6 @@ import io.raytracer.worldly.drawables.Sphere;
 import io.raytracer.worldly.materials.Glass;
 import org.junit.jupiter.api.Test;
 
-import java.util.Optional;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 class MaterialPointTest {

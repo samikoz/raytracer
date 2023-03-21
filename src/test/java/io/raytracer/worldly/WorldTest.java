@@ -271,20 +271,41 @@ public class WorldTest {
     }
 
     @Test
-    void illuminatingWithRefractiveMaterial() {
+    void illuminatingWithTransparentMaterial() {
         Material planeMaterial = Material.builder().pattern(new Monopattern(new Colour(1, 1, 1)))
             .diffuse(0.9).specular(0.9).shininess(200.0).ambient(0.1).transparency(0.5).refractiveIndex(1.5).build();
         Drawable floor = new Plane(planeMaterial);
         floor.setTransform(ThreeTransform.translation(0, -1, 0));
         Material belowMaterial = Material.builder().pattern(new Monopattern(new Colour(1, 0, 0)))
-                .diffuse(0.9).specular(0.9).shininess(200.0).ambient(0.5).build();
+            .diffuse(0.9).specular(0.9).shininess(200.0).ambient(0.5).build();
         Drawable below = new Sphere(belowMaterial);
         below.setTransform(ThreeTransform.translation(0, -3.5, -0.5));
         IWorld world = new World().put(new LightSource(new Colour(1, 1, 1), new Point(-10, 10, -10)));
-        world.put(floor).put(below);
+        world.put(floor).put(below).put(outerSphere);
         IRay ray = new Ray(new Point(0, 0, -3), new Vector(0, -Math.sqrt(2)/2, Math.sqrt(2)/2));
 
         IColour expectedColor = new Colour(0.93642, 0.68642, 0.68642);
+        IColour actualColor = world.illuminate(ray);
+
+        assertEquals(expectedColor, actualColor);
+    }
+
+    @Test
+    void illuminatingWithTransparentAndReflectiveMaterial() {
+        Material planeMaterial = Material.builder().pattern(new Monopattern(new Colour(1, 1, 1)))
+            .diffuse(0.9).specular(0.9).shininess(200.0).ambient(0.1).transparency(0.5).reflectivity(0.5)
+            .refractiveIndex(1.5).build();
+        Drawable floor = new Plane(planeMaterial);
+        floor.setTransform(ThreeTransform.translation(0, -1, 0));
+        Material belowMaterial = Material.builder().pattern(new Monopattern(new Colour(1, 0, 0)))
+            .diffuse(0.9).specular(0.9).shininess(200.0).ambient(0.5).build();
+        Drawable below = new Sphere(belowMaterial);
+        below.setTransform(ThreeTransform.translation(0, -3.5, -0.5));
+        IWorld world = new World().put(new LightSource(new Colour(1, 1, 1), new Point(-10, 10, -10)));
+        world.put(floor).put(below).put(outerSphere);
+        IRay ray = new Ray(new Point(0, 0, -3), new Vector(0, -Math.sqrt(2)/2, Math.sqrt(2)/2));
+
+        IColour expectedColor = new Colour(0.93391, 0.69643, 0.69243);
         IColour actualColor = world.illuminate(ray);
 
         assertEquals(expectedColor, actualColor);
