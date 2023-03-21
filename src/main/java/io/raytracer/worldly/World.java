@@ -81,11 +81,7 @@ public class World implements IWorld {
     }
 
     IColour getRefractedColour(@NonNull MaterialPoint point) {
-        if (point.object.getMaterial().transparency == 0) {
-            return new Colour(0, 0, 0);
-        }
-
-        if (point.reflectance == 1.0) {
+        if (point.object.getMaterial().transparency == 0 || point.reflectance == 1.0 || point.inRay.getRecast() > World.recursionDepth) {
             return new Colour(0, 0, 0);
         }
 

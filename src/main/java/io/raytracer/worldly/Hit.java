@@ -71,7 +71,8 @@ public class Hit extends Intersection {
             intersectionPoint,
             this.ray,
             eyeVector,
-            surfaceNormal, this.refractiveFrom,
+            surfaceNormal,
+            this.refractiveFrom,
             this.refractiveTo,
             false
         );

@@ -32,12 +32,16 @@ public class DrawBasicWorld {
                 .ambient(0.1)
                 .diffuse(0.9)
                 .shininess(200.0)
+                .reflectivity(0.5)
                 .build();
         Plane floor = new Plane(wallMaterial);
 
         Material sphereMaterial = Material.builder().diffuse(0.7).specular(0.3).ambient(0.1).shininess(200.0).build();
 
-        Material leftMaterial = sphereMaterial.toBuilder().pattern(new StripedPattern(new Colour(1, 1, 1), new Colour(0, 1, 0))).build();
+        Material leftMaterial = sphereMaterial.toBuilder()
+                .pattern(new StripedPattern(new Colour(1, 1, 1), new Colour(0, 1, 0)))
+                .transparency(0.5).refractiveIndex(1.5)
+                .build();
         Sphere leftSphere = new Sphere(leftMaterial);
         leftSphere.setTransform(ThreeTransform.rotation_z(Math.PI / 4).translate(-1, 1, -1));
 

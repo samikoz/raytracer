@@ -5,7 +5,6 @@ import io.raytracer.drawing.IColour;
 import io.raytracer.drawing.IPicture;
 import io.raytracer.drawing.PPMPicture;
 import io.raytracer.worldly.drawables.Drawable;
-import lombok.NonNull;
 
 public interface IWorld {
     IWorld put(ILightSource source);
