@@ -1,6 +1,8 @@
 package io.raytracer.drawing;
 
+import lombok.Getter;
 import lombok.NonNull;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.PrintWriter;
 import java.util.Arrays;
@@ -10,6 +12,8 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 public class PPMPicture implements IPicture {
+    @Getter private final int width;
+    @Getter private final int height;
     private final PPMCanvasRow[] pixelGrid;
     private final String exportHeader;
 
@@ -17,6 +21,8 @@ public class PPMPicture implements IPicture {
     static private final int exportedLineMaxLength = 70;
 
     public PPMPicture(int x, int y) {
+        this.width = x;
+        this.height = y;
         exportHeader = "P3\n" + x + " " + y + "\n255\n";
 
         pixelGrid = new PPMCanvasRow[y];
@@ -112,7 +118,7 @@ public class PPMPicture implements IPicture {
         }
 
         @Override
-        public Iterator<IColour> iterator() {
+        public @NotNull Iterator<IColour> iterator() {
             return new Iterator<IColour>() {
                 private int rowElementIndex;
 

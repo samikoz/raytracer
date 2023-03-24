@@ -23,7 +23,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-public class DrawSkalinn {
+public class Skalinn {
     public static void main(String[] args) throws IOException {
         int spheresCount = 10;
         int sphereSeparation = 10;

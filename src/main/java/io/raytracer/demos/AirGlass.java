@@ -2,7 +2,7 @@ package io.raytracer.demos;
 
 import java.io.IOException;
 
-public class AirGlassDemo {
+public class AirGlass {
     public static void main(String[] args) throws IOException {
         int secondsCount = 3;
         int framesPerSecond = 32;

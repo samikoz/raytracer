@@ -24,7 +24,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-public class DrawBasicWorld {
+public class BasicWorld {
     public static void main(String[] args) throws IOException {
         Material wallMaterial = Material.builder()
                 .pattern(new Monopattern(new Colour(1, 0.9, 0.9)))
