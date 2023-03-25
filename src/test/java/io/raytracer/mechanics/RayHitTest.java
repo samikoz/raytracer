@@ -17,7 +17,7 @@ import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class HitTest {
+class RayHitTest {
     static IRay testRay;
 
     @BeforeAll
@@ -29,7 +29,7 @@ class HitTest {
     void hitWithPositiveIntersections() {
         Intersection i1 = new Intersection(testRay,2.0, new Sphere());
         Intersection i2 = new Intersection(testRay,0.1, new Sphere());
-        Optional<Hit> expectedHit = Hit.fromIntersections(new Intersection[] { i1, i2 });
+        Optional<RayHit> expectedHit = RayHit.fromIntersections(new Intersection[] { i1, i2 });
 
         assertTrue(expectedHit.isPresent());
         assertEquals(0.1, expectedHit.get().rayParameter, 1e-3,
@@ -40,7 +40,7 @@ class HitTest {
     void hitWithSomeNegativeIntersections() {
         Intersection i1 = new Intersection(testRay,2.0, new Sphere());
         Intersection i2 = new Intersection(testRay,-0.1, new Sphere());
-        Optional<Hit> expectedHit = Hit.fromIntersections(new Intersection[] { i1, i2 });
+        Optional<RayHit> expectedHit = RayHit.fromIntersections(new Intersection[] { i1, i2 });
 
         assertTrue(expectedHit.isPresent());
         assertEquals(2.0, expectedHit.get().rayParameter, 1e-3,
@@ -51,40 +51,40 @@ class HitTest {
     void hitWithAllNegativeIntersections() {
         Intersection i1 = new Intersection(testRay,-2.0, new Sphere());
         Intersection i2 = new Intersection(testRay,-0.1, new Sphere());
-        Optional<Hit> expectedHit = Hit.fromIntersections(new Intersection[] { i1, i2 });
+        Optional<RayHit> expectedHit = RayHit.fromIntersections(new Intersection[] { i1, i2 });
 
         assertFalse(expectedHit.isPresent(), "All negative intersections should produce no hit.");
     }
 
     @Test
-    void getMaterialPoint() {
+    void hitpointCreation() {
         Ray ray = new Ray(new Point(0, 0, -5), new Vector(0, 0, 1));
         Sphere sphere = new Sphere();
         Intersection intersection = new Intersection(ray,4, sphere);
-        Optional<Hit> hit = Hit.fromIntersections(new Intersection[] { intersection });
+        Optional<RayHit> hit = RayHit.fromIntersections(new Intersection[] { intersection });
 
         assertTrue(hit.isPresent());
-        MaterialPoint illuminated = hit.get().getMaterialPoint();
+        RayHit hitpoint = hit.get();
 
-        assertEquals(sphere, illuminated.object);
-        assertEquals(new Point(0, 0, -1), illuminated.point);
-        assertEquals(new Vector(0, 0, -1), illuminated.eyeVector);
-        assertEquals(new Vector(0, 0, -1), illuminated.normalVector);
+        assertEquals(sphere, hitpoint.object);
+        assertEquals(new Point(0, 0, -1), hitpoint.point);
+        assertEquals(new Vector(0, 0, -1), hitpoint.eyeVector);
+        assertEquals(new Vector(0, 0, -1), hitpoint.normalVector);
     }
 
     @Test
-    void getMaterialPointFromInside() {
+    void hitpointCreationFromInside() {
         Ray ray = new Ray(new Point(0, 0, 0), new Vector(0, 0, 1));
         Sphere sphere = new Sphere();
         Intersection intersection = new Intersection(ray,1, sphere);
-        Optional<Hit> hit = Hit.fromIntersections(new Intersection[] { intersection });
+        Optional<RayHit> hit = RayHit.fromIntersections(new Intersection[] { intersection });
 
         assertTrue(hit.isPresent());
-        MaterialPoint illuminated = hit.get().getMaterialPoint();
+        RayHit hitpoint = hit.get();
 
-        assertEquals(new Point(0, 0, 1), illuminated.point);
-        assertEquals(new Vector(0, 0, -1), illuminated.eyeVector);
-        assertEquals(new Vector(0, 0, -1), illuminated.normalVector,
+        assertEquals(new Point(0, 0, 1), hitpoint.point);
+        assertEquals(new Vector(0, 0, -1), hitpoint.eyeVector);
+        assertEquals(new Vector(0, 0, -1), hitpoint.normalVector,
                 "Normal vector should be inverted");
     }
 
@@ -112,11 +112,29 @@ class HitTest {
 
         IRay ray = new Ray(rayStartPoint, new Vector(0, 0, 1));
         Intersection[] intersections = world.intersect(ray);
-        Optional<Hit> hit = Hit.fromIntersections(intersections);
+        Optional<RayHit> hit = RayHit.fromIntersections(intersections);
         assertTrue(hit.isPresent());
-        MaterialPoint point = hit.get().getMaterialPoint();
+        RayHit hitpoint = hit.get();
 
-        assertEquals(refractiveFrom, point.refractiveIndexFrom);
-        assertEquals(refractiveTo, point.refractiveIndexTo);
+        assertEquals(refractiveFrom, hitpoint.refractiveIndexFrom);
+        assertEquals(refractiveTo, hitpoint.refractiveIndexTo);
+    }
+
+    @Test
+    void reflectanceOfAPerpendicularRay() {
+        Drawable sphere = new Sphere(Glass.glassBuilder().build());
+        IRay ray = new Ray(new Point(0, 0, 0), new Vector(0, 1, 0));
+        RayHit hitpoint = RayHit.fromIntersections(new Intersection[] { new Intersection(ray, 1, sphere) }).get();
+
+        assertEquals(0.04, hitpoint.reflectance, 1e-3, "Reflectance is small for a perpendicular ray");
+    }
+
+    @Test
+    void reflectanceForASmallAngleAndLargerSecondRefractiveIndex() {
+        Drawable sphere = new Sphere(Glass.glassBuilder().build());
+        IRay ray = new Ray(new Point(0, 0.99, -2), new Vector(0, 0, 1));
+        RayHit hitpoint = RayHit.fromIntersections(new Intersection[] { new Intersection(ray, 1.8589, sphere) }).get();
+
+        assertEquals(0.48873, hitpoint.reflectance, 1e-3, "Reflectance is small for a perpendicular ray");
     }
 }

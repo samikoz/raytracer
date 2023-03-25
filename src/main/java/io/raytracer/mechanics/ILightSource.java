@@ -4,7 +4,7 @@ import io.raytracer.tools.IColour;
 import io.raytracer.geometry.IPoint;
 
 public interface ILightSource {
-    IColour illuminate(MaterialPoint illuminated);
+    IColour illuminate(RayHit hitpoint);
 
     IPoint getPosition();
 }

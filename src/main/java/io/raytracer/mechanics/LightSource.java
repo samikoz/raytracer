@@ -16,12 +16,12 @@ public class LightSource implements ILightSource {
     @NonNull public final IColour colour;
     @Getter @NonNull private final IPoint position;
 
-    public IColour illuminate(MaterialPoint illuminated) {
-        Material material = illuminated.object.getMaterial();
-        IColour effectiveColour = this.getObjectColour(illuminated.object, illuminated.point).mix(this.colour);
-        IVector sourceDirection = this.position.subtract(illuminated.point).normalise();
+    public IColour illuminate(RayHit hitpoint) {
+        Material material = hitpoint.object.getMaterial();
+        IColour effectiveColour = this.getObjectColour(hitpoint.object, hitpoint.point).mix(this.colour);
+        IVector sourceDirection = this.position.subtract(hitpoint.point).normalise();
         IColour ambientContribution = effectiveColour.multiply(material.ambient);
-        double lightNormalCosine = sourceDirection.dot(illuminated.normalVector);
+        double lightNormalCosine = sourceDirection.dot(hitpoint.normalVector);
 
         IColour diffuseContribution;
         IColour specularContribution;
@@ -29,15 +29,15 @@ public class LightSource implements ILightSource {
             diffuseContribution = new Colour(0, 0, 0);
             specularContribution = new Colour(0, 0, 0);
         } else {
-            if (illuminated.shadowed) {
+            if (hitpoint.shadowed) {
                 diffuseContribution = new Colour(0, 0, 0);
             } else {
                 diffuseContribution = effectiveColour.multiply(material.diffuse).multiply(lightNormalCosine);
             }
-            IVector reflectionVector = sourceDirection.negate().reflect(illuminated.normalVector);
-            double reflectionEyeCosine = reflectionVector.dot(illuminated.eyeVector);
+            IVector reflectionVector = sourceDirection.negate().reflect(hitpoint.normalVector);
+            double reflectionEyeCosine = reflectionVector.dot(hitpoint.eyeVector);
 
-            if (reflectionEyeCosine <= 0 || illuminated.shadowed) {
+            if (reflectionEyeCosine <= 0 || hitpoint.shadowed) {
                 specularContribution = new Colour(0, 0, 0);
             } else {
                 double specularFactor = Math.pow(reflectionEyeCosine, material.shininess);

@@ -5,7 +5,6 @@ import io.raytracer.tools.Colour;
 import io.raytracer.tools.ICamera;
 import io.raytracer.tools.IPicture;
 import io.raytracer.tools.PPMPicture;
-import io.raytracer.patterns.CheckerPattern;
 import io.raytracer.patterns.Monopattern;
 import io.raytracer.geometry.IPoint;
 import io.raytracer.geometry.IVector;
@@ -30,36 +29,32 @@ public class Windows {
         int sphereSeparation = 10;
 
         IWorld world = new World();
-        world.put(new LightSource(new Colour(1, 1, 1), new Point(-20, 10, -10)));
+        world.put(new LightSource(new Colour(1, 1, 1), new Point(0, 10, -30)));
 
         Material floorMaterial = Material.builder()
-                .pattern(new CheckerPattern(new Colour(0, 0, 0), new Colour(1, 1, 1)))
-                .specular(0.0)
-                .ambient(0.1)
-                .diffuse(0.9)
-                .shininess(200.0)
-                .reflectivity(0.5)
+                .reflectivity(0.8)
+                .transparency(0.1)
                 .build();
         Plane floor = new Plane(floorMaterial);
         world.put(floor);
 
         Material.MaterialBuilder sphereMaterialBuilder = Material.builder()
-                .pattern(new Monopattern(new Colour(1, 0, 0)))
-                .specular(0.3).ambient(0.1).shininess(100.0);
+                .pattern(new Monopattern(new Colour(0, 1, 0)))
+                .specular(0.3).ambient(0.1).shininess(150.0);
 
         for (int sphereIndex = 0; sphereIndex < spheresCount; sphereIndex++) {
-            Material sphereMaterial = sphereMaterialBuilder.diffuse(0.7 - 0.35*(sphereIndex/(float)spheresCount)).build();
+            Material sphereMaterial = sphereMaterialBuilder.diffuse(0.7*(1 - (sphereIndex/(float)spheresCount))).build();
             Drawable aSphere = new Sphere(sphereMaterial);
             aSphere.setTransform(ThreeTransform.translation(0, 1, sphereSeparation*sphereIndex));
             world.put(aSphere);
         }
 
-        IPoint leftEyePosition = new Point(-5, 1, -10);
+        IPoint leftEyePosition = new Point(-3, 1, -10);
         IVector leftLookDirection = new Point(0, 0, 5*sphereSeparation).subtract(leftEyePosition);
         IVector upDirection = new Vector(0, 1, 0);
         ICamera leftCamera = new Camera(600, 600, Math.PI / 3, leftEyePosition, leftLookDirection, upDirection);
 
-        IPoint rightEyePosition = new Point(5, 1, -10);
+        IPoint rightEyePosition = new Point(3, 1, -10);
         IVector rightLookDirection = new Point(0, 0, 5*sphereSeparation).subtract(rightEyePosition);
         ICamera rightCamera = new Camera(600, 600, Math.PI / 3, rightEyePosition, rightLookDirection, upDirection);
 

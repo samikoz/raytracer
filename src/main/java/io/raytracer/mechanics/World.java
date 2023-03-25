@@ -37,19 +37,19 @@ public class World implements IWorld {
     }
 
     public IColour illuminate(@NonNull IRay ray) {
-        Optional<Hit> hit = Hit.fromIntersections(this.intersect(ray));
+        Optional<RayHit> hit = RayHit.fromIntersections(this.intersect(ray));
         if (hit.isPresent()) {
-            MaterialPoint realPoint = hit.get().getMaterialPoint();
-            realPoint.shadowed = this.isShadowed(realPoint.offsetAbove);
-            IColour surfaceColour = lightSource.illuminate(realPoint);
-            IColour reflectedColour = this.getReflectedColour(realPoint);
-            IColour refractedColour = this.getRefractedColour(realPoint);
-            Material pointMaterial = realPoint.object.getMaterial();
+            RayHit hitpoint = hit.get();
+            hitpoint.shadowed = this.isShadowed(hitpoint.offsetAbove);
+            IColour surfaceColour = lightSource.illuminate(hitpoint);
+            IColour reflectedColour = this.getReflectedColour(hitpoint);
+            IColour refractedColour = this.getRefractedColour(hitpoint);
+            Material pointMaterial = hitpoint.object.getMaterial();
             if (pointMaterial.reflectivity > 0 && pointMaterial.transparency > 0) {
                 //Schlick approximation
                 return surfaceColour
-                    .add(reflectedColour.multiply(realPoint.reflectance))
-                    .add(refractedColour.multiply(1-realPoint.reflectance));
+                    .add(reflectedColour.multiply(hitpoint.reflectance))
+                    .add(refractedColour.multiply(1-hitpoint.reflectance));
             } else {
                 return surfaceColour.add(reflectedColour).add(refractedColour);
             }
@@ -67,26 +67,26 @@ public class World implements IWorld {
         IVector lightDistance = this.lightSource.getPosition().subtract(point);
         IVector lightDirection = lightDistance.normalise();
         IRay lightRay = new Ray(point, lightDirection);
-        Optional<Hit> shadowingHit = Hit.fromIntersections(this.intersect(lightRay));
-        return (shadowingHit.isPresent() && shadowingHit.get().getMaterialPoint().point.distance(point) < lightDistance.norm());
+        Optional<RayHit> shadowingHit = RayHit.fromIntersections(this.intersect(lightRay));
+        return (shadowingHit.isPresent() && shadowingHit.get().point.distance(point) < lightDistance.norm());
     }
 
-    IColour getReflectedColour(@NotNull MaterialPoint point) {
-        if (point.object.getMaterial().reflectivity == 0 || point.inRay.getRecast() > World.recursionDepth) {
+    IColour getReflectedColour(@NotNull RayHit hitpoint) {
+        if (hitpoint.object.getMaterial().reflectivity == 0 || hitpoint.ray.getRecast() > World.recursionDepth) {
             return new Colour(0, 0, 0);
         }
-        IRay reflectedRay = Ray.reflectFrom(point);
+        IRay reflectedRay = Ray.reflectFrom(hitpoint);
         IColour reflectedColour = this.illuminate(reflectedRay);
-        return reflectedColour.multiply(point.object.getMaterial().reflectivity);
+        return reflectedColour.multiply(hitpoint.object.getMaterial().reflectivity);
     }
 
-    IColour getRefractedColour(@NonNull MaterialPoint point) {
-        if (point.object.getMaterial().transparency == 0 || point.reflectance == 1.0 || point.inRay.getRecast() > World.recursionDepth) {
+    IColour getRefractedColour(@NonNull RayHit hitpoint) {
+        if (hitpoint.object.getMaterial().transparency == 0 || hitpoint.reflectance == 1.0 || hitpoint.ray.getRecast() > World.recursionDepth) {
             return new Colour(0, 0, 0);
         }
 
-        IRay refractedRay = Ray.refractFrom(point);
+        IRay refractedRay = Ray.refractFrom(hitpoint);
         IColour refractedColour = this.illuminate(refractedRay);
-        return refractedColour.multiply(point.object.getMaterial().transparency);
+        return refractedColour.multiply(hitpoint.object.getMaterial().transparency);
     }
 }

@@ -159,10 +159,10 @@ public class WorldTest {
     void getReflectedColourFromNonReflectiveSurface() {
         IRay ray = new Ray(new Point(0, 0, 0), new Vector(0, 0, 1));
 
-        Optional<Hit> hit = Hit.fromIntersections(defaultWorld.intersect(ray));
+        Optional<RayHit> hit = RayHit.fromIntersections(defaultWorld.intersect(ray));
         assertTrue(hit.isPresent());
-        MaterialPoint realPoint = hit.get().getMaterialPoint();
-        IColour reflectedColour = defaultWorld.getReflectedColour(realPoint);
+        RayHit hitpoint = hit.get();
+        IColour reflectedColour = defaultWorld.getReflectedColour(hitpoint);
         
         assertEquals(new Colour(0, 0, 0), reflectedColour);
     }
@@ -181,11 +181,11 @@ public class WorldTest {
         testWorld.put(new LightSource(new Colour(1, 1, 1), new Point(-10, 10, -10)));
         testWorld.put(sphere).put(plane);
 
-        Optional<Hit> hit = Hit.fromIntersections(testWorld.intersect(ray));
+        Optional<RayHit> hit = RayHit.fromIntersections(testWorld.intersect(ray));
         assertTrue(hit.isPresent());
-        MaterialPoint realPoint = hit.get().getMaterialPoint();
+        RayHit hitpoint = hit.get();
 
-        assertEquals(new Colour(0.19032, 0.2379, 0.14274), testWorld.getReflectedColour(realPoint));
+        assertEquals(new Colour(0.19032, 0.2379, 0.14274), testWorld.getReflectedColour(hitpoint));
     }
 
     @Test
@@ -227,10 +227,10 @@ public class WorldTest {
     void getRefractedColourFromOpaqueSurface() {
         IRay ray = new Ray(new Point(0, 0, -5), new Vector(0, 0, 1));
 
-        Optional<Hit> hit = Hit.fromIntersections(defaultWorld.intersect(ray));
+        Optional<RayHit> hit = RayHit.fromIntersections(defaultWorld.intersect(ray));
         assertTrue(hit.isPresent());
-        MaterialPoint realPoint = hit.get().getMaterialPoint();
-        IColour refractedColour = defaultWorld.getRefractedColour(realPoint);
+        RayHit hitpoint = hit.get();
+        IColour refractedColour = defaultWorld.getRefractedColour(hitpoint);
 
         assertEquals(new Colour(0, 0, 0), refractedColour);
     }
@@ -245,10 +245,10 @@ public class WorldTest {
         World world = new World();
         world.put(new LightSource(new Colour(1, 1, 1), new Point(-10, 10, -10))).put(sphere);
 
-        Optional<Hit> hit = Hit.fromIntersections(world.intersect(ray));
+        Optional<RayHit> hit = RayHit.fromIntersections(world.intersect(ray));
         assertTrue(hit.isPresent());
-        MaterialPoint realPoint = hit.get().getMaterialPoint();
-        IColour refractedColour = world.getRefractedColour(realPoint);
+        RayHit hitpoint = hit.get();
+        IColour refractedColour = world.getRefractedColour(hitpoint);
 
         assertEquals(new Colour(0, 0, 0), refractedColour);
     }
@@ -262,10 +262,10 @@ public class WorldTest {
         world.put(outer).put(inner).put(new LightSource(new Colour(1, 1, 1), new Point(-10, 10, -10)));
         IRay ray = new Ray(new Point(0, 0, 0.1), new Vector(0, 1, 0));
 
-        Optional<Hit> hit = Hit.fromIntersections(world.intersect(ray));
+        Optional<RayHit> hit = RayHit.fromIntersections(world.intersect(ray));
         assertTrue(hit.isPresent());
-        MaterialPoint realPoint = hit.get().getMaterialPoint();
-        IColour refractedColour = world.getRefractedColour(realPoint);
+        RayHit hitpoint = hit.get();
+        IColour refractedColour = world.getRefractedColour(hitpoint);
 
         assertEquals(new Colour(0, 0.99888, 0.04725), refractedColour);
     }
