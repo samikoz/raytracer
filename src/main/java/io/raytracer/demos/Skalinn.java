@@ -4,8 +4,8 @@ import io.raytracer.tools.ICamera;
 import io.raytracer.tools.Camera;
 import io.raytracer.tools.IPicture;
 import io.raytracer.tools.Colour;
-import io.raytracer.patterns.CheckerPattern;
-import io.raytracer.patterns.Monopattern;
+import io.raytracer.textures.CheckerTexture;
+import io.raytracer.textures.MonocolourTexture;
 import io.raytracer.materials.Material;
 import io.raytracer.drawables.Drawable;
 import io.raytracer.drawables.Plane;
@@ -32,7 +32,7 @@ public class Skalinn {
         world.put(new LightSource(new Colour(1, 1, 1), new Point(-20, 10, -10)));
 
         Material floorMaterial = Material.builder()
-                .pattern(new CheckerPattern(new Colour(0, 0, 0), new Colour(1, 1, 1)))
+                .texture(new CheckerTexture(new Colour(0, 0, 0), new Colour(1, 1, 1)))
                 .specular(0.0)
                 .ambient(0.1)
                 .diffuse(0.9)
@@ -43,7 +43,7 @@ public class Skalinn {
         world.put(floor);
 
         Material.MaterialBuilder sphereMaterialBuilder = Material.builder()
-                .pattern(new Monopattern(new Colour(1, 0, 0)))
+                .texture(new MonocolourTexture(new Colour(1, 0, 0)))
                 .specular(0.3).ambient(0.1).shininess(100.0);
 
         for (int sphereIndex = 0; sphereIndex < spheresCount; sphereIndex++) {

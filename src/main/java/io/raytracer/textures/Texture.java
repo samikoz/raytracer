@@ -1,4 +1,4 @@
-package io.raytracer.patterns;
+package io.raytracer.textures;
 
 import io.raytracer.tools.IColour;
 import io.raytracer.geometry.IPoint;
@@ -8,7 +8,7 @@ import lombok.Getter;
 
 import java.util.Arrays;
 
-public abstract class Pattern {
+public abstract class Texture {
     @Getter private ITransform inverseTransform;
     public abstract IColour colourAt(IPoint p);
 
@@ -16,7 +16,7 @@ public abstract class Pattern {
         this.inverseTransform = transform.inverse();
     }
 
-    Pattern() {
+    Texture() {
         this.setTransform(new ThreeTransform());
     }
 

@@ -1,20 +1,18 @@
-package io.raytracer.tools.patterns;
+package io.raytracer.textures;
 
 import io.raytracer.tools.Colour;
 import io.raytracer.geometry.Point;
-import io.raytracer.patterns.CheckerPattern;
-import io.raytracer.patterns.Pattern;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class CheckerPatternTest {
+class CheckerTextureTest {
     private final Colour black = new Colour(0, 0, 0);
     private final Colour white = new Colour(1, 1, 1);
 
     @Test
-    void checkerPatternRepeatsInThreeDimensions() {
-        Pattern checker = new CheckerPattern(white, black);
+    void checkerTextureRepeatsInThreeDimensions() {
+        Texture checker = new CheckerTexture(white, black);
         double belowOne = 0.99;
         double aboveOne = 1.01;
 

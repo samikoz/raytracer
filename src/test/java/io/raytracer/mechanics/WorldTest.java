@@ -6,8 +6,8 @@ import io.raytracer.tools.Camera;
 import io.raytracer.tools.IPicture;
 import io.raytracer.tools.IColour;
 import io.raytracer.tools.Colour;
-import io.raytracer.patterns.Monopattern;
-import io.raytracer.patterns.TestPattern;
+import io.raytracer.textures.MonocolourTexture;
+import io.raytracer.textures.TestTexture;
 import io.raytracer.geometry.IPoint;
 import io.raytracer.geometry.Point;
 import io.raytracer.geometry.ThreeTransform;
@@ -36,7 +36,7 @@ public class WorldTest {
     @BeforeEach
     void setupMaterialAndPosition() {
         outerMaterial = Material.builder()
-                .pattern(new Monopattern(new Colour(0.8, 1.0, 0.6))).diffuse(0.7).specular(0.2)
+                .texture(new MonocolourTexture(new Colour(0.8, 1.0, 0.6))).diffuse(0.7).specular(0.2)
                 .ambient(0.1).shininess(200.0).build();
         innerMaterial = Material.builder().build();
         outerSphere = new Sphere(outerMaterial);
@@ -92,13 +92,13 @@ public class WorldTest {
         IRay ray = new Ray(new Point(0, 0, 0.75), new Vector(0, 0, -1));
         IColour illuminated = world.illuminate(ray);
 
-        assertEquals(innerObject.getMaterial().pattern.colourAt(new Point(0, 0, 0)), illuminated,
+        assertEquals(innerObject.getMaterial().texture.colourAt(new Point(0, 0, 0)), illuminated,
                 "Illuminate should use the hit with the inner sphere");
     }
 
     @Test
     void illuminatingWhenIntersectionIsInTheShadow() {
-        Material material = Material.builder().pattern(new Monopattern(new Colour(1, 1, 1))).ambient(0.1).diffuse(0.9)
+        Material material = Material.builder().texture(new MonocolourTexture(new Colour(1, 1, 1))).ambient(0.1).diffuse(0.9)
                 .specular(0.9).shininess(200.0).build();
         Sphere firstSphere = new Sphere(material);
         Sphere secondSphere = new Sphere(material);
@@ -173,7 +173,7 @@ public class WorldTest {
         Drawable sphere = new Sphere(outerMaterial);
         Material planeMaterial = Material.builder()
                 .diffuse(0.9).specular(0.9).ambient(0.1).shininess(200.0).reflectivity(0.5)
-                .pattern(new Monopattern(new Colour(1, 1, 1))).build();
+                .texture(new MonocolourTexture(new Colour(1, 1, 1))).build();
         Drawable plane = new Plane(planeMaterial);
         plane.setTransform(ThreeTransform.translation(0, -1, 0));
         
@@ -193,11 +193,11 @@ public class WorldTest {
         IRay ray = new Ray(new Point(0, 0, -3), new Vector(0, -Math.sqrt(2)/2, Math.sqrt(2)/2));
         Material sphereMaterial = Material.builder()
                 .diffuse(0.7).specular(0.2).ambient(0.1).shininess(200.0)
-                .pattern(new Monopattern(new Colour(0.8, 1.0, 0.6))).build();
+                .texture(new MonocolourTexture(new Colour(0.8, 1.0, 0.6))).build();
         Drawable sphere = new Sphere(sphereMaterial);
         Material planeMaterial = Material.builder()
                 .diffuse(0.9).specular(0.9).ambient(0.1).shininess(200.0).reflectivity(0.5)
-                .pattern(new Monopattern(new Colour(1, 1, 1))).build();
+                .texture(new MonocolourTexture(new Colour(1, 1, 1))).build();
         Drawable plane = new Plane(planeMaterial);
         plane.setTransform(ThreeTransform.translation(0, -1, 0));
 
@@ -240,7 +240,7 @@ public class WorldTest {
         IRay ray = new Ray(new Point(0, 0, Math.sqrt(2) / 2), new Vector(0, 1, 0));
         Material sphereMaterial = Material.builder()
                 .diffuse(0.7).specular(0.2).ambient(0.1).shininess(200.0).transparency(1.0).refractiveIndex(1.5)
-                .pattern(new Monopattern(new Colour(0.8, 1.0, 0.6))).build();
+                .texture(new MonocolourTexture(new Colour(0.8, 1.0, 0.6))).build();
         Drawable sphere = new Sphere(sphereMaterial);
         World world = new World();
         world.put(new LightSource(new Colour(1, 1, 1), new Point(-10, 10, -10))).put(sphere);
@@ -255,7 +255,7 @@ public class WorldTest {
 
     @Test
     void getRefractedColour() {
-        Drawable outer = new Sphere(outerMaterial.toBuilder().ambient(1.0).pattern(new TestPattern()).build());
+        Drawable outer = new Sphere(outerMaterial.toBuilder().ambient(1.0).texture(new TestTexture()).build());
         Drawable inner = new Sphere(innerMaterial.toBuilder().transparency(1.0).refractiveIndex(1.5).build());
         inner.setTransform(ThreeTransform.scaling(0.5, 0.5, 0.5));
         World world = new World();
@@ -272,11 +272,11 @@ public class WorldTest {
 
     @Test
     void illuminatingWithTransparentMaterial() {
-        Material planeMaterial = Material.builder().pattern(new Monopattern(new Colour(1, 1, 1)))
+        Material planeMaterial = Material.builder().texture(new MonocolourTexture(new Colour(1, 1, 1)))
             .diffuse(0.9).specular(0.9).shininess(200.0).ambient(0.1).transparency(0.5).refractiveIndex(1.5).build();
         Drawable floor = new Plane(planeMaterial);
         floor.setTransform(ThreeTransform.translation(0, -1, 0));
-        Material belowMaterial = Material.builder().pattern(new Monopattern(new Colour(1, 0, 0)))
+        Material belowMaterial = Material.builder().texture(new MonocolourTexture(new Colour(1, 0, 0)))
             .diffuse(0.9).specular(0.9).shininess(200.0).ambient(0.5).build();
         Drawable below = new Sphere(belowMaterial);
         below.setTransform(ThreeTransform.translation(0, -3.5, -0.5));
@@ -292,12 +292,12 @@ public class WorldTest {
 
     @Test
     void illuminatingWithTransparentAndReflectiveMaterial() {
-        Material planeMaterial = Material.builder().pattern(new Monopattern(new Colour(1, 1, 1)))
+        Material planeMaterial = Material.builder().texture(new MonocolourTexture(new Colour(1, 1, 1)))
             .diffuse(0.9).specular(0.9).shininess(200.0).ambient(0.1).transparency(0.5).reflectivity(0.5)
             .refractiveIndex(1.5).build();
         Drawable floor = new Plane(planeMaterial);
         floor.setTransform(ThreeTransform.translation(0, -1, 0));
-        Material belowMaterial = Material.builder().pattern(new Monopattern(new Colour(1, 0, 0)))
+        Material belowMaterial = Material.builder().texture(new MonocolourTexture(new Colour(1, 0, 0)))
             .diffuse(0.9).specular(0.9).shininess(200.0).ambient(0.5).build();
         Drawable below = new Sphere(belowMaterial);
         below.setTransform(ThreeTransform.translation(0, -3.5, -0.5));

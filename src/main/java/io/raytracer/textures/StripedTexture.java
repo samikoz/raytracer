@@ -1,21 +1,22 @@
-package io.raytracer.patterns;
+package io.raytracer.textures;
 
 import io.raytracer.tools.IColour;
 import io.raytracer.geometry.IPoint;
+import lombok.NonNull;
 
-
-public class GradientPattern extends Pattern {
+public class StripedTexture extends Texture {
     private final IColour firstColour;
     private final IColour secondColour;
 
-    public GradientPattern(IColour firstColour, IColour secondColour) {
+    public StripedTexture(@NonNull IColour firstColour, @NonNull IColour secondColour) {
+        super();
         this.firstColour = firstColour;
         this.secondColour = secondColour;
     }
 
     @Override
     public IColour colourAt(IPoint p) {
-        return firstColour.interpolate(this.secondColour, p.get(0) - Math.floor(p.get(0)));
+        return (int)Math.floor(p.get(0)) % 2 == 0 ? firstColour : secondColour;
     }
 
     @Override
@@ -27,7 +28,7 @@ public class GradientPattern extends Pattern {
     public boolean equals(Object them) {
         if (them == null || this.getClass() != them.getClass()) return false;
 
-        GradientPattern themGrad = (GradientPattern) them;
-        return themGrad.firstColour.equals(this.firstColour) && themGrad.secondColour.equals(this.secondColour);
+        StripedTexture themStriped = (StripedTexture) them;
+        return themStriped.firstColour.equals(this.firstColour) && themStriped.secondColour.equals(this.secondColour);
     }
 }

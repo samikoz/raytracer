@@ -1,4 +1,4 @@
-package io.raytracer.patterns;
+package io.raytracer.textures;
 
 import io.raytracer.tools.IColour;
 import io.raytracer.geometry.IPoint;
@@ -6,12 +6,12 @@ import io.raytracer.geometry.IPoint;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
-public class CheckerPattern extends Pattern {
+public class CheckerTexture extends Texture {
     private final IColour firstColour;
     private final IColour secondColour;
     private static final int decimalPlacesTolerance = 6;
 
-    public CheckerPattern(IColour firstColour, IColour secondColour) {
+    public CheckerTexture(IColour firstColour, IColour secondColour) {
         this.firstColour = firstColour;
         this.secondColour = secondColour;
     }
@@ -26,7 +26,7 @@ public class CheckerPattern extends Pattern {
 
     private double roundToTolerance(double x) {
         BigDecimal bd = new BigDecimal(Double.toString(x));
-        bd = bd.setScale(CheckerPattern.decimalPlacesTolerance, RoundingMode.HALF_UP);
+        bd = bd.setScale(CheckerTexture.decimalPlacesTolerance, RoundingMode.HALF_UP);
         return bd.doubleValue();
     }
 
@@ -39,7 +39,7 @@ public class CheckerPattern extends Pattern {
     public boolean equals(Object them) {
         if (them == null || this.getClass() != them.getClass()) return false;
 
-        CheckerPattern themGrad = (CheckerPattern) them;
+        CheckerTexture themGrad = (CheckerTexture) them;
         return themGrad.firstColour.equals(this.firstColour) && themGrad.secondColour.equals(this.secondColour);
     }
 }

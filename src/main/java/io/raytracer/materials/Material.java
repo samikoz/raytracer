@@ -1,7 +1,7 @@
 package io.raytracer.materials;
 
-import io.raytracer.patterns.Monopattern;
-import io.raytracer.patterns.Pattern;
+import io.raytracer.textures.MonocolourTexture;
+import io.raytracer.textures.Texture;
 import io.raytracer.tools.Colour;
 import lombok.Builder;
 
@@ -9,8 +9,8 @@ import java.util.Arrays;
 import java.util.Optional;
 
 public class Material {
-    public final Pattern pattern;
-    private static final Pattern defaultPattern = new Monopattern(new Colour(0, 0, 0));
+    public final Texture texture;
+    private static final Texture DEFAULT_TEXTURE = new MonocolourTexture(new Colour(0, 0, 0));
     public final double ambient;
     public final double diffuse;
     public final double specular;
@@ -22,9 +22,9 @@ public class Material {
     private static final double equalityTolerance = 1e-3;
 
     @Builder(toBuilder = true)
-    protected Material(Pattern pattern, Double ambient, Double diffuse, Double specular, Double shininess,
+    protected Material(Texture texture, Double ambient, Double diffuse, Double specular, Double shininess,
                        Double reflectivity, Double transparency, Double refractiveIndex) {
-        this.pattern = Optional.ofNullable(pattern).orElse(Material.defaultPattern);
+        this.texture = Optional.ofNullable(texture).orElse(Material.DEFAULT_TEXTURE);
         this.ambient = Optional.ofNullable(ambient).orElse(0.0);
         this.diffuse = Optional.ofNullable(diffuse).orElse(0.0);
         this.specular = Optional.ofNullable(specular).orElse(0.0);
@@ -37,7 +37,7 @@ public class Material {
     @Override
     public int hashCode() {
         return Arrays.hashCode(new int[] {
-                this.pattern.getHashCode(),
+                this.texture.getHashCode(),
                 Arrays.hashCode(new double[] {this.ambient, this.diffuse, this.specular, this.shininess})});
     }
 
@@ -46,7 +46,7 @@ public class Material {
         if (them == null || this.getClass() != them.getClass()) return false;
 
         Material themMaterial = (Material) them;
-        return (this.pattern.equals(themMaterial.pattern)
+        return (this.texture.equals(themMaterial.texture)
             && Math.abs(this.ambient - themMaterial.ambient) < equalityTolerance
             && Math.abs(this.diffuse - themMaterial.diffuse) < equalityTolerance
             && Math.abs(this.specular - themMaterial.specular) < equalityTolerance

@@ -1,13 +1,13 @@
-package io.raytracer.patterns;
+package io.raytracer.textures;
 
 import io.raytracer.tools.IColour;
 import io.raytracer.geometry.IPoint;
 import lombok.NonNull;
 
-public class Monopattern extends Pattern {
+public class MonocolourTexture extends Texture {
     @NonNull private final IColour monocolour;
 
-    public Monopattern(IColour colour) {
+    public MonocolourTexture(IColour colour) {
         super();
         this.monocolour = colour;
     }
@@ -24,7 +24,7 @@ public class Monopattern extends Pattern {
     public boolean equals(Object them) {
         if (them == null || this.getClass() != them.getClass()) return false;
 
-        Monopattern themMonocolour = (Monopattern) them;
+        MonocolourTexture themMonocolour = (MonocolourTexture) them;
         return themMonocolour.monocolour.equals(this.monocolour);
     }
 }

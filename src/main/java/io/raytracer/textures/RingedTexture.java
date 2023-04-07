@@ -1,22 +1,20 @@
-package io.raytracer.patterns;
+package io.raytracer.textures;
 
 import io.raytracer.tools.IColour;
 import io.raytracer.geometry.IPoint;
-import lombok.NonNull;
 
-public class StripedPattern extends Pattern {
+public class RingedTexture extends Texture {
     private final IColour firstColour;
     private final IColour secondColour;
 
-    public StripedPattern(@NonNull IColour firstColour, @NonNull IColour secondColour) {
-        super();
+    public RingedTexture(IColour firstColour, IColour secondColour) {
         this.firstColour = firstColour;
         this.secondColour = secondColour;
     }
 
     @Override
     public IColour colourAt(IPoint p) {
-        return (int)Math.floor(p.get(0)) % 2 == 0 ? firstColour : secondColour;
+        return Math.floor(Math.sqrt(Math.pow(p.get(0), 2) + Math.pow(p.get(2), 2))) % 2 == 0 ? this.firstColour : this.secondColour;
     }
 
     @Override
@@ -28,7 +26,7 @@ public class StripedPattern extends Pattern {
     public boolean equals(Object them) {
         if (them == null || this.getClass() != them.getClass()) return false;
 
-        StripedPattern themStriped = (StripedPattern) them;
-        return themStriped.firstColour.equals(this.firstColour) && themStriped.secondColour.equals(this.secondColour);
+        RingedTexture themGrad = (RingedTexture) them;
+        return themGrad.firstColour.equals(this.firstColour) && themGrad.secondColour.equals(this.secondColour);
     }
 }

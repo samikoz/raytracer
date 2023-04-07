@@ -4,8 +4,8 @@ import io.raytracer.tools.ICamera;
 import io.raytracer.tools.Camera;
 import io.raytracer.tools.IPicture;
 import io.raytracer.tools.Colour;
-import io.raytracer.patterns.CheckerPattern;
-import io.raytracer.patterns.Monopattern;
+import io.raytracer.textures.CheckerTexture;
+import io.raytracer.textures.MonocolourTexture;
 import io.raytracer.drawables.Drawable;
 import io.raytracer.materials.Glass;
 import io.raytracer.materials.Material;
@@ -28,7 +28,7 @@ public class AirGlassSnapshot {
     public static void render(double angle, String filename) throws IOException {
         int cubeHalfSide = 7;
         Material wallMaterial = Material.builder()
-            .pattern(new CheckerPattern(new Colour(0.6, 0.6, 0.6), new Colour(0, 0, 0)))
+            .texture(new CheckerTexture(new Colour(0.6, 0.6, 0.6), new Colour(0, 0, 0)))
             .ambient(1.0)
             .build();
         Plane backWall = new Plane(wallMaterial);
@@ -45,7 +45,7 @@ public class AirGlassSnapshot {
         bottomWall.setTransform(ThreeTransform.translation(0, -cubeHalfSide, 0));
 
         Material glassMaterial = Glass.glassBuilder()
-                .pattern(new Monopattern(new Colour(0, 0, 0)))
+                .texture(new MonocolourTexture(new Colour(0, 0, 0)))
                 .specular(0.9)
                 .ambient(0.1)
                 .shininess(250.0)
@@ -55,7 +55,7 @@ public class AirGlassSnapshot {
         Material airMaterial = Material.builder()
             .transparency(1.0)
             .reflectivity(0.9)
-            .pattern(new Monopattern(new Colour(0, 0, 0)))
+            .texture(new MonocolourTexture(new Colour(0, 0, 0)))
             .specular(0.1)
             .ambient(0.1)
             .shininess(20.0)

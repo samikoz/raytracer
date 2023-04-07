@@ -3,9 +3,9 @@ package io.raytracer.mechanics;
 import io.raytracer.drawables.Plane;
 import io.raytracer.tools.IColour;
 import io.raytracer.tools.Colour;
-import io.raytracer.patterns.Monopattern;
-import io.raytracer.patterns.Pattern;
-import io.raytracer.patterns.StripedPattern;
+import io.raytracer.textures.MonocolourTexture;
+import io.raytracer.textures.Texture;
+import io.raytracer.textures.StripedTexture;
 import io.raytracer.geometry.Point;
 import io.raytracer.geometry.ThreeTransform;
 import io.raytracer.geometry.Vector;
@@ -27,7 +27,7 @@ public class LightSourceTest {
     @BeforeEach
     void setupMaterialAndHitpoint() {
         material = Material.builder()
-                .pattern(new Monopattern(new Colour(1, 1, 1))).ambient(0.1).diffuse(0.9).specular(0.9).shininess(200.0)
+                .texture(new MonocolourTexture(new Colour(1, 1, 1))).ambient(0.1).diffuse(0.9).specular(0.9).shininess(200.0)
                 .build();
         plane = new Plane(material);
         plane.setTransform(ThreeTransform.rotation_x(Math.PI / 2));
@@ -117,14 +117,14 @@ public class LightSourceTest {
     }
 
     @Test
-    void illuminateWithPatternApplied() {
+    void illuminateWithTextureApplied() {
         IColour black = new Colour(0, 0, 0);
         IColour white = new Colour(1, 1,1);
-        Material patternedMaterial = Material.builder()
-            .pattern(new StripedPattern(white, black))
+        Material textureedMaterial = Material.builder()
+            .texture(new StripedTexture(white, black))
             .ambient(1.0).diffuse(0.0).specular(0.0).shininess(200.0)
             .build();
-        Drawable stripedPlane = new Plane(patternedMaterial);
+        Drawable stripedPlane = new Plane(textureedMaterial);
         ILightSource source = new LightSource(new Colour(1, 1, 1), new Point(0, 0, -10));
         IRay firstRay = new Ray(new Point(0.9, 0, -1), new Vector(0, 0, 1));
         Optional<RayHit> firstHitMaybe = RayHit.fromIntersections(new Intersection[] { new Intersection(firstRay, 1, stripedPlane) });
@@ -143,11 +143,11 @@ public class LightSourceTest {
     void getObjectColourForTransformedObject() {
         IColour white = new Colour(1, 1, 1);
         IColour black = new Colour(0, 0, 0);
-        Material patternedMaterial = Material.builder()
-                .pattern(new StripedPattern(white, black))
+        Material textureedMaterial = Material.builder()
+                .texture(new StripedTexture(white, black))
                 .ambient(1.0).diffuse(0.0).specular(0.0).shininess(200.0)
                 .build();
-        Drawable sphere = new Sphere(patternedMaterial);
+        Drawable sphere = new Sphere(textureedMaterial);
         sphere.setTransform(ThreeTransform.scaling(2, 2, 2));
         LightSource source = new LightSource(new Colour(1, 1, 1), new Point(0, 0, -10));
 
@@ -157,16 +157,16 @@ public class LightSourceTest {
     }
 
     @Test
-    void getObjectColourForTransformedPattern() {
+    void getObjectColourForTransformedTexture() {
         IColour white = new Colour(1, 1, 1);
         IColour black = new Colour(0, 0, 0);
-        Pattern stripedPattern = new StripedPattern(white, black);
-        stripedPattern.setTransform(ThreeTransform.scaling(2, 2, 2));
-        Material patternedMaterial = Material.builder()
-                .pattern(stripedPattern)
+        Texture stripedTexture = new StripedTexture(white, black);
+        stripedTexture.setTransform(ThreeTransform.scaling(2, 2, 2));
+        Material textureedMaterial = Material.builder()
+                .texture(stripedTexture)
                 .ambient(1.0).diffuse(0.0).specular(0.0).shininess(200.0)
                 .build();
-        Drawable sphere = new Sphere(patternedMaterial);
+        Drawable sphere = new Sphere(textureedMaterial);
         LightSource source = new LightSource(new Colour(1, 1, 1), new Point(0, 0, -10));
 
         IColour colour = source.getObjectColour(sphere, new Point(1.5, 0, 0));
@@ -175,16 +175,16 @@ public class LightSourceTest {
     }
 
     @Test
-    void getObjectColourForBothTransformedObjectAndPattern() {
+    void getObjectColourForBothTransformedObjectAndTexture() {
         IColour white = new Colour(1, 1, 1);
         IColour black = new Colour(0, 0, 0);
-        Pattern stripedPattern = new StripedPattern(white, black);
-        stripedPattern.setTransform(ThreeTransform.translation(0.5, 0, 0));
-        Material patternedMaterial = Material.builder()
-                .pattern(stripedPattern)
+        Texture stripedTexture = new StripedTexture(white, black);
+        stripedTexture.setTransform(ThreeTransform.translation(0.5, 0, 0));
+        Material textureedMaterial = Material.builder()
+                .texture(stripedTexture)
                 .ambient(1.0).diffuse(0.0).specular(0.0).shininess(200.0)
                 .build();
-        Drawable sphere = new Sphere(patternedMaterial);
+        Drawable sphere = new Sphere(textureedMaterial);
         sphere.setTransform(ThreeTransform.scaling(2, 2, 2));
         LightSource source = new LightSource(new Colour(1, 1, 1), new Point(0, 0, -10));
 

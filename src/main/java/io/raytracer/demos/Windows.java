@@ -5,7 +5,7 @@ import io.raytracer.tools.Colour;
 import io.raytracer.tools.ICamera;
 import io.raytracer.tools.IPicture;
 import io.raytracer.tools.PPMPicture;
-import io.raytracer.patterns.Monopattern;
+import io.raytracer.textures.MonocolourTexture;
 import io.raytracer.geometry.IPoint;
 import io.raytracer.geometry.IVector;
 import io.raytracer.geometry.Point;
@@ -39,7 +39,7 @@ public class Windows {
         world.put(floor);
 
         Material.MaterialBuilder sphereMaterialBuilder = Material.builder()
-                .pattern(new Monopattern(new Colour(0, 1, 0)))
+                .texture(new MonocolourTexture(new Colour(0, 1, 0)))
                 .specular(0.3).ambient(0.1).shininess(150.0);
 
         for (int sphereIndex = 0; sphereIndex < spheresCount; sphereIndex++) {

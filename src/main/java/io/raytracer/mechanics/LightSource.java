@@ -50,7 +50,7 @@ public class LightSource implements ILightSource {
     IColour getObjectColour(Drawable object, IPoint point) {
         IPoint objectPoint = object.getInverseTransform().act(point);
         Material material = object.getMaterial();
-        IPoint patternPoint = material.pattern.getInverseTransform().act(objectPoint);
-        return material.pattern.colourAt(patternPoint);
+        IPoint texturePoint = material.texture.getInverseTransform().act(objectPoint);
+        return material.texture.colourAt(texturePoint);
     }
 }

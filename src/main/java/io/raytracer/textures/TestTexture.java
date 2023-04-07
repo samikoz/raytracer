@@ -1,10 +1,10 @@
-package io.raytracer.patterns;
+package io.raytracer.textures;
 
 import io.raytracer.tools.Colour;
 import io.raytracer.tools.IColour;
 import io.raytracer.geometry.IPoint;
 
-public class TestPattern extends Pattern {
+public class TestTexture extends Texture {
     @Override
     public IColour colourAt(IPoint p) {
         return new Colour(p.get(0), p.get(1), p.get(2));

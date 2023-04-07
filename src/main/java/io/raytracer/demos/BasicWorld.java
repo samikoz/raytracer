@@ -4,10 +4,10 @@ import io.raytracer.tools.ICamera;
 import io.raytracer.tools.Camera;
 import io.raytracer.tools.IPicture;
 import io.raytracer.tools.Colour;
-import io.raytracer.patterns.GradientPattern;
-import io.raytracer.patterns.Monopattern;
-import io.raytracer.patterns.Pattern;
-import io.raytracer.patterns.StripedPattern;
+import io.raytracer.textures.GradientTexture;
+import io.raytracer.textures.MonocolourTexture;
+import io.raytracer.textures.Texture;
+import io.raytracer.textures.StripedTexture;
 import io.raytracer.materials.Material;
 import io.raytracer.drawables.Plane;
 import io.raytracer.drawables.Sphere;
@@ -27,7 +27,7 @@ import java.io.PrintWriter;
 public class BasicWorld {
     public static void main(String[] args) throws IOException {
         Material wallMaterial = Material.builder()
-                .pattern(new Monopattern(new Colour(1, 0.9, 0.9)))
+                .texture(new MonocolourTexture(new Colour(1, 0.9, 0.9)))
                 .specular(0.0)
                 .ambient(0.1)
                 .diffuse(0.9)
@@ -39,15 +39,15 @@ public class BasicWorld {
         Material sphereMaterial = Material.builder().diffuse(0.7).specular(0.3).ambient(0.1).shininess(200.0).build();
 
         Material leftMaterial = sphereMaterial.toBuilder()
-                .pattern(new StripedPattern(new Colour(1, 1, 1), new Colour(0, 1, 0)))
+                .texture(new StripedTexture(new Colour(1, 1, 1), new Colour(0, 1, 0)))
                 .transparency(0.5).refractiveIndex(1.5)
                 .build();
         Sphere leftSphere = new Sphere(leftMaterial);
         leftSphere.setTransform(ThreeTransform.rotation_z(Math.PI / 4).translate(-1, 1, -1));
 
-        Pattern rightPattern = new GradientPattern(new Colour(1, 0, 0), new Colour(0, 0, 1));
-        rightPattern.setTransform(ThreeTransform.translation(-0.5,0 ,0 ).rotate_z(Math.PI / 2).scale(2, 2, 2));
-        Material rightMaterial = sphereMaterial.toBuilder().pattern(rightPattern).build();
+        Texture rightTexture = new GradientTexture(new Colour(1, 0, 0), new Colour(0, 0, 1));
+        rightTexture.setTransform(ThreeTransform.translation(-0.5,0 ,0 ).rotate_z(Math.PI / 2).scale(2, 2, 2));
+        Material rightMaterial = sphereMaterial.toBuilder().texture(rightTexture).build();
         Sphere rightSphere = new Sphere(rightMaterial);
         rightSphere.setTransform(ThreeTransform.scaling(0.5, 0.5, 0.5).translate(2, 0.5, 1));
 
