@@ -4,11 +4,11 @@ import io.raytracer.tools.ICamera;
 import io.raytracer.tools.IColour;
 import io.raytracer.tools.IPicture;
 import io.raytracer.tools.PPMPicture;
-import io.raytracer.drawables.Drawable;
+import io.raytracer.shapes.Shape;
 
 public interface IWorld {
     IWorld put(ILightSource source);
-    IWorld put(Drawable object);
+    IWorld put(Shape object);
 
     IColour illuminate(IRay ray);
 

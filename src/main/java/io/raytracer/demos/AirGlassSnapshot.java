@@ -6,11 +6,11 @@ import io.raytracer.tools.IPicture;
 import io.raytracer.tools.Colour;
 import io.raytracer.textures.CheckerTexture;
 import io.raytracer.textures.MonocolourTexture;
-import io.raytracer.drawables.Drawable;
+import io.raytracer.shapes.Shape;
 import io.raytracer.materials.Glass;
 import io.raytracer.materials.Material;
-import io.raytracer.drawables.Plane;
-import io.raytracer.drawables.Sphere;
+import io.raytracer.shapes.Plane;
+import io.raytracer.shapes.Sphere;
 import io.raytracer.geometry.IPoint;
 import io.raytracer.geometry.Point;
 import io.raytracer.geometry.ThreeTransform;
@@ -50,7 +50,7 @@ public class AirGlassSnapshot {
                 .ambient(0.1)
                 .shininess(250.0)
                 .build();
-        Drawable glassSphere = new Sphere(glassMaterial);
+        Shape glassSphere = new Sphere(glassMaterial);
 
         Material airMaterial = Material.builder()
             .transparency(1.0)
@@ -60,7 +60,7 @@ public class AirGlassSnapshot {
             .ambient(0.1)
             .shininess(20.0)
             .build();
-        Drawable airSphere = new Sphere(airMaterial);
+        Shape airSphere = new Sphere(airMaterial);
         airSphere.setTransform(ThreeTransform.scaling(0.5, 0.5, 0.5));
 
         IWorld world = new World();

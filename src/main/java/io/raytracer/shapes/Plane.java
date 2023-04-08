@@ -1,4 +1,4 @@
-package io.raytracer.drawables;
+package io.raytracer.shapes;
 
 import io.raytracer.geometry.IPoint;
 import io.raytracer.geometry.IVector;
@@ -9,7 +9,7 @@ import lombok.NonNull;
 
 import static java.lang.Math.abs;
 
-public class Plane extends Drawable {
+public class Plane extends Shape {
     private static final double parallelTolerance = 1e-3;
 
     public Plane() {

@@ -1,6 +1,5 @@
-package io.raytracer.drawables;
+package io.raytracer.shapes;
 
-import io.raytracer.drawables.Sphere;
 import io.raytracer.geometry.Point;
 import io.raytracer.geometry.ThreeTransform;
 import io.raytracer.geometry.ITransform;

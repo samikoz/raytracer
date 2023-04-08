@@ -1,4 +1,4 @@
-package io.raytracer.drawables;
+package io.raytracer.shapes;
 
 import io.raytracer.geometry.IPoint;
 import io.raytracer.geometry.IVector;
@@ -7,7 +7,7 @@ import io.raytracer.materials.Material;
 import io.raytracer.mechanics.IRay;
 import lombok.NonNull;
 
-public class Cube extends Drawable {
+public class Cube extends Shape {
     Cube() {
         super();
     }

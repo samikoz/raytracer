@@ -1,6 +1,6 @@
 package io.raytracer.mechanics;
 
-import io.raytracer.drawables.Plane;
+import io.raytracer.shapes.Plane;
 import io.raytracer.tools.IColour;
 import io.raytracer.tools.Colour;
 import io.raytracer.textures.MonocolourTexture;
@@ -9,8 +9,8 @@ import io.raytracer.textures.StripedTexture;
 import io.raytracer.geometry.Point;
 import io.raytracer.geometry.ThreeTransform;
 import io.raytracer.geometry.Vector;
-import io.raytracer.drawables.Drawable;
-import io.raytracer.drawables.Sphere;
+import io.raytracer.shapes.Shape;
+import io.raytracer.shapes.Sphere;
 import io.raytracer.materials.Material;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -22,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class LightSourceTest {
     Material material;
-    Drawable plane;
+    Shape plane;
 
     @BeforeEach
     void setupMaterialAndHitpoint() {
@@ -124,7 +124,7 @@ public class LightSourceTest {
             .texture(new StripedTexture(white, black))
             .ambient(1.0).diffuse(0.0).specular(0.0).shininess(200.0)
             .build();
-        Drawable stripedPlane = new Plane(textureedMaterial);
+        Shape stripedPlane = new Plane(textureedMaterial);
         ILightSource source = new LightSource(new Colour(1, 1, 1), new Point(0, 0, -10));
         IRay firstRay = new Ray(new Point(0.9, 0, -1), new Vector(0, 0, 1));
         Optional<RayHit> firstHitMaybe = RayHit.fromIntersections(new Intersection[] { new Intersection(firstRay, 1, stripedPlane) });
@@ -147,7 +147,7 @@ public class LightSourceTest {
                 .texture(new StripedTexture(white, black))
                 .ambient(1.0).diffuse(0.0).specular(0.0).shininess(200.0)
                 .build();
-        Drawable sphere = new Sphere(textureedMaterial);
+        Shape sphere = new Sphere(textureedMaterial);
         sphere.setTransform(ThreeTransform.scaling(2, 2, 2));
         LightSource source = new LightSource(new Colour(1, 1, 1), new Point(0, 0, -10));
 
@@ -166,7 +166,7 @@ public class LightSourceTest {
                 .texture(stripedTexture)
                 .ambient(1.0).diffuse(0.0).specular(0.0).shininess(200.0)
                 .build();
-        Drawable sphere = new Sphere(textureedMaterial);
+        Shape sphere = new Sphere(textureedMaterial);
         LightSource source = new LightSource(new Colour(1, 1, 1), new Point(0, 0, -10));
 
         IColour colour = source.getObjectColour(sphere, new Point(1.5, 0, 0));
@@ -184,7 +184,7 @@ public class LightSourceTest {
                 .texture(stripedTexture)
                 .ambient(1.0).diffuse(0.0).specular(0.0).shininess(200.0)
                 .build();
-        Drawable sphere = new Sphere(textureedMaterial);
+        Shape sphere = new Sphere(textureedMaterial);
         sphere.setTransform(ThreeTransform.scaling(2, 2, 2));
         LightSource source = new LightSource(new Colour(1, 1, 1), new Point(0, 0, -10));
 

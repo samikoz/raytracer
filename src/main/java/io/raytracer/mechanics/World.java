@@ -4,7 +4,7 @@ import io.raytracer.tools.IColour;
 import io.raytracer.tools.Colour;
 import io.raytracer.geometry.IPoint;
 import io.raytracer.geometry.IVector;
-import io.raytracer.drawables.Drawable;
+import io.raytracer.shapes.Shape;
 import io.raytracer.materials.Material;
 import lombok.NonNull;
 import org.jetbrains.annotations.NotNull;
@@ -17,7 +17,7 @@ import java.util.stream.Stream;
 
 public class World implements IWorld {
     private ILightSource lightSource;
-    private final List<Drawable> contents;
+    private final List<Shape> contents;
     private static final int recursionDepth = 4;
 
     public World() {
@@ -31,7 +31,7 @@ public class World implements IWorld {
     }
 
     @Override
-    public IWorld put(Drawable object) {
+    public IWorld put(Shape object) {
         this.contents.add(object);
         return this;
     }

@@ -2,7 +2,7 @@ package io.raytracer.mechanics;
 
 import io.raytracer.geometry.IPoint;
 import io.raytracer.geometry.IVector;
-import io.raytracer.drawables.Drawable;
+import io.raytracer.shapes.Shape;
 import lombok.ToString;
 
 import java.util.ArrayList;
@@ -55,7 +55,7 @@ public class RayHit extends Intersection {
     }
 
     static double[] findRefractiveIndices(Intersection[] inters, Intersection hitIntersection) {
-        ArrayList<Drawable> containers = new ArrayList<>();
+        ArrayList<Shape> containers = new ArrayList<>();
         double[] refractiveIndices = new double[2];
         for (Intersection currentIntersection : inters) {
             if (currentIntersection.equals(hitIntersection)) {

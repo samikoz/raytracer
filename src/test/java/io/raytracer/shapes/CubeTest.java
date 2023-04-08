@@ -1,10 +1,9 @@
-package io.raytracer.drawables;
+package io.raytracer.shapes;
 
 import io.raytracer.geometry.IVector;
 import io.raytracer.geometry.Point;
 import io.raytracer.geometry.Vector;
 import io.raytracer.mechanics.Ray;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -29,7 +28,7 @@ class CubeTest {
     @ParameterizedTest
     @MethodSource("providePositiveRaysAndIntersections")
     void positiveLocalIntersectionPositions(Ray ray, double firstIntersection, double secondIntersection) {
-        Drawable cube = new Cube();
+        Shape cube = new Cube();
         double[] intersections = cube.getLocalIntersectionPositions(ray);
         assertEquals(2, intersections.length);
         assertEquals(firstIntersection, intersections[0], 1e-3);
@@ -50,7 +49,7 @@ class CubeTest {
     @ParameterizedTest
     @MethodSource("provideMissingRaysAndIntersections")
     void missingLocalIntersectionPositions(Ray ray) {
-        Drawable cube = new Cube();
+        Shape cube = new Cube();
         double[] intersections = cube.getLocalIntersectionPositions(ray);
         assertEquals(0, intersections.length);
     }
@@ -71,7 +70,7 @@ class CubeTest {
     @ParameterizedTest
     @MethodSource("providePointsAndNormals")
     void normalLocally(Point point, Vector normal) {
-        Drawable cube = new Cube();
+        Shape cube = new Cube();
         IVector actualNormal = cube.normalLocally(point);
         assertEquals(normal, actualNormal);
     }

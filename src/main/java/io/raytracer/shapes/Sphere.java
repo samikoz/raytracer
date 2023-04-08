@@ -1,4 +1,4 @@
-package io.raytracer.drawables;
+package io.raytracer.shapes;
 
 import io.raytracer.geometry.IPoint;
 import io.raytracer.geometry.Point;
@@ -8,7 +8,7 @@ import io.raytracer.materials.Material;
 import io.raytracer.mechanics.IRay;
 import lombok.NonNull;
 
-public class Sphere extends Drawable {
+public class Sphere extends Shape {
     public Sphere() {
         super();
     }

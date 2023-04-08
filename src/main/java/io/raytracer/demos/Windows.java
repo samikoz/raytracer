@@ -14,9 +14,9 @@ import io.raytracer.geometry.Vector;
 import io.raytracer.mechanics.IWorld;
 import io.raytracer.mechanics.LightSource;
 import io.raytracer.mechanics.World;
-import io.raytracer.drawables.Drawable;
-import io.raytracer.drawables.Plane;
-import io.raytracer.drawables.Sphere;
+import io.raytracer.shapes.Shape;
+import io.raytracer.shapes.Plane;
+import io.raytracer.shapes.Sphere;
 import io.raytracer.materials.Material;
 
 import java.io.FileWriter;
@@ -44,7 +44,7 @@ public class Windows {
 
         for (int sphereIndex = 0; sphereIndex < spheresCount; sphereIndex++) {
             Material sphereMaterial = sphereMaterialBuilder.diffuse(0.7*(1 - (sphereIndex/(float)spheresCount))).build();
-            Drawable aSphere = new Sphere(sphereMaterial);
+            Shape aSphere = new Sphere(sphereMaterial);
             aSphere.setTransform(ThreeTransform.translation(0, 1, sphereSeparation*sphereIndex));
             world.put(aSphere);
         }

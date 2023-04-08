@@ -7,9 +7,9 @@ import io.raytracer.tools.Colour;
 import io.raytracer.textures.CheckerTexture;
 import io.raytracer.textures.MonocolourTexture;
 import io.raytracer.materials.Material;
-import io.raytracer.drawables.Drawable;
-import io.raytracer.drawables.Plane;
-import io.raytracer.drawables.Sphere;
+import io.raytracer.shapes.Shape;
+import io.raytracer.shapes.Plane;
+import io.raytracer.shapes.Sphere;
 import io.raytracer.geometry.IPoint;
 import io.raytracer.geometry.Point;
 import io.raytracer.geometry.ThreeTransform;
@@ -48,7 +48,7 @@ public class Skalinn {
 
         for (int sphereIndex = 0; sphereIndex < spheresCount; sphereIndex++) {
             Material sphereMaterial = sphereMaterialBuilder.diffuse(0.7 - 0.35*(sphereIndex/(float)spheresCount)).build();
-            Drawable aSphere = new Sphere(sphereMaterial);
+            Shape aSphere = new Sphere(sphereMaterial);
             aSphere.setTransform(ThreeTransform.translation(0, 1, sphereSeparation*sphereIndex));
             world.put(aSphere);
         }

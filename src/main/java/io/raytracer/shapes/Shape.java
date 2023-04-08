@@ -1,4 +1,4 @@
-package io.raytracer.drawables;
+package io.raytracer.shapes;
 
 import io.raytracer.geometry.IPoint;
 import io.raytracer.geometry.ITransform;
@@ -12,7 +12,7 @@ import lombok.NonNull;
 
 import java.util.Arrays;
 
-public abstract class Drawable {
+public abstract class Shape {
     @Getter private ITransform inverseTransform;
     @Getter private final Material material;
 
@@ -20,12 +20,12 @@ public abstract class Drawable {
         this.inverseTransform = transform.inverse();
     }
 
-    Drawable() {
+    Shape() {
         this.setTransform(new ThreeTransform());
         this.material = Material.builder().build();
     }
 
-    Drawable(@NonNull Material material) {
+    Shape(@NonNull Material material) {
         this.setTransform(new ThreeTransform());
         this.material = material;
     }

@@ -1,6 +1,5 @@
-package io.raytracer.drawables;
+package io.raytracer.shapes;
 
-import io.raytracer.drawables.Plane;
 import io.raytracer.geometry.Point;
 import io.raytracer.geometry.Vector;
 import io.raytracer.mechanics.IRay;

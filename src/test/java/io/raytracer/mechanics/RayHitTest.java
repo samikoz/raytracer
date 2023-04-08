@@ -3,8 +3,8 @@ package io.raytracer.mechanics;
 import io.raytracer.geometry.Point;
 import io.raytracer.geometry.ThreeTransform;
 import io.raytracer.geometry.Vector;
-import io.raytracer.drawables.Drawable;
-import io.raytracer.drawables.Sphere;
+import io.raytracer.shapes.Shape;
+import io.raytracer.shapes.Sphere;
 import io.raytracer.materials.Glass;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -102,11 +102,11 @@ class RayHitTest {
     @ParameterizedTest
     @MethodSource("provideIntersectionIndicesAndRefractionIndices")
     void refractiveIndices(Point rayStartPoint, double refractiveFrom, double refractiveTo) {
-        Drawable outerSphere = new Sphere(Glass.glassBuilder().refractiveIndex(1.5).build());
+        Shape outerSphere = new Sphere(Glass.glassBuilder().refractiveIndex(1.5).build());
         outerSphere.setTransform(ThreeTransform.scaling(2, 2, 2));
-        Drawable leftSphere = new Sphere(Glass.glassBuilder().refractiveIndex(2.0).build());
+        Shape leftSphere = new Sphere(Glass.glassBuilder().refractiveIndex(2.0).build());
         leftSphere.setTransform(ThreeTransform.translation(0, 0, -0.25));
-        Drawable rightSphere = new Sphere(Glass.glassBuilder().refractiveIndex(2.5).build());
+        Shape rightSphere = new Sphere(Glass.glassBuilder().refractiveIndex(2.5).build());
         rightSphere.setTransform(ThreeTransform.translation(0, 0, 0.25));
         World world = (World)new World().put(outerSphere).put(leftSphere).put(rightSphere);
 
@@ -122,7 +122,7 @@ class RayHitTest {
 
     @Test
     void reflectanceOfAPerpendicularRay() {
-        Drawable sphere = new Sphere(Glass.glassBuilder().build());
+        Shape sphere = new Sphere(Glass.glassBuilder().build());
         IRay ray = new Ray(new Point(0, 0, 0), new Vector(0, 1, 0));
         RayHit hitpoint = RayHit.fromIntersections(new Intersection[] { new Intersection(ray, 1, sphere) }).get();
 
@@ -131,7 +131,7 @@ class RayHitTest {
 
     @Test
     void reflectanceForASmallAngleAndLargerSecondRefractiveIndex() {
-        Drawable sphere = new Sphere(Glass.glassBuilder().build());
+        Shape sphere = new Sphere(Glass.glassBuilder().build());
         IRay ray = new Ray(new Point(0, 0.99, -2), new Vector(0, 0, 1));
         RayHit hitpoint = RayHit.fromIntersections(new Intersection[] { new Intersection(ray, 1.8589, sphere) }).get();
 

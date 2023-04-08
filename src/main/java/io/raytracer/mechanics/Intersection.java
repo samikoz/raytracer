@@ -1,6 +1,6 @@
 package io.raytracer.mechanics;
 
-import io.raytracer.drawables.Drawable;
+import io.raytracer.shapes.Shape;
 import lombok.AllArgsConstructor;
 import lombok.ToString;
 import lombok.NonNull;
@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
 public class Intersection implements Comparable<Intersection> {
     public IRay ray;
     public double rayParameter;
-    @NonNull public Drawable object;
+    @NonNull public Shape object;
 
     @Override
     public int compareTo(@NotNull Intersection intersection) {
