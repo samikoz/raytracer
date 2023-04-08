@@ -59,8 +59,8 @@ public class World implements IWorld {
     }
 
     Intersection[] intersect(@NonNull IRay ray) {
-        Stream<Intersection> s = contents.stream().map(object -> object.intersect(ray)).flatMap(Arrays::stream);
-        return s.sorted().toArray(Intersection[]::new);
+        return contents.stream().map(object -> object.intersect(ray))
+            .flatMap(Arrays::stream).sorted().toArray(Intersection[]::new);
     }
 
     boolean isShadowed(IPoint point) {

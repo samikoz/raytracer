@@ -3,11 +3,11 @@ package io.raytracer.shapes;
 import io.raytracer.geometry.IPoint;
 import io.raytracer.geometry.IVector;
 import io.raytracer.mechanics.IRay;
+import io.raytracer.mechanics.Intersection;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.IntStream;
 
 public class Group extends Shape {
     private final List<Shape> children;
@@ -17,14 +17,22 @@ public class Group extends Shape {
         this.children = new ArrayList<>();
     }
 
-    public void add(Shape shape) {
+    public Group add(Shape shape) {
         this.children.add(shape);
         shape.setParent(this);
+        return this;
+    }
+
+    @Override
+    public Intersection[] intersect(IRay ray) {
+        IRay transformedRay = ray.getTransformed(this.getInverseTransform());
+        return this.children.stream().map(child -> child.intersect(transformedRay))
+            .flatMap(Arrays::stream).sorted().toArray(Intersection[]::new);
     }
 
     @Override
     protected double[] getLocalIntersectionPositions(IRay ray) {
-        return new double[0];
+        throw new UnsupportedOperationException("a group doesn't have own local intersections");
     }
 
     @Override
