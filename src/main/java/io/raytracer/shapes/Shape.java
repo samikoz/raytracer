@@ -9,18 +9,21 @@ import io.raytracer.mechanics.IRay;
 import io.raytracer.mechanics.Intersection;
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.Setter;
 
 import java.util.Arrays;
 import java.util.Optional;
 
 public abstract class Shape {
-    @Setter private Group parent;
+    private Group parent;
     @Getter private ITransform inverseTransform;
     @Getter private final Material material;
 
     public Optional<Group> getParent() {
         return Optional.ofNullable(this.parent);
+    }
+
+    protected void setParent(Group group) {
+        this.parent = group;
     }
 
     public void setTransform(ITransform transform) {
@@ -61,9 +64,25 @@ public abstract class Shape {
     }
 
     public IVector normal(IPoint point) {
-        ITransform inverseTransform = this.inverseTransform;
-        IPoint transformedPoint = inverseTransform.act(point);
+        IPoint transformedPoint = this.transformToOwnSpace(point);
         IVector normal = this.normalLocally(transformedPoint);
-        return inverseTransform.transpose().act(normal).normalise();
+        return this.transformToWorldSpace(normal);
+    }
+
+    protected IPoint transformToOwnSpace(IPoint worldPoint) {
+        Optional<Group> parent = this.getParent();
+        if (parent.isPresent()) {
+            worldPoint = parent.get().transformToOwnSpace(worldPoint);
+        }
+        return this.inverseTransform.act(worldPoint);
+    }
+
+    protected IVector transformToWorldSpace(IVector ownNormal) {
+        IVector transposedNormal = this.inverseTransform.transpose().act(ownNormal).normalise();
+        Optional<Group> parent = this.getParent();
+        if (parent.isPresent()) {
+            transposedNormal = parent.get().transformToWorldSpace(transposedNormal);
+        }
+        return transposedNormal;
     }
 }

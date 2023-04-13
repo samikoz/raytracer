@@ -1,5 +1,7 @@
 package io.raytracer.shapes;
 
+import io.raytracer.geometry.IPoint;
+import io.raytracer.geometry.IVector;
 import io.raytracer.geometry.Point;
 import io.raytracer.geometry.ThreeTransform;
 import io.raytracer.geometry.Vector;
@@ -66,5 +68,39 @@ class GroupTest {
         Intersection[] intersections = group.intersect(ray);
 
         assertEquals(2, intersections.length);
+    }
+
+    @Test
+    void transformToOwnSpace() {
+        Group outerGroup = new Group();
+        outerGroup.setTransform(ThreeTransform.rotation_y(Math.PI / 2));
+        Group innerGroup = new Group();
+        innerGroup.setTransform(ThreeTransform.scaling(2, 2, 2));
+        outerGroup.add(innerGroup);
+        Shape sphere = new Sphere();
+        sphere.setTransform(ThreeTransform.translation(5, 0, 0));
+        innerGroup.add(sphere);
+
+        IPoint transformedPoint = sphere.transformToOwnSpace(new Point(-2, 0, -10));
+        IPoint expectedPoint = new Point(0, 0, -1);
+
+        assertEquals(expectedPoint, transformedPoint);
+    }
+
+    @Test
+    void normalOnObjectInTransformedGroup() {
+        Group outerGroup = new Group();
+        outerGroup.setTransform(ThreeTransform.rotation_y(Math.PI / 2));
+        Group innerGroup = new Group();
+        innerGroup.setTransform(ThreeTransform.scaling(1, 2, 3));
+        outerGroup.add(innerGroup);
+        Shape sphere = new Sphere();
+        sphere.setTransform(ThreeTransform.translation(5, 0, 0));
+        innerGroup.add(sphere);
+
+        IVector normal = sphere.normal(new Point(1.7321, 1.1547, -5.5774));
+        IVector expectedNormal = new Vector(0.2857, 0.4286, -0.8571);
+
+        assertEquals(expectedNormal, normal);
     }
 }
