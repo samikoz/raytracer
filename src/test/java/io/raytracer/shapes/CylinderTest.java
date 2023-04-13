@@ -6,7 +6,6 @@ import io.raytracer.geometry.Point;
 import io.raytracer.geometry.Vector;
 import io.raytracer.mechanics.IRay;
 import io.raytracer.mechanics.Ray;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -68,5 +67,27 @@ class CylinderTest {
         IVector normal = cylinder.normalLocally(normalPosition);
 
         assertEquals(expectedNormal, normal);
+    }
+
+    private static Stream<Arguments> provideRaysAndIntersectionCounts() {
+        return Stream.of(
+            Arguments.of(new Ray(new Point(0, 1.5, 0), new Vector(0.099503, 0.995037, 0)), 0),
+            Arguments.of(new Ray(new Point(0, 3, -5), new Vector(0, 0, 1)), 0),
+            Arguments.of(new Ray(new Point(0, 0, -5), new Vector(0, 0, 1)), 0),
+            Arguments.of(new Ray(new Point(0, 2, -5), new Vector(0, 0, 1)), 0),
+            Arguments.of(new Ray(new Point(0, 1, -5), new Vector(0, 0, 1)), 0),
+            Arguments.of(new Ray(new Point(0, 1.5, -2), new Vector(0, 0, 1)), 2)
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource("provideRaysAndIntersectionCounts")
+    void intersectionToTruncatedCylinders(IRay ray, int intersectionsCount) {
+        Cylinder cylinder = new Cylinder();
+        IVector a = ray.getDirection().normalise();
+        cylinder.truncate(1, 2);
+        double[] intersections = cylinder.getLocalIntersectionPositions(ray);
+
+        assertEquals(intersectionsCount, intersections.length);
     }
 }

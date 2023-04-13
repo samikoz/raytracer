@@ -7,15 +7,29 @@ import io.raytracer.materials.Material;
 import io.raytracer.mechanics.IRay;
 import lombok.NonNull;
 
+import java.util.Arrays;
+
 public class Cylinder extends Shape {
+    public double upperBound;
+    public double lowerBound;
+
     private static final double tolerance = 1e-3;
 
     Cylinder() {
         super();
+        this.upperBound = Double.POSITIVE_INFINITY;
+        this.lowerBound = Double.NEGATIVE_INFINITY;
     }
 
     Cylinder(@NonNull Material material) {
         super(material);
+        this.upperBound = Double.POSITIVE_INFINITY;
+        this.lowerBound = Double.NEGATIVE_INFINITY;
+    }
+
+    public void truncate(double lowerBound, double upperBound) {
+        this.lowerBound = lowerBound;
+        this.upperBound = upperBound;
     }
 
     @Override
@@ -34,10 +48,13 @@ public class Cylinder extends Shape {
             return new double[] {};
         }
 
-        return new double[] {
+        double[] fullCylinderIntersections = new double[] {
             (-b - Math.sqrt(delta))/(2*a),
             (-b + Math.sqrt(delta))/(2*a)
         };
+        return Arrays.stream(fullCylinderIntersections)
+            .filter(i -> ray.getPosition(i).get(1) > this.lowerBound && ray.getPosition(i).get(1) < this.upperBound)
+            .toArray();
     }
 
     @Override
