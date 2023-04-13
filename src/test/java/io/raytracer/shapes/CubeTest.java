@@ -13,7 +13,7 @@ import java.util.stream.Stream;
 import static org.junit.jupiter.api.Assertions.*;
 
 class CubeTest {
-    private static Stream<Arguments> providePositiveRaysAndIntersections() {
+    private static Stream<Arguments> provideHittingRaysAndIntersections() {
         return Stream.of(
                 Arguments.of(new Ray(new Point(5, 0.5, 0), new Vector(-1,0,0)), 4.0, 6.0),
                 Arguments.of(new Ray(new Point(-5, 0.5, 0), new Vector(1,0,0)), 4.0, 6.0),
@@ -26,7 +26,7 @@ class CubeTest {
     }
 
     @ParameterizedTest
-    @MethodSource("providePositiveRaysAndIntersections")
+    @MethodSource("provideHittingRaysAndIntersections")
     void positiveLocalIntersectionPositions(Ray ray, double firstIntersection, double secondIntersection) {
         Shape cube = new Cube();
         double[] intersections = cube.getLocalIntersectionPositions(ray);
@@ -35,7 +35,7 @@ class CubeTest {
         assertEquals(secondIntersection, intersections[1], 1e-3);
     }
 
-    private static Stream<Arguments> provideMissingRaysAndIntersections() {
+    private static Stream<Arguments> provideMissingRays() {
         return Stream.of(
                 Arguments.of(new Ray(new Point(2, 0, 0), new Vector(0.2673, 0.5345, 0.8018))),
                 Arguments.of(new Ray(new Point(0, -2, 0), new Vector(0.8018, 0.2673, 0.5345))),
@@ -47,7 +47,7 @@ class CubeTest {
     }
 
     @ParameterizedTest
-    @MethodSource("provideMissingRaysAndIntersections")
+    @MethodSource("provideMissingRays")
     void missingLocalIntersectionPositions(Ray ray) {
         Shape cube = new Cube();
         double[] intersections = cube.getLocalIntersectionPositions(ray);
