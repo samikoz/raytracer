@@ -2,7 +2,7 @@ package io.raytracer.mechanics;
 
 import io.raytracer.tools.Colour;
 import io.raytracer.geometry.IVector;
-import io.raytracer.shapes.Shape;
+
 import io.raytracer.materials.Material;
 import lombok.Getter;
 import lombok.NonNull;
@@ -18,7 +18,7 @@ public class LightSource implements ILightSource {
 
     public IColour illuminate(RayHit hitpoint) {
         Material material = hitpoint.object.getMaterial();
-        IColour effectiveColour = this.getObjectColour(hitpoint.object, hitpoint.point).mix(this.colour);
+        IColour effectiveColour = hitpoint.object.getIntrinsicColour(hitpoint.point).mix(this.colour);
         IVector sourceDirection = this.position.subtract(hitpoint.point).normalise();
         IColour ambientContribution = effectiveColour.multiply(material.ambient);
         double lightNormalCosine = sourceDirection.dot(hitpoint.normalVector);
@@ -45,12 +45,5 @@ public class LightSource implements ILightSource {
             }
         }
         return ambientContribution.add(diffuseContribution).add(specularContribution);
-    }
-
-    IColour getObjectColour(Shape object, IPoint point) {
-        IPoint objectPoint = object.getInverseTransform().act(point);
-        Material material = object.getMaterial();
-        IPoint texturePoint = material.texture.getInverseTransform().act(objectPoint);
-        return material.texture.colourAt(texturePoint);
     }
 }

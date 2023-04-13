@@ -7,6 +7,7 @@ import io.raytracer.geometry.ThreeTransform;
 import io.raytracer.materials.Material;
 import io.raytracer.mechanics.IRay;
 import io.raytracer.mechanics.Intersection;
+import io.raytracer.tools.IColour;
 import lombok.Getter;
 import lombok.NonNull;
 
@@ -69,7 +70,14 @@ public abstract class Shape {
         return this.transformToWorldSpace(normal);
     }
 
-    protected IPoint transformToOwnSpace(IPoint worldPoint) {
+    public IColour getIntrinsicColour(IPoint point) {
+        IPoint objectPoint = this.transformToOwnSpace(point);
+        Material material = this.getMaterial();
+        IPoint texturePoint = material.texture.getInverseTransform().act(objectPoint);
+        return material.texture.colourAt(texturePoint);
+    }
+
+    public IPoint transformToOwnSpace(IPoint worldPoint) {
         Optional<Group> parent = this.getParent();
         if (parent.isPresent()) {
             worldPoint = parent.get().transformToOwnSpace(worldPoint);
