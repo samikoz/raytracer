@@ -53,10 +53,10 @@ class CylinderTest {
 
     private static Stream<Arguments> provideNormalPositionsAndNormals() {
         return Stream.of(
-                Arguments.of(new Point(1, 0, 0), new Vector(1,0,0)),
-                Arguments.of(new Point(0, 5, -1), new Vector(0,0,-1)),
-                Arguments.of(new Point(0, -2, 1), new Vector(0,0,1)),
-                Arguments.of(new Point(-1, 1, 0), new Vector(-1, 0, 0))
+            Arguments.of(new Point(1, 0, 0), new Vector(1,0,0)),
+            Arguments.of(new Point(0, 5, -1), new Vector(0,0,-1)),
+            Arguments.of(new Point(0, -2, 1), new Vector(0,0,1)),
+            Arguments.of(new Point(-1, 1, 0), new Vector(-1, 0, 0))
         );
     }
 
@@ -69,7 +69,7 @@ class CylinderTest {
         assertEquals(expectedNormal, normal);
     }
 
-    private static Stream<Arguments> provideRaysAndIntersectionCounts() {
+    private static Stream<Arguments> provideRaysAndIntersectionCountsForTruncated() {
         return Stream.of(
             Arguments.of(new Ray(new Point(0, 1.5, 0), new Vector(0.099503, 0.995037, 0)), 0),
             Arguments.of(new Ray(new Point(0, 3, -5), new Vector(0, 0, 1)), 0),
@@ -81,13 +81,60 @@ class CylinderTest {
     }
 
     @ParameterizedTest
-    @MethodSource("provideRaysAndIntersectionCounts")
-    void intersectionToTruncatedCylinders(IRay ray, int intersectionsCount) {
+    @MethodSource("provideRaysAndIntersectionCountsForTruncated")
+    void intersectionWithTruncatedCylinders(IRay ray, int intersectionsCount) {
         Cylinder cylinder = new Cylinder();
-        IVector a = ray.getDirection().normalise();
-        cylinder.truncate(1, 2);
+        cylinder.setLowerBound(1);
+        cylinder.setUpperBound(2);
         double[] intersections = cylinder.getLocalIntersectionPositions(ray);
 
         assertEquals(intersectionsCount, intersections.length);
+    }
+
+    private static Stream<Arguments> provideRaysAndIntersectionCountsForCapped() {
+        return Stream.of(
+            Arguments.of(new Ray(new Point(0, 3, 0), new Vector(0, -1, 0)), 2),
+            Arguments.of(new Ray(new Point(0, 3, -2), new Vector(0, -1, 2)), 2),
+            Arguments.of(new Ray(new Point(0, 4, -2), new Vector(0, -1, 1)), 2),
+            Arguments.of(new Ray(new Point(0, 0, -2), new Vector(0, 1, 2)), 2),
+            Arguments.of(new Ray(new Point(0, -1, -2), new Vector(0, 1, 1)), 2)
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource("provideRaysAndIntersectionCountsForCapped")
+    void intersectionWithCappedCylinders(IRay ray, int intersectionsCount) {
+        Cylinder cylinder = new Cylinder();
+        cylinder.setLowerBound(1);
+        cylinder.setUpperBound(2);
+        cylinder.setTopClosed(true);
+        cylinder.setBottomClosed(true);
+        double[] intersections = cylinder.getLocalIntersectionPositions(ray);
+
+        assertEquals(intersectionsCount, intersections.length);
+    }
+
+    private static Stream<Arguments> provideNormalPositionsAndNormalsForCapped() {
+        return Stream.of(
+            Arguments.of(new Point(0, 1, 0), new Vector(0,-1,0)),
+            Arguments.of(new Point(0.5, 1, 0), new Vector(0,-1,0)),
+            Arguments.of(new Point(0, 1, 0.5), new Vector(0,-1,0)),
+            Arguments.of(new Point(0, 2, 0), new Vector(0, 1, 0)),
+            Arguments.of(new Point(0.5, 2, 0), new Vector(0, 1, 0)),
+            Arguments.of(new Point(0, 2, 0.5), new Vector(0, 1, 0))
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource("provideNormalPositionsAndNormalsForCapped")
+    void normalsOnCappedCylinders(IPoint normalPosition, IVector expectedNormal) {
+        Cylinder cylinder = new Cylinder();
+        cylinder.setLowerBound(1);
+        cylinder.setUpperBound(2);
+        cylinder.setTopClosed(true);
+        cylinder.setBottomClosed(true);
+        IVector normal = cylinder.normalLocally(normalPosition);
+
+        assertEquals(expectedNormal, normal);
     }
 }
