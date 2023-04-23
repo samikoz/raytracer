@@ -22,7 +22,7 @@ public class Cylinder extends Shape {
 
     private static final double tolerance = 1e-3;
 
-    Cylinder() {
+    public Cylinder() {
         super();
         this.upperBound = Double.POSITIVE_INFINITY;
         this.lowerBound = Double.NEGATIVE_INFINITY;
@@ -30,7 +30,7 @@ public class Cylinder extends Shape {
         this.isBottomClosed = false;
     }
 
-    Cylinder(@NonNull Material material) {
+    public Cylinder(@NonNull Material material) {
         super(material);
         this.upperBound = Double.POSITIVE_INFINITY;
         this.lowerBound = Double.NEGATIVE_INFINITY;

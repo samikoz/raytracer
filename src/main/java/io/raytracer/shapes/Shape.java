@@ -10,6 +10,7 @@ import io.raytracer.mechanics.Intersection;
 import io.raytracer.tools.IColour;
 import lombok.Getter;
 import lombok.NonNull;
+import lombok.Setter;
 
 import java.util.Arrays;
 import java.util.Optional;
@@ -18,6 +19,7 @@ public abstract class Shape {
     private Group parent;
     @Getter private ITransform inverseTransform;
     @Getter private final Material material;
+    @Getter @Setter private boolean isCastingShadows;
 
     public Optional<Group> getParent() {
         return Optional.ofNullable(this.parent);
@@ -34,11 +36,13 @@ public abstract class Shape {
     Shape() {
         this.setTransform(new ThreeTransform());
         this.material = Material.builder().build();
+        this.isCastingShadows = true;
     }
 
     Shape(@NonNull Material material) {
         this.setTransform(new ThreeTransform());
         this.material = material;
+        this.isCastingShadows = true;
     }
 
     abstract protected double[] getLocalIntersectionPositions(IRay ray);

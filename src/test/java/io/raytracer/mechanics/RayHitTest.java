@@ -12,6 +12,9 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -29,7 +32,7 @@ class RayHitTest {
     void hitWithPositiveIntersections() {
         Intersection i1 = new Intersection(testRay,2.0, new Sphere());
         Intersection i2 = new Intersection(testRay,0.1, new Sphere());
-        Optional<RayHit> expectedHit = RayHit.fromIntersections(new Intersection[] { i1, i2 });
+        Optional<RayHit> expectedHit = RayHit.fromIntersections(Arrays.asList(i1, i2));
 
         assertTrue(expectedHit.isPresent());
         assertEquals(0.1, expectedHit.get().rayParameter, 1e-3,
@@ -40,7 +43,7 @@ class RayHitTest {
     void hitWithSomeNegativeIntersections() {
         Intersection i1 = new Intersection(testRay,2.0, new Sphere());
         Intersection i2 = new Intersection(testRay,-0.1, new Sphere());
-        Optional<RayHit> expectedHit = RayHit.fromIntersections(new Intersection[] { i1, i2 });
+        Optional<RayHit> expectedHit = RayHit.fromIntersections(Arrays.asList(i1, i2));
 
         assertTrue(expectedHit.isPresent());
         assertEquals(2.0, expectedHit.get().rayParameter, 1e-3,
@@ -51,7 +54,7 @@ class RayHitTest {
     void hitWithAllNegativeIntersections() {
         Intersection i1 = new Intersection(testRay,-2.0, new Sphere());
         Intersection i2 = new Intersection(testRay,-0.1, new Sphere());
-        Optional<RayHit> expectedHit = RayHit.fromIntersections(new Intersection[] { i1, i2 });
+        Optional<RayHit> expectedHit = RayHit.fromIntersections(Arrays.asList(i1, i2));
 
         assertFalse(expectedHit.isPresent(), "All negative intersections should produce no hit.");
     }
@@ -60,8 +63,7 @@ class RayHitTest {
     void hitpointCreation() {
         Ray ray = new Ray(new Point(0, 0, -5), new Vector(0, 0, 1));
         Sphere sphere = new Sphere();
-        Intersection intersection = new Intersection(ray,4, sphere);
-        Optional<RayHit> hit = RayHit.fromIntersections(new Intersection[] { intersection });
+        Optional<RayHit> hit = RayHit.fromIntersections(Collections.singletonList(new Intersection(ray,4, sphere)));
 
         assertTrue(hit.isPresent());
         RayHit hitpoint = hit.get();
@@ -76,8 +78,7 @@ class RayHitTest {
     void hitpointCreationFromInside() {
         Ray ray = new Ray(new Point(0, 0, 0), new Vector(0, 0, 1));
         Sphere sphere = new Sphere();
-        Intersection intersection = new Intersection(ray,1, sphere);
-        Optional<RayHit> hit = RayHit.fromIntersections(new Intersection[] { intersection });
+        Optional<RayHit> hit = RayHit.fromIntersections(Collections.singletonList(new Intersection(ray,1, sphere)));
 
         assertTrue(hit.isPresent());
         RayHit hitpoint = hit.get();
@@ -111,7 +112,7 @@ class RayHitTest {
         World world = (World)new World().put(outerSphere).put(leftSphere).put(rightSphere);
 
         IRay ray = new Ray(rayStartPoint, new Vector(0, 0, 1));
-        Intersection[] intersections = world.intersect(ray);
+        Collection<Intersection> intersections = world.intersect(ray);
         Optional<RayHit> hit = RayHit.fromIntersections(intersections);
         assertTrue(hit.isPresent());
         RayHit hitpoint = hit.get();
@@ -124,7 +125,7 @@ class RayHitTest {
     void reflectanceOfAPerpendicularRay() {
         Shape sphere = new Sphere(Glass.glassBuilder().build());
         IRay ray = new Ray(new Point(0, 0, 0), new Vector(0, 1, 0));
-        RayHit hitpoint = RayHit.fromIntersections(new Intersection[] { new Intersection(ray, 1, sphere) }).get();
+        RayHit hitpoint = RayHit.fromIntersections(Collections.singletonList(new Intersection(ray, 1, sphere))).get();
 
         assertEquals(0.04, hitpoint.reflectance, 1e-3, "Reflectance is small for a perpendicular ray");
     }
@@ -133,7 +134,7 @@ class RayHitTest {
     void reflectanceForASmallAngleAndLargerSecondRefractiveIndex() {
         Shape sphere = new Sphere(Glass.glassBuilder().build());
         IRay ray = new Ray(new Point(0, 0.99, -2), new Vector(0, 0, 1));
-        RayHit hitpoint = RayHit.fromIntersections(new Intersection[] { new Intersection(ray, 1.8589, sphere) }).get();
+        RayHit hitpoint = RayHit.fromIntersections(Collections.singletonList(new Intersection(ray, 1.8589, sphere))).get();
 
         assertEquals(0.48873, hitpoint.reflectance, 1e-3, "Reflectance is small for a perpendicular ray");
     }

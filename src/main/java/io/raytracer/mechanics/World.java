@@ -11,8 +11,10 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class World implements IWorld {
     private ILightSource lightSource;
@@ -57,16 +59,17 @@ public class World implements IWorld {
         }
     }
 
-    Intersection[] intersect(@NonNull IRay ray) {
+    Collection<Intersection> intersect(@NonNull IRay ray) {
         return contents.stream().map(object -> object.intersect(ray))
-            .flatMap(Arrays::stream).sorted().toArray(Intersection[]::new);
+            .flatMap(Arrays::stream).sorted().collect(Collectors.toList());
     }
 
     boolean isShadowed(IPoint point) {
         IVector lightDistance = this.lightSource.getPosition().subtract(point);
         IVector lightDirection = lightDistance.normalise();
         IRay lightRay = new Ray(point, lightDirection);
-        Optional<RayHit> shadowingHit = RayHit.fromIntersections(this.intersect(lightRay));
+        Collection<Intersection> shadowingIntersections = this.intersect(lightRay).stream().filter(i -> i.object.isCastingShadows()).collect(Collectors.toList());
+        Optional<RayHit> shadowingHit = RayHit.fromIntersections(shadowingIntersections);
         return (shadowingHit.isPresent() && shadowingHit.get().point.distance(point) < lightDistance.norm());
     }
 

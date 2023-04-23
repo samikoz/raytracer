@@ -115,6 +115,26 @@ public class WorldTest {
     }
 
     @Test
+    void illuminatingThroughNonShadowingSurface() {
+        Material material = Material.builder().texture(new MonocolourTexture(new Colour(1, 1, 1)))
+            .ambient(0.1).diffuse(0.2).specular(0.2).shininess(200.0).build();
+        Sphere sphere = new Sphere(material);
+        sphere.setTransform(ThreeTransform.translation(0, 0, 10));
+        Plane plane = new Plane();
+        plane.setTransform(ThreeTransform.rotation_x(Math.PI / 2));
+        plane.setCastingShadows(false);
+        ILightSource light = new LightSource(new Colour(1, 1, 1), new Point(0, 0, -10));
+        World world = new World();
+        world.put(sphere).put(plane).put(light);
+
+        IRay ray = new Ray(new Point(0, 0, 5), new Vector(0, 0, 1));
+        IColour expectedColour = new Colour(0.5, 0.5, 0.5);
+        IColour actualColour = world.illuminate(ray);
+
+        assertEquals(expectedColour, actualColour, "non-shadowing objects should not cast shadows");
+    }
+
+    @Test
     void renderDefaultWorld() {
         IPoint eyePosition = new Point(0, 0, -5);
         IVector lookDirection = new Vector(0, 0, 1);

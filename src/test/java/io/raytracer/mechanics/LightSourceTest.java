@@ -4,17 +4,16 @@ import io.raytracer.shapes.Plane;
 import io.raytracer.tools.IColour;
 import io.raytracer.tools.Colour;
 import io.raytracer.textures.MonocolourTexture;
-import io.raytracer.textures.Texture;
 import io.raytracer.textures.StripedTexture;
 import io.raytracer.geometry.Point;
 import io.raytracer.geometry.ThreeTransform;
 import io.raytracer.geometry.Vector;
 import io.raytracer.shapes.Shape;
-import io.raytracer.shapes.Sphere;
 import io.raytracer.materials.Material;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.Collections;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -38,7 +37,7 @@ public class LightSourceTest {
     void illuminateWithLightEyeSurfaceNormalInLine() {
         ILightSource source = new LightSource(new Colour(1, 1, 1), new Point(0, 0, -10));
         IRay ray = new Ray(new Point(0, 0, -1), new Vector(0, 0, 1));
-        Optional<RayHit> hitMaybe = RayHit.fromIntersections(new Intersection[] { new Intersection(ray, 1, plane) });
+        Optional<RayHit> hitMaybe = RayHit.fromIntersections(Collections.singletonList(new Intersection(ray, 1, plane)));
         assertTrue(hitMaybe.isPresent());
         RayHit hitpoint = hitMaybe.get();
         IColour expectedResult = new Colour(1.9, 1.9, 1.9);
@@ -51,7 +50,7 @@ public class LightSourceTest {
     void illuminateWithLightOppositeSurfaceEyeOffset45Degrees() {
         ILightSource source = new LightSource(new Colour(1, 1, 1), new Point(0, 0, -10));
         IRay ray = new Ray(new Point(0, Math.sqrt(2) / 2, -Math.sqrt(2) / 2), new Vector(0, -Math.sqrt(2) / 2, Math.sqrt(2) / 2));
-        Optional<RayHit> hitMaybe = RayHit.fromIntersections(new Intersection[] { new Intersection(ray, 1, plane) });
+        Optional<RayHit> hitMaybe = RayHit.fromIntersections(Collections.singletonList(new Intersection(ray, 1, plane)));
         assertTrue(hitMaybe.isPresent());
         RayHit hitpoint = hitMaybe.get();
         IColour expectedResult = new Colour(1, 1, 1);
@@ -64,7 +63,7 @@ public class LightSourceTest {
     void illuminateWithEyeOppositeSurfaceLightOffset45Degrees() {
         ILightSource source = new LightSource(new Colour(1, 1, 1), new Point(0, 10, -10));
         IRay ray = new Ray(new Point(0, 0, -1), new Vector(0, 0, 1));
-        Optional<RayHit> hitMaybe = RayHit.fromIntersections(new Intersection[] { new Intersection(ray, 1, plane) });
+        Optional<RayHit> hitMaybe = RayHit.fromIntersections(Collections.singletonList(new Intersection(ray, 1, plane)));
         assertTrue(hitMaybe.isPresent());
         RayHit hitpoint = hitMaybe.get();
         IColour expectedResult = new Colour(0.7364, 0.7364, 0.7364);
@@ -77,7 +76,7 @@ public class LightSourceTest {
     void illuminateWithEyeInThePathOfReflectionVector() {
         ILightSource source = new LightSource(new Colour(1, 1, 1), new Point(0, 10, -10));
         IRay ray = new Ray(new Point(0, -Math.sqrt(2) / 2, -Math.sqrt(2) / 2), new Vector(0, Math.sqrt(2) / 2, Math.sqrt(2) / 2));
-        Optional<RayHit> hitMaybe = RayHit.fromIntersections(new Intersection[] { new Intersection(ray, 1, plane) });
+        Optional<RayHit> hitMaybe = RayHit.fromIntersections(Collections.singletonList(new Intersection(ray, 1, plane)));
         assertTrue(hitMaybe.isPresent());
         RayHit hitpoint = hitMaybe.get();
         IColour expectedResult = new Colour(1.6364, 1.6364, 1.6364);
@@ -91,7 +90,7 @@ public class LightSourceTest {
     void illuminateWithLightBehindTheSurface() {
         ILightSource source = new LightSource(new Colour(1, 1, 1), new Point(0, 0, 10));
         IRay ray = new Ray(new Point(0, Math.sqrt(2) / 2, -Math.sqrt(2) / 2), new Vector(0, -Math.sqrt(2) / 2, Math.sqrt(2) / 2));
-        Optional<RayHit> hitMaybe = RayHit.fromIntersections(new Intersection[] { new Intersection(ray, 1, plane) });
+        Optional<RayHit> hitMaybe = RayHit.fromIntersections(Collections.singletonList(new Intersection(ray, 1, plane)));
         assertTrue(hitMaybe.isPresent());
         RayHit hitpoint = hitMaybe.get();
         IColour expectedResult = new Colour(0.1, 0.1, 0.1);
@@ -105,7 +104,7 @@ public class LightSourceTest {
     void illuminateWithTheSurfaceInTheShadow() {
         ILightSource source = new LightSource(new Colour(1, 1, 1), new Point(0, 0, -10));
         IRay ray = new Ray(new Point(-1, 0, 0), new Vector(1, 0, 0));
-        Optional<RayHit> hitMaybe = RayHit.fromIntersections(new Intersection[] { new Intersection(ray, 1, plane) });
+        Optional<RayHit> hitMaybe = RayHit.fromIntersections(Collections.singletonList(new Intersection(ray, 1, plane)));
         assertTrue(hitMaybe.isPresent());
         RayHit hitpoint = hitMaybe.get();
         hitpoint.shadowed = true;
@@ -127,11 +126,11 @@ public class LightSourceTest {
         Shape stripedPlane = new Plane(textureedMaterial);
         ILightSource source = new LightSource(new Colour(1, 1, 1), new Point(0, 0, -10));
         IRay firstRay = new Ray(new Point(0.9, 0, -1), new Vector(0, 0, 1));
-        Optional<RayHit> firstHitMaybe = RayHit.fromIntersections(new Intersection[] { new Intersection(firstRay, 1, stripedPlane) });
+        Optional<RayHit> firstHitMaybe = RayHit.fromIntersections(Collections.singletonList(new Intersection(firstRay, 1, stripedPlane)));
         assertTrue(firstHitMaybe.isPresent());
         RayHit firstHitpoint = firstHitMaybe.get();
         IRay secondRay = new Ray(new Point(1.1, 0, -1), new Vector(0, 0, 1));
-        Optional<RayHit> secondHitMaybe = RayHit.fromIntersections(new Intersection[] { new Intersection(secondRay, 1, stripedPlane) });
+        Optional<RayHit> secondHitMaybe = RayHit.fromIntersections(Collections.singletonList(new Intersection(secondRay, 1, stripedPlane)));
         assertTrue(secondHitMaybe.isPresent());
         RayHit secondHitpoint = secondHitMaybe.get();
 

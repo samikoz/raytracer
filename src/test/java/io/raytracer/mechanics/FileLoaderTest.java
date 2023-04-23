@@ -28,7 +28,7 @@ class FileLoaderTest {
         loader.load(testInput);
         loader.populate(world);
 
-        assertEquals(2, world.intersect(firstRay).length);
-        assertEquals(2, world.intersect(secondRay).length);
+        assertEquals(2, world.intersect(firstRay).size());
+        assertEquals(2, world.intersect(secondRay).size());
     }
 }
