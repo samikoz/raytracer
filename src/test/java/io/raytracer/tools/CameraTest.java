@@ -9,26 +9,29 @@ import io.raytracer.mechanics.IRay;
 import io.raytracer.mechanics.Ray;
 import org.junit.jupiter.api.Test;
 
+import java.util.Collection;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class CameraTest {
     @Test
     void getRayThroughTheCentreOfCanvas() {
         ICamera camera = new Camera(201, 101, Math.PI / 2);
-        IRay ray = camera.getRayThroughPixel(100, 50);
+        Collection<IRay> rays = camera.getRaysThroughPixel(100, 50);
+        IRay uniqueRay = rays.toArray(new IRay[] {})[0];
 
-        assertEquals(new Point(0, 0, 0), ray.getOrigin());
-        assertEquals(new Vector(0, 0, -1), ray.getDirection());
+        assertEquals(new Point(0, 0, 0), uniqueRay.getOrigin());
+        assertEquals(new Vector(0, 0, -1), uniqueRay.getDirection());
     }
 
     @Test
     void getRayThroughCornerOfCanvas() {
         ICamera camera = new Camera(201, 101, Math.PI / 2);
-        IRay ray = camera.getRayThroughPixel(0, 0);
+        Collection<IRay> rays = camera.getRaysThroughPixel(0, 0);
+        IRay uniqueRay = rays.toArray(new IRay[] {})[0];
 
-        assertEquals(new Point(0, 0, 0), ray.getOrigin());
-        assertEquals(new Vector(0.66519, 0.33259, -0.66851), ray.getDirection());
+        assertEquals(new Point(0, 0, 0), uniqueRay.getOrigin());
+        assertEquals(new Vector(0.66519, 0.33259, -0.66851), uniqueRay.getDirection());
     }
 
     @Test
@@ -37,11 +40,12 @@ public class CameraTest {
         IVector lookDirection = ThreeTransform.rotation_y(-Math.PI / 4).act(new Vector(0, 0, -1));
         IVector upDirection = new Vector(0, 1, 0);
         ICamera camera = new Camera(201, 101, Math.PI / 2, eyePosition, lookDirection, upDirection);
-        IRay ray = camera.getRayThroughPixel(100, 50);
+        Collection<IRay> rays = camera.getRaysThroughPixel(100, 50);
+        IRay uniqueRay = rays.toArray(new IRay[] {})[0];
 
-        assertEquals(new Point(0, 2, -5), ray.getOrigin(),
+        assertEquals(new Point(0, 2, -5), uniqueRay.getOrigin(),
                 "Ray's origin should be transformed accordingly to the camera's transformation");
-        assertEquals(new Vector(Math.sqrt(2) / 2, 0, -Math.sqrt(2) / 2), ray.getDirection());
+        assertEquals(new Vector(Math.sqrt(2) / 2, 0, -Math.sqrt(2) / 2), uniqueRay.getDirection());
     }
 
     @Test
@@ -53,7 +57,9 @@ public class CameraTest {
 
         camera.transform(ThreeTransform.rotation_z(-Math.PI / 2));
         Ray expectedRay = new Ray(new Point(0, 1, 0), new Vector(0, -1, 0));
+        Collection<IRay> rays = camera.getRaysThroughPixel(0, 0);
+        IRay uniqueRay = rays.toArray(new IRay[] {})[0];
 
-        assertEquals(expectedRay, camera.getRayThroughPixel(0, 0));
+        assertEquals(expectedRay, uniqueRay);
     }
 }

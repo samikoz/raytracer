@@ -20,6 +20,8 @@ import io.raytracer.materials.Material;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -51,17 +53,19 @@ public class WorldTest {
     @Test
     void illuminatingEmptyWorld() {
         IRay ray = new Ray(new Point(0, 0, -5), new Vector(0, 0, 1));
+        Collection<IRay> rays = Collections.singletonList(ray);
         World world = new World();
         world.put(new LightSource(new Colour(1, 1, 1), new Point(-10, 10, -10)));
         IColour expectedColour = new Colour(0, 0, 0);
 
-        assertEquals(expectedColour, world.illuminate(ray), "Empty world has no illumination");
+        assertEquals(expectedColour, world.illuminate(rays), "Empty world has no illumination");
     }
 
     @Test
     void illuminatingWhenRayMisses() {
         IRay ray = new Ray(new Point(0, 0, -5), new Vector(0, 1, 0));
-        IColour illuminated = defaultWorld.illuminate(ray);
+        Collection<IRay> rays = Collections.singletonList(ray);
+        IColour illuminated = defaultWorld.illuminate(rays);
         IColour expectedColour = new Colour(0, 0, 0);
 
         assertEquals(expectedColour, illuminated, "A ray that misses should return black");
@@ -70,7 +74,8 @@ public class WorldTest {
     @Test
     void illuminatingWhenRayHits() {
         IRay ray = new Ray(new Point(0, 0, -5), new Vector(0, 0, 1));
-        IColour illuminated = defaultWorld.illuminate(ray);
+        Collection<IRay> rays = Collections.singletonList(ray);
+        IColour illuminated = defaultWorld.illuminate(rays);
         IColour expectedColour = new Colour(0.38066, 0.47583, 0.2855);
 
         assertEquals(expectedColour, illuminated);
@@ -90,7 +95,8 @@ public class WorldTest {
         world.put(innerObject).put(outerObject);
 
         IRay ray = new Ray(new Point(0, 0, 0.75), new Vector(0, 0, -1));
-        IColour illuminated = world.illuminate(ray);
+        Collection<IRay> rays = Collections.singletonList(ray);
+        IColour illuminated = world.illuminate(rays);
 
         assertEquals(innerObject.getMaterial().texture.colourAt(new Point(0, 0, 0)), illuminated,
                 "Illuminate should use the hit with the inner sphere");
@@ -108,8 +114,9 @@ public class WorldTest {
         world.put(firstSphere).put(secondSphere).put(light);
 
         IRay ray = new Ray(new Point(0, 0, 5), new Vector(0, 0, 1));
+        Collection<IRay> rays = Collections.singletonList(ray);
         IColour expectedColour = new Colour(0.1, 0.1, 0.1);
-        IColour actualColour = world.illuminate(ray);
+        IColour actualColour = world.illuminate(rays);
 
         assertEquals(expectedColour, actualColour, "Illuminate shaded point should return only ambient value");
     }
@@ -128,8 +135,9 @@ public class WorldTest {
         world.put(sphere).put(plane).put(light);
 
         IRay ray = new Ray(new Point(0, 0, 5), new Vector(0, 0, 1));
+        Collection<IRay> rays = Collections.singletonList(ray);
         IColour expectedColour = new Colour(0.5, 0.5, 0.5);
-        IColour actualColour = world.illuminate(ray);
+        IColour actualColour = world.illuminate(rays);
 
         assertEquals(expectedColour, actualColour, "non-shadowing objects should not cast shadows");
     }
@@ -211,6 +219,7 @@ public class WorldTest {
     @Test
     void illuminatingWithReflectiveMaterial() {
         IRay ray = new Ray(new Point(0, 0, -3), new Vector(0, -Math.sqrt(2)/2, Math.sqrt(2)/2));
+        Collection<IRay> rays = Collections.singletonList(ray);
         Material sphereMaterial = Material.builder()
                 .diffuse(0.7).specular(0.2).ambient(0.1).shininess(200.0)
                 .texture(new MonocolourTexture(new Colour(0.8, 1.0, 0.6))).build();
@@ -225,7 +234,7 @@ public class WorldTest {
         testWorld.put(new LightSource(new Colour(1, 1, 1), new Point(-10, 10, -10)));
         testWorld.put(sphere).put(plane);
 
-        assertEquals(new Colour(0.87677, 0.92436, 0.82918), testWorld.illuminate(ray));
+        assertEquals(new Colour(0.87677, 0.92436, 0.82918), testWorld.illuminate(rays));
     }
 
     @Test
@@ -239,8 +248,9 @@ public class WorldTest {
         world.put(new LightSource(new Colour(1, 1, 1), new Point(0, 0, 0)));
         world.put(leftPlane).put(rightPlane);
         IRay ray = new Ray(new Point(0, 0, 0), new Vector(0, 1, 0));
+        Collection<IRay> rays = Collections.singletonList(ray);
 
-        assertEquals(new Colour(0, 0, 0), world.illuminate(ray));
+        assertEquals(new Colour(0, 0, 0), world.illuminate(rays));
     }
 
     @Test
@@ -303,9 +313,10 @@ public class WorldTest {
         IWorld world = new World().put(new LightSource(new Colour(1, 1, 1), new Point(-10, 10, -10)));
         world.put(floor).put(below).put(outerSphere);
         IRay ray = new Ray(new Point(0, 0, -3), new Vector(0, -Math.sqrt(2)/2, Math.sqrt(2)/2));
+        Collection<IRay> rays = Collections.singletonList(ray);
 
         IColour expectedColor = new Colour(0.93642, 0.68642, 0.68642);
-        IColour actualColor = world.illuminate(ray);
+        IColour actualColor = world.illuminate(rays);
 
         assertEquals(expectedColor, actualColor);
     }
@@ -324,9 +335,10 @@ public class WorldTest {
         IWorld world = new World().put(new LightSource(new Colour(1, 1, 1), new Point(-10, 10, -10)));
         world.put(floor).put(below).put(outerSphere);
         IRay ray = new Ray(new Point(0, 0, -3), new Vector(0, -Math.sqrt(2)/2, Math.sqrt(2)/2));
+        Collection<IRay> rays = Collections.singletonList(ray);
 
         IColour expectedColor = new Colour(0.93391, 0.69643, 0.69243);
-        IColour actualColor = world.illuminate(ray);
+        IColour actualColor = world.illuminate(rays);
 
         assertEquals(expectedColor, actualColor);
     }

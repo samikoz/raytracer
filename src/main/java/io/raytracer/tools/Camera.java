@@ -11,6 +11,9 @@ import io.raytracer.mechanics.IRay;
 import io.raytracer.mechanics.Ray;
 import lombok.Getter;
 
+import java.util.Collection;
+import java.util.Collections;
+
 public class Camera implements ICamera {
     @Getter private final int pictureWidthPixels;
     @Getter private final int pictureHeightPixels;
@@ -39,7 +42,7 @@ public class Camera implements ICamera {
     }
 
     @Override
-    public IRay getRayThroughPixel(int x, int y) {
+    public Collection<IRay> getRaysThroughPixel(int x, int y) {
         double canvasXOffset = (x + 0.5) * this.pixelSize;
         double canvasYOffset = (y + 0.5) * this.pixelSize;
 
@@ -50,7 +53,7 @@ public class Camera implements ICamera {
         IPoint origin = worldTransformation.act(new Point(0, 0, 0));
         IVector direction = (pixel.subtract(origin)).normalise();
 
-        return new Ray(origin, direction);
+        return Collections.singletonList(new Ray(origin, direction));
     }
 
     private void computePixelSize() {

@@ -38,8 +38,9 @@ public class World implements IWorld {
         return this;
     }
 
-    public IColour illuminate(@NonNull IRay ray) {
-        Collection<Intersection> intersections = this.intersect(ray);
+    public IColour illuminate(@NonNull Collection<IRay> rays) {
+        IRay uniqueRay = rays.toArray(new IRay[] {})[0];
+        Collection<Intersection> intersections = this.intersect(uniqueRay);
         Optional<RayHit> hit = RayHit.fromIntersections(intersections);
         if (hit.isPresent()) {
             RayHit hitpoint = hit.get();
@@ -79,8 +80,8 @@ public class World implements IWorld {
         if (hitpoint.object.getMaterial().reflectivity == 0 || hitpoint.ray.getRecast() > World.recursionDepth) {
             return new Colour(0, 0, 0);
         }
-        IRay reflectedRay = Ray.reflectFrom(hitpoint);
-        IColour reflectedColour = this.illuminate(reflectedRay);
+        Collection<IRay> reflectedRays = Collections.singletonList(Ray.reflectFrom(hitpoint));
+        IColour reflectedColour = this.illuminate(reflectedRays);
         return reflectedColour.multiply(hitpoint.object.getMaterial().reflectivity);
     }
 
@@ -89,8 +90,8 @@ public class World implements IWorld {
             return new Colour(0, 0, 0);
         }
 
-        IRay refractedRay = Ray.refractFrom(hitpoint);
-        IColour refractedColour = this.illuminate(refractedRay);
+        Collection<IRay> refractedRays = Collections.singletonList(Ray.refractFrom(hitpoint));
+        IColour refractedColour = this.illuminate(refractedRays);
         return refractedColour.multiply(hitpoint.object.getMaterial().transparency);
     }
 }
