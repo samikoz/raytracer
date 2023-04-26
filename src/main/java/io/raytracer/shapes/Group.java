@@ -12,7 +12,7 @@ import java.util.List;
 public class Group extends Shape {
     private final List<Shape> children;
 
-    Group() {
+    public Group() {
         super();
         this.children = new ArrayList<>();
     }

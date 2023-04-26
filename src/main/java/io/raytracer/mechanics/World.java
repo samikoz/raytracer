@@ -12,6 +12,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -38,7 +39,8 @@ public class World implements IWorld {
     }
 
     public IColour illuminate(@NonNull IRay ray) {
-        Optional<RayHit> hit = RayHit.fromIntersections(this.intersect(ray));
+        Collection<Intersection> intersections = this.intersect(ray);
+        Optional<RayHit> hit = RayHit.fromIntersections(intersections);
         if (hit.isPresent()) {
             RayHit hitpoint = hit.get();
             hitpoint.shadowed = this.isShadowed(hitpoint.offsetAbove);

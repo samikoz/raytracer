@@ -15,7 +15,7 @@ public class Camera implements ICamera {
     @Getter private final int pictureWidthPixels;
     @Getter private final int pictureHeightPixels;
     private final double fieldOfView;
-    private final ITransform worldTransformation;
+    private ITransform worldTransformation;
     private double pictureHalfWidth;
     private double pictureHalfHeight;
     private double pixelSize;
@@ -83,5 +83,10 @@ public class Camera implements ICamera {
 
         return ThreeTransform.translation(-eyePosition.get(0), -eyePosition.get(1), -eyePosition.get(2))
                 .transform(originTransformation);
+    }
+
+    @Override
+    public void transform(ITransform t) {
+        this.worldTransformation = ThreeTransform.transformation(t.inverse().getMatrix().multiply(this.worldTransformation.getMatrix()));
     }
 }

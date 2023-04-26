@@ -3,6 +3,7 @@ package io.raytracer.mechanics;
 import io.raytracer.geometry.IPoint;
 import io.raytracer.geometry.Point;
 import io.raytracer.geometry.ThreeTransform;
+import io.raytracer.materials.Material;
 import io.raytracer.shapes.Shape;
 import io.raytracer.shapes.Sphere;
 
@@ -16,16 +17,18 @@ import java.util.regex.Pattern;
 
 public class FileLoader implements Loader {
     private final ArrayList<Shape> loaded;
+    private final Material material;
 
     private final String floatPoint = "(-?\\d+\\.\\d+)";
     private final String threePoint = "P\\(" + floatPoint + "," + floatPoint + "," + floatPoint + "\\)";
 
-    public FileLoader() {
+    public FileLoader(Material material) {
         this.loaded = new ArrayList<>();
+        this.material = material;
     }
 
     @Override
-    public void populate(World world) {
+    public void populate(IWorld world) {
         this.loaded.forEach(world::put);
     }
 
@@ -55,7 +58,7 @@ public class FileLoader implements Loader {
     }
 
     private Sphere parseSphere(Matcher sphereMatcher) {
-        Sphere sphere = new Sphere();
+        Sphere sphere = new Sphere(this.material);
         double parsedRadius = Double.parseDouble(sphereMatcher.group(4));
         IPoint parsedCentre = new Point(
             Double.parseDouble(sphereMatcher.group(1)),

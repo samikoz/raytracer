@@ -13,15 +13,20 @@ public interface IWorld {
     IColour illuminate(IRay ray);
 
     default IPicture render(ICamera camera) {
+        int totalRaysCount = camera.getPictureWidthPixels()*camera.getPictureHeightPixels();
         IPicture picture = new PPMPicture(camera.getPictureWidthPixels(), camera.getPictureHeightPixels());
 
+        int rayCount = 1;
         for (int y = 0; y < camera.getPictureHeightPixels() - 1; y++) {
             for (int x = 0; x < camera.getPictureWidthPixels() - 1; x++) {
+                System.out.printf("\rray %d out of %d", rayCount, totalRaysCount);
                 IRay ray = camera.getRayThroughPixel(x, y);
                 IColour colour = this.illuminate(ray);
                 picture.write(x, y, colour);
+                rayCount++;
             }
         }
+        System.out.println();
 
         return picture;
     }

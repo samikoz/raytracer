@@ -65,4 +65,9 @@ public class Ray implements IRay {
     public int hashCode() {
         return Arrays.hashCode(new int[] { this.origin.hashCode(), this.direction.hashCode(), this.recast});
     }
+
+    @Override
+    public String toString() {
+        return String.format("Ray[%s, %s]", this.origin, this.direction);
+    }
 }

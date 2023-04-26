@@ -2,6 +2,7 @@ package io.raytracer.mechanics;
 
 import io.raytracer.geometry.Point;
 import io.raytracer.geometry.Vector;
+import io.raytracer.materials.Material;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
@@ -20,7 +21,7 @@ class FileLoaderTest {
         File testInput = new File(tempdir, "test.mth");
         List<String> lines = Arrays.asList("Sphere(P(1.0,2.0,3.0),0.1)", "Sphere(P(-1.0,-2.0,-3.0),0.1)");
         Files.write(testInput.toPath(), lines);
-        Loader loader = new FileLoader();
+        Loader loader = new FileLoader(Material.builder().build());
         World world = new World();
         IRay firstRay = new Ray(new Point(0, 2, 3), new Vector(1, 0, 0));
         IRay secondRay = new Ray(new Point(-1, 0, -3), new Vector(0, -1, 0));

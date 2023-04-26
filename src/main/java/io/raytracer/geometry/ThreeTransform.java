@@ -1,13 +1,14 @@
 package io.raytracer.geometry;
 
+import lombok.Getter;
 import lombok.ToString;
 
 @ToString
 public class ThreeTransform implements ITransform {
-    private final ISquareMatrix underlyingMatrix;
+    @Getter private final ISquareMatrix matrix;
 
     public ThreeTransform() {
-        underlyingMatrix = new SquareMatrix(
+        matrix = new SquareMatrix(
                 1, 0, 0, 0,
                 0, 1, 0, 0,
                 0, 0, 1, 0,
@@ -16,7 +17,7 @@ public class ThreeTransform implements ITransform {
     }
 
     private ThreeTransform(ISquareMatrix m) {
-        underlyingMatrix = m;
+        matrix = m;
     }
 
     public static ThreeTransform translation(double x, double y, double z) {
@@ -34,7 +35,7 @@ public class ThreeTransform implements ITransform {
                 0, 1, 0, y,
                 0, 0, 1, z,
                 0, 0, 0, 1
-        ).multiply(this.underlyingMatrix));
+        ).multiply(this.matrix));
     }
 
     public static ThreeTransform scaling(double x, double y, double z) {
@@ -52,7 +53,7 @@ public class ThreeTransform implements ITransform {
                 0, y, 0, 0,
                 0, 0, z, 0,
                 0, 0, 0, 1
-        ).multiply(this.underlyingMatrix));
+        ).multiply(this.matrix));
     }
 
     public static ThreeTransform rotation_x(double angle) {
@@ -70,7 +71,7 @@ public class ThreeTransform implements ITransform {
                 0, Math.cos(angle), -Math.sin(angle), 0,
                 0, Math.sin(angle), Math.cos(angle), 0,
                 0, 0, 0, 1
-        ).multiply(this.underlyingMatrix));
+        ).multiply(this.matrix));
     }
 
     public static ThreeTransform rotation_y(double angle) {
@@ -88,7 +89,7 @@ public class ThreeTransform implements ITransform {
                 0, 1, 0, 0,
                 -Math.sin(angle), 0, Math.cos(angle), 0,
                 0, 0, 0, 1
-        ).multiply(this.underlyingMatrix));
+        ).multiply(this.matrix));
     }
 
     public static ThreeTransform rotation_z(double angle) {
@@ -106,7 +107,7 @@ public class ThreeTransform implements ITransform {
                 Math.sin(angle), Math.cos(angle), 0, 0,
                 0, 0, 1, 0,
                 0, 0, 0, 1
-        ).multiply(this.underlyingMatrix));
+        ).multiply(this.matrix));
     }
 
     public static ThreeTransform shear(double xy, double xz, double yx, double yz, double zx, double zy) {
@@ -124,7 +125,7 @@ public class ThreeTransform implements ITransform {
                 yx, 1, yz, 0,
                 zx, zy, 1, 0,
                 0, 0, 0, 1
-        ).multiply(this.underlyingMatrix));
+        ).multiply(this.matrix));
     }
     
     public static ThreeTransform transformation(ISquareMatrix m) {
@@ -132,7 +133,7 @@ public class ThreeTransform implements ITransform {
     }
     
     public ThreeTransform transform(ISquareMatrix m) {
-        return new ThreeTransform(m.multiply(this.underlyingMatrix));
+        return new ThreeTransform(m.multiply(this.matrix));
     }
 
     @Override
@@ -140,33 +141,33 @@ public class ThreeTransform implements ITransform {
         if (them == null || this.getClass() != them.getClass()) return false;
 
         ThreeTransform themTransformation = (ThreeTransform) them;
-        return this.underlyingMatrix.equals(themTransformation.underlyingMatrix);
+        return this.matrix.equals(themTransformation.matrix);
     }
 
     @Override
     public int hashCode() {
-        return this.underlyingMatrix.hashCode();
+        return this.matrix.hashCode();
     }
 
     @Override
     public ITransform inverse() {
-        return new ThreeTransform(this.underlyingMatrix.inverse());
+        return new ThreeTransform(this.matrix.inverse());
     }
 
     @Override
     public ITransform transpose() {
-        return new ThreeTransform(this.underlyingMatrix.transpose());
+        return new ThreeTransform(this.matrix.transpose());
     }
 
     @Override
     public IPoint act(IPoint p) {
-        ITuple higherTuple = underlyingMatrix.multiply(new Point(p.get(0), p.get(1), p.get(2), 1));
+        ITuple higherTuple = matrix.multiply(new Point(p.get(0), p.get(1), p.get(2), 1));
         return new Point(higherTuple.get(0), higherTuple.get(1), higherTuple.get(2));
     }
 
     @Override
     public IVector act(IVector v) {
-        ITuple higherTuple = underlyingMatrix.multiply(new Point(v.get(0), v.get(1), v.get(2), 0));
+        ITuple higherTuple = matrix.multiply(new Point(v.get(0), v.get(1), v.get(2), 0));
         return new Vector(higherTuple.get(0), higherTuple.get(1), higherTuple.get(2));
     }
 }
