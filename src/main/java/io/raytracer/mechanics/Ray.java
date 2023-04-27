@@ -21,22 +21,23 @@ public class Ray implements IRay {
         this.recast = 0;
     }
 
-    public static Ray reflectFrom(RayHit hitpoint) {
-        Ray reflectedRay = new Ray(hitpoint.offsetAbove, hitpoint.reflectionVector);
-        reflectedRay.recast = hitpoint.ray.getRecast() + 1;
+    public Ray reflectFrom(IPoint point, IVector normalVector) {
+        IVector reflectionDirection = this.getDirection().reflect(normalVector);
+        Ray reflectedRay = new Ray(point, reflectionDirection);
+        reflectedRay.recast = this.getRecast() + 1;
         return reflectedRay;
     }
 
-    public static Ray refractFrom(RayHit hitpoint) {
-        double refractedRatio = hitpoint.refractiveIndexFrom / hitpoint.refractiveIndexTo;
-        double cosIncident = hitpoint.eyeVector.dot(hitpoint.normalVector);
+    public Ray refractOn(RefractionPoint refpoint) {
+        double refractedRatio = refpoint.refractiveIndexFrom / refpoint.refractiveIndexTo;
+        double cosIncident = refpoint.eyeVector.dot(refpoint.normalVector);
         double sinRefractedSquared = Math.pow(refractedRatio, 2)*(1 - Math.pow(cosIncident, 2));
         assert sinRefractedSquared <= 1;
         double cosRefracted = Math.sqrt(1 - sinRefractedSquared);
-        IVector refractedDirection = hitpoint.normalVector.multiply(refractedRatio*cosIncident - cosRefracted)
-                .subtract(hitpoint.eyeVector.multiply(refractedRatio));
-        Ray refractedRay = new Ray(hitpoint.offsetBelow, refractedDirection);
-        refractedRay.recast = hitpoint.ray.getRecast() + 1;
+        IVector refractedDirection = refpoint.normalVector.multiply(refractedRatio*cosIncident - cosRefracted)
+                .subtract(refpoint.eyeVector.multiply(refractedRatio));
+        Ray refractedRay = new Ray(refpoint.point, refractedDirection);
+        refractedRay.recast = this.getRecast() + 1;
         return refractedRay;
     }
 

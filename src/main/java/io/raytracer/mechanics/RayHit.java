@@ -19,7 +19,6 @@ public class RayHit extends Intersection {
     public final IPoint offsetBelow;
     public final IVector eyeVector;
     public final IVector normalVector;
-    public final IVector reflectionVector;
     public final double refractiveIndexFrom;
     public final double refractiveIndexTo;
     public final double reflectance;
@@ -39,7 +38,6 @@ public class RayHit extends Intersection {
         this.normalVector = surfaceNormal.normalise();
         this.offsetAbove = this.point.add(this.normalVector.multiply(1e-6));
         this.offsetBelow = this.point.subtract(this.normalVector.multiply(1e-6));
-        this.reflectionVector = this.ray.getDirection().reflect(normalVector);
         this.refractiveIndexFrom = refractiveFrom;
         this.refractiveIndexTo = refractiveTo;
         this.shadowed = false;
@@ -97,6 +95,10 @@ public class RayHit extends Intersection {
         }
         double r = Math.pow(((this.refractiveIndexFrom - this.refractiveIndexTo) / (this.refractiveIndexFrom + this.refractiveIndexTo)), 2);
         return r + (1-r)*Math.pow(1-cos, 5);
+    }
+
+    public RefractionPoint getRefractionPoint() {
+        return new RefractionPoint(this.offsetBelow, this.refractiveIndexFrom, this.refractiveIndexTo, this.eyeVector, this.normalVector);
     }
 
     @Override

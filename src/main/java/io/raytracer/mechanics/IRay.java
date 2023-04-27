@@ -9,6 +9,9 @@ public interface IRay {
     IPoint getOrigin();
 
     IPoint getPosition(double parameter);
+
+    IRay reflectFrom(IPoint point, IVector reflectionVector);
+    IRay refractOn(RefractionPoint refpoint);
     int getRecast();
 
     IRay getTransformed(ITransform t);

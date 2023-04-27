@@ -80,7 +80,7 @@ public class World implements IWorld {
         if (hitpoint.object.getMaterial().reflectivity == 0 || hitpoint.ray.getRecast() > World.recursionDepth) {
             return new Colour(0, 0, 0);
         }
-        Collection<IRay> reflectedRays = Collections.singletonList(Ray.reflectFrom(hitpoint));
+        Collection<IRay> reflectedRays = Collections.singletonList(hitpoint.ray.reflectFrom(hitpoint.offsetAbove, hitpoint.normalVector));
         IColour reflectedColour = this.illuminate(reflectedRays);
         return reflectedColour.multiply(hitpoint.object.getMaterial().reflectivity);
     }
@@ -90,7 +90,7 @@ public class World implements IWorld {
             return new Colour(0, 0, 0);
         }
 
-        Collection<IRay> refractedRays = Collections.singletonList(Ray.refractFrom(hitpoint));
+        Collection<IRay> refractedRays = Collections.singletonList(hitpoint.ray.refractOn(hitpoint.getRefractionPoint()));
         IColour refractedColour = this.illuminate(refractedRays);
         return refractedColour.multiply(hitpoint.object.getMaterial().transparency);
     }
