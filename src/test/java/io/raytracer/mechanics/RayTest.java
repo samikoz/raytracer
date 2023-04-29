@@ -22,13 +22,15 @@ class RayTest {
     @Test
     void translatingRay() {
         IVector direction = new Vector(0, 1, 0);
-        IRay ray = new Ray(new Point(1, 2, 3), direction);
-        IRay translatedRay = ray.getTransformed(ThreeTransform.translation(3, 4, 5));
+        Ray ray = new Ray(new Point(1, 2, 3), direction);
+        ray.setRecast(2);
+        Ray translatedRay = (Ray)ray.getTransformed(ThreeTransform.translation(3, 4, 5));
         IPoint expectedOrigin = new Point(4, 6, 8);
 
         assertEquals(expectedOrigin, translatedRay.getOrigin(), "Translation should translate ray's origin.");
         assertEquals(direction, translatedRay.getDirection(),
                 "Translation should not affect ray's direction.");
+        assertEquals(2, translatedRay.getRecast(), "Transforming should preserve recasts");
     }
 
     @Test

@@ -48,7 +48,9 @@ public class Ray implements IRay {
 
     @Override
     public IRay getTransformed(ITransform t) {
-        return new Ray(this.origin.transform(t), this.direction.transform(t));
+        Ray transformed = new Ray(this.origin.transform(t), this.direction.transform(t));
+        transformed.recast = this.recast;
+        return transformed;
     }
 
     @Override
