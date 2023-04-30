@@ -27,7 +27,7 @@ public class Group extends Shape {
     public Intersection[] intersect(IRay ray) {
         IRay transformedRay = ray.getTransformed(this.getInverseTransform());
         return this.children.stream().map(child -> child.intersect(transformedRay))
-            .flatMap(Arrays::stream).sorted().toArray(Intersection[]::new);
+            .flatMap(Arrays::stream).sorted().map(i -> ray.intersect(i.object, i.rayParameter)).toArray(Intersection[]::new);
     }
 
     @Override

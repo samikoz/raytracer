@@ -4,6 +4,7 @@ import io.raytracer.geometry.IPoint;
 import io.raytracer.geometry.ITransform;
 import io.raytracer.geometry.IVector;
 
+import io.raytracer.shapes.Shape;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
@@ -21,14 +22,19 @@ public class Ray implements IRay {
         this.recast = 0;
     }
 
-    public Ray reflectFrom(IPoint point, IVector normalVector) {
+    @Override
+    public Intersection intersect(Shape shape, double parameter) {
+        return new Intersection(this, parameter, shape);
+    }
+
+    public IRay reflectFrom(IPoint point, IVector normalVector) {
         IVector reflectionDirection = this.getDirection().reflect(normalVector);
         Ray reflectedRay = new Ray(point, reflectionDirection);
         reflectedRay.recast = this.getRecast() + 1;
         return reflectedRay;
     }
 
-    public Ray refractOn(RefractionPoint refpoint) {
+    public IRay refractOn(RefractionPoint refpoint) {
         double refractedRatio = refpoint.refractiveIndexFrom / refpoint.refractiveIndexTo;
         double cosIncident = refpoint.eyeVector.dot(refpoint.normalVector);
         double sinRefractedSquared = Math.pow(refractedRatio, 2)*(1 - Math.pow(cosIncident, 2));

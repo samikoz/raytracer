@@ -65,7 +65,7 @@ public abstract class Shape {
     public Intersection[] intersect(IRay ray) {
         IRay transformedRay = ray.getTransformed(this.inverseTransform);
         return Arrays.stream(this.getLocalIntersectionPositions(transformedRay)).
-                mapToObj(position -> new Intersection(ray, position, this)).toArray(Intersection[]::new);
+            mapToObj(position -> ray.intersect(this, position)).toArray(Intersection[]::new);
     }
 
     public IVector normal(IPoint point) {
