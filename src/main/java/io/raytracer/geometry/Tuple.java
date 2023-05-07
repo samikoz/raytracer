@@ -67,6 +67,6 @@ class Tuple implements ITuple {
 
     @Override
     public String toString() {
-        return this.getClass().getName() + Arrays.toString(this.coords);
+        return this.getClass().getSimpleName() + Arrays.toString(this.coords);
     }
 }

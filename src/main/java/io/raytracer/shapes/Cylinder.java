@@ -20,7 +20,7 @@ public class Cylinder extends Shape {
     @Setter public boolean isTopClosed;
     @Setter public boolean isBottomClosed;
 
-    private static final double tolerance = 1e-3;
+    private static final double tolerance = 1e-7;
 
     public Cylinder() {
         super();

@@ -1,10 +1,11 @@
 package io.raytracer.demos;
 
+import io.raytracer.shapes.Cylinder;
+import io.raytracer.shapes.Shape;
 import io.raytracer.tools.ICamera;
 import io.raytracer.tools.Camera;
 import io.raytracer.tools.IPicture;
 import io.raytracer.tools.Colour;
-import io.raytracer.textures.GradientTexture;
 import io.raytracer.textures.MonocolourTexture;
 import io.raytracer.textures.Texture;
 import io.raytracer.textures.StripedTexture;
@@ -45,15 +46,14 @@ public class BasicWorld {
         Sphere leftSphere = new Sphere(leftMaterial);
         leftSphere.setTransform(ThreeTransform.rotation_z(Math.PI / 4).translate(-1, 1, -1));
 
-        Texture rightTexture = new GradientTexture(new Colour(1, 0, 0), new Colour(0, 0, 1));
-        rightTexture.setTransform(ThreeTransform.translation(-0.5,0 ,0 ).rotate_z(Math.PI / 2).scale(2, 2, 2));
-        Material rightMaterial = sphereMaterial.toBuilder().texture(rightTexture).build();
-        Sphere rightSphere = new Sphere(rightMaterial);
-        rightSphere.setTransform(ThreeTransform.scaling(0.5, 0.5, 0.5).translate(2, 0.5, 1));
+        Texture rightTexture = new MonocolourTexture(new Colour(1, 0.965, 0));
+        Material rightMaterial = sphereMaterial.toBuilder().texture(rightTexture).reflectivity(0.5).build();
+        Shape rightShape = new Cylinder(rightMaterial);
+        rightShape.setTransform(ThreeTransform.scaling(0.5, 0.5, 0.5).translate(2, 0.5, 1));
 
         IWorld world = new World();
         world.put(new LightSource(new Colour(1, 1, 1), new Point(-10, 10, -10)));
-        world.put(floor).put(leftSphere).put(rightSphere);
+        world.put(floor).put(leftSphere).put(rightShape);
 
         IPoint eyePosition = new Point(0, 1.5, -5);
         IVector lookDirection = new Point(0, 1, 0).subtract(eyePosition);

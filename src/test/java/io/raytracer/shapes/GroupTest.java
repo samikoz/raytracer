@@ -1,18 +1,11 @@
 package io.raytracer.shapes;
 
-import io.raytracer.geometry.IPoint;
-import io.raytracer.geometry.IVector;
 import io.raytracer.geometry.Point;
 import io.raytracer.geometry.ThreeTransform;
 import io.raytracer.geometry.Vector;
-import io.raytracer.materials.Material;
 import io.raytracer.mechanics.IRay;
 import io.raytracer.mechanics.Intersection;
-import io.raytracer.mechanics.LightSource;
 import io.raytracer.mechanics.Ray;
-import io.raytracer.textures.StripedTexture;
-import io.raytracer.tools.Colour;
-import io.raytracer.tools.IColour;
 import org.junit.jupiter.api.Test;
 
 import java.util.Optional;
