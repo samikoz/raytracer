@@ -16,14 +16,22 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.function.Function;
 
 public class World implements IWorld {
     private ILightSource lightSource;
+    private final Function<IRay, IColour> background;
     private final List<Shape> contents;
     private static final int recursionDepth = 4;
 
     public World() {
         this.contents = new ArrayList<>();
+        this.background = ray -> new Colour(0, 0, 0);
+    }
+
+    public World(Function<IRay, IColour> background) {
+        this.contents = new ArrayList<>();
+        this.background = background;
     }
 
     @Override
@@ -58,7 +66,7 @@ public class World implements IWorld {
                 return surfaceColour.add(reflectedColour).add(refractedColour);
             }
         } else {
-            return new Colour(0, 0, 0);
+            return this.background.apply(uniqueRay);
         }
     }
 

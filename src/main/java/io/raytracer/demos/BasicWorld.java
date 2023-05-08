@@ -1,9 +1,11 @@
 package io.raytracer.demos;
 
+import io.raytracer.mechanics.IRay;
 import io.raytracer.shapes.Cylinder;
 import io.raytracer.shapes.Shape;
 import io.raytracer.tools.ICamera;
 import io.raytracer.tools.Camera;
+import io.raytracer.tools.IColour;
 import io.raytracer.tools.IPicture;
 import io.raytracer.tools.Colour;
 import io.raytracer.textures.MonocolourTexture;
@@ -24,6 +26,7 @@ import io.raytracer.mechanics.World;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.function.Function;
 
 public class BasicWorld {
     public static void main(String[] args) throws IOException {
@@ -51,7 +54,11 @@ public class BasicWorld {
         Shape rightShape = new Cylinder(rightMaterial);
         rightShape.setTransform(ThreeTransform.scaling(0.5, 0.5, 0.5).translate(2, 0.5, 1));
 
-        IWorld world = new World();
+        Function<IRay, IColour> background = ray -> {
+            double t = 0.5*ray.getDirection().normalise().get(1) + 1;
+            return (new Colour(1, 1, 1)).multiply(1-t).add(new Colour(0.5, 0.7, 1.0)).multiply(t);
+        };
+        IWorld world = new World(background);
         world.put(new LightSource(new Colour(1, 1, 1), new Point(-10, 10, -10)));
         world.put(floor).put(leftSphere).put(rightShape);
 
