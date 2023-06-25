@@ -20,8 +20,8 @@ import io.raytracer.geometry.ThreeTransform;
 import io.raytracer.geometry.IVector;
 import io.raytracer.geometry.Vector;
 import io.raytracer.mechanics.LightSource;
-import io.raytracer.mechanics.IWorld;
 import io.raytracer.mechanics.World;
+import io.raytracer.mechanics.PhongWorld;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -58,7 +58,7 @@ public class BasicWorld {
             double t = 0.5*ray.getDirection().normalise().get(1) + 1;
             return (new Colour(1, 1, 1)).multiply(1-t).add(new Colour(0.5, 0.7, 1.0)).multiply(t);
         };
-        IWorld world = new World(background);
+        PhongWorld world = new PhongWorld(background);
         world.put(new LightSource(new Colour(1, 1, 1), new Point(-10, 10, -10)));
         world.put(floor).put(leftSphere).put(rightShape);
 

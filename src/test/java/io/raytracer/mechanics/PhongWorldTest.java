@@ -28,12 +28,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class WorldTest {
+public class PhongWorldTest {
     static Material outerMaterial;
     static Material innerMaterial;
     static Sphere outerSphere;
     static Sphere innerSphere;
-    static World defaultWorld;
+    static PhongWorld defaultWorld;
 
     @BeforeEach
     void setupMaterialAndPosition() {
@@ -45,7 +45,7 @@ public class WorldTest {
         innerSphere = new Sphere(innerMaterial);
         innerSphere.setTransform(ThreeTransform.scaling(0.5, 0.5, 0.5));
 
-        defaultWorld = new World();
+        defaultWorld = new PhongWorld();
         defaultWorld.put(new LightSource(new Colour(1, 1, 1), new Point(-10, 10, -10)));
         defaultWorld.put(outerSphere).put(innerSphere);
     }
@@ -54,7 +54,7 @@ public class WorldTest {
     void illuminatingEmptyWorld() {
         IRay ray = new Ray(new Point(0, 0, -5), new Vector(0, 0, 1));
         Collection<IRay> rays = Collections.singletonList(ray);
-        World world = new World();
+        PhongWorld world = new PhongWorld();
         world.put(new LightSource(new Colour(1, 1, 1), new Point(-10, 10, -10)));
         IColour expectedColour = new Colour(0, 0, 0);
 
@@ -90,7 +90,7 @@ public class WorldTest {
         Sphere innerObject = new Sphere(inner);
         innerObject.setTransform(ThreeTransform.scaling(0.5, 0.5, 0.5));
 
-        World world = new World();
+        PhongWorld world = new PhongWorld();
         world.put(new LightSource(new Colour(1, 1, 1), new Point(-10, 10, -10)));
         world.put(innerObject).put(outerObject);
 
@@ -110,8 +110,8 @@ public class WorldTest {
         Sphere secondSphere = new Sphere(material);
         secondSphere.setTransform(ThreeTransform.translation(0, 0, 10));
         ILightSource light = new LightSource(new Colour(1, 1, 1), new Point(0, 0, -10));
-        World world = new World();
-        world.put(firstSphere).put(secondSphere).put(light);
+        PhongWorld world = new PhongWorld();
+        world.put(light).put(firstSphere).put(secondSphere);
 
         IRay ray = new Ray(new Point(0, 0, 5), new Vector(0, 0, 1));
         Collection<IRay> rays = Collections.singletonList(ray);
@@ -131,8 +131,8 @@ public class WorldTest {
         plane.setTransform(ThreeTransform.rotation_x(Math.PI / 2));
         plane.setCastingShadows(false);
         ILightSource light = new LightSource(new Colour(1, 1, 1), new Point(0, 0, -10));
-        World world = new World();
-        world.put(sphere).put(plane).put(light);
+        PhongWorld world = new PhongWorld();
+        world.put(light).put(sphere).put(plane);
 
         IRay ray = new Ray(new Point(0, 0, 5), new Vector(0, 0, 1));
         Collection<IRay> rays = Collections.singletonList(ray);
@@ -205,7 +205,7 @@ public class WorldTest {
         Shape plane = new Plane(planeMaterial);
         plane.setTransform(ThreeTransform.translation(0, -1, 0));
         
-        World testWorld = new World();
+        PhongWorld testWorld = new PhongWorld();
         testWorld.put(new LightSource(new Colour(1, 1, 1), new Point(-10, 10, -10)));
         testWorld.put(sphere).put(plane);
 
@@ -230,7 +230,7 @@ public class WorldTest {
         Shape plane = new Plane(planeMaterial);
         plane.setTransform(ThreeTransform.translation(0, -1, 0));
 
-        World testWorld = new World();
+        PhongWorld testWorld = new PhongWorld();
         testWorld.put(new LightSource(new Colour(1, 1, 1), new Point(-10, 10, -10)));
         testWorld.put(sphere).put(plane);
 
@@ -244,7 +244,7 @@ public class WorldTest {
         leftPlane.setTransform(ThreeTransform.translation(0, -1, 0));
         Shape rightPlane = new Plane(planeMaterial);
         rightPlane.setTransform(ThreeTransform.translation(0, 1, 0));
-        World world = new World();
+        PhongWorld world = new PhongWorld();
         world.put(new LightSource(new Colour(1, 1, 1), new Point(0, 0, 0)));
         world.put(leftPlane).put(rightPlane);
         IRay ray = new Ray(new Point(0, 0, 0), new Vector(0, 1, 0));
@@ -272,7 +272,7 @@ public class WorldTest {
                 .diffuse(0.7).specular(0.2).ambient(0.1).shininess(200.0).transparency(1.0).refractiveIndex(1.5)
                 .texture(new MonocolourTexture(new Colour(0.8, 1.0, 0.6))).build();
         Shape sphere = new Sphere(sphereMaterial);
-        World world = new World();
+        PhongWorld world = new PhongWorld();
         world.put(new LightSource(new Colour(1, 1, 1), new Point(-10, 10, -10))).put(sphere);
 
         Optional<RayHit> hit = RayHit.fromIntersections(world.intersect(ray));
@@ -288,8 +288,8 @@ public class WorldTest {
         Shape outer = new Sphere(outerMaterial.toBuilder().ambient(1.0).texture(new TestTexture()).build());
         Shape inner = new Sphere(innerMaterial.toBuilder().transparency(1.0).refractiveIndex(1.5).build());
         inner.setTransform(ThreeTransform.scaling(0.5, 0.5, 0.5));
-        World world = new World();
-        world.put(outer).put(inner).put(new LightSource(new Colour(1, 1, 1), new Point(-10, 10, -10)));
+        PhongWorld world = new PhongWorld();
+        world.put(new LightSource(new Colour(1, 1, 1), new Point(-10, 10, -10))).put(outer).put(inner);
         IRay ray = new Ray(new Point(0, 0, 0.1), new Vector(0, 1, 0));
 
         Optional<RayHit> hit = RayHit.fromIntersections(world.intersect(ray));
@@ -310,7 +310,7 @@ public class WorldTest {
             .diffuse(0.9).specular(0.9).shininess(200.0).ambient(0.5).build();
         Shape below = new Sphere(belowMaterial);
         below.setTransform(ThreeTransform.translation(0, -3.5, -0.5));
-        IWorld world = new World().put(new LightSource(new Colour(1, 1, 1), new Point(-10, 10, -10)));
+        World world = new PhongWorld().put(new LightSource(new Colour(1, 1, 1), new Point(-10, 10, -10)));
         world.put(floor).put(below).put(outerSphere);
         IRay ray = new Ray(new Point(0, 0, -3), new Vector(0, -Math.sqrt(2)/2, Math.sqrt(2)/2));
         Collection<IRay> rays = Collections.singletonList(ray);
@@ -332,7 +332,7 @@ public class WorldTest {
             .diffuse(0.9).specular(0.9).shininess(200.0).ambient(0.5).build();
         Shape below = new Sphere(belowMaterial);
         below.setTransform(ThreeTransform.translation(0, -3.5, -0.5));
-        IWorld world = new World().put(new LightSource(new Colour(1, 1, 1), new Point(-10, 10, -10)));
+        World world = new PhongWorld().put(new LightSource(new Colour(1, 1, 1), new Point(-10, 10, -10)));
         world.put(floor).put(below).put(outerSphere);
         IRay ray = new Ray(new Point(0, 0, -3), new Vector(0, -Math.sqrt(2)/2, Math.sqrt(2)/2));
         Collection<IRay> rays = Collections.singletonList(ray);

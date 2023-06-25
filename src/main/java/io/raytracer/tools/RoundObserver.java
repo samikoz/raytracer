@@ -4,7 +4,7 @@ import io.raytracer.geometry.IPoint;
 import io.raytracer.geometry.Point;
 import io.raytracer.geometry.ThreeTransform;
 import io.raytracer.geometry.Vector;
-import io.raytracer.mechanics.IWorld;
+import io.raytracer.mechanics.World;
 import lombok.AllArgsConstructor;
 
 import java.io.FileWriter;
@@ -16,7 +16,7 @@ public class RoundObserver {
     private final double radius;
     private final String name;
 
-    public void observe(IWorld world) throws IOException {
+    public void observe(World world) throws IOException {
         ICamera camera = this.getFrontCamera();
 
         PrintWriter frontWriter = new PrintWriter(new FileWriter(String.format("%s_front.ppm", this.name)));

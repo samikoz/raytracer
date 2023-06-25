@@ -28,7 +28,7 @@ public class FileLoader implements Loader {
     }
 
     @Override
-    public void populate(IWorld world) {
+    public void populate(World world) {
         this.loaded.forEach(world::put);
     }
 

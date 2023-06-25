@@ -109,7 +109,7 @@ class RayHitTest {
         leftSphere.setTransform(ThreeTransform.translation(0, 0, -0.25));
         Shape rightSphere = new Sphere(Glass.glassBuilder().refractiveIndex(2.5).build());
         rightSphere.setTransform(ThreeTransform.translation(0, 0, 0.25));
-        World world = (World)new World().put(outerSphere).put(leftSphere).put(rightSphere);
+        PhongWorld world = (PhongWorld)new PhongWorld().put(outerSphere).put(leftSphere).put(rightSphere);
 
         IRay ray = new Ray(rayStartPoint, new Vector(0, 0, 1));
         Collection<Intersection> intersections = world.intersect(ray);

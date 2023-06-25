@@ -11,9 +11,9 @@ import io.raytracer.geometry.IVector;
 import io.raytracer.geometry.Point;
 import io.raytracer.geometry.ThreeTransform;
 import io.raytracer.geometry.Vector;
-import io.raytracer.mechanics.IWorld;
-import io.raytracer.mechanics.LightSource;
 import io.raytracer.mechanics.World;
+import io.raytracer.mechanics.LightSource;
+import io.raytracer.mechanics.PhongWorld;
 import io.raytracer.shapes.Shape;
 import io.raytracer.shapes.Plane;
 import io.raytracer.shapes.Sphere;
@@ -28,7 +28,7 @@ public class Windows {
         int spheresCount = 10;
         int sphereSeparation = 10;
 
-        IWorld world = new World();
+        PhongWorld world = new PhongWorld();
         world.put(new LightSource(new Colour(1, 1, 1), new Point(0, 10, -30)));
 
         Material floorMaterial = Material.builder()

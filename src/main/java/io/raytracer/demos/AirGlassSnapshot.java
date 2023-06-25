@@ -17,8 +17,8 @@ import io.raytracer.geometry.ThreeTransform;
 import io.raytracer.geometry.IVector;
 import io.raytracer.geometry.Vector;
 import io.raytracer.mechanics.LightSource;
-import io.raytracer.mechanics.IWorld;
 import io.raytracer.mechanics.World;
+import io.raytracer.mechanics.PhongWorld;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -63,7 +63,7 @@ public class AirGlassSnapshot {
         Shape airSphere = new Sphere(airMaterial);
         airSphere.setTransform(ThreeTransform.scaling(0.5, 0.5, 0.5));
 
-        IWorld world = new World();
+        PhongWorld world = new PhongWorld();
         world.put(new LightSource(new Colour(1, 1, 1), new Point(-5, 5, -5)));
         world.put(backWall).put(frontWall).put(leftWall).put(rightWall).put(topWall).put(bottomWall).put(airSphere).put(glassSphere);
 
