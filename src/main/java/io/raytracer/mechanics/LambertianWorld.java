@@ -24,20 +24,19 @@ public class LambertianWorld extends World {
     }
 
     @Override
-    IColour illuminate(Collection<IRay> rays) {
-        IRay uniqueRay = rays.toArray(new IRay[]{})[0];
-        if (uniqueRay.getRecast() >= LambertianWorld.lambertianDepth) {
+    IColour illuminate(IRay ray) {
+        if (ray.getRecast() >= LambertianWorld.lambertianDepth) {
             return new Colour(0, 0, 0);
         }
-        Collection<Intersection> intersections = this.intersect(uniqueRay);
+        Collection<Intersection> intersections = this.intersect(ray);
         Optional<RayHit> hit = RayHit.fromIntersections(intersections);
         if (hit.isPresent()) {
             RayHit hitpoint = hit.get();
-            IRay reflectionRay = uniqueRay.recast(hitpoint.offsetAbove, this.getLambertianDirection(hitpoint));
+            IRay reflectionRay = ray.recast(hitpoint.offsetAbove, this.getLambertianDirection(hitpoint));
             return hitpoint.object.getIntrinsicColour(hitpoint.point).mix(this.illuminate(Collections.singletonList(reflectionRay)));
         }
         else {
-            return this.getBackgroundAt(uniqueRay);
+            return this.getBackgroundAt(ray);
         }
     }
 

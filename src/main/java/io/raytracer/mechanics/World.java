@@ -34,7 +34,11 @@ public abstract class World {
         return this;
     }
 
-    abstract IColour illuminate(Collection<IRay> rays);
+    public IColour illuminate(Collection<IRay> rays) {
+        return rays.stream().map(this::illuminate).reduce(new Colour(0, 0, 0), IColour::add).multiply((double)1/rays.size());
+    }
+
+    abstract IColour illuminate(IRay ray);
 
     Collection<Intersection> intersect(@NonNull IRay ray) {
         return contents.stream().map(object -> object.intersect(ray))

@@ -35,9 +35,8 @@ public class PhongWorld extends World {
         return this;
     }
 
-    public IColour illuminate(@NonNull Collection<IRay> rays) {
-        IRay uniqueRay = rays.toArray(new IRay[]{})[0];
-        Collection<Intersection> intersections = this.intersect(uniqueRay);
+    public IColour illuminate(IRay ray) {
+        Collection<Intersection> intersections = this.intersect(ray);
         Optional<RayHit> hit = RayHit.fromIntersections(intersections);
         if (hit.isPresent()) {
             RayHit hitpoint = hit.get();
@@ -55,7 +54,7 @@ public class PhongWorld extends World {
                 return surfaceColour.add(reflectedColour).add(refractedColour);
             }
         } else {
-            return this.getBackgroundAt(uniqueRay);
+            return this.getBackgroundAt(ray);
         }
     }
 
