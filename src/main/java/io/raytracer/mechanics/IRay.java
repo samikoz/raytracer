@@ -12,6 +12,7 @@ public interface IRay {
     IPoint getPosition(double parameter);
 
     Intersection intersect(Shape shape, double parameter);
+    IRay recast(IPoint from, IVector direction);
     IRay reflectFrom(IPoint point, IVector reflectionVector);
     IRay refractOn(RefractionPoint refpoint);
     int getRecast();

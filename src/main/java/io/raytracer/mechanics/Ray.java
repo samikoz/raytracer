@@ -29,9 +29,7 @@ public class Ray implements IRay {
 
     public IRay reflectFrom(IPoint point, IVector normalVector) {
         IVector reflectionDirection = this.getDirection().reflect(normalVector);
-        Ray reflectedRay = new Ray(point, reflectionDirection);
-        reflectedRay.recast = this.getRecast() + 1;
-        return reflectedRay;
+        return this.recast(point, reflectionDirection);
     }
 
     public IRay refractOn(RefractionPoint refpoint) {
@@ -42,9 +40,13 @@ public class Ray implements IRay {
         double cosRefracted = Math.sqrt(1 - sinRefractedSquared);
         IVector refractedDirection = refpoint.normalVector.multiply(refractedRatio*cosIncident - cosRefracted)
                 .subtract(refpoint.eyeVector.multiply(refractedRatio));
-        Ray refractedRay = new Ray(refpoint.point, refractedDirection);
-        refractedRay.recast = this.getRecast() + 1;
-        return refractedRay;
+        return this.recast(refpoint.point, refractedDirection);
+    }
+
+    public IRay recast(IPoint from, IVector direction) {
+        Ray recastRay = new Ray(from, direction);
+        recastRay.recast = this.getRecast() + 1;
+        return recastRay;
     }
 
     @Override
