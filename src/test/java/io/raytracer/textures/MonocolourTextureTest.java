@@ -14,8 +14,8 @@ class MonocolourTextureTest {
         LinearColour colour = new LinearColour(0.2, 0.3, 0.4);
         MonocolourTexture texture = new MonocolourTexture(colour);
 
-        IColour firstColour = texture.colourAt(new Point(-1, 2, 15));
-        IColour secondColour = texture.colourAt(new Point(15, 0, 0.1));
+        IColour firstColour = texture.ownColourAt(new Point(-1, 2, 15));
+        IColour secondColour = texture.ownColourAt(new Point(15, 0, 0.1));
 
         assertEquals(colour, firstColour);
         assertEquals(colour, secondColour);

@@ -15,7 +15,7 @@ public class StripedTexture extends Texture {
     }
 
     @Override
-    public IColour colourAt(IPoint p) {
+    public IColour ownColourAt(IPoint p) {
         return (int)Math.floor(p.get(0)) % 2 == 0 ? firstColour : secondColour;
     }
 

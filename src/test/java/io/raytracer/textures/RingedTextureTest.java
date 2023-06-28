@@ -14,9 +14,9 @@ class RingedTextureTest {
     void ringTextureExtendsInBothXAndZ() {
         Texture ringed = new RingedTexture(white, black);
 
-        assertEquals(white, ringed.colourAt(new Point(0, 0, 0)));
-        assertEquals(black, ringed.colourAt(new Point(1, 0, 0)));
-        assertEquals(black, ringed.colourAt(new Point(0, 0, 1)));
-        assertEquals(black, ringed.colourAt(new Point(Math.sqrt(2) / 2, 0, Math.sqrt(2) / 2)));
+        assertEquals(white, ringed.ownColourAt(new Point(0, 0, 0)));
+        assertEquals(black, ringed.ownColourAt(new Point(1, 0, 0)));
+        assertEquals(black, ringed.ownColourAt(new Point(0, 0, 1)));
+        assertEquals(black, ringed.ownColourAt(new Point(Math.sqrt(2) / 2, 0, Math.sqrt(2) / 2)));
     }
 }

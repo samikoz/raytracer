@@ -13,7 +13,7 @@ public class MonocolourTexture extends Texture {
         this.monocolour = colour;
     }
 
-    public IColour colourAt(IPoint point) {
+    public IColour ownColourAt(IPoint point) {
         return this.monocolour;
     }
 

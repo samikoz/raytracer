@@ -77,8 +77,7 @@ public abstract class Shape {
     public IColour getIntrinsicColour(IPoint point) {
         IPoint objectPoint = this.transformToOwnSpace(point);
         Material material = this.getMaterial();
-        IPoint texturePoint = material.texture.getInverseTransform().act(objectPoint);
-        return material.texture.colourAt(texturePoint);
+        return material.texture.colourAt(objectPoint);
     }
 
     public IPoint transformToOwnSpace(IPoint worldPoint) {

@@ -6,7 +6,7 @@ import io.raytracer.geometry.IPoint;
 
 public class TestTexture extends Texture {
     @Override
-    public IColour colourAt(IPoint p) {
+    public IColour ownColourAt(IPoint p) {
         return new LinearColour(p.get(0), p.get(1), p.get(2));
     }
 

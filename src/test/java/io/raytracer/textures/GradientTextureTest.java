@@ -14,7 +14,7 @@ class GradientTextureTest {
     void gradientTextureLinearlyInterpolatesInX() {
         Texture gradient = new GradientTexture(black, white);
 
-        assertEquals(black, gradient.colourAt(new Point(0, 0, 0)));
-        assertEquals(new LinearColour(0.2, 0.2, 0.2), gradient.colourAt(new Point(0.2, 0, 0)));
+        assertEquals(black, gradient.ownColourAt(new Point(0, 0, 0)));
+        assertEquals(new LinearColour(0.2, 0.2, 0.2), gradient.ownColourAt(new Point(0.2, 0, 0)));
     }
 }

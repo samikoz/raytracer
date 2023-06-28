@@ -14,9 +14,9 @@ class StripedTextureTest {
     @Test
     void stripedTextureIsConstantInY() {
         Texture striped = new StripedTexture(white, black);
-        IColour firstColour = striped.colourAt(new Point(0, 0, 0));
-        IColour secondColour = striped.colourAt(new Point(0, 1, 0));
-        IColour thirdColour = striped.colourAt(new Point(0, 2.3, 0));
+        IColour firstColour = striped.ownColourAt(new Point(0, 0, 0));
+        IColour secondColour = striped.ownColourAt(new Point(0, 1, 0));
+        IColour thirdColour = striped.ownColourAt(new Point(0, 2.3, 0));
 
         assertEquals(white, firstColour);
         assertEquals(white, secondColour);
@@ -26,9 +26,9 @@ class StripedTextureTest {
     @Test
     void stripedTextureIsConstantInZ() {
         Texture striped = new StripedTexture(white, black);
-        IColour firstColour = striped.colourAt(new Point(0, 0, 0));
-        IColour secondColour = striped.colourAt(new Point(0, 0, 1));
-        IColour thirdColour = striped.colourAt(new Point(0, 0, -2.3));
+        IColour firstColour = striped.ownColourAt(new Point(0, 0, 0));
+        IColour secondColour = striped.ownColourAt(new Point(0, 0, 1));
+        IColour thirdColour = striped.ownColourAt(new Point(0, 0, -2.3));
 
         assertEquals(white, firstColour);
         assertEquals(white, secondColour);
@@ -38,9 +38,9 @@ class StripedTextureTest {
     @Test
     void stripedTextureAlternatesInX() {
         Texture striped = new StripedTexture(white, black);
-        IColour firstColour = striped.colourAt(new Point(0, 0, 0));
-        IColour secondColour = striped.colourAt(new Point(1, 0, 0));
-        IColour thirdColour = striped.colourAt(new Point(2.3, 0, 0));
+        IColour firstColour = striped.ownColourAt(new Point(0, 0, 0));
+        IColour secondColour = striped.ownColourAt(new Point(1, 0, 0));
+        IColour thirdColour = striped.ownColourAt(new Point(2.3, 0, 0));
 
         assertEquals(white, firstColour);
         assertEquals(black, secondColour);

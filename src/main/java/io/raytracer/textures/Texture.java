@@ -10,7 +10,11 @@ import java.util.Arrays;
 
 public abstract class Texture {
     @Getter private ITransform inverseTransform;
-    public abstract IColour colourAt(IPoint p);
+
+    public IColour colourAt(IPoint p) {
+        return this.ownColourAt(this.getInverseTransform().act(p));
+    }
+    abstract IColour ownColourAt(IPoint p);
 
     public void setTransform(ITransform transform) {
         this.inverseTransform = transform.inverse();
