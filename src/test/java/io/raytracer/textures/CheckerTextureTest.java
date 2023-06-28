@@ -1,14 +1,14 @@
 package io.raytracer.textures;
 
-import io.raytracer.tools.Colour;
+import io.raytracer.tools.LinearColour;
 import io.raytracer.geometry.Point;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class CheckerTextureTest {
-    private final Colour black = new Colour(0, 0, 0);
-    private final Colour white = new Colour(1, 1, 1);
+    private final LinearColour black = new LinearColour(0, 0, 0);
+    private final LinearColour white = new LinearColour(1, 1, 1);
 
     @Test
     void checkerTextureRepeatsInThreeDimensions() {

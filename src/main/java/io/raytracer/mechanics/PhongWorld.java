@@ -1,19 +1,15 @@
 package io.raytracer.mechanics;
 
 import io.raytracer.tools.IColour;
-import io.raytracer.tools.Colour;
+import io.raytracer.tools.LinearColour;
 import io.raytracer.geometry.IPoint;
 import io.raytracer.geometry.IVector;
-import io.raytracer.shapes.Shape;
 import io.raytracer.materials.Material;
 import lombok.NonNull;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.function.Function;
@@ -69,7 +65,7 @@ public class PhongWorld extends World {
 
     IColour getReflectedColour(@NotNull RayHit hitpoint) {
         if (hitpoint.object.getMaterial().reflectivity == 0 || hitpoint.ray.getRecast() > PhongWorld.recursionDepth) {
-            return new Colour(0, 0, 0);
+            return new LinearColour(0, 0, 0);
         }
         Collection<IRay> reflectedRays = Collections.singletonList(hitpoint.ray.reflectFrom(hitpoint.offsetAbove, hitpoint.normalVector));
         IColour reflectedColour = this.illuminate(reflectedRays);
@@ -78,7 +74,7 @@ public class PhongWorld extends World {
 
     IColour getRefractedColour(@NonNull RayHit hitpoint) {
         if (hitpoint.object.getMaterial().transparency == 0 || hitpoint.reflectance == 1.0 || hitpoint.ray.getRecast() > PhongWorld.recursionDepth) {
-            return new Colour(0, 0, 0);
+            return new LinearColour(0, 0, 0);
         }
 
         Collection<IRay> refractedRays = Collections.singletonList(hitpoint.ray.refractOn(hitpoint.getRefractionPoint()));

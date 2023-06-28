@@ -5,7 +5,7 @@ import io.raytracer.tools.Camera;
 import io.raytracer.tools.SingleRayCamera;
 import io.raytracer.tools.IPicture;
 import io.raytracer.tools.IColour;
-import io.raytracer.tools.Colour;
+import io.raytracer.tools.LinearColour;
 import io.raytracer.textures.MonocolourTexture;
 import io.raytracer.textures.TestTexture;
 import io.raytracer.geometry.IPoint;
@@ -38,7 +38,7 @@ public class PhongWorldTest {
     @BeforeEach
     void setupMaterialAndPosition() {
         outerMaterial = Material.builder()
-                .texture(new MonocolourTexture(new Colour(0.8, 1.0, 0.6))).diffuse(0.7).specular(0.2)
+                .texture(new MonocolourTexture(new LinearColour(0.8, 1.0, 0.6))).diffuse(0.7).specular(0.2)
                 .ambient(0.1).shininess(200.0).build();
         innerMaterial = Material.builder().build();
         outerSphere = new Sphere(outerMaterial);
@@ -46,7 +46,7 @@ public class PhongWorldTest {
         innerSphere.setTransform(ThreeTransform.scaling(0.5, 0.5, 0.5));
 
         defaultWorld = new PhongWorld();
-        defaultWorld.put(new LightSource(new Colour(1, 1, 1), new Point(-10, 10, -10)));
+        defaultWorld.put(new LightSource(new LinearColour(1, 1, 1), new Point(-10, 10, -10)));
         defaultWorld.put(outerSphere).put(innerSphere);
     }
 
@@ -55,8 +55,8 @@ public class PhongWorldTest {
         IRay ray = new Ray(new Point(0, 0, -5), new Vector(0, 0, 1));
         Collection<IRay> rays = Collections.singletonList(ray);
         PhongWorld world = new PhongWorld();
-        world.put(new LightSource(new Colour(1, 1, 1), new Point(-10, 10, -10)));
-        IColour expectedColour = new Colour(0, 0, 0);
+        world.put(new LightSource(new LinearColour(1, 1, 1), new Point(-10, 10, -10)));
+        IColour expectedColour = new LinearColour(0, 0, 0);
 
         assertEquals(expectedColour, world.illuminate(rays), "Empty world has no illumination");
     }
@@ -66,7 +66,7 @@ public class PhongWorldTest {
         IRay ray = new Ray(new Point(0, 0, -5), new Vector(0, 1, 0));
         Collection<IRay> rays = Collections.singletonList(ray);
         IColour illuminated = defaultWorld.illuminate(rays);
-        IColour expectedColour = new Colour(0, 0, 0);
+        IColour expectedColour = new LinearColour(0, 0, 0);
 
         assertEquals(expectedColour, illuminated, "A ray that misses should return black");
     }
@@ -76,7 +76,7 @@ public class PhongWorldTest {
         IRay ray = new Ray(new Point(0, 0, -5), new Vector(0, 0, 1));
         Collection<IRay> rays = Collections.singletonList(ray);
         IColour illuminated = defaultWorld.illuminate(rays);
-        IColour expectedColour = new Colour(0.38066, 0.47583, 0.2855);
+        IColour expectedColour = new LinearColour(0.38066, 0.47583, 0.2855);
 
         assertEquals(expectedColour, illuminated);
     }
@@ -91,7 +91,7 @@ public class PhongWorldTest {
         innerObject.setTransform(ThreeTransform.scaling(0.5, 0.5, 0.5));
 
         PhongWorld world = new PhongWorld();
-        world.put(new LightSource(new Colour(1, 1, 1), new Point(-10, 10, -10)));
+        world.put(new LightSource(new LinearColour(1, 1, 1), new Point(-10, 10, -10)));
         world.put(innerObject).put(outerObject);
 
         IRay ray = new Ray(new Point(0, 0, 0.75), new Vector(0, 0, -1));
@@ -104,18 +104,18 @@ public class PhongWorldTest {
 
     @Test
     void illuminatingWhenIntersectionIsInTheShadow() {
-        Material material = Material.builder().texture(new MonocolourTexture(new Colour(1, 1, 1))).ambient(0.1).diffuse(0.9)
+        Material material = Material.builder().texture(new MonocolourTexture(new LinearColour(1, 1, 1))).ambient(0.1).diffuse(0.9)
                 .specular(0.9).shininess(200.0).build();
         Sphere firstSphere = new Sphere(material);
         Sphere secondSphere = new Sphere(material);
         secondSphere.setTransform(ThreeTransform.translation(0, 0, 10));
-        ILightSource light = new LightSource(new Colour(1, 1, 1), new Point(0, 0, -10));
+        ILightSource light = new LightSource(new LinearColour(1, 1, 1), new Point(0, 0, -10));
         PhongWorld world = new PhongWorld();
         world.put(light).put(firstSphere).put(secondSphere);
 
         IRay ray = new Ray(new Point(0, 0, 5), new Vector(0, 0, 1));
         Collection<IRay> rays = Collections.singletonList(ray);
-        IColour expectedColour = new Colour(0.1, 0.1, 0.1);
+        IColour expectedColour = new LinearColour(0.1, 0.1, 0.1);
         IColour actualColour = world.illuminate(rays);
 
         assertEquals(expectedColour, actualColour, "Illuminate shaded point should return only ambient value");
@@ -123,20 +123,20 @@ public class PhongWorldTest {
 
     @Test
     void illuminatingThroughNonShadowingSurface() {
-        Material material = Material.builder().texture(new MonocolourTexture(new Colour(1, 1, 1)))
+        Material material = Material.builder().texture(new MonocolourTexture(new LinearColour(1, 1, 1)))
             .ambient(0.1).diffuse(0.2).specular(0.2).shininess(200.0).build();
         Sphere sphere = new Sphere(material);
         sphere.setTransform(ThreeTransform.translation(0, 0, 10));
         Plane plane = new Plane();
         plane.setTransform(ThreeTransform.rotation_x(Math.PI / 2));
         plane.setCastingShadows(false);
-        ILightSource light = new LightSource(new Colour(1, 1, 1), new Point(0, 0, -10));
+        ILightSource light = new LightSource(new LinearColour(1, 1, 1), new Point(0, 0, -10));
         PhongWorld world = new PhongWorld();
         world.put(light).put(sphere).put(plane);
 
         IRay ray = new Ray(new Point(0, 0, 5), new Vector(0, 0, 1));
         Collection<IRay> rays = Collections.singletonList(ray);
-        IColour expectedColour = new Colour(0.5, 0.5, 0.5);
+        IColour expectedColour = new LinearColour(0.5, 0.5, 0.5);
         IColour actualColour = world.illuminate(rays);
 
         assertEquals(expectedColour, actualColour, "non-shadowing objects should not cast shadows");
@@ -151,7 +151,7 @@ public class PhongWorldTest {
 
         IPicture picture = defaultWorld.render(camera);
 
-        assertEquals(new Colour(0.38066, 0.47583, 0.2855), picture.read(5, 5),
+        assertEquals(new LinearColour(0.38066, 0.47583, 0.2855), picture.read(5, 5),
                 "Pixel in the middle of the canvas has correct colour.");
     }
 
@@ -192,7 +192,7 @@ public class PhongWorldTest {
         RayHit hitpoint = hit.get();
         IColour reflectedColour = defaultWorld.getReflectedColour(hitpoint);
         
-        assertEquals(new Colour(0, 0, 0), reflectedColour);
+        assertEquals(new LinearColour(0, 0, 0), reflectedColour);
     }
 
     @Test
@@ -201,19 +201,19 @@ public class PhongWorldTest {
         Shape sphere = new Sphere(outerMaterial);
         Material planeMaterial = Material.builder()
                 .diffuse(0.9).specular(0.9).ambient(0.1).shininess(200.0).reflectivity(0.5)
-                .texture(new MonocolourTexture(new Colour(1, 1, 1))).build();
+                .texture(new MonocolourTexture(new LinearColour(1, 1, 1))).build();
         Shape plane = new Plane(planeMaterial);
         plane.setTransform(ThreeTransform.translation(0, -1, 0));
         
         PhongWorld testWorld = new PhongWorld();
-        testWorld.put(new LightSource(new Colour(1, 1, 1), new Point(-10, 10, -10)));
+        testWorld.put(new LightSource(new LinearColour(1, 1, 1), new Point(-10, 10, -10)));
         testWorld.put(sphere).put(plane);
 
         Optional<RayHit> hit = RayHit.fromIntersections(testWorld.intersect(ray));
         assertTrue(hit.isPresent());
         RayHit hitpoint = hit.get();
 
-        assertEquals(new Colour(0.19032, 0.2379, 0.14274), testWorld.getReflectedColour(hitpoint));
+        assertEquals(new LinearColour(0.19032, 0.2379, 0.14274), testWorld.getReflectedColour(hitpoint));
     }
 
     @Test
@@ -222,19 +222,19 @@ public class PhongWorldTest {
         Collection<IRay> rays = Collections.singletonList(ray);
         Material sphereMaterial = Material.builder()
                 .diffuse(0.7).specular(0.2).ambient(0.1).shininess(200.0)
-                .texture(new MonocolourTexture(new Colour(0.8, 1.0, 0.6))).build();
+                .texture(new MonocolourTexture(new LinearColour(0.8, 1.0, 0.6))).build();
         Shape sphere = new Sphere(sphereMaterial);
         Material planeMaterial = Material.builder()
                 .diffuse(0.9).specular(0.9).ambient(0.1).shininess(200.0).reflectivity(0.5)
-                .texture(new MonocolourTexture(new Colour(1, 1, 1))).build();
+                .texture(new MonocolourTexture(new LinearColour(1, 1, 1))).build();
         Shape plane = new Plane(planeMaterial);
         plane.setTransform(ThreeTransform.translation(0, -1, 0));
 
         PhongWorld testWorld = new PhongWorld();
-        testWorld.put(new LightSource(new Colour(1, 1, 1), new Point(-10, 10, -10)));
+        testWorld.put(new LightSource(new LinearColour(1, 1, 1), new Point(-10, 10, -10)));
         testWorld.put(sphere).put(plane);
 
-        assertEquals(new Colour(0.87677, 0.92436, 0.82918), testWorld.illuminate(rays));
+        assertEquals(new LinearColour(0.87677, 0.92436, 0.82918), testWorld.illuminate(rays));
     }
 
     @Test
@@ -245,12 +245,12 @@ public class PhongWorldTest {
         Shape rightPlane = new Plane(planeMaterial);
         rightPlane.setTransform(ThreeTransform.translation(0, 1, 0));
         PhongWorld world = new PhongWorld();
-        world.put(new LightSource(new Colour(1, 1, 1), new Point(0, 0, 0)));
+        world.put(new LightSource(new LinearColour(1, 1, 1), new Point(0, 0, 0)));
         world.put(leftPlane).put(rightPlane);
         IRay ray = new Ray(new Point(0, 0, 0), new Vector(0, 1, 0));
         Collection<IRay> rays = Collections.singletonList(ray);
 
-        assertEquals(new Colour(0, 0, 0), world.illuminate(rays));
+        assertEquals(new LinearColour(0, 0, 0), world.illuminate(rays));
     }
 
     @Test
@@ -262,7 +262,7 @@ public class PhongWorldTest {
         RayHit hitpoint = hit.get();
         IColour refractedColour = defaultWorld.getRefractedColour(hitpoint);
 
-        assertEquals(new Colour(0, 0, 0), refractedColour);
+        assertEquals(new LinearColour(0, 0, 0), refractedColour);
     }
 
     @Test
@@ -270,17 +270,17 @@ public class PhongWorldTest {
         IRay ray = new Ray(new Point(0, 0, Math.sqrt(2) / 2), new Vector(0, 1, 0));
         Material sphereMaterial = Material.builder()
                 .diffuse(0.7).specular(0.2).ambient(0.1).shininess(200.0).transparency(1.0).refractiveIndex(1.5)
-                .texture(new MonocolourTexture(new Colour(0.8, 1.0, 0.6))).build();
+                .texture(new MonocolourTexture(new LinearColour(0.8, 1.0, 0.6))).build();
         Shape sphere = new Sphere(sphereMaterial);
         PhongWorld world = new PhongWorld();
-        world.put(new LightSource(new Colour(1, 1, 1), new Point(-10, 10, -10))).put(sphere);
+        world.put(new LightSource(new LinearColour(1, 1, 1), new Point(-10, 10, -10))).put(sphere);
 
         Optional<RayHit> hit = RayHit.fromIntersections(world.intersect(ray));
         assertTrue(hit.isPresent());
         RayHit hitpoint = hit.get();
         IColour refractedColour = world.getRefractedColour(hitpoint);
 
-        assertEquals(new Colour(0, 0, 0), refractedColour);
+        assertEquals(new LinearColour(0, 0, 0), refractedColour);
     }
 
     @Test
@@ -289,7 +289,7 @@ public class PhongWorldTest {
         Shape inner = new Sphere(innerMaterial.toBuilder().transparency(1.0).refractiveIndex(1.5).build());
         inner.setTransform(ThreeTransform.scaling(0.5, 0.5, 0.5));
         PhongWorld world = new PhongWorld();
-        world.put(new LightSource(new Colour(1, 1, 1), new Point(-10, 10, -10))).put(outer).put(inner);
+        world.put(new LightSource(new LinearColour(1, 1, 1), new Point(-10, 10, -10))).put(outer).put(inner);
         IRay ray = new Ray(new Point(0, 0, 0.1), new Vector(0, 1, 0));
 
         Optional<RayHit> hit = RayHit.fromIntersections(world.intersect(ray));
@@ -297,25 +297,25 @@ public class PhongWorldTest {
         RayHit hitpoint = hit.get();
         IColour refractedColour = world.getRefractedColour(hitpoint);
 
-        assertEquals(new Colour(0, 0.99888, 0.04725), refractedColour);
+        assertEquals(new LinearColour(0, 0.99888, 0.04725), refractedColour);
     }
 
     @Test
     void illuminatingWithTransparentMaterial() {
-        Material planeMaterial = Material.builder().texture(new MonocolourTexture(new Colour(1, 1, 1)))
+        Material planeMaterial = Material.builder().texture(new MonocolourTexture(new LinearColour(1, 1, 1)))
             .diffuse(0.9).specular(0.9).shininess(200.0).ambient(0.1).transparency(0.5).refractiveIndex(1.5).build();
         Shape floor = new Plane(planeMaterial);
         floor.setTransform(ThreeTransform.translation(0, -1, 0));
-        Material belowMaterial = Material.builder().texture(new MonocolourTexture(new Colour(1, 0, 0)))
+        Material belowMaterial = Material.builder().texture(new MonocolourTexture(new LinearColour(1, 0, 0)))
             .diffuse(0.9).specular(0.9).shininess(200.0).ambient(0.5).build();
         Shape below = new Sphere(belowMaterial);
         below.setTransform(ThreeTransform.translation(0, -3.5, -0.5));
-        World world = new PhongWorld().put(new LightSource(new Colour(1, 1, 1), new Point(-10, 10, -10)));
+        World world = new PhongWorld().put(new LightSource(new LinearColour(1, 1, 1), new Point(-10, 10, -10)));
         world.put(floor).put(below).put(outerSphere);
         IRay ray = new Ray(new Point(0, 0, -3), new Vector(0, -Math.sqrt(2)/2, Math.sqrt(2)/2));
         Collection<IRay> rays = Collections.singletonList(ray);
 
-        IColour expectedColor = new Colour(0.93642, 0.68642, 0.68642);
+        IColour expectedColor = new LinearColour(0.93642, 0.68642, 0.68642);
         IColour actualColor = world.illuminate(rays);
 
         assertEquals(expectedColor, actualColor);
@@ -323,21 +323,21 @@ public class PhongWorldTest {
 
     @Test
     void illuminatingWithTransparentAndReflectiveMaterial() {
-        Material planeMaterial = Material.builder().texture(new MonocolourTexture(new Colour(1, 1, 1)))
+        Material planeMaterial = Material.builder().texture(new MonocolourTexture(new LinearColour(1, 1, 1)))
             .diffuse(0.9).specular(0.9).shininess(200.0).ambient(0.1).transparency(0.5).reflectivity(0.5)
             .refractiveIndex(1.5).build();
         Shape floor = new Plane(planeMaterial);
         floor.setTransform(ThreeTransform.translation(0, -1, 0));
-        Material belowMaterial = Material.builder().texture(new MonocolourTexture(new Colour(1, 0, 0)))
+        Material belowMaterial = Material.builder().texture(new MonocolourTexture(new LinearColour(1, 0, 0)))
             .diffuse(0.9).specular(0.9).shininess(200.0).ambient(0.5).build();
         Shape below = new Sphere(belowMaterial);
         below.setTransform(ThreeTransform.translation(0, -3.5, -0.5));
-        World world = new PhongWorld().put(new LightSource(new Colour(1, 1, 1), new Point(-10, 10, -10)));
+        World world = new PhongWorld().put(new LightSource(new LinearColour(1, 1, 1), new Point(-10, 10, -10)));
         world.put(floor).put(below).put(outerSphere);
         IRay ray = new Ray(new Point(0, 0, -3), new Vector(0, -Math.sqrt(2)/2, Math.sqrt(2)/2));
         Collection<IRay> rays = Collections.singletonList(ray);
 
-        IColour expectedColor = new Colour(0.93391, 0.69643, 0.69243);
+        IColour expectedColor = new LinearColour(0.93391, 0.69643, 0.69243);
         IColour actualColor = world.illuminate(rays);
 
         assertEquals(expectedColor, actualColor);

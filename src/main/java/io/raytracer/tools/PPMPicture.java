@@ -2,22 +2,21 @@ package io.raytracer.tools;
 
 import lombok.Getter;
 import lombok.NonNull;
-import org.jetbrains.annotations.NotNull;
 
 import java.io.PrintWriter;
-import java.util.Arrays;
 import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.Collections;
 import java.util.List;
-import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class PPMPicture implements IPicture {
     @Getter private final int width;
     @Getter private final int height;
-    private final PPMCanvasRow[] pixelGrid;
+    private final List<ArrayList<IColour>> pixelGrid;
     private final String exportHeader;
 
-    static private final IColour initialColour = new Colour(0, 0, 0);
+    static private final IColour initialColour = new LinearColour(0, 0, 0);
     static private final int exportedLineMaxLength = 70;
 
     public PPMPicture(int x, int y) {
@@ -25,18 +24,17 @@ public class PPMPicture implements IPicture {
         this.height = y;
         exportHeader = "P3\n" + x + " " + y + "\n255\n";
 
-        pixelGrid = new PPMCanvasRow[y];
-        Arrays.setAll(pixelGrid, i -> new PPMCanvasRow(x));
+        pixelGrid = Stream.generate(() -> new ArrayList<>(Collections.nCopies(x, PPMPicture.initialColour))).limit(y).collect(Collectors.toList());
     }
 
     @Override
     public void write(int x, int y, @NonNull IColour colour) {
-        pixelGrid[y].set(x, colour);
+        pixelGrid.get(y).set(x, colour);
     }
 
     @Override
     public IColour read(int x, int y) {
-        return pixelGrid[y].get(x);
+        return pixelGrid.get(y).get(x);
     }
 
     @Override
@@ -49,34 +47,16 @@ public class PPMPicture implements IPicture {
     public String export() {
         StringBuilder exported = new StringBuilder(exportHeader);
 
-        for (PPMCanvasRow row : rows()) {
-            exported.append(putLineBreaks(String.join(" ", row.export()))).append("\n");
+        for (ArrayList<IColour> row : this.pixelGrid) {
+            exported.append(putLineBreaks(String.join(" ", this.export(row)))).append("\n");
         }
         return exported.toString();
     }
 
-    private Iterable<PPMCanvasRow> rows() {
-        return () -> new Iterator<PPMCanvasRow>() {
-            private int rowIndex;
-
-            {
-                rowIndex = 0;
-            }
-
-            @Override
-            public boolean hasNext() {
-                return rowIndex < pixelGrid.length;
-            }
-
-            @Override
-            public PPMCanvasRow next() {
-                if (hasNext()) {
-                    return pixelGrid[rowIndex++];
-                } else {
-                    throw new NoSuchElementException();
-                }
-            }
-        };
+    private List<String> export(ArrayList<IColour> ppmRow) {
+        List<String> exported = new ArrayList<>();
+        ppmRow.forEach(rowElement -> exported.add(rowElement.export()));
+        return exported;
     }
 
     private String putLineBreaks(String exportRow) {
@@ -88,58 +68,5 @@ public class PPMPicture implements IPicture {
             rowToBreak.setCharAt(whitespacePosition, '\n');
         }
         return rowToBreak.toString();
-    }
-
-    private static class PPMCanvasRow implements Iterable<IColour> {
-        private final IColour[] rowColours;
-        private final int size;
-
-        PPMCanvasRow(int size) {
-            this.size = size;
-
-            rowColours = new Colour[size];
-            Arrays.fill(rowColours, initialColour);
-        }
-
-        IColour get(int x) {
-            return rowColours[x];
-        }
-
-        void set(int x, IColour colour) {
-            rowColours[x] = colour;
-        }
-
-        List<String> export() {
-            List<String> exported = new ArrayList<>(size);
-            for (IColour rowElement : this) {
-                exported.add(rowElement.exportNormalised());
-            }
-            return exported;
-        }
-
-        @Override
-        public @NotNull Iterator<IColour> iterator() {
-            return new Iterator<IColour>() {
-                private int rowElementIndex;
-
-                {
-                    rowElementIndex = 0;
-                }
-
-                @Override
-                public boolean hasNext() {
-                    return rowElementIndex < rowColours.length;
-                }
-
-                @Override
-                public IColour next() {
-                    if (hasNext()) {
-                        return rowColours[rowElementIndex++];
-                    } else {
-                        throw new NoSuchElementException();
-                    }
-                }
-            };
-        }
     }
 }

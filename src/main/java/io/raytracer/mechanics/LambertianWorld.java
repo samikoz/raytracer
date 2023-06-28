@@ -3,7 +3,7 @@ package io.raytracer.mechanics;
 import io.raytracer.geometry.IPoint;
 import io.raytracer.geometry.IVector;
 import io.raytracer.geometry.Vector;
-import io.raytracer.tools.Colour;
+import io.raytracer.tools.GammaColour;
 import io.raytracer.tools.IColour;
 
 import java.util.Collections;
@@ -26,7 +26,7 @@ public class LambertianWorld extends World {
     @Override
     IColour illuminate(IRay ray) {
         if (ray.getRecast() >= LambertianWorld.lambertianDepth) {
-            return new Colour(0, 0, 0);
+            return new GammaColour(0, 0, 0);
         }
         Collection<Intersection> intersections = this.intersect(ray);
         Optional<RayHit> hit = RayHit.fromIntersections(intersections);

@@ -1,5 +1,6 @@
 package io.raytracer.tools;
 
+
 public interface IColour {
     double getRed();
     double getGreen();
@@ -14,7 +15,10 @@ public interface IColour {
 
     IColour mix(IColour them);
 
-    IColour interpolate(IColour them, double factor);
+    default IColour interpolate(IColour them, double factor) {
+        factor = Math.max(Math.min(1, factor), 0);
+        return this.add(them.subtract(this).multiply(factor));
+    }
 
-    String exportNormalised();
+    String export();
 }

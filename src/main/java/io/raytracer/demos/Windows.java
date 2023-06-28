@@ -1,7 +1,7 @@
 package io.raytracer.demos;
 
 import io.raytracer.tools.SingleRayCamera;
-import io.raytracer.tools.Colour;
+import io.raytracer.tools.LinearColour;
 import io.raytracer.tools.Camera;
 import io.raytracer.tools.IPicture;
 import io.raytracer.tools.PPMPicture;
@@ -28,7 +28,7 @@ public class Windows {
         int sphereSeparation = 10;
 
         PhongWorld world = new PhongWorld();
-        world.put(new LightSource(new Colour(1, 1, 1), new Point(0, 10, -30)));
+        world.put(new LightSource(new LinearColour(1, 1, 1), new Point(0, 10, -30)));
 
         Material floorMaterial = Material.builder()
                 .reflectivity(0.8)
@@ -38,7 +38,7 @@ public class Windows {
         world.put(floor);
 
         Material.MaterialBuilder sphereMaterialBuilder = Material.builder()
-                .texture(new MonocolourTexture(new Colour(0, 1, 0)))
+                .texture(new MonocolourTexture(new LinearColour(0, 1, 0)))
                 .specular(0.3).ambient(0.1).shininess(150.0);
 
         for (int sphereIndex = 0; sphereIndex < spheresCount; sphereIndex++) {

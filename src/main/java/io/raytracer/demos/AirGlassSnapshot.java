@@ -3,7 +3,7 @@ package io.raytracer.demos;
 import io.raytracer.tools.Camera;
 import io.raytracer.tools.SingleRayCamera;
 import io.raytracer.tools.IPicture;
-import io.raytracer.tools.Colour;
+import io.raytracer.tools.LinearColour;
 import io.raytracer.textures.CheckerTexture;
 import io.raytracer.textures.MonocolourTexture;
 import io.raytracer.shapes.Shape;
@@ -27,7 +27,7 @@ public class AirGlassSnapshot {
     public static void render(double angle, String filename) throws IOException {
         int cubeHalfSide = 7;
         Material wallMaterial = Material.builder()
-            .texture(new CheckerTexture(new Colour(0.6, 0.6, 0.6), new Colour(0, 0, 0)))
+            .texture(new CheckerTexture(new LinearColour(0.6, 0.6, 0.6), new LinearColour(0, 0, 0)))
             .ambient(1.0)
             .build();
         Plane backWall = new Plane(wallMaterial);
@@ -44,7 +44,7 @@ public class AirGlassSnapshot {
         bottomWall.setTransform(ThreeTransform.translation(0, -cubeHalfSide, 0));
 
         Material glassMaterial = Glass.glassBuilder()
-                .texture(new MonocolourTexture(new Colour(0, 0, 0)))
+                .texture(new MonocolourTexture(new LinearColour(0, 0, 0)))
                 .specular(0.9)
                 .ambient(0.1)
                 .shininess(250.0)
@@ -54,7 +54,7 @@ public class AirGlassSnapshot {
         Material airMaterial = Material.builder()
             .transparency(1.0)
             .reflectivity(0.9)
-            .texture(new MonocolourTexture(new Colour(0, 0, 0)))
+            .texture(new MonocolourTexture(new LinearColour(0, 0, 0)))
             .specular(0.1)
             .ambient(0.1)
             .shininess(20.0)
@@ -63,7 +63,7 @@ public class AirGlassSnapshot {
         airSphere.setTransform(ThreeTransform.scaling(0.5, 0.5, 0.5));
 
         PhongWorld world = new PhongWorld();
-        world.put(new LightSource(new Colour(1, 1, 1), new Point(-5, 5, -5)));
+        world.put(new LightSource(new LinearColour(1, 1, 1), new Point(-5, 5, -5)));
         world.put(backWall).put(frontWall).put(leftWall).put(rightWall).put(topWall).put(bottomWall).put(airSphere).put(glassSphere);
 
         IPoint eyePosition = new Point(0-3*Math.sin(angle), 0, -3*Math.cos(angle));

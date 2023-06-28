@@ -8,11 +8,9 @@
 1. https://raytracing.github.io/
 
 # Technicalities
+- Think about the current recursive implementation of illuminate. Can't we pass the "colour so far"
+parameter and cut off the subsequent invocations if their contribution would be too small to notice?
 - Intersection for cube can be optimised. To be found somewhere in TR1., "the next week".
-- Antialiasing can be added, some preparations have been made by World.illuminate accepting
-a collection of rays. At the moment it only selects the first one.
 - Groups have been implemented for grouping but not for bounding boxes
 - Really the current Tuple-based implementation is too general. Should be having
 classes assuming 3 dimensions.
-- Look at TR1, "weekend" for implementation of matte surfaces. Will want to implement it
-aside out Phong reflection model to be able to choose and compare.

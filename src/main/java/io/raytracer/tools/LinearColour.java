@@ -5,10 +5,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 
 import java.util.Arrays;
+import java.util.stream.Stream;
 
 @ToString
 @RequiredArgsConstructor
-public class Colour implements IColour {
+public class LinearColour implements IColour {
     @Getter private final double red;
     @Getter private final double green;
     @Getter private final double blue;
@@ -25,37 +26,41 @@ public class Colour implements IColour {
     public boolean equals(Object them) {
         if (them == null || this.getClass() != them.getClass()) return false;
 
-        Colour themColour = (Colour) them;
+        LinearColour themColour = (LinearColour) them;
         return (this.distance(themColour) < equalityTolerance);
     }
 
-    private double distance(Colour them) {
+    private double distance(LinearColour them) {
         return Math.sqrt(
-                Math.pow(this.getRed() - them.getRed(), 2) +
-                        Math.pow(this.getGreen() - them.getGreen(), 2) +
-                        Math.pow(this.getBlue() - them.getBlue(), 2)
+            Math.pow(this.getRed() - them.getRed(), 2) +
+            Math.pow(this.getGreen() - them.getGreen(), 2) +
+            Math.pow(this.getBlue() - them.getBlue(), 2)
         );
     }
 
-    private int normaliseComponent(double componentValue) {
+    protected double clamp(double componentValue) {
         if (componentValue <= 0) {
             componentValue = 0;
         } else if (componentValue >= 1) {
             componentValue = 1;
         }
-        return (int) Math.round(componentValue * exportScale);
+        return componentValue;
+    }
+
+    protected int scale(double value) {
+        return (int) Math.round(value * exportScale);
     }
 
     @Override
-    public String exportNormalised() {
-        return normaliseComponent(getRed()) + " " +
-                normaliseComponent(getGreen()) + " " +
-                normaliseComponent(getBlue());
+    public String export() {
+        return Stream.of(this.getRed(), this.getGreen(), this.getBlue())
+            .mapToDouble(this::clamp).mapToInt(this::scale)
+            .mapToObj(String::valueOf).reduce((c1, c2) -> c1 + " " + c2).get();
     }
 
     @Override
-    public Colour add(IColour them) {
-        return new Colour(
+    public LinearColour add(IColour them) {
+        return new LinearColour(
                 this.getRed() + them.getRed(),
                 this.getGreen() + them.getGreen(),
                 this.getBlue() + them.getBlue()
@@ -64,7 +69,7 @@ public class Colour implements IColour {
 
     @Override
     public IColour multiply(double scalar) {
-        return new Colour(
+        return new LinearColour(
                 scalar * this.getRed(),
                 scalar * this.getGreen(),
                 scalar * this.getBlue()
@@ -73,7 +78,7 @@ public class Colour implements IColour {
 
     @Override
     public IColour mix(IColour them) {
-        return new Colour(
+        return new LinearColour(
                 this.getRed() * them.getRed(),
                 this.getGreen() * them.getGreen(),
                 this.getBlue() * them.getBlue()

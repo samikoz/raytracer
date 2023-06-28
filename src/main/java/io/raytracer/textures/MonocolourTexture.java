@@ -3,11 +3,12 @@ package io.raytracer.textures;
 import io.raytracer.tools.IColour;
 import io.raytracer.geometry.IPoint;
 import lombok.NonNull;
+import org.jetbrains.annotations.NotNull;
 
 public class MonocolourTexture extends Texture {
     @NonNull private final IColour monocolour;
 
-    public MonocolourTexture(IColour colour) {
+    public MonocolourTexture(@NotNull IColour colour) {
         super();
         this.monocolour = colour;
     }

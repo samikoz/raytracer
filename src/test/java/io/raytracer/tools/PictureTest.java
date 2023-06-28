@@ -12,15 +12,15 @@ class PictureTest {
         IPicture picture = new PPMPicture(2, 3);
 
         IColour defaultCanvasColour = picture.read(1, 1);
-        IColour black = new Colour(0, 0, 0);
+        IColour black = new LinearColour(0, 0, 0);
 
         assertEquals(defaultCanvasColour, black, "Default canvas colour should be black");
     }
 
     @Test
     void writeAndReadFromCanvas() {
-        IColour first = new Colour(0.5, 0.2, 0.3);
-        IColour second = new Colour(0, 0, 0.4);
+        IColour first = new LinearColour(0.5, 0.2, 0.3);
+        IColour second = new LinearColour(0, 0, 0.4);
         IPicture picture = new PPMPicture(10, 20);
 
         picture.write(0, 19, first);
@@ -48,30 +48,31 @@ class PictureTest {
     @Test
     void correctPPMExportPixelData() {
         IPicture picture = new PPMPicture(5, 3);
-        picture.write(0, 0, new Colour(1, 0, 0));
-        picture.write(2, 1, new Colour(0, 0.5, 0));
-        picture.write(4, 2, new Colour(-0.5, 0, 1));
+        picture.write(0, 0, new GammaColour(1, 0, 0));
+        picture.write(2, 1, new GammaColour(0, 0.5, 0));
+        picture.write(4, 2, new GammaColour(-0.5, 0, 1));
 
         String expectedFirstRowData = "255 0 0 0 0 0 0 0 0 0 0 0 0 0 0\n";
-        String expectedSecondRowData = "0 0 0 0 0 0 0 128 0 0 0 0 0 0 0\n";
+        String expectedSecondRowData = "0 0 0 0 0 0 0 180 0 0 0 0 0 0 0\n";
         String expectedThirdRowData = "0 0 0 0 0 0 0 0 0 0 0 0 0 0 255\n";
         String expectedPixelData = expectedFirstRowData + expectedSecondRowData + expectedThirdRowData;
+        String actualPixelData = picture.export();
 
-        assertTrue(picture.export().endsWith(expectedPixelData));
+        assertTrue(actualPixelData.endsWith(expectedPixelData));
     }
 
     @Test
     void noLinesLongerThan70InExportedString() {
         IPicture picture = new PPMPicture(10, 2);
-        IColour aColour = new Colour(1, 0.8, 0.6);
+        IColour aColour = new GammaColour(1, 0.8, 0.6);
 
         for (int i = 0; i < 10; ++i) {
             picture.write(i, 0, aColour);
             picture.write(i, 1, aColour);
         }
 
-        String expectedPreLineBreak = "255 204 153 255 204 153 255 204 153 255 204 153 255 204 153 255 204";
-        String expectedPostLineBreak = "153 255 204 153 255 204 153 255 204 153 255 204 153";
+        String expectedPreLineBreak = "255 228 198 255 228 198 255 228 198 255 228 198 255 228 198 255 228";
+        String expectedPostLineBreak = "198 255 228 198 255 228 198 255 228 198 255 228 198";
 
         assertTrue(picture.export().endsWith(expectedPreLineBreak + "\n" + expectedPostLineBreak + "\n"),
                 "Exporting should correctly break lines longer than 70 characters."

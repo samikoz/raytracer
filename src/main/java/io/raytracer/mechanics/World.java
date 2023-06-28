@@ -1,6 +1,6 @@
 package io.raytracer.mechanics;
 
-import io.raytracer.tools.Colour;
+import io.raytracer.tools.LinearColour;
 import io.raytracer.tools.Camera;
 import io.raytracer.tools.IColour;
 import io.raytracer.tools.IPicture;
@@ -21,7 +21,7 @@ public abstract class World {
 
     public World() {
         this.contents = new ArrayList<>();
-        this.background = ray -> new Colour(0, 0, 0);
+        this.background = ray -> new LinearColour(0, 0, 0);
     }
 
     public World(Function<IRay, IColour> background) {
@@ -35,7 +35,7 @@ public abstract class World {
     }
 
     public IColour illuminate(Collection<IRay> rays) {
-        return rays.stream().map(this::illuminate).reduce(new Colour(0, 0, 0), IColour::add).multiply((double)1/rays.size());
+        return rays.stream().map(this::illuminate).reduce(new LinearColour(0, 0, 0), IColour::add).multiply((double)1/rays.size());
     }
 
     abstract IColour illuminate(IRay ray);

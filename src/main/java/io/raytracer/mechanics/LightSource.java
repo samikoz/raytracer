@@ -1,6 +1,6 @@
 package io.raytracer.mechanics;
 
-import io.raytracer.tools.Colour;
+import io.raytracer.tools.LinearColour;
 import io.raytracer.geometry.IVector;
 
 import io.raytracer.materials.Material;
@@ -26,11 +26,11 @@ public class LightSource implements ILightSource {
         IColour diffuseContribution;
         IColour specularContribution;
         if (lightNormalCosine < 0) {
-            diffuseContribution = new Colour(0, 0, 0);
-            specularContribution = new Colour(0, 0, 0);
+            diffuseContribution = new LinearColour(0, 0, 0);
+            specularContribution = new LinearColour(0, 0, 0);
         } else {
             if (hitpoint.shadowed) {
-                diffuseContribution = new Colour(0, 0, 0);
+                diffuseContribution = new LinearColour(0, 0, 0);
             } else {
                 diffuseContribution = effectiveColour.multiply(material.diffuse).multiply(lightNormalCosine);
             }
@@ -38,7 +38,7 @@ public class LightSource implements ILightSource {
             double reflectionEyeCosine = reflectionVector.dot(hitpoint.eyeVector);
 
             if (reflectionEyeCosine <= 0 || hitpoint.shadowed) {
-                specularContribution = new Colour(0, 0, 0);
+                specularContribution = new LinearColour(0, 0, 0);
             } else {
                 double specularFactor = Math.pow(reflectionEyeCosine, material.shininess);
                 specularContribution = this.colour.multiply(material.specular).multiply(specularFactor);

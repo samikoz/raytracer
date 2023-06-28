@@ -2,7 +2,7 @@ package io.raytracer.materials;
 
 import io.raytracer.textures.MonocolourTexture;
 import io.raytracer.textures.Texture;
-import io.raytracer.tools.Colour;
+import io.raytracer.tools.LinearColour;
 import lombok.Builder;
 
 import java.util.Arrays;
@@ -10,7 +10,7 @@ import java.util.Optional;
 
 public class Material {
     public final Texture texture;
-    private static final Texture DEFAULT_TEXTURE = new MonocolourTexture(new Colour(0, 0, 0));
+    private static final Texture DEFAULT_TEXTURE = new MonocolourTexture(new LinearColour(0, 0, 0));
     public final double ambient;
     public final double diffuse;
     public final double specular;

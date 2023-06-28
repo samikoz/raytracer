@@ -8,7 +8,7 @@ import io.raytracer.geometry.Vector;
 import io.raytracer.materials.Material;
 import io.raytracer.textures.StripedTexture;
 import io.raytracer.textures.Texture;
-import io.raytracer.tools.Colour;
+import io.raytracer.tools.LinearColour;
 import io.raytracer.tools.IColour;
 import org.junit.jupiter.api.Test;
 
@@ -17,8 +17,8 @@ import static org.junit.jupiter.api.Assertions.*;
 class ShapeTest {
     @Test
     void getObjectColourForTransformedObject() {
-        IColour white = new Colour(1, 1, 1);
-        IColour black = new Colour(0, 0, 0);
+        IColour white = new LinearColour(1, 1, 1);
+        IColour black = new LinearColour(0, 0, 0);
         Material textureedMaterial = Material.builder()
                 .texture(new StripedTexture(white, black))
                 .ambient(1.0).diffuse(0.0).specular(0.0).shininess(200.0)
@@ -33,8 +33,8 @@ class ShapeTest {
 
     @Test
     void getObjectColourForTransformedTexture() {
-        IColour white = new Colour(1, 1, 1);
-        IColour black = new Colour(0, 0, 0);
+        IColour white = new LinearColour(1, 1, 1);
+        IColour black = new LinearColour(0, 0, 0);
         Texture stripedTexture = new StripedTexture(white, black);
         stripedTexture.setTransform(ThreeTransform.scaling(2, 2, 2));
         Material textureedMaterial = Material.builder()
@@ -50,8 +50,8 @@ class ShapeTest {
 
     @Test
     void getObjectColourForBothTransformedObjectAndTexture() {
-        IColour white = new Colour(1, 1, 1);
-        IColour black = new Colour(0, 0, 0);
+        IColour white = new LinearColour(1, 1, 1);
+        IColour black = new LinearColour(0, 0, 0);
         Texture stripedTexture = new StripedTexture(white, black);
         stripedTexture.setTransform(ThreeTransform.translation(0.5, 0, 0));
         Material textureedMaterial = Material.builder()
@@ -70,8 +70,8 @@ class ShapeTest {
 
     @Test
     void patternOnObjectInTransformedGroup() {
-        IColour white = new Colour(1, 1, 1);
-        IColour black = new Colour(0, 0, 0);
+        IColour white = new LinearColour(1, 1, 1);
+        IColour black = new LinearColour(0, 0, 0);
         Group group = new Group();
         group.setTransform(ThreeTransform.scaling(2, 2, 2));
         Shape sphere = new Sphere(Material.builder().texture(new StripedTexture(white, black)).build());
