@@ -17,7 +17,7 @@ public class RoundObserver {
     private final String name;
 
     public void observe(World world) throws IOException {
-        ICamera camera = this.getFrontCamera();
+        Camera camera = this.getFrontCamera();
 
         PrintWriter frontWriter = new PrintWriter(new FileWriter(String.format("%s_front.ppm", this.name)));
         world.render(camera).export(frontWriter);
@@ -35,8 +35,8 @@ public class RoundObserver {
         world.render(camera).export(leftWriter);
     }
 
-    private ICamera getFrontCamera() {
+    private Camera getFrontCamera() {
         IPoint eyePosition = new Point(this.radius, 0, 0);
-        return new Camera(300, 300, Math.PI/3, eyePosition, new Point(0, 0, 0).subtract(eyePosition), new Vector(0, 0, 1));
+        return new SingleRayCamera(300, 300, Math.PI/3, eyePosition, new Point(0, 0, 0).subtract(eyePosition), new Vector(0, 0, 1));
     }
 }

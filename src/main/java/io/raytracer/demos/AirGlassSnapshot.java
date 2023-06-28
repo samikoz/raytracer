@@ -1,7 +1,7 @@
 package io.raytracer.demos;
 
-import io.raytracer.tools.ICamera;
 import io.raytracer.tools.Camera;
+import io.raytracer.tools.SingleRayCamera;
 import io.raytracer.tools.IPicture;
 import io.raytracer.tools.Colour;
 import io.raytracer.textures.CheckerTexture;
@@ -17,7 +17,6 @@ import io.raytracer.geometry.ThreeTransform;
 import io.raytracer.geometry.IVector;
 import io.raytracer.geometry.Vector;
 import io.raytracer.mechanics.LightSource;
-import io.raytracer.mechanics.World;
 import io.raytracer.mechanics.PhongWorld;
 
 import java.io.FileWriter;
@@ -70,7 +69,7 @@ public class AirGlassSnapshot {
         IPoint eyePosition = new Point(0-3*Math.sin(angle), 0, -3*Math.cos(angle));
         IVector lookDirection = new Point(0, 0, 0).subtract(eyePosition);
         IVector upDirection = new Vector(0, 1, 0);
-        ICamera camera = new Camera(1080, 1080, 3*Math.PI / 8, eyePosition, lookDirection, upDirection);
+        Camera camera = new SingleRayCamera(1080, 1080, 3*Math.PI / 8, eyePosition, lookDirection, upDirection);
 
         PrintWriter writer = new PrintWriter(new FileWriter(filename));
         IPicture picture = world.render(camera);

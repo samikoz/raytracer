@@ -1,8 +1,8 @@
 package io.raytracer.mechanics;
 
 
-import io.raytracer.tools.ICamera;
 import io.raytracer.tools.Camera;
+import io.raytracer.tools.SingleRayCamera;
 import io.raytracer.tools.IPicture;
 import io.raytracer.tools.IColour;
 import io.raytracer.tools.Colour;
@@ -147,7 +147,7 @@ public class PhongWorldTest {
         IPoint eyePosition = new Point(0, 0, -5);
         IVector lookDirection = new Vector(0, 0, 1);
         IVector upDirection = new Vector(0, 1, 0);
-        ICamera camera = new Camera(11, 11, Math.PI / 2, eyePosition, lookDirection, upDirection);
+        Camera camera = new SingleRayCamera(11, 11, Math.PI / 2, eyePosition, lookDirection, upDirection);
 
         IPicture picture = defaultWorld.render(camera);
 

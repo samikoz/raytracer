@@ -1,7 +1,7 @@
 package io.raytracer.demos;
 
-import io.raytracer.tools.ICamera;
 import io.raytracer.tools.Camera;
+import io.raytracer.tools.SingleRayCamera;
 import io.raytracer.tools.IPicture;
 import io.raytracer.tools.Colour;
 import io.raytracer.textures.CheckerTexture;
@@ -16,7 +16,6 @@ import io.raytracer.geometry.ThreeTransform;
 import io.raytracer.geometry.IVector;
 import io.raytracer.geometry.Vector;
 import io.raytracer.mechanics.LightSource;
-import io.raytracer.mechanics.World;
 import io.raytracer.mechanics.PhongWorld;
 
 import java.io.FileWriter;
@@ -56,7 +55,7 @@ public class Skalinn {
         IPoint eyePosition = new Point(-5, 1, -5);
         IVector lookDirection = new Point(0, 0, 5*sphereSeparation).subtract(eyePosition);
         IVector upDirection = new Vector(0, 1, 0);
-        ICamera camera = new Camera(1200, 900, Math.PI / 3, eyePosition, lookDirection, upDirection);
+        Camera camera = new SingleRayCamera(1200, 900, Math.PI / 3, eyePosition, lookDirection, upDirection);
 
         String filename = "skalinn.ppm";
         PrintWriter writer = new PrintWriter(new FileWriter(filename));

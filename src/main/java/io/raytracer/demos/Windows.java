@@ -1,8 +1,8 @@
 package io.raytracer.demos;
 
-import io.raytracer.tools.Camera;
+import io.raytracer.tools.SingleRayCamera;
 import io.raytracer.tools.Colour;
-import io.raytracer.tools.ICamera;
+import io.raytracer.tools.Camera;
 import io.raytracer.tools.IPicture;
 import io.raytracer.tools.PPMPicture;
 import io.raytracer.textures.MonocolourTexture;
@@ -11,7 +11,6 @@ import io.raytracer.geometry.IVector;
 import io.raytracer.geometry.Point;
 import io.raytracer.geometry.ThreeTransform;
 import io.raytracer.geometry.Vector;
-import io.raytracer.mechanics.World;
 import io.raytracer.mechanics.LightSource;
 import io.raytracer.mechanics.PhongWorld;
 import io.raytracer.shapes.Shape;
@@ -52,11 +51,11 @@ public class Windows {
         IPoint leftEyePosition = new Point(-3, 1, -10);
         IVector leftLookDirection = new Point(0, 0, 5*sphereSeparation).subtract(leftEyePosition);
         IVector upDirection = new Vector(0, 1, 0);
-        ICamera leftCamera = new Camera(600, 600, Math.PI / 3, leftEyePosition, leftLookDirection, upDirection);
+        Camera leftCamera = new SingleRayCamera(600, 600, Math.PI / 3, leftEyePosition, leftLookDirection, upDirection);
 
         IPoint rightEyePosition = new Point(3, 1, -10);
         IVector rightLookDirection = new Point(0, 0, 5*sphereSeparation).subtract(rightEyePosition);
-        ICamera rightCamera = new Camera(600, 600, Math.PI / 3, rightEyePosition, rightLookDirection, upDirection);
+        Camera rightCamera = new SingleRayCamera(600, 600, Math.PI / 3, rightEyePosition, rightLookDirection, upDirection);
 
         String filename = "windows.ppm";
         PrintWriter writer = new PrintWriter(new FileWriter(filename));

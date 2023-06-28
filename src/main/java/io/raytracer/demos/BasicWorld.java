@@ -1,10 +1,12 @@
 package io.raytracer.demos;
 
 import io.raytracer.mechanics.IRay;
+import io.raytracer.mechanics.LambertianWorld;
 import io.raytracer.shapes.Cylinder;
 import io.raytracer.shapes.Shape;
-import io.raytracer.tools.ICamera;
 import io.raytracer.tools.Camera;
+import io.raytracer.tools.MultipleRayCamera;
+import io.raytracer.tools.SingleRayCamera;
 import io.raytracer.tools.IColour;
 import io.raytracer.tools.IPicture;
 import io.raytracer.tools.Colour;
@@ -20,7 +22,6 @@ import io.raytracer.geometry.ThreeTransform;
 import io.raytracer.geometry.IVector;
 import io.raytracer.geometry.Vector;
 import io.raytracer.mechanics.LightSource;
-import io.raytracer.mechanics.World;
 import io.raytracer.mechanics.PhongWorld;
 
 import java.io.FileWriter;
@@ -58,14 +59,14 @@ public class BasicWorld {
             double t = 0.5*ray.getDirection().normalise().get(1) + 1;
             return (new Colour(1, 1, 1)).multiply(1-t).add(new Colour(0.5, 0.7, 1.0)).multiply(t);
         };
-        PhongWorld world = new PhongWorld(background);
-        world.put(new LightSource(new Colour(1, 1, 1), new Point(-10, 10, -10)));
+        LambertianWorld world = new LambertianWorld(background);
+        //world.put(new LightSource(new Colour(1, 1, 1), new Point(-10, 10, -10)));
         world.put(floor).put(leftSphere).put(rightShape);
 
         IPoint eyePosition = new Point(0, 1.5, -5);
         IVector lookDirection = new Point(0, 1, 0).subtract(eyePosition);
         IVector upDirection = new Vector(0, 1, 0);
-        ICamera camera = new Camera(600, 300, Math.PI / 3, eyePosition, lookDirection, upDirection);
+        Camera camera = new MultipleRayCamera(50, 600, 300, Math.PI / 3, eyePosition, lookDirection, upDirection);
 
         String filename = "basic_world.ppm";
         PrintWriter writer = new PrintWriter(new FileWriter(filename));

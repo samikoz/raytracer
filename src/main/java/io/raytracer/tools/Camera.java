@@ -1,20 +1,19 @@
 package io.raytracer.tools;
 
 import io.raytracer.geometry.IPoint;
-import io.raytracer.geometry.Point;
 import io.raytracer.geometry.ISquareMatrix;
-import io.raytracer.geometry.SquareMatrix;
-import io.raytracer.geometry.ThreeTransform;
 import io.raytracer.geometry.ITransform;
 import io.raytracer.geometry.IVector;
+import io.raytracer.geometry.Point;
+import io.raytracer.geometry.SquareMatrix;
+import io.raytracer.geometry.ThreeTransform;
 import io.raytracer.mechanics.IRay;
 import io.raytracer.mechanics.Ray;
 import lombok.Getter;
 
 import java.util.Collection;
-import java.util.Collections;
 
-public class Camera implements ICamera {
+public abstract class Camera {
     @Getter private final int pictureWidthPixels;
     @Getter private final int pictureHeightPixels;
     private final double fieldOfView;
@@ -40,9 +39,9 @@ public class Camera implements ICamera {
 
         computePixelSize();
     }
+    public abstract Collection<IRay> getRaysThroughPixel(int x, int y);
 
-    @Override
-    public Collection<IRay> getRaysThroughPixel(int x, int y) {
+    protected IRay getRayThroughPixel(double x, double y) {
         double canvasXOffset = (x + 0.5) * this.pixelSize;
         double canvasYOffset = (y + 0.5) * this.pixelSize;
 
@@ -53,9 +52,8 @@ public class Camera implements ICamera {
         IPoint origin = worldTransformation.act(new Point(0, 0, 0));
         IVector direction = (pixel.subtract(origin)).normalise();
 
-        return Collections.singletonList(new Ray(origin, direction));
+        return new Ray(origin, direction);
     }
-
     private void computePixelSize() {
         // the picture == canvas is always one unit away from the camera
         double halfView = Math.tan(fieldOfView / 2);
@@ -88,7 +86,6 @@ public class Camera implements ICamera {
                 .transform(originTransformation);
     }
 
-    @Override
     public void transform(ITransform t) {
         this.worldTransformation = ThreeTransform.transformation(t.inverse().getMatrix().multiply(this.worldTransformation.getMatrix()));
     }

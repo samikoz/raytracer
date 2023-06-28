@@ -1,7 +1,7 @@
 package io.raytracer.mechanics;
 
 import io.raytracer.tools.Colour;
-import io.raytracer.tools.ICamera;
+import io.raytracer.tools.Camera;
 import io.raytracer.tools.IColour;
 import io.raytracer.tools.IPicture;
 import io.raytracer.tools.PPMPicture;
@@ -45,7 +45,7 @@ public abstract class World {
                 .flatMap(Arrays::stream).sorted().collect(Collectors.toList());
     }
 
-    public IPicture render(ICamera camera) {
+    public IPicture render(Camera camera) {
         int totalRaysCount = camera.getPictureWidthPixels()*camera.getPictureHeightPixels();
         IPicture picture = new PPMPicture(camera.getPictureWidthPixels(), camera.getPictureHeightPixels());
 
