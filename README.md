@@ -8,6 +8,8 @@
 1. https://raytracing.github.io/
 
 # Technicalities
+- Concoct "Recasters" static class with FucntionalInterface fields for Material.recaster(contribution, recaster)
+returning Collection of recast rays. This way can reconcile Lambertian and Phong worlds.
 - Think about the current recursive implementation of illuminate. Can't we pass the "colour so far"
 parameter and cut off the subsequent invocations if their contribution would be too small to notice?
 - Intersection for cube can be optimised. To be found somewhere in TR1., "the next week".

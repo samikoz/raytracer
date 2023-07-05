@@ -1,6 +1,8 @@
 package io.raytracer.materials;
 
 import io.raytracer.textures.Texture;
+import io.raytracer.tools.GammaColour;
+import io.raytracer.tools.IColour;
 import lombok.Builder;
 
 import java.util.Optional;
@@ -14,10 +16,11 @@ public class Glass extends Material {
     protected Glass(Texture texture, Double ambient, Double diffuse, Double specular, Double shininess,
                     Double reflectivity, Double transparency, Double refractiveIndex) {
         super(
-                texture, ambient, diffuse, specular, shininess,
+            texture, ambient, diffuse, specular, shininess,
             Optional.ofNullable(reflectivity).orElse(Glass.defaultReflectivity),
             Optional.ofNullable(transparency).orElse(Glass.defaultTransparency),
-            Optional.ofNullable(refractiveIndex).orElse(Glass.defaultRefractiveIndex)
+            Optional.ofNullable(refractiveIndex).orElse(Glass.defaultRefractiveIndex),
+            new GammaColour(0, 0, 0)
         );
     }
 }

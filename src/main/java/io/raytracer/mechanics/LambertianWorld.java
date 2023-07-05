@@ -32,6 +32,10 @@ public class LambertianWorld extends World {
         Optional<RayHit> hit = RayHit.fromIntersections(intersections);
         if (hit.isPresent()) {
             RayHit hitpoint = hit.get();
+            IColour emit = hitpoint.object.getMaterial().emit;
+            if (!emit.equals(new GammaColour(0, 0 ,0))) {
+                return emit;
+            }
             IRay reflectionRay = ray.recast(hitpoint.offsetAbove, this.getLambertianDirection(hitpoint));
             return hitpoint.object.getIntrinsicColour(hitpoint.point).mix(this.illuminate(Collections.singletonList(reflectionRay)));
         }
