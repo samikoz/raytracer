@@ -49,17 +49,29 @@ public abstract class World {
         int totalRaysCount = camera.getPictureWidthPixels()*camera.getPictureHeightPixels();
         IPicture picture = new PPMPicture(camera.getPictureWidthPixels(), camera.getPictureHeightPixels());
 
+        long renderStart = System.nanoTime();
+        int minutesLeft = 0;
         int rayCount = 1;
         for (int y = 0; y < camera.getPictureHeightPixels() - 1; y++) {
             for (int x = 0; x < camera.getPictureWidthPixels() - 1; x++) {
-                System.out.printf("\rray %d out of %d", rayCount, totalRaysCount);
+                float progressPercent = (float)rayCount/totalRaysCount*100;
+                if (rayCount % 100 == 0) {
+                    long currentTime = System.nanoTime();
+                    double timeLeft = (currentTime - renderStart)*(((double)totalRaysCount/rayCount) - 1);
+                    minutesLeft = (int)(timeLeft/(60*Math.pow(10,9)));
+                }
+                System.out.printf("\r%.2f%%\t (%d out of %d); ~%d min left", progressPercent, rayCount, totalRaysCount, minutesLeft);
                 Collection<IRay> rays = camera.getRaysThroughPixel(x, y);
                 IColour colour = this.illuminate(rays);
                 picture.write(x, y, colour);
                 rayCount++;
             }
         }
+        long renderEnd = System.nanoTime();
+        int seconds = (int)((renderEnd - renderStart)/Math.pow(10, 9));
+        int minutes = seconds / 60;
         System.out.println();
+        System.out.printf("render took %d min, %d sec%n", minutes, seconds % 60);
 
         return picture;
     }
