@@ -8,6 +8,7 @@ import io.raytracer.geometry.Vector;
 import io.raytracer.materials.Material;
 import io.raytracer.mechanics.IRay;
 import io.raytracer.mechanics.LambertianWorld;
+import io.raytracer.shapes.Cylinder;
 import io.raytracer.shapes.Plane;
 import io.raytracer.shapes.Rectangle;
 import io.raytracer.shapes.Shape;
@@ -28,31 +29,56 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.function.Function;
+import java.util.stream.IntStream;
 
 public class Prison {
     public static void main(String[] args) throws IOException {
-        Material floorMaterial = Material.builder()
-            .texture(new CheckerTexture(new GammaColour(0, 0, 0), new GammaColour(1, 1, 1)))
-            .build();
-        Shape floor = new Plane(floorMaterial);
-
-        Shape sphere = new Sphere(floorMaterial);
-        sphere.setTransform(ThreeTransform.scaling(2, 2, 2).translate(3, 2, 1));
-
-        Material emitent = Material.builder().emit(new GammaColour(4, 4, 4)).build();
-        Shape rect = new Rectangle(emitent);
-        rect.setTransform(ThreeTransform.scaling(2, 2, 1).translate(3, 1, -2));
+        int columnCount = 8;
+        int columnSeparation = 22;
+        double columnScale = 2;
 
         Function<IRay, IColour> background = ray -> new GammaColour(0, 0, 0);
         LambertianWorld world = new LambertianWorld(background);
-        world.put(floor).put(rect).put(sphere);
 
-        IPoint eyePosition = new Point(26, 3, 6);
-        IVector lookDirection = new Point(0, 2, 0).subtract(eyePosition);
+        Texture floorTexture = new CheckerTexture(new GammaColour(0, 0, 0), new GammaColour(1, 1, 1));
+        floorTexture.setTransform(ThreeTransform.scaling(2, 2, 2));
+        Material floorMaterial = Material.builder()
+            .texture(floorTexture)
+            .build();
+        Shape floor = new Plane(floorMaterial);
+        world.put(floor);
+
+        Material columnMaterial = Material.builder()
+            .texture(new MonocolourTexture(new GammaColour(0.2, 0.2, 0.2)))
+            .build();
+        IntStream.range(0, columnCount).mapToObj(columnIndex -> {
+            Shape cylinder = new Cylinder(columnMaterial);
+            cylinder.setTransform(ThreeTransform.scaling(columnScale, 1, columnScale).translate(15-columnIndex*columnSeparation, 0, 0));
+            return cylinder;
+        }).forEach(world::put);
+        IntStream.range(0, columnCount).mapToObj(columnIndex -> {
+            Shape cylinder = new Cylinder(columnMaterial);
+            cylinder.setTransform(ThreeTransform.scaling(columnScale, 1, columnScale).translate(15-columnIndex*columnSeparation, 0, 25));
+            return cylinder;
+        }).forEach(world::put);
+        IntStream.range(0, columnCount).mapToObj(columnIndex -> {
+            Shape cylinder = new Cylinder(columnMaterial);
+            cylinder.setTransform(ThreeTransform.scaling(columnScale, 1, columnScale).translate(15-columnIndex*columnSeparation, 0, 50));
+            return cylinder;
+        }).forEach(world::put);
+
+        Material emitent = Material.builder().emit(new GammaColour(64, 64, 64)).build();
+        Shape lighting = new Rectangle(emitent);
+        lighting.setTransform(ThreeTransform.scaling(5, 5, 1).translate(10, 10, -6));
+        world.put(lighting);
+
+
+        IPoint eyePosition = new Point(45, 12, 40);
+        IVector lookDirection = new Point(-15, 2, 25).subtract(eyePosition);
         IVector upDirection = new Vector(0, 1, 0);
-        Camera camera = new MultipleRayCamera(200, 600, 300, Math.PI / 3, eyePosition, lookDirection, upDirection);
+        Camera camera = new MultipleRayCamera(200, 1024, 768, Math.PI / 3, eyePosition, lookDirection, upDirection);
 
-        String filename = "prison.ppm";
+        String filename = "prison_3.ppm";
         PrintWriter writer = new PrintWriter(new FileWriter(filename));
         IPicture picture = world.render(camera);
         picture.export(writer);
