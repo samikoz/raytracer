@@ -28,7 +28,7 @@
                         </execution>
                     </executions>
                     <configuration>
-                        <mainClass>io.raytracer.demos.Skalinn</mainClass>
+                        <mainClass>io.raytracer.demos.BasicWorld</mainClass>
                     </configuration>
                 </plugin>
             </plugins>

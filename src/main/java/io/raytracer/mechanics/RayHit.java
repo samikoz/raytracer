@@ -97,10 +97,6 @@ public class RayHit extends Intersection {
         return r + (1-r)*Math.pow(1-cos, 5);
     }
 
-    public RefractionPoint getRefractionPoint() {
-        return new RefractionPoint(this.offsetBelow, this.refractiveIndexFrom, this.refractiveIndexTo, this.eyeVector, this.normalVector);
-    }
-
     @Override
     public boolean equals(Object them) {
         if (them == null || this.getClass() != them.getClass()) return false;

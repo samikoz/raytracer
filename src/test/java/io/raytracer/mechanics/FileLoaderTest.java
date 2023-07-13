@@ -22,7 +22,7 @@ class FileLoaderTest {
         List<String> lines = Arrays.asList("Sphere(P(1.0,2.0,3.0),0.1)", "Sphere(P(-1.0,-2.0,-3.0),0.1)");
         Files.write(testInput.toPath(), lines);
         Loader loader = new FileLoader(Material.builder().build());
-        PhongWorld world = new PhongWorld();
+        World world = new LambertianWorld();
         IRay firstRay = new Ray(new Point(0, 2, 3), new Vector(1, 0, 0));
         IRay secondRay = new Ray(new Point(-1, 0, -3), new Vector(0, -1, 0));
 

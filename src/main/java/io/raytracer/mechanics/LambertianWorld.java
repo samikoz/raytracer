@@ -10,6 +10,9 @@ import java.util.function.Function;
 public class LambertianWorld extends World {
     private static final int lambertianDepth = 50;
 
+    public LambertianWorld() {
+        super();
+    }
     public LambertianWorld(Function<IRay, IColour> background) {
         super(background);
     }

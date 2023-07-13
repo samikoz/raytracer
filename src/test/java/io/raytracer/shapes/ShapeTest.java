@@ -21,7 +21,6 @@ class ShapeTest {
         IColour black = new LinearColour(0, 0, 0);
         Material textureedMaterial = Material.builder()
                 .texture(new StripedTexture(white, black))
-                .ambient(1.0).diffuse(0.0).specular(0.0).shininess(200.0)
                 .build();
         Shape sphere = new Sphere(textureedMaterial);
         sphere.setTransform(ThreeTransform.scaling(2, 2, 2));
@@ -39,7 +38,6 @@ class ShapeTest {
         stripedTexture.setTransform(ThreeTransform.scaling(2, 2, 2));
         Material textureedMaterial = Material.builder()
                 .texture(stripedTexture)
-                .ambient(1.0).diffuse(0.0).specular(0.0).shininess(200.0)
                 .build();
         Shape sphere = new Sphere(textureedMaterial);
 
@@ -56,7 +54,6 @@ class ShapeTest {
         stripedTexture.setTransform(ThreeTransform.translation(0.5, 0, 0));
         Material textureedMaterial = Material.builder()
                 .texture(stripedTexture)
-                .ambient(1.0).diffuse(0.0).specular(0.0).shininess(200.0)
                 .build();
         Shape sphere = new Sphere(textureedMaterial);
         sphere.setTransform(ThreeTransform.scaling(2, 2, 2));

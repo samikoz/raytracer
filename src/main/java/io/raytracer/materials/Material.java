@@ -12,13 +12,7 @@ import java.util.Optional;
 
 public class Material {
     public final Texture texture;
-    private static final Texture DEFAULT_TEXTURE = new MonocolourTexture(new LinearColour(0, 0, 0));
-    public final double ambient;
-    public final double diffuse;
-    public final double specular;
-    public final double shininess;
-    public final double reflectivity;
-    public final double transparency;
+    private static final Texture default_texture = new MonocolourTexture(new LinearColour(0, 0, 0));
     public final double refractiveIndex;
     public final IColour emit;
     private static final IColour defaultEmit = new GammaColour(0, 0, 0);
@@ -26,27 +20,15 @@ public class Material {
     private static final double equalityTolerance = 1e-3;
 
     @Builder(toBuilder = true)
-    protected Material(Texture texture, Double ambient, Double diffuse, Double specular, Double shininess,
-                       Double reflectivity, Double transparency, Double refractiveIndex, IColour emit) {
-        this.texture = Optional.ofNullable(texture).orElse(Material.DEFAULT_TEXTURE);
-        this.ambient = Optional.ofNullable(ambient).orElse(0.0);
-        this.diffuse = Optional.ofNullable(diffuse).orElse(0.0);
-        this.specular = Optional.ofNullable(specular).orElse(0.0);
-        this.shininess = Optional.ofNullable(shininess).orElse(0.0);
-        this.reflectivity = Optional.ofNullable(reflectivity).orElse(0.0);
-        this.transparency = Optional.ofNullable(transparency).orElse(0.0);
+    protected Material(Texture texture, Double refractiveIndex, IColour emit) {
+        this.texture = Optional.ofNullable(texture).orElse(Material.default_texture);
         this.refractiveIndex = Optional.ofNullable(refractiveIndex).orElse(Material.defaultRefractiveIndex);
         this.emit = Optional.ofNullable(emit).orElse(Material.defaultEmit);
     }
 
     @Override
     public int hashCode() {
-        return Arrays.hashCode(new int[] {
-            this.texture.getHashCode(),
-            Arrays.hashCode(new double[] {
-                this.ambient, this.diffuse, this.specular, this.shininess, this.reflectivity, this.transparency, this.refractiveIndex
-            })
-        });
+        return Arrays.hashCode(new int[] { this.texture.hashCode(), Double.hashCode(this.refractiveIndex), this.emit.hashCode() });
     }
 
     @Override
@@ -55,9 +37,7 @@ public class Material {
 
         Material themMaterial = (Material) them;
         return (this.texture.equals(themMaterial.texture)
-            && Math.abs(this.ambient - themMaterial.ambient) < equalityTolerance
-            && Math.abs(this.diffuse - themMaterial.diffuse) < equalityTolerance
-            && Math.abs(this.specular - themMaterial.specular) < equalityTolerance
-            && Math.abs(this.shininess - themMaterial.shininess) < equalityTolerance);
+            && Math.abs(this.refractiveIndex - themMaterial.refractiveIndex) < equalityTolerance
+            && this.emit.equals(themMaterial.emit));
     }
 }

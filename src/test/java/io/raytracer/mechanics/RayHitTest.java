@@ -1,22 +1,14 @@
 package io.raytracer.mechanics;
 
 import io.raytracer.geometry.Point;
-import io.raytracer.geometry.ThreeTransform;
 import io.raytracer.geometry.Vector;
-import io.raytracer.shapes.Shape;
 import io.raytracer.shapes.Sphere;
-import io.raytracer.materials.Glass;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Optional;
-import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -87,55 +79,5 @@ class RayHitTest {
         assertEquals(new Vector(0, 0, -1), hitpoint.eyeVector);
         assertEquals(new Vector(0, 0, -1), hitpoint.normalVector,
                 "Normal vector should be inverted");
-    }
-
-    private static Stream<Arguments> provideIntersectionIndicesAndRefractionIndices() {
-        return Stream.of(
-                Arguments.of(new Point(0, 0, -2.5), 1.0, 1.5),
-                Arguments.of(new Point(0, 0, -1.5), 1.5, 2.0),
-                Arguments.of(new Point(0, 0, -1), 2.0, 2.5),
-                Arguments.of(new Point(0, 0, 0), 2.5, 2.5),
-                Arguments.of(new Point(0, 0, 1), 2.5, 1.5),
-                Arguments.of(new Point(0, 0, 1.5), 1.5, 1.0)
-        );
-    }
-
-    @ParameterizedTest
-    @MethodSource("provideIntersectionIndicesAndRefractionIndices")
-    void refractiveIndices(Point rayStartPoint, double refractiveFrom, double refractiveTo) {
-        Shape outerSphere = new Sphere(Glass.glassBuilder().refractiveIndex(1.5).build());
-        outerSphere.setTransform(ThreeTransform.scaling(2, 2, 2));
-        Shape leftSphere = new Sphere(Glass.glassBuilder().refractiveIndex(2.0).build());
-        leftSphere.setTransform(ThreeTransform.translation(0, 0, -0.25));
-        Shape rightSphere = new Sphere(Glass.glassBuilder().refractiveIndex(2.5).build());
-        rightSphere.setTransform(ThreeTransform.translation(0, 0, 0.25));
-        PhongWorld world = (PhongWorld)new PhongWorld().put(outerSphere).put(leftSphere).put(rightSphere);
-
-        IRay ray = new Ray(rayStartPoint, new Vector(0, 0, 1));
-        Collection<Intersection> intersections = world.intersect(ray);
-        Optional<RayHit> hit = RayHit.fromIntersections(intersections);
-        assertTrue(hit.isPresent());
-        RayHit hitpoint = hit.get();
-
-        assertEquals(refractiveFrom, hitpoint.refractiveIndexFrom);
-        assertEquals(refractiveTo, hitpoint.refractiveIndexTo);
-    }
-
-    @Test
-    void reflectanceOfAPerpendicularRay() {
-        Shape sphere = new Sphere(Glass.glassBuilder().build());
-        IRay ray = new Ray(new Point(0, 0, 0), new Vector(0, 1, 0));
-        RayHit hitpoint = RayHit.fromIntersections(Collections.singletonList(new Intersection(ray, 1, sphere))).get();
-
-        assertEquals(0.04, hitpoint.reflectance, 1e-3, "Reflectance is small for a perpendicular ray");
-    }
-
-    @Test
-    void reflectanceForASmallAngleAndLargerSecondRefractiveIndex() {
-        Shape sphere = new Sphere(Glass.glassBuilder().build());
-        IRay ray = new Ray(new Point(0, 0.99, -2), new Vector(0, 0, 1));
-        RayHit hitpoint = RayHit.fromIntersections(Collections.singletonList(new Intersection(ray, 1.8589, sphere))).get();
-
-        assertEquals(0.48873, hitpoint.reflectance, 1e-3, "Reflectance is small for a perpendicular ray");
     }
 }
