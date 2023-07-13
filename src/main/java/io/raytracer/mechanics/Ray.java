@@ -27,22 +27,6 @@ public class Ray implements IRay {
         return new Intersection(this, parameter, shape);
     }
 
-    public IRay reflectFrom(IPoint point, IVector normalVector) {
-        IVector reflectionDirection = this.getDirection().reflect(normalVector);
-        return this.recast(point, reflectionDirection);
-    }
-
-    public IRay refractOn(RefractionPoint refpoint) {
-        double refractedRatio = refpoint.refractiveIndexFrom / refpoint.refractiveIndexTo;
-        double cosIncident = refpoint.eyeVector.dot(refpoint.normalVector);
-        double sinRefractedSquared = Math.pow(refractedRatio, 2)*(1 - Math.pow(cosIncident, 2));
-        assert sinRefractedSquared <= 1;
-        double cosRefracted = Math.sqrt(1 - sinRefractedSquared);
-        IVector refractedDirection = refpoint.normalVector.multiply(refractedRatio*cosIncident - cosRefracted)
-                .subtract(refpoint.eyeVector.multiply(refractedRatio));
-        return this.recast(refpoint.point, refractedDirection);
-    }
-
     public IRay recast(IPoint from, IVector direction) {
         Ray recastRay = new Ray(from, direction);
         recastRay.recast = this.getRecast() + 1;

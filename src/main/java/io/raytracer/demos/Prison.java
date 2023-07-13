@@ -12,17 +12,13 @@ import io.raytracer.shapes.Cylinder;
 import io.raytracer.shapes.Plane;
 import io.raytracer.shapes.Rectangle;
 import io.raytracer.shapes.Shape;
-import io.raytracer.shapes.Sphere;
-import io.raytracer.textures.BlendTexture;
 import io.raytracer.textures.CheckerTexture;
 import io.raytracer.textures.MonocolourTexture;
-import io.raytracer.textures.StripedTexture;
 import io.raytracer.textures.Texture;
 import io.raytracer.tools.Camera;
 import io.raytracer.tools.GammaColour;
 import io.raytracer.tools.IColour;
 import io.raytracer.tools.IPicture;
-import io.raytracer.tools.LinearColour;
 import io.raytracer.tools.MultipleRayCamera;
 
 import java.io.FileWriter;

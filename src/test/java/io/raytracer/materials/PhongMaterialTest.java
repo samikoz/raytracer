@@ -1,12 +1,11 @@
 package io.raytracer.materials;
 
-import io.raytracer.materials.Material;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
-public class MaterialTest {
+public class PhongMaterialTest {
     @Test
     void materialEquality() {
         Material material1 = Material.builder().diffuse(2.5).build();

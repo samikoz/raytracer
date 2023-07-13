@@ -15,7 +15,6 @@ import io.raytracer.tools.MultipleRayCamera;
 import io.raytracer.tools.IColour;
 import io.raytracer.tools.IPicture;
 import io.raytracer.materials.Material;
-import io.raytracer.shapes.Sphere;
 import io.raytracer.geometry.IPoint;
 import io.raytracer.geometry.Point;
 import io.raytracer.geometry.ThreeTransform;

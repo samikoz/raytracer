@@ -1,8 +1,6 @@
 package io.raytracer.materials;
 
 
-import io.raytracer.materials.Glass;
-import io.raytracer.materials.Material;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

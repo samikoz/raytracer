@@ -9,7 +9,6 @@ import lombok.NonNull;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.function.Function;
@@ -32,6 +31,9 @@ public class PhongWorld extends World {
     }
 
     public IColour illuminate(IRay ray) {
+        if (ray.getRecast() >= PhongWorld.recursionDepth) {
+            return new LinearColour(0, 0, 0);
+        }
         Collection<Intersection> intersections = this.intersect(ray);
         Optional<RayHit> hit = RayHit.fromIntersections(intersections);
         if (hit.isPresent()) {
@@ -64,21 +66,18 @@ public class PhongWorld extends World {
     }
 
     IColour getReflectedColour(@NotNull RayHit hitpoint) {
-        if (hitpoint.object.getMaterial().reflectivity == 0 || hitpoint.ray.getRecast() > PhongWorld.recursionDepth) {
+        if (hitpoint.object.getMaterial().reflectivity == 0) {
             return new LinearColour(0, 0, 0);
         }
-        Collection<IRay> reflectedRays = Collections.singletonList(hitpoint.ray.reflectFrom(hitpoint.offsetAbove, hitpoint.normalVector));
-        IColour reflectedColour = this.illuminate(reflectedRays);
+        IColour reflectedColour =  this.illuminate(Recasters.reflective.apply(hitpoint));
         return reflectedColour.multiply(hitpoint.object.getMaterial().reflectivity);
     }
 
     IColour getRefractedColour(@NonNull RayHit hitpoint) {
-        if (hitpoint.object.getMaterial().transparency == 0 || hitpoint.reflectance == 1.0 || hitpoint.ray.getRecast() > PhongWorld.recursionDepth) {
+        if (hitpoint.object.getMaterial().transparency == 0 || hitpoint.reflectance == 1.0) {
             return new LinearColour(0, 0, 0);
         }
-
-        Collection<IRay> refractedRays = Collections.singletonList(hitpoint.ray.refractOn(hitpoint.getRefractionPoint()));
-        IColour refractedColour = this.illuminate(refractedRays);
+        IColour refractedColour = this.illuminate(Recasters.refractive.apply(hitpoint));
         return refractedColour.multiply(hitpoint.object.getMaterial().transparency);
     }
 }

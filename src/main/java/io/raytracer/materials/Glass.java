@@ -2,7 +2,6 @@ package io.raytracer.materials;
 
 import io.raytracer.textures.Texture;
 import io.raytracer.tools.GammaColour;
-import io.raytracer.tools.IColour;
 import lombok.Builder;
 
 import java.util.Optional;

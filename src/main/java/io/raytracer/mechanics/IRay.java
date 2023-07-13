@@ -13,8 +13,6 @@ public interface IRay {
 
     Intersection intersect(Shape shape, double parameter);
     IRay recast(IPoint from, IVector direction);
-    IRay reflectFrom(IPoint point, IVector reflectionVector);
-    IRay refractOn(RefractionPoint refpoint);
     int getRecast();
 
     IRay getTransformed(ITransform t);
