@@ -35,7 +35,7 @@ public class Material {
         this.recasterContributions = new ArrayList<>();
     }
 
-    public Material addRecaster(Function<RayHit, Collection<IRay>> recaster, double contribution) {
+    public Material addRecaster(Function<RayHit, Optional<IRay>> recaster, double contribution) {
         this.recasterContributions.add(new RecasterContribution(recaster, contribution));
         return this;
     }

@@ -43,15 +43,16 @@ public class LambertianWorld extends World {
             }
 
             float randVar = this.randomVariable.get();
-            Collection<IRay> recastRays = this.getRecastRays(hitpoint, randVar);
-            return hitpoint.object.getIntrinsicColour(hitpoint.point).mix(this.illuminate(recastRays));
+            Optional<IRay> recastRay = this.getRecastRays(hitpoint, randVar);
+            IColour recastColour = recastRay.map(this::illuminate).orElse(new GammaColour(0, 0, 0));
+            return hitpoint.object.getIntrinsicColour(hitpoint.point).mix(recastColour);
         }
         else {
             return this.getBackgroundAt(ray);
         }
     }
 
-    private Collection<IRay> getRecastRays(RayHit hitpoint, float randomChance) {
+    private Optional<IRay> getRecastRays(RayHit hitpoint, float randomChance) {
         List<RecasterContribution> recasters = hitpoint.object.getMaterial().getRecasterContributions();
         double probabilityThreshold = 1;
         for (int i = recasters.size() - 1; i > -1; i--) {

@@ -21,7 +21,6 @@ public class RayHit extends Intersection {
     public final IVector normalVector;
     public final double refractiveIndexFrom;
     public final double refractiveIndexTo;
-    public final double reflectance;
     public boolean shadowed;
 
     private RayHit(Intersection i, double refractiveFrom, double refractiveTo) {
@@ -41,8 +40,6 @@ public class RayHit extends Intersection {
         this.refractiveIndexFrom = refractiveFrom;
         this.refractiveIndexTo = refractiveTo;
         this.shadowed = false;
-
-        this.reflectance = this.getReflectance();
     }
 
     static Optional<RayHit> fromIntersections(Collection<Intersection> inters) {
@@ -81,20 +78,6 @@ public class RayHit extends Intersection {
             }
         }
         return refractiveIndices;
-    }
-
-    private double getReflectance() {
-        double cos = this.eyeVector.dot(this.normalVector);
-        if (this.refractiveIndexFrom > this.refractiveIndexTo) {
-            double refractiveRatio = this.refractiveIndexFrom / this.refractiveIndexTo;
-            double sinRefractedSquared = Math.pow(refractiveRatio, 2)*(1 - Math.pow(cos, 2));
-            if (sinRefractedSquared > 1) {
-                return 1;
-            }
-            cos = Math.sqrt(1 - sinRefractedSquared);
-        }
-        double r = Math.pow(((this.refractiveIndexFrom - this.refractiveIndexTo) / (this.refractiveIndexFrom + this.refractiveIndexTo)), 2);
-        return r + (1-r)*Math.pow(1-cos, 5);
     }
 
     @Override

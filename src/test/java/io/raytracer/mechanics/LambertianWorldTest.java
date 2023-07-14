@@ -10,7 +10,7 @@ import io.raytracer.textures.MonocolourTexture;
 import io.raytracer.tools.LinearColour;
 import org.junit.jupiter.api.Test;
 
-import java.util.Collections;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -39,8 +39,8 @@ class LambertianWorldTest {
         bottomWall.setTransform(ThreeTransform.translation(0, -2 ,0));
 
         Material middleMaterial = Material.builder().texture(new MonocolourTexture(new LinearColour(1, 1, 1))).build();
-        middleMaterial.addRecaster(rayHit -> Collections.singletonList(new Ray(new Point(0, 0, 0), new Vector(0, 1, 0))), 0.2);
-        middleMaterial.addRecaster(rayHit -> Collections.singletonList(new Ray(new Point(0, 0, 0), new Vector(0, -1, 0))), 0.8);
+        middleMaterial.addRecaster(rayHit -> Optional.of(new Ray(new Point(0, 1e-3, 0), new Vector(0, 1, 0))), 0.2);
+        middleMaterial.addRecaster(rayHit -> Optional.of(new Ray(new Point(0, -1e-3, 0), new Vector(0, -1, 0))), 0.8);
         Shape middleWall = new Plane(middleMaterial);
 
         OscillatoryCaller caller = new OscillatoryCaller();
