@@ -2,6 +2,7 @@ package io.raytracer.demos;
 
 import io.raytracer.mechanics.IRay;
 import io.raytracer.mechanics.LambertianWorld;
+import io.raytracer.mechanics.Recasters;
 import io.raytracer.shapes.Plane;
 import io.raytracer.shapes.Rectangle;
 import io.raytracer.shapes.Shape;
@@ -37,6 +38,7 @@ public class BasicWorld {
         Material floorMaterial = Material.builder()
                 .texture(blendTexture)
                 .build();
+        floorMaterial.addRecaster(Recasters.diffuse, 1);
         Shape floor = new Plane(floorMaterial);
         floor.setTransform(ThreeTransform.scaling(100, 100, 100).translate(0, -100.5, -4));
 

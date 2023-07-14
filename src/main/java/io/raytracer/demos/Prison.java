@@ -8,6 +8,7 @@ import io.raytracer.geometry.Vector;
 import io.raytracer.materials.Material;
 import io.raytracer.mechanics.IRay;
 import io.raytracer.mechanics.LambertianWorld;
+import io.raytracer.mechanics.Recasters;
 import io.raytracer.shapes.Cylinder;
 import io.raytracer.shapes.Plane;
 import io.raytracer.shapes.Rectangle;
@@ -41,12 +42,14 @@ public class Prison {
         Material floorMaterial = Material.builder()
             .texture(floorTexture)
             .build();
+        floorMaterial.addRecaster(Recasters.diffuse, 1);
         Shape floor = new Plane(floorMaterial);
         world.put(floor);
 
         Material columnMaterial = Material.builder()
             .texture(new MonocolourTexture(new GammaColour(0.2, 0.2, 0.2)))
             .build();
+        columnMaterial.addRecaster(Recasters.diffuse, 1);
         IntStream.range(0, columnCount).mapToObj(columnIndex -> {
             Shape cylinder = new Cylinder(columnMaterial);
             cylinder.setTransform(ThreeTransform.scaling(columnScale, 1, columnScale).translate(15-columnIndex*columnSeparation, 0, 0));
