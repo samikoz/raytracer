@@ -33,18 +33,13 @@ public class FileLoader implements Loader {
     }
 
     @Override
-    public void load(File file) {
-        try {
-            Scanner scanner = new Scanner(file);
-            while (scanner.hasNextLine()) {
-                String line = scanner.nextLine();
-                this.parseLine(line);
-            }
-            scanner.close();
+    public void load(File file) throws FileNotFoundException {
+        Scanner scanner = new Scanner(file);
+        while (scanner.hasNextLine()) {
+            String line = scanner.nextLine();
+            this.parseLine(line);
         }
-        catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
+        scanner.close();
     }
 
     private void parseLine(String line) {

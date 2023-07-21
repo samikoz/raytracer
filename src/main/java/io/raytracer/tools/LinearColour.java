@@ -84,10 +84,4 @@ public class LinearColour implements IColour {
                 this.getBlue() * them.getBlue()
         );
     }
-
-    @Override
-    public IColour interpolate(IColour them, double factor) {
-        factor = Math.max(Math.min(1, factor), 0);
-        return this.add(them.subtract(this).multiply(factor));
-    }
 }
