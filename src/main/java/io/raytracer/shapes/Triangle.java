@@ -14,7 +14,7 @@ public class Triangle extends Shape {
 
     private static final double tolerance = 1e-3;
 
-    Triangle(IPoint v1, IPoint v2, IPoint v3) {
+    public Triangle(IPoint v1, IPoint v2, IPoint v3) {
         this.v1 = v1;
         this.v2 = v2;
         this.v3 = v3;
@@ -23,7 +23,7 @@ public class Triangle extends Shape {
         this.normal = this.e2.cross(this.e1).normalise();
     }
 
-    Triangle(IPoint v1, IPoint v2, IPoint v3, @NonNull Material material) {
+    public Triangle(IPoint v1, IPoint v2, IPoint v3, @NonNull Material material) {
         super(material);
     }
 

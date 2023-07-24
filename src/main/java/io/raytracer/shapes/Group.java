@@ -10,7 +10,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Group extends Shape {
-    private final List<Shape> children;
+    public final List<Shape> children;
 
     public Group() {
         super();

@@ -4,45 +4,31 @@ import io.raytracer.geometry.IPoint;
 import io.raytracer.geometry.Point;
 import io.raytracer.geometry.ThreeTransform;
 import io.raytracer.materials.Material;
-import io.raytracer.shapes.Shape;
+import io.raytracer.shapes.Group;
 import io.raytracer.shapes.Sphere;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
-public class FileLoader implements Loader {
-    private final ArrayList<Shape> loaded;
+public class LiteralParser implements Parser {
+    private final Group loaded;
     private final Material material;
 
     private final String floatPoint = "(-?\\d+\\.\\d+)";
     private final String threePoint = "P\\(" + floatPoint + "," + floatPoint + "," + floatPoint + "\\)";
 
-    public FileLoader(Material material) {
-        this.loaded = new ArrayList<>();
+    public LiteralParser(Material material) {
+        this.loaded = new Group();
         this.material = material;
     }
 
     @Override
-    public void populate(World world) {
-        this.loaded.forEach(world::put);
+    public Group getParsed() {
+        return this.loaded;
     }
 
-    @Override
-    public void load(File file) throws FileNotFoundException {
-        Scanner scanner = new Scanner(file);
-        while (scanner.hasNextLine()) {
-            String line = scanner.nextLine();
-            this.parseLine(line);
-        }
-        scanner.close();
-    }
-
-    private void parseLine(String line) {
+    public void parseLine(String line) {
         Pattern spherePattern = Pattern.compile("Sphere\\(" + this.threePoint + "," + this.floatPoint + "\\)");
         Matcher sphereMatcher = spherePattern.matcher(line);
         if (sphereMatcher.find()) {
