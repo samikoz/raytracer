@@ -34,13 +34,13 @@ public abstract class Shape {
     }
 
     Shape() {
-        this.setTransform(new ThreeTransform());
+        this.inverseTransform = new ThreeTransform();
         this.material = Material.builder().build();
         this.isCastingShadows = true;
     }
 
     Shape(@NonNull Material material) {
-        this.setTransform(new ThreeTransform());
+        this.inverseTransform = new ThreeTransform();
         this.material = material;
         this.isCastingShadows = true;
     }
