@@ -103,7 +103,7 @@ public class SphereTest {
     void intersectRayInside() {
         IRay ray = new Ray(new Point(0, 0, 0), new Vector(0, 0, 1));
         Sphere sphere = new Sphere();
-        Intersection[] intersections = sphere.intersect(ray);
+        Intersection[] intersections = sphere.intersect(ray, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY);
 
         assertEquals(2, intersections.length, "Should have two intersections.");
         assertEquals(-1, intersections[0].rayParameter, "The first intersection should be at -1.0.");
@@ -113,7 +113,7 @@ public class SphereTest {
     void intersectionBehindRay() {
         IRay ray = new Ray(new Point(0, 0, 5), new Vector(0, 0, 1));
         Sphere sphere = new Sphere();
-        Intersection[] intersections = sphere.intersect(ray);
+        Intersection[] intersections = sphere.intersect(ray, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY);
 
         assertEquals(2, intersections.length, "Should have two intersections.");
         assertEquals(-4.0, intersections[1].rayParameter, "The second intersection should be at -4.0.");
@@ -124,7 +124,7 @@ public class SphereTest {
         IRay ray = new Ray(new Point(0, 0, -5), new Vector(0, 0, 1));
         Sphere sphere = new Sphere();
         sphere.setTransform(ThreeTransform.scaling(2, 2, 2));
-        Intersection[] intersections = sphere.intersect(ray);
+        Intersection[] intersections = sphere.intersect(ray, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY);
 
         assertEquals(2, intersections.length, "Should have two intersections.");
         assertEquals(7, intersections[1].rayParameter, "The second intersection should be at 7.");

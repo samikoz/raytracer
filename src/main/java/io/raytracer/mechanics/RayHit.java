@@ -43,7 +43,7 @@ public class RayHit extends Intersection {
     }
 
     static Optional<RayHit> fromIntersections(Collection<Intersection> inters) {
-        Optional<Intersection> firstPositive = inters.stream().filter(i -> i.rayParameter > 0).min(Comparator.comparingDouble(i -> i.rayParameter));
+        Optional<Intersection> firstPositive = inters.stream().min(Comparator.comparingDouble(i -> i.rayParameter));
         if (!firstPositive.isPresent()) { return Optional.empty(); }
         Intersection hitIntersection = firstPositive.get();
         double[] refractiveIndices = RayHit.findRefractiveIndices(inters, hitIntersection);

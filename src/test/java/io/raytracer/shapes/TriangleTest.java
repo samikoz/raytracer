@@ -45,7 +45,7 @@ class TriangleTest {
         );
         Ray ray = new Ray(new Point(0, -1, -2), new Vector(0, 1, 0));
 
-        assertEquals(0, t.getLocalIntersectionPositions(ray).length);
+        assertEquals(0, t.getLocalIntersectionPositions(ray, 0, Double.POSITIVE_INFINITY).length);
     }
 
     @Test
@@ -56,7 +56,7 @@ class TriangleTest {
             new Point(1, 0, 0)
         );
         Ray ray = new Ray(new Point(1, 1, -2), new Vector(0, 0, 1));
-        double[] intersections = t.getLocalIntersectionPositions(ray);
+        double[] intersections = t.getLocalIntersectionPositions(ray, 0, Double.POSITIVE_INFINITY);
 
         assertEquals(0, intersections.length);
     }
@@ -69,7 +69,7 @@ class TriangleTest {
             new Point(1, 0, 0)
         );
         Ray ray = new Ray(new Point(-1, 1, -2), new Vector(0, 0, 1));
-        double[] intersections = t.getLocalIntersectionPositions(ray);
+        double[] intersections = t.getLocalIntersectionPositions(ray, 0, Double.POSITIVE_INFINITY);
 
         assertEquals(0, intersections.length);
     }
@@ -82,7 +82,7 @@ class TriangleTest {
             new Point(1, 0, 0)
         );
         Ray ray = new Ray(new Point(0, -1, -2), new Vector(0, 0, 1));
-        double[] intersections = t.getLocalIntersectionPositions(ray);
+        double[] intersections = t.getLocalIntersectionPositions(ray, 0, Double.POSITIVE_INFINITY);
 
         assertEquals(0, intersections.length);
     }
@@ -95,7 +95,7 @@ class TriangleTest {
             new Point(1, 0, 0)
         );
         Ray ray = new Ray(new Point(0, 0.5, -2), new Vector(0, 0, 1));
-        double[] intersections = t.getLocalIntersectionPositions(ray);
+        double[] intersections = t.getLocalIntersectionPositions(ray, 0, Double.POSITIVE_INFINITY);
 
         assertEquals(1, intersections.length);
         assertEquals(2, intersections[0]);

@@ -31,7 +31,7 @@ public class Group extends Shape {
     }
 
     @Override
-    protected double[] getLocalIntersectionPositions(IRay ray) {
+    protected double[] getLocalIntersectionPositions(IRay ray, double tmin, double tmax) {
         throw new UnsupportedOperationException("a group doesn't have own local intersections");
     }
 

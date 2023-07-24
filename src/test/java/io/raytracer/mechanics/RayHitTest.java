@@ -23,32 +23,12 @@ class RayHitTest {
     @Test
     void hitWithPositiveIntersections() {
         Intersection i1 = new Intersection(testRay,2.0, new Sphere());
-        Intersection i2 = new Intersection(testRay,0.1, new Sphere());
-        Optional<RayHit> expectedHit = RayHit.fromIntersections(Arrays.asList(i1, i2));
-
-        assertTrue(expectedHit.isPresent());
-        assertEquals(0.1, expectedHit.get().rayParameter, 1e-3,
-                "Hit should be with lowest positive parameter value");
-    }
-
-    @Test
-    void hitWithSomeNegativeIntersections() {
-        Intersection i1 = new Intersection(testRay,2.0, new Sphere());
         Intersection i2 = new Intersection(testRay,-0.1, new Sphere());
         Optional<RayHit> expectedHit = RayHit.fromIntersections(Arrays.asList(i1, i2));
 
         assertTrue(expectedHit.isPresent());
-        assertEquals(2.0, expectedHit.get().rayParameter, 1e-3,
-                "Hit should be with the lowest positive parameter value.");
-    }
-
-    @Test
-    void hitWithAllNegativeIntersections() {
-        Intersection i1 = new Intersection(testRay,-2.0, new Sphere());
-        Intersection i2 = new Intersection(testRay,-0.1, new Sphere());
-        Optional<RayHit> expectedHit = RayHit.fromIntersections(Arrays.asList(i1, i2));
-
-        assertFalse(expectedHit.isPresent(), "All negative intersections should produce no hit.");
+        assertEquals(-0.1, expectedHit.get().rayParameter, 1e-3,
+                "Hit should be with lowest parameter value");
     }
 
     @Test

@@ -45,7 +45,7 @@ public abstract class Shape {
         this.isCastingShadows = true;
     }
 
-    abstract protected double[] getLocalIntersectionPositions(IRay ray);
+    abstract protected double[] getLocalIntersectionPositions(IRay ray, double tmin, double tmax);
 
     abstract protected IVector normalLocally(IPoint point);
 
@@ -63,8 +63,12 @@ public abstract class Shape {
     }
 
     public Intersection[] intersect(IRay ray) {
+        return this.intersect(ray, 0, Double.POSITIVE_INFINITY);
+    }
+
+    public Intersection[] intersect(IRay ray, double tmin, double tmax) {
         IRay transformedRay = ray.getTransformed(this.inverseTransform);
-        return Arrays.stream(this.getLocalIntersectionPositions(transformedRay)).
+        return Arrays.stream(this.getLocalIntersectionPositions(transformedRay, tmin, tmax)).
             mapToObj(position -> ray.intersect(this, position)).toArray(Intersection[]::new);
     }
 

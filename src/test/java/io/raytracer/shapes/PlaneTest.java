@@ -22,7 +22,7 @@ class PlaneTest {
         Plane plane = new Plane();
         IRay parallelRay = new Ray(new Point(0, 10, 0), new Vector(0, 0, 1));
 
-        double[] intersectPositions = plane.getLocalIntersectionPositions(parallelRay);
+        double[] intersectPositions = plane.getLocalIntersectionPositions(parallelRay, 0, Double.POSITIVE_INFINITY);
 
         assertEquals(0, intersectPositions.length);
     }
@@ -32,7 +32,7 @@ class PlaneTest {
         Plane plane = new Plane();
         IRay coplanarRay = new Ray(new Point(0, 0, 0), new Vector(1, 0, 0));
 
-        double[] intersectPositions = plane.getLocalIntersectionPositions(coplanarRay);
+        double[] intersectPositions = plane.getLocalIntersectionPositions(coplanarRay, 0, Double.POSITIVE_INFINITY);
 
         assertEquals(0, intersectPositions.length);
     }
@@ -42,7 +42,7 @@ class PlaneTest {
         Plane plane = new Plane();
         IRay ray = new Ray(new Point(0, 1, 0), new Vector(0, -1, 0));
 
-        double[] intersectPositions = plane.getLocalIntersectionPositions(ray);
+        double[] intersectPositions = plane.getLocalIntersectionPositions(ray, 0, Double.POSITIVE_INFINITY);
 
         assertEquals(1, intersectPositions.length);
         assertEquals(1, intersectPositions[0]);
@@ -53,7 +53,7 @@ class PlaneTest {
         Plane plane = new Plane();
         IRay ray = new Ray(new Point(0, -1, 0), new Vector(0, 1, 0));
 
-        double[] intersectPositions = plane.getLocalIntersectionPositions(ray);
+        double[] intersectPositions = plane.getLocalIntersectionPositions(ray, 0, Double.POSITIVE_INFINITY);
 
         assertEquals(1, intersectPositions.length);
         assertEquals(1, intersectPositions[0]);

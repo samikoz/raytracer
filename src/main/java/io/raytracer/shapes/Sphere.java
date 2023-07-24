@@ -8,6 +8,8 @@ import io.raytracer.materials.Material;
 import io.raytracer.mechanics.IRay;
 import lombok.NonNull;
 
+import java.util.Arrays;
+
 public class Sphere extends Shape {
     public Sphere() {
         super();
@@ -18,7 +20,7 @@ public class Sphere extends Shape {
     }
 
     @Override
-    protected double[] getLocalIntersectionPositions(IRay ray) {
+    protected double[] getLocalIntersectionPositions(IRay ray, double tmin, double tmax) {
         IVector rayOrigin = ray.getOrigin().subtract(new Point(0, 0, 0));
         double a = ray.getDirection().dot(ray.getDirection());
         double b = 2 * ray.getDirection().dot(rayOrigin);
@@ -28,7 +30,8 @@ public class Sphere extends Shape {
         if (delta < 0) {
             return new double[] {};
         }
-        return new double[] { (-b - Math.sqrt(delta)) / (2 * a), (-b + Math.sqrt(delta)) / (2 * a) };
+        double[] roots = new double[] { (-b - Math.sqrt(delta)) / (2 * a), (-b + Math.sqrt(delta)) / (2 * a) };
+        return Arrays.stream(roots).filter(root -> root > tmin && root < tmax).toArray();
     }
 
     @Override

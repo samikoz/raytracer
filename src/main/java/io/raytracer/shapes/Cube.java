@@ -7,6 +7,8 @@ import io.raytracer.materials.Material;
 import io.raytracer.mechanics.IRay;
 import lombok.NonNull;
 
+import java.util.Arrays;
+
 public class Cube extends Shape {
     Cube() {
         super();
@@ -17,7 +19,7 @@ public class Cube extends Shape {
     }
 
     @Override
-    protected double[] getLocalIntersectionPositions(IRay ray) {
+    protected double[] getLocalIntersectionPositions(IRay ray, double tmin, double tmax) {
         double[] xIntersections = this.getAxisIntersections(ray.getOrigin().get(0), ray.getDirection().get(0));
         double[] yIntersections = this.getAxisIntersections(ray.getOrigin().get(1), ray.getDirection().get(1));
         double[] zIntersections = this.getAxisIntersections(ray.getOrigin().get(2), ray.getDirection().get(2));
@@ -28,8 +30,8 @@ public class Cube extends Shape {
         if (maxMinIntersection > minMaxIntersection) {
             return new double[] {};
         }
-
-        return new double[] { maxMinIntersection, minMaxIntersection };
+        double [] intersections = new double[] { maxMinIntersection, minMaxIntersection };
+        return Arrays.stream(intersections).filter(i -> i > tmin && i < tmax).toArray();
     }
 
     private double[] getAxisIntersections(double originComponent, double directionComponent) {

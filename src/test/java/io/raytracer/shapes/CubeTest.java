@@ -29,7 +29,7 @@ class CubeTest {
     @MethodSource("provideHittingRaysAndIntersections")
     void positiveLocalIntersectionPositions(Ray ray, double firstIntersection, double secondIntersection) {
         Shape cube = new Cube();
-        double[] intersections = cube.getLocalIntersectionPositions(ray);
+        double[] intersections = cube.getLocalIntersectionPositions(ray, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY);
         assertEquals(2, intersections.length);
         assertEquals(firstIntersection, intersections[0], 1e-3);
         assertEquals(secondIntersection, intersections[1], 1e-3);
@@ -50,7 +50,7 @@ class CubeTest {
     @MethodSource("provideMissingRays")
     void missingLocalIntersectionPositions(Ray ray) {
         Shape cube = new Cube();
-        double[] intersections = cube.getLocalIntersectionPositions(ray);
+        double[] intersections = cube.getLocalIntersectionPositions(ray, 0, Double.POSITIVE_INFINITY);
         assertEquals(0, intersections.length);
     }
 

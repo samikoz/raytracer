@@ -21,12 +21,15 @@ public class Plane extends Shape {
     }
 
     @Override
-    protected double[] getLocalIntersectionPositions(IRay ray) {
+    protected double[] getLocalIntersectionPositions(IRay ray, double tmin, double tmax) {
         if (abs(ray.getDirection().get(1)) < parallelTolerance) {
-            return new double[] {};
-        } else {
-            return new double[] { -ray.getOrigin().get(1) / ray.getDirection().get(1) };
+            return new double[]{};
         }
+        double intersection = -ray.getOrigin().get(1) / ray.getDirection().get(1);
+        if (intersection < tmin || intersection > tmax) {
+            return new double[] {};
+        }
+        return new double[] { -ray.getOrigin().get(1) / ray.getDirection().get(1) };
     }
 
     @Override

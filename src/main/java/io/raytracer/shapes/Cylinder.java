@@ -39,7 +39,7 @@ public class Cylinder extends Shape {
     }
 
     @Override
-    protected double[] getLocalIntersectionPositions(IRay ray) {
+    protected double[] getLocalIntersectionPositions(IRay ray, double tmin, double tmax) {
         double[] sideIntersections = this.getSideIntersections(ray);
         List<Double> allIntersections = DoubleStream.of(sideIntersections).boxed().collect(Collectors.toCollection(ArrayList::new));
         if (Math.abs(ray.getDirection().get(1)) > Cylinder.tolerance) {
@@ -52,7 +52,7 @@ public class Cylinder extends Shape {
                 allIntersections.add(upperEndParameter);
             }
         }
-        return allIntersections.stream().mapToDouble(d -> d).toArray();
+        return allIntersections.stream().mapToDouble(d -> d).filter(i -> i > tmin && i< tmax).toArray();
     }
 
     private double[] getSideIntersections(IRay ray) {

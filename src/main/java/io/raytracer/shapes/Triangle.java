@@ -28,7 +28,7 @@ public class Triangle extends Shape {
     }
 
     @Override
-    protected double[] getLocalIntersectionPositions(IRay ray) {
+    protected double[] getLocalIntersectionPositions(IRay ray, double tmin, double tmax) {
         IVector dirCrossE2 = ray.getDirection().cross(this.e2);
         double det = dirCrossE2.dot(this.e1);
         if (Math.abs(det) < Triangle.tolerance) {
@@ -43,6 +43,10 @@ public class Triangle extends Shape {
         IVector originCrossE1 = p1ToOrigin.cross(this.e1);
         double v = f*ray.getDirection().dot(originCrossE1);
         if (v < 0 || (u+v) > 1) {
+            return new double[] {};
+        }
+        double intersection = f*this.e2.dot(originCrossE1);
+        if (intersection < tmin || intersection > tmax) {
             return new double[] {};
         }
         return new double[] { f*this.e2.dot(originCrossE1) };
