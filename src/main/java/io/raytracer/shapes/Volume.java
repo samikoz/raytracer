@@ -42,23 +42,23 @@ public class Volume extends Shape {
     }
 
     @Override
-    protected double[] getLocalIntersectionPositions(IRay ray, double tmin, double tmax) {
+    protected Intersection[] getLocalIntersections(IRay ray, double tmin, double tmax) {
         Intersection[] boundaryIntersections = this.boundary.intersect(ray, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY);
         Optional<RayHit> leftHit = RayHit.fromIntersections(Arrays.asList(boundaryIntersections));
         if (!leftHit.isPresent()) {
-            return new double[]{};
+            return new Intersection[]{};
         }
         double leftParameter = leftHit.get().rayParameter;
         Intersection[] subsequentIntersections = this.boundary.intersect(ray, leftParameter + 0.0001, Double.POSITIVE_INFINITY);
         Optional<RayHit> rightHit = RayHit.fromIntersections(Arrays.asList(subsequentIntersections));
         if (!rightHit.isPresent()) {
-            return new double[]{};
+            return new Intersection[]{};
         }
         double rightParameter = rightHit.get().rayParameter;
         leftParameter = max(tmin, leftParameter);
         rightParameter = min(tmax, rightParameter);
         if (leftParameter >= rightParameter) {
-            return new double[]{};
+            return new Intersection[]{};
         }
         leftParameter = max(leftParameter, 0);
 
@@ -66,14 +66,14 @@ public class Volume extends Shape {
         double distInside = (rightParameter - leftParameter)*rayLength;
         double hitDist = this.densityParameter*log(Volume.randGen.nextDouble());
         if (hitDist > distInside) {
-            return new double[]{};
+            return new Intersection[]{};
         }
-        return new double[] { leftParameter + (hitDist / rayLength)};
+        return new Intersection[] { new Intersection(this, ray, leftParameter + (hitDist / rayLength), 0, 0)};
 
     }
 
     @Override
-    protected IVector normalLocally(IPoint point) {
+    protected IVector localNormalAt(IPoint point) {
         return new Vector(1, 0, 0);
     }
 }

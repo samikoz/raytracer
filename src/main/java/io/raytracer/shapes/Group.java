@@ -27,16 +27,16 @@ public class Group extends Shape {
     public Intersection[] intersect(IRay ray) {
         IRay transformedRay = ray.getTransformed(this.getInverseTransform());
         return this.children.stream().map(child -> child.intersect(transformedRay))
-            .flatMap(Arrays::stream).sorted().map(i -> ray.intersect(i.object, i.rayParameter)).toArray(Intersection[]::new);
+            .flatMap(Arrays::stream).sorted().map(ray::reintersect).toArray(Intersection[]::new);
     }
 
     @Override
-    protected double[] getLocalIntersectionPositions(IRay ray, double tmin, double tmax) {
+    protected Intersection[] getLocalIntersections(IRay ray, double tmin, double tmax) {
         throw new UnsupportedOperationException("a group doesn't have own local intersections");
     }
 
     @Override
-    protected IVector normalLocally(IPoint point) {
+    protected IVector localNormalAt(IPoint point) {
         throw new UnsupportedOperationException("normal cannot be requested from a group");
     }
 

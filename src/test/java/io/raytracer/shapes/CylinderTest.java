@@ -5,6 +5,7 @@ import io.raytracer.geometry.IVector;
 import io.raytracer.geometry.Point;
 import io.raytracer.geometry.Vector;
 import io.raytracer.mechanics.IRay;
+import io.raytracer.mechanics.Intersection;
 import io.raytracer.mechanics.Ray;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -28,7 +29,7 @@ class CylinderTest {
     @MethodSource("provideMissingRays")
     void getLocalIntersectionsForMissingRay(IRay ray) {
         Shape cylinder = new Cylinder();
-        double[] intersections = cylinder.getLocalIntersectionPositions(ray, 0, Double.POSITIVE_INFINITY);
+        Intersection[] intersections = cylinder.getLocalIntersections(ray, 0, Double.POSITIVE_INFINITY);
 
         assertEquals(0, intersections.length);
     }
@@ -43,12 +44,12 @@ class CylinderTest {
 
     @ParameterizedTest
     @MethodSource("provideHittingRaysAndIntersections")
-    void positiveLocalIntersectionPositions(Ray ray, double firstIntersection, double secondIntersection) {
+    void positiveLocalIntersectionPositions(Ray ray, double firstPosition, double secondPosition) {
         Shape cylinder = new Cylinder();
-        double[] intersections = cylinder.getLocalIntersectionPositions(ray, 0, Double.POSITIVE_INFINITY);
+        Intersection[] intersections = cylinder.getLocalIntersections(ray, 0, Double.POSITIVE_INFINITY);
         assertEquals(2, intersections.length);
-        assertEquals(firstIntersection, intersections[0], 1e-3);
-        assertEquals(secondIntersection, intersections[1], 1e-3);
+        assertEquals(firstPosition, intersections[0].rayParameter, 1e-3);
+        assertEquals(secondPosition, intersections[1].rayParameter, 1e-3);
     }
 
     private static Stream<Arguments> provideNormalPositionsAndNormals() {
@@ -64,7 +65,7 @@ class CylinderTest {
     @MethodSource("provideNormalPositionsAndNormals")
     void normalToCylinders(IPoint normalPosition, IVector expectedNormal) {
         Shape cylinder = new Cylinder();
-        IVector normal = cylinder.normalLocally(normalPosition);
+        IVector normal = cylinder.localNormalAt(normalPosition);
 
         assertEquals(expectedNormal, normal);
     }
@@ -86,7 +87,7 @@ class CylinderTest {
         Cylinder cylinder = new Cylinder();
         cylinder.setLowerBound(1);
         cylinder.setUpperBound(2);
-        double[] intersections = cylinder.getLocalIntersectionPositions(ray, 0, Double.POSITIVE_INFINITY);
+        Intersection[] intersections = cylinder.getLocalIntersections(ray, 0, Double.POSITIVE_INFINITY);
 
         assertEquals(intersectionsCount, intersections.length);
     }
@@ -109,7 +110,7 @@ class CylinderTest {
         cylinder.setUpperBound(2);
         cylinder.setTopClosed(true);
         cylinder.setBottomClosed(true);
-        double[] intersections = cylinder.getLocalIntersectionPositions(ray, 0, Double.POSITIVE_INFINITY);
+        Intersection[] intersections = cylinder.getLocalIntersections(ray, 0, Double.POSITIVE_INFINITY);
 
         assertEquals(intersectionsCount, intersections.length);
     }
@@ -133,7 +134,7 @@ class CylinderTest {
         cylinder.setUpperBound(2);
         cylinder.setTopClosed(true);
         cylinder.setBottomClosed(true);
-        IVector normal = cylinder.normalLocally(normalPosition);
+        IVector normal = cylinder.localNormalAt(normalPosition);
 
         assertEquals(expectedNormal, normal);
     }

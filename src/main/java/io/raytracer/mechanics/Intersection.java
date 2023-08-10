@@ -9,9 +9,10 @@ import org.jetbrains.annotations.NotNull;
 @ToString
 @AllArgsConstructor
 public class Intersection implements Comparable<Intersection> {
+    @NonNull public Shape object;
     public IRay ray;
     public double rayParameter;
-    @NonNull public Shape object;
+    public double u, v;
 
     @Override
     public int compareTo(@NotNull Intersection intersection) {

@@ -5,6 +5,7 @@ import io.raytracer.geometry.IVector;
 import io.raytracer.geometry.Vector;
 import io.raytracer.materials.Material;
 import io.raytracer.mechanics.IRay;
+import io.raytracer.mechanics.Intersection;
 import lombok.NonNull;
 import lombok.Setter;
 
@@ -39,7 +40,7 @@ public class Cylinder extends Shape {
     }
 
     @Override
-    protected double[] getLocalIntersectionPositions(IRay ray, double tmin, double tmax) {
+    protected Intersection[] getLocalIntersections(IRay ray, double tmin, double tmax) {
         double[] sideIntersections = this.getSideIntersections(ray);
         List<Double> allIntersections = DoubleStream.of(sideIntersections).boxed().collect(Collectors.toCollection(ArrayList::new));
         if (Math.abs(ray.getDirection().get(1)) > Cylinder.tolerance) {
@@ -52,7 +53,10 @@ public class Cylinder extends Shape {
                 allIntersections.add(upperEndParameter);
             }
         }
-        return allIntersections.stream().mapToDouble(d -> d).filter(i -> i > tmin && i< tmax).toArray();
+        return allIntersections.stream()
+            .mapToDouble(d -> d).filter(i -> i > tmin && i< tmax)
+            .mapToObj(position -> new Intersection(this, ray, position, 0, 0))
+            .toArray(Intersection[]::new);
     }
 
     private double[] getSideIntersections(IRay ray) {
@@ -86,7 +90,7 @@ public class Cylinder extends Shape {
     }
 
     @Override
-    protected IVector normalLocally(IPoint point) {
+    protected IVector localNormalAt(IPoint point) {
         double yDistance = Math.pow(point.get(0), 2) + Math.pow(point.get(2), 2);
 
         if (yDistance < 1  && point.get(1) >= this.upperBound - Cylinder.tolerance) {

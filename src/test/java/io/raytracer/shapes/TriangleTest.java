@@ -2,6 +2,7 @@ package io.raytracer.shapes;
 
 import io.raytracer.geometry.Point;
 import io.raytracer.geometry.Vector;
+import io.raytracer.mechanics.Intersection;
 import io.raytracer.mechanics.Ray;
 import org.junit.jupiter.api.Test;
 
@@ -31,9 +32,9 @@ class TriangleTest {
             new Point(1, 0, 0)
         );
 
-        assertEquals(t.normal, t.normalLocally(new Point(0, 0.5, 0)));
-        assertEquals(t.normal, t.normalLocally(new Point(-0.5, 0.75, 0)));
-        assertEquals(t.normal, t.normalLocally(new Point(0.5, 0.25, 0)));
+        assertEquals(t.normal, t.localNormalAt(new Point(0, 0.5, 0)));
+        assertEquals(t.normal, t.localNormalAt(new Point(-0.5, 0.75, 0)));
+        assertEquals(t.normal, t.localNormalAt(new Point(0.5, 0.25, 0)));
     }
 
     @Test
@@ -45,7 +46,7 @@ class TriangleTest {
         );
         Ray ray = new Ray(new Point(0, -1, -2), new Vector(0, 1, 0));
 
-        assertEquals(0, t.getLocalIntersectionPositions(ray, 0, Double.POSITIVE_INFINITY).length);
+        assertEquals(0, t.getLocalIntersections(ray, 0, Double.POSITIVE_INFINITY).length);
     }
 
     @Test
@@ -56,7 +57,7 @@ class TriangleTest {
             new Point(1, 0, 0)
         );
         Ray ray = new Ray(new Point(1, 1, -2), new Vector(0, 0, 1));
-        double[] intersections = t.getLocalIntersectionPositions(ray, 0, Double.POSITIVE_INFINITY);
+        Intersection[] intersections = t.getLocalIntersections(ray, 0, Double.POSITIVE_INFINITY);
 
         assertEquals(0, intersections.length);
     }
@@ -69,7 +70,7 @@ class TriangleTest {
             new Point(1, 0, 0)
         );
         Ray ray = new Ray(new Point(-1, 1, -2), new Vector(0, 0, 1));
-        double[] intersections = t.getLocalIntersectionPositions(ray, 0, Double.POSITIVE_INFINITY);
+        Intersection[] intersections = t.getLocalIntersections(ray, 0, Double.POSITIVE_INFINITY);
 
         assertEquals(0, intersections.length);
     }
@@ -82,7 +83,7 @@ class TriangleTest {
             new Point(1, 0, 0)
         );
         Ray ray = new Ray(new Point(0, -1, -2), new Vector(0, 0, 1));
-        double[] intersections = t.getLocalIntersectionPositions(ray, 0, Double.POSITIVE_INFINITY);
+        Intersection[] intersections = t.getLocalIntersections(ray, 0, Double.POSITIVE_INFINITY);
 
         assertEquals(0, intersections.length);
     }
@@ -95,9 +96,24 @@ class TriangleTest {
             new Point(1, 0, 0)
         );
         Ray ray = new Ray(new Point(0, 0.5, -2), new Vector(0, 0, 1));
-        double[] intersections = t.getLocalIntersectionPositions(ray, 0, Double.POSITIVE_INFINITY);
+        Intersection[] intersections = t.getLocalIntersections(ray, 0, Double.POSITIVE_INFINITY);
 
         assertEquals(1, intersections.length);
-        assertEquals(2, intersections[0]);
+        assertEquals(2, intersections[0].rayParameter);
+    }
+
+    @Test
+    void rayHitComputesUVCorrectly() {
+        Triangle t = new Triangle(
+            new Point(0, 1, 0),
+            new Point(-1, 0, 0),
+            new Point(1, 0, 0)
+        );
+        Ray ray = new Ray(new Point(-0.2, 0.3, -2), new Vector(0, 0, 1));
+        Intersection[] is = t.getLocalIntersections(ray, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY);
+
+        assertEquals(1, is.length);
+        assertEquals(0.45, is[0].u, 1e-3);
+        assertEquals(0.25, is[0].v, 1e-3);
     }
 }

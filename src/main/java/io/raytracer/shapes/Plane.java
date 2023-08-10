@@ -5,6 +5,7 @@ import io.raytracer.geometry.IVector;
 import io.raytracer.geometry.Vector;
 import io.raytracer.materials.Material;
 import io.raytracer.mechanics.IRay;
+import io.raytracer.mechanics.Intersection;
 import lombok.NonNull;
 
 import static java.lang.Math.abs;
@@ -21,19 +22,19 @@ public class Plane extends Shape {
     }
 
     @Override
-    protected double[] getLocalIntersectionPositions(IRay ray, double tmin, double tmax) {
+    protected Intersection[] getLocalIntersections(IRay ray, double tmin, double tmax) {
         if (abs(ray.getDirection().get(1)) < parallelTolerance) {
-            return new double[]{};
+            return new Intersection[]{};
         }
         double intersection = -ray.getOrigin().get(1) / ray.getDirection().get(1);
         if (intersection < tmin || intersection > tmax) {
-            return new double[] {};
+            return new Intersection[] {};
         }
-        return new double[] { -ray.getOrigin().get(1) / ray.getDirection().get(1) };
+        return new Intersection[] { new Intersection(this, ray, -ray.getOrigin().get(1) / ray.getDirection().get(1),0, 0) };
     }
 
     @Override
-    protected IVector normalLocally(IPoint point) {
+    protected IVector localNormalAt(IPoint point) {
         return new Vector(0, 1, 0);
     }
 }

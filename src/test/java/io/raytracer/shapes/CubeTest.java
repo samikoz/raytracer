@@ -3,6 +3,7 @@ package io.raytracer.shapes;
 import io.raytracer.geometry.IVector;
 import io.raytracer.geometry.Point;
 import io.raytracer.geometry.Vector;
+import io.raytracer.mechanics.Intersection;
 import io.raytracer.mechanics.Ray;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -27,12 +28,12 @@ class CubeTest {
 
     @ParameterizedTest
     @MethodSource("provideHittingRaysAndIntersections")
-    void positiveLocalIntersectionPositions(Ray ray, double firstIntersection, double secondIntersection) {
+    void positiveLocalIntersectionPositions(Ray ray, double firstPosition, double secondPosition) {
         Shape cube = new Cube();
-        double[] intersections = cube.getLocalIntersectionPositions(ray, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY);
+        Intersection[] intersections = cube.getLocalIntersections(ray, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY);
         assertEquals(2, intersections.length);
-        assertEquals(firstIntersection, intersections[0], 1e-3);
-        assertEquals(secondIntersection, intersections[1], 1e-3);
+        assertEquals(firstPosition, intersections[0].rayParameter, 1e-3);
+        assertEquals(secondPosition, intersections[1].rayParameter, 1e-3);
     }
 
     private static Stream<Arguments> provideMissingRays() {
@@ -50,7 +51,7 @@ class CubeTest {
     @MethodSource("provideMissingRays")
     void missingLocalIntersectionPositions(Ray ray) {
         Shape cube = new Cube();
-        double[] intersections = cube.getLocalIntersectionPositions(ray, 0, Double.POSITIVE_INFINITY);
+        Intersection[] intersections = cube.getLocalIntersections(ray, 0, Double.POSITIVE_INFINITY);
         assertEquals(0, intersections.length);
     }
 
@@ -71,7 +72,7 @@ class CubeTest {
     @MethodSource("providePointsAndNormals")
     void normalLocally(Point point, Vector normal) {
         Shape cube = new Cube();
-        IVector actualNormal = cube.normalLocally(point);
+        IVector actualNormal = cube.localNormalAt(point);
         assertEquals(normal, actualNormal);
     }
 }

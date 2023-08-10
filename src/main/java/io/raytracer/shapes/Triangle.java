@@ -4,6 +4,7 @@ import io.raytracer.geometry.IPoint;
 import io.raytracer.geometry.IVector;
 import io.raytracer.materials.Material;
 import io.raytracer.mechanics.IRay;
+import io.raytracer.mechanics.Intersection;
 import lombok.NonNull;
 
 public class Triangle extends Shape {
@@ -27,32 +28,32 @@ public class Triangle extends Shape {
     }
 
     @Override
-    protected double[] getLocalIntersectionPositions(IRay ray, double tmin, double tmax) {
+    protected Intersection[] getLocalIntersections(IRay ray, double tmin, double tmax) {
         IVector dirCrossE2 = ray.getDirection().cross(this.e2);
         double det = dirCrossE2.dot(this.e1);
         if (Math.abs(det) < Triangle.tolerance) {
-            return new double[] {};
+            return new Intersection[] {};
         }
         double f = 1.0 / det;
         IVector p1ToOrigin = ray.getOrigin().subtract(this.v1);
         double u = f*p1ToOrigin.dot(dirCrossE2);
         if (u < 0 || u > 1) {
-            return new double[] {};
+            return new Intersection[] {};
         }
         IVector originCrossE1 = p1ToOrigin.cross(this.e1);
         double v = f*ray.getDirection().dot(originCrossE1);
         if (v < 0 || (u+v) > 1) {
-            return new double[] {};
+            return new Intersection[] {};
         }
         double intersection = f*this.e2.dot(originCrossE1);
         if (intersection < tmin || intersection > tmax) {
-            return new double[] {};
+            return new Intersection[] {};
         }
-        return new double[] { f*this.e2.dot(originCrossE1) };
+        return new Intersection[] { new Intersection(this , ray, f*this.e2.dot(originCrossE1), u, v) };
     }
 
     @Override
-    protected IVector normalLocally(IPoint point) {
+    protected IVector localNormalAt(IPoint point) {
         return this.normal;
     }
 }

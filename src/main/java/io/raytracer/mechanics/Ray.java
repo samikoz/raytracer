@@ -23,8 +23,8 @@ public class Ray implements IRay {
     }
 
     @Override
-    public Intersection intersect(Shape shape, double parameter) {
-        return new Intersection(this, parameter, shape);
+    public Intersection reintersect(Intersection i) {
+        return new Intersection(i.object, this, i.rayParameter, i.u, i.v);
     }
 
     public IRay recast(IPoint from, IVector direction) {

@@ -24,7 +24,7 @@ public class RayHit extends Intersection {
     public boolean shadowed;
 
     private RayHit(Intersection i, double refractiveFrom, double refractiveTo) {
-        super(i.ray, i.rayParameter, i.object);
+        super(i.object, i.ray, i.rayParameter, 0, 0);
 
         IPoint intersectionPoint = this.ray.getPosition(this.rayParameter);
         IVector surfaceNormal = this.object.normal(intersectionPoint);

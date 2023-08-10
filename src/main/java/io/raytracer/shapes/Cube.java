@@ -5,6 +5,7 @@ import io.raytracer.geometry.IVector;
 import io.raytracer.geometry.Vector;
 import io.raytracer.materials.Material;
 import io.raytracer.mechanics.IRay;
+import io.raytracer.mechanics.Intersection;
 import lombok.NonNull;
 
 import java.util.Arrays;
@@ -19,7 +20,7 @@ public class Cube extends Shape {
     }
 
     @Override
-    protected double[] getLocalIntersectionPositions(IRay ray, double tmin, double tmax) {
+    protected Intersection[] getLocalIntersections(IRay ray, double tmin, double tmax) {
         double[] xIntersections = this.getAxisIntersections(ray.getOrigin().get(0), ray.getDirection().get(0));
         double[] yIntersections = this.getAxisIntersections(ray.getOrigin().get(1), ray.getDirection().get(1));
         double[] zIntersections = this.getAxisIntersections(ray.getOrigin().get(2), ray.getDirection().get(2));
@@ -28,10 +29,13 @@ public class Cube extends Shape {
         double minMaxIntersection = Math.min(Math.min(xIntersections[1], yIntersections[1]), zIntersections[1]);
 
         if (maxMinIntersection > minMaxIntersection) {
-            return new double[] {};
+            return new Intersection[] {};
         }
-        double [] intersections = new double[] { maxMinIntersection, minMaxIntersection };
-        return Arrays.stream(intersections).filter(i -> i > tmin && i < tmax).toArray();
+        Intersection[] is = new Intersection[] {
+            new Intersection(this, ray, maxMinIntersection, 0, 0),
+            new Intersection(this, ray, minMaxIntersection,0, 0)
+        };
+        return Arrays.stream(is).filter(i -> i.rayParameter > tmin && i.rayParameter < tmax).toArray(Intersection[]::new);
     }
 
     private double[] getAxisIntersections(double originComponent, double directionComponent) {
@@ -41,7 +45,7 @@ public class Cube extends Shape {
     }
 
     @Override
-    protected IVector normalLocally(IPoint point) {
+    protected IVector localNormalAt(IPoint point) {
         double maxComponent = Math.max(Math.abs(point.get(0)), Math.max(Math.abs(point.get(1)), Math.abs(point.get(2))));
 
         if (maxComponent == Math.abs(point.get(0))) {
