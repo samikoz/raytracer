@@ -10,11 +10,11 @@ import lombok.NonNull;
 import java.util.Arrays;
 
 public class Cube extends Shape {
-    Cube() {
+    public Cube() {
         super();
     }
 
-    Cube(@NonNull Material material) {
+    public Cube(@NonNull Material material) {
         super(material);
     }
 
