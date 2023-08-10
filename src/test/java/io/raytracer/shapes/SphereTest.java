@@ -17,7 +17,12 @@ public class SphereTest {
     void normalOnASphereOnXAxis() {
         Sphere sphere = new Sphere();
         IVector expectedNormal = new Vector(1, 0, 0);
-        IVector actualNormal = sphere.normal(new Point(1, 0, 0));
+        Intersection testIntersection = new Intersection(
+            sphere,
+            new Ray(new Point(1, 0, 0), new Vector(0, 0, 1)),
+            0, 0, 0
+        );
+        IVector actualNormal = sphere.normal(testIntersection);
 
         assertEquals(expectedNormal, actualNormal, "Normal to a sphere is a vector representing the point.");
     }
@@ -26,8 +31,12 @@ public class SphereTest {
     void normalOnASphereAtGenericPoint() {
         Sphere sphere = new Sphere();
         IVector expectedNormal = new Vector(Math.sqrt(3) / 3, Math.sqrt(3) / 3, Math.sqrt(3) / 3);
-        IVector actualNormal = sphere.normal(
-                new Point(Math.sqrt(3) / 3, Math.sqrt(3) / 3, Math.sqrt(3) / 3));
+        Intersection testIntersection = new Intersection(
+            sphere,
+            new Ray(new Point(Math.sqrt(3) / 3, Math.sqrt(3) / 3, Math.sqrt(3) / 3), new Vector(0, 0, 1)),
+            0, 0, 0
+        );
+        IVector actualNormal = sphere.normal(testIntersection);
 
         assertEquals(expectedNormal, actualNormal, "Normal to a sphere is a vector representing the point.");
     }
@@ -35,7 +44,12 @@ public class SphereTest {
     @Test
     void normalIsNormalised() {
         Sphere sphere = new Sphere();
-        IVector normal = sphere.normal(new Point(Math.sqrt(3) / 3, Math.sqrt(3) / 3, Math.sqrt(3) / 3));
+        Intersection testIntersection = new Intersection(
+            sphere,
+            new Ray(new Point(Math.sqrt(3) / 3, Math.sqrt(3) / 3, Math.sqrt(3) / 3), new Vector(0, 0, 1)),
+            0, 0, 0
+        );
+        IVector normal = sphere.normal(testIntersection);
 
         assertEquals(normal, normal.normalise(), "Normal vector should be normalised.");
     }
@@ -44,7 +58,12 @@ public class SphereTest {
     void normalOnATranslatedSphere() {
         Sphere sphere = new Sphere();
         sphere.setTransform(ThreeTransform.translation(0, 1, 0));
-        IVector actualNormal = sphere.normal(new Point(0, 1.70711, -0.70711));
+        Intersection testIntersection = new Intersection(
+            sphere,
+            new Ray(new Point(0, 1.70711, -0.70711), new Vector(0, 0, 1)),
+            0, 0, 0
+        );
+        IVector actualNormal = sphere.normal(testIntersection);
         IVector expectedNormal = new Vector(0, 0.70711, -0.70711);
 
         assertEquals(expectedNormal, actualNormal);
@@ -55,7 +74,12 @@ public class SphereTest {
         Sphere sphere = new Sphere();
         ITransform trans = ThreeTransform.rotation_z(Math.PI / 5).scale(1, 0.5, 1);
         sphere.setTransform(trans);
-        IVector actualNormal = sphere.normal(new Point(0, Math.sqrt(2) / 2, -Math.sqrt(2) / 2));
+        Intersection testIntersection = new Intersection(
+            sphere,
+            new Ray(new Point(0, Math.sqrt(2) / 2, -Math.sqrt(2) / 2), new Vector(0, 0, 1)),
+            0, 0, 0
+        );
+        IVector actualNormal = sphere.normal(testIntersection);
         IVector expectedNormal = new Vector(0, 0.97014, -0.24254);
 
         assertEquals(expectedNormal, actualNormal);

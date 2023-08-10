@@ -27,7 +27,7 @@ public class RayHit extends Intersection {
         super(i.object, i.ray, i.rayParameter, 0, 0);
 
         IPoint intersectionPoint = this.ray.getPosition(this.rayParameter);
-        IVector surfaceNormal = this.object.normal(intersectionPoint);
+        IVector surfaceNormal = this.object.normal(i);
         IVector eyeVector = this.ray.getDirection().negate();
         if (surfaceNormal.dot(eyeVector) < 0) {
             surfaceNormal = surfaceNormal.negate();

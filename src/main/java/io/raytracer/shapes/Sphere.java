@@ -39,7 +39,7 @@ public class Sphere extends Shape {
     }
 
     @Override
-    public IVector localNormalAt(@NonNull IPoint p) {
+    public IVector localNormalAt(@NonNull IPoint p, double u, double v) {
         return (p.subtract(new Point(0, 0, 0))).normalise();
     }
 }

@@ -14,8 +14,8 @@ class PlaneTest {
     void normalToPlaneIsConstant() {
         Plane plane = new Plane();
 
-        assertEquals(new Vector(0, 1, 0), plane.localNormalAt(new Point(0, 0, 0)));
-        assertEquals(new Vector(0, 1, 0), plane.localNormalAt(new Point(10, 0, -150)));
+        assertEquals(new Vector(0, 1, 0), plane.localNormalAt(new Point(0, 0, 0), 0, 0));
+        assertEquals(new Vector(0, 1, 0), plane.localNormalAt(new Point(10, 0, -150), 0, 0));
     }
 
     @Test

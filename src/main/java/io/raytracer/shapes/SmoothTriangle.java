@@ -20,6 +20,11 @@ public class SmoothTriangle extends Triangle {
         this.n1 = n1;
         this.n2 = n2;
         this.n3 = n3;
-
     }
+
+    @Override
+    protected IVector localNormalAt(IPoint point, double u, double v) {
+        return this.n2.multiply(u).add(this.n3.multiply(v)).add(this.n1.multiply(1 - u - v));
+    }
+
 }

@@ -36,7 +36,7 @@ public class Group extends Shape {
     }
 
     @Override
-    protected IVector localNormalAt(IPoint point) {
+    protected IVector localNormalAt(IPoint point, double u, double v) {
         throw new UnsupportedOperationException("normal cannot be requested from a group");
     }
 

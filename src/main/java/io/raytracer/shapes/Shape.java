@@ -47,7 +47,7 @@ public abstract class Shape {
 
     abstract protected Intersection[] getLocalIntersections(IRay ray, double tmin, double tmax);
 
-    abstract protected IVector localNormalAt(IPoint point);
+    abstract protected IVector localNormalAt(IPoint point, double u, double v);
 
     @Override
     public boolean equals(Object them) {
@@ -71,9 +71,9 @@ public abstract class Shape {
         return Arrays.stream(this.getLocalIntersections(transformedRay, tmin, tmax)).map(ray::reintersect).toArray(Intersection[]::new);
     }
 
-    public IVector normal(IPoint point) {
-        IPoint transformedPoint = this.transformToOwnSpace(point);
-        IVector normal = this.localNormalAt(transformedPoint);
+    public IVector normal(Intersection i) {
+        IPoint transformedPoint = this.transformToOwnSpace(i.ray.getPosition(i.rayParameter));
+        IVector normal = this.localNormalAt(transformedPoint, i.u, i.v);
         return this.transformToWorldSpace(normal);
     }
 

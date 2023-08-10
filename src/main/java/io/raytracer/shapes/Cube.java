@@ -45,7 +45,7 @@ public class Cube extends Shape {
     }
 
     @Override
-    protected IVector localNormalAt(IPoint point) {
+    protected IVector localNormalAt(IPoint point, double u, double v) {
         double maxComponent = Math.max(Math.abs(point.get(0)), Math.max(Math.abs(point.get(1)), Math.abs(point.get(2))));
 
         if (maxComponent == Math.abs(point.get(0))) {

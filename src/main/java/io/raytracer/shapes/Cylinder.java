@@ -90,7 +90,7 @@ public class Cylinder extends Shape {
     }
 
     @Override
-    protected IVector localNormalAt(IPoint point) {
+    protected IVector localNormalAt(IPoint point, double u, double v) {
         double yDistance = Math.pow(point.get(0), 2) + Math.pow(point.get(2), 2);
 
         if (yDistance < 1  && point.get(1) >= this.upperBound - Cylinder.tolerance) {

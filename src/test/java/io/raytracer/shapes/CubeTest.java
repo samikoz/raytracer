@@ -72,7 +72,7 @@ class CubeTest {
     @MethodSource("providePointsAndNormals")
     void normalLocally(Point point, Vector normal) {
         Shape cube = new Cube();
-        IVector actualNormal = cube.localNormalAt(point);
+        IVector actualNormal = cube.localNormalAt(point, 0, 0);
         assertEquals(normal, actualNormal);
     }
 }

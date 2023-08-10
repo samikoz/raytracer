@@ -34,7 +34,7 @@ public class Plane extends Shape {
     }
 
     @Override
-    protected IVector localNormalAt(IPoint point) {
+    protected IVector localNormalAt(IPoint point, double u, double v) {
         return new Vector(0, 1, 0);
     }
 }

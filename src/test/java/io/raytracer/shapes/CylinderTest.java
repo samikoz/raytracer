@@ -65,7 +65,7 @@ class CylinderTest {
     @MethodSource("provideNormalPositionsAndNormals")
     void normalToCylinders(IPoint normalPosition, IVector expectedNormal) {
         Shape cylinder = new Cylinder();
-        IVector normal = cylinder.localNormalAt(normalPosition);
+        IVector normal = cylinder.localNormalAt(normalPosition, 0, 0);
 
         assertEquals(expectedNormal, normal);
     }
@@ -134,7 +134,7 @@ class CylinderTest {
         cylinder.setUpperBound(2);
         cylinder.setTopClosed(true);
         cylinder.setBottomClosed(true);
-        IVector normal = cylinder.localNormalAt(normalPosition);
+        IVector normal = cylinder.localNormalAt(normalPosition, 0, 0);
 
         assertEquals(expectedNormal, normal);
     }
