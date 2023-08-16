@@ -16,27 +16,18 @@ public class RoundObserver {
     private final double radius;
     private final String name;
 
-    public void observe(World world) throws IOException {
+    public void observe(World world, double angle, int count) throws IOException {
         Camera camera = this.getFrontCamera();
 
-        PrintWriter frontWriter = new PrintWriter(new FileWriter(String.format("%s_front.ppm", this.name)));
-        world.render(camera).export(frontWriter);
-
-        camera.transform(ThreeTransform.rotation_z(-Math.PI/2));
-        PrintWriter rightWriter = new PrintWriter(new FileWriter(String.format("%s_right.ppm", this.name)));
-        world.render(camera).export(rightWriter);
-
-        camera.transform(ThreeTransform.rotation_z(-Math.PI/2));
-        PrintWriter backWriter = new PrintWriter(new FileWriter(String.format("%s_back.ppm", this.name)));
-        world.render(camera).export(backWriter);
-
-        camera.transform(ThreeTransform.rotation_z(-Math.PI/2));
-        PrintWriter leftWriter = new PrintWriter(new FileWriter(String.format("%s_left.ppm", this.name)));
-        world.render(camera).export(leftWriter);
+        for (int i = 0; i < count; i++) {
+            camera.transform(ThreeTransform.rotation_y(i*angle));
+            PrintWriter rightWriter = new PrintWriter(new FileWriter(String.format("%s_%d.ppm", this.name, i)));
+            world.render(camera).export(rightWriter);
+        }
     }
 
     private Camera getFrontCamera() {
-        IPoint eyePosition = new Point(this.radius, 0, 0);
-        return new SingleRayCamera(300, 300, Math.PI/3, eyePosition, new Point(0, 0, 0).subtract(eyePosition), new Vector(0, 0, 1));
+        IPoint eyePosition = new Point(this.radius, 2, 0);
+        return new MultipleRayCamera(4, 600, 300, Math.PI/3, eyePosition, new Point(0, 0, 0).subtract(eyePosition), new Vector(0, 1, 0));
     }
 }
