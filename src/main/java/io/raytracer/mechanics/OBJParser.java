@@ -1,6 +1,9 @@
 package io.raytracer.mechanics;
 
+import io.raytracer.geometry.IPoint;
+import io.raytracer.geometry.IVector;
 import io.raytracer.geometry.Point;
+import io.raytracer.geometry.Vector;
 import io.raytracer.shapes.Group;
 import io.raytracer.shapes.Triangle;
 import lombok.Getter;
@@ -14,7 +17,8 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class OBJParser implements Parser {
-    public List<Point> vertices;
+    public List<IPoint> vertices;
+    public List<IVector> normals;
     @Getter private final Group parsed;
     private Group currentlyParsed;
 
@@ -22,10 +26,13 @@ public class OBJParser implements Parser {
     private final Pattern vertexPattern = Pattern.compile("v " + floatPoint + " " + floatPoint + " " + floatPoint);
     private final Pattern facePattern = Pattern.compile("f((?: \\d){3,})");
     private final Pattern groupPattern = Pattern.compile("g \\w+");
+    private final Pattern normalPattern = Pattern.compile("vn " + floatPoint + " " + floatPoint + " " + floatPoint);
 
     public OBJParser() {
         this.vertices = new ArrayList<>();
+        this.normals = new ArrayList<>();
         this.vertices.add(null);
+        this.normals.add(null);
         this.parsed = new Group();
 
         this.currentlyParsed = this.parsed;
@@ -47,13 +54,25 @@ public class OBJParser implements Parser {
             this.parsed.add(newGroup);
             this.currentlyParsed = newGroup;
         }
+        Matcher normalMatcher = normalPattern.matcher(line);
+        if (normalMatcher.find()) {
+            this.normals.add(this.parseNormal(normalMatcher));
+        }
     }
 
-    private Point parsePoint(Matcher vertexMatcher) {
+    private IPoint parsePoint(Matcher vertexMatcher) {
         return new Point(
             Double.parseDouble(vertexMatcher.group(1)),
             Double.parseDouble(vertexMatcher.group(2)),
             Double.parseDouble(vertexMatcher.group(3))
+        );
+    }
+
+    private IVector parseNormal(Matcher normalMatcher) {
+        return new Vector(
+            Double.parseDouble(normalMatcher.group(1)),
+            Double.parseDouble(normalMatcher.group(2)),
+            Double.parseDouble(normalMatcher.group(3))
         );
     }
 

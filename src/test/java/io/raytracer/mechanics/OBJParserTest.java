@@ -1,6 +1,7 @@
 package io.raytracer.mechanics;
 
 import io.raytracer.geometry.Point;
+import io.raytracer.geometry.Vector;
 import io.raytracer.shapes.Group;
 import io.raytracer.shapes.Shape;
 import io.raytracer.shapes.Triangle;
@@ -143,5 +144,23 @@ class OBJParserTest {
         assertEquals(parser.vertices.get(1), secondTriangle.v1);
         assertEquals(parser.vertices.get(3), secondTriangle.v2);
         assertEquals(parser.vertices.get(4), secondTriangle.v3);
+    }
+
+    @Test
+    void parseVertexNormals(@TempDir File tempdir) throws IOException {
+        File testInput = new File(tempdir, "test.mth");
+        List<String> lines = Arrays.asList(
+            "vn 0 0 1",
+            "vn 0.707 0 -0.707",
+            "vn 1 2 3"
+        );
+        Files.write(testInput.toPath(), lines);
+        OBJParser parser = new OBJParser();
+        parser.parse(testInput);
+
+        assertEquals(4, parser.normals.size());
+        assertEquals(new Vector(0, 0, 1), parser.normals.get(1));
+        assertEquals(new Vector(0.707, 0, -0.707), parser.normals.get(2));
+        assertEquals(new Vector(1, 2, 3), parser.normals.get(3));
     }
 }
