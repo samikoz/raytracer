@@ -5,6 +5,7 @@ import io.raytracer.geometry.IVector;
 import io.raytracer.geometry.Point;
 import io.raytracer.geometry.Vector;
 import io.raytracer.shapes.Group;
+import io.raytracer.shapes.SmoothTriangle;
 import io.raytracer.shapes.Triangle;
 import lombok.Getter;
 
@@ -13,8 +14,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 public class OBJParser implements Parser {
     public List<IPoint> vertices;
@@ -24,7 +23,7 @@ public class OBJParser implements Parser {
 
     private final String floatPoint = "(-?\\d+(?:\\.\\d+)*)";
     private final Pattern vertexPattern = Pattern.compile("v " + floatPoint + " " + floatPoint + " " + floatPoint);
-    private final Pattern facePattern = Pattern.compile("f((?: \\d){3,})");
+    private final Pattern facePattern = Pattern.compile("f(?: (\\S*)){3,}");
     private final Pattern groupPattern = Pattern.compile("g \\w+");
     private final Pattern normalPattern = Pattern.compile("vn " + floatPoint + " " + floatPoint + " " + floatPoint);
 
@@ -77,11 +76,28 @@ public class OBJParser implements Parser {
     }
 
     private List<Triangle> parseFace(Matcher faceMatcher) {
-        int[] vertexIndices = Arrays.stream(faceMatcher.group().substring(2).split(" ")).mapToInt(Integer::parseInt).toArray();
-        return IntStream.range(1, vertexIndices.length-1).mapToObj(index -> new Triangle(
-                this.vertices.get(vertexIndices[0]),
-                this.vertices.get(vertexIndices[index]),
-                this.vertices.get(vertexIndices[index+1])
-        )).collect(Collectors.toList());
+        List<Triangle> parsedTriangles = new ArrayList<>();
+        String[] vertexStrings = Arrays.stream(faceMatcher.group().substring(2).split(" ")).toArray(String[]::new);
+        String[][] vertexInfos = Arrays.stream(vertexStrings).map(vertexString -> vertexString.split("/")).toArray(String[][]::new);
+        for (int i = 1; i < vertexStrings.length - 1; i++) {
+            if (vertexInfos[0].length == 3 && vertexInfos[i].length == 3 && vertexInfos[i+1].length == 3) {
+                parsedTriangles.add(new SmoothTriangle(
+                    this.vertices.get(Integer.parseInt(vertexInfos[0][0])),
+                    this.vertices.get(Integer.parseInt(vertexInfos[i][0])),
+                    this.vertices.get(Integer.parseInt(vertexInfos[i + 1][0])),
+                    this.normals.get(Integer.parseInt(vertexInfos[0][2])),
+                    this.normals.get(Integer.parseInt(vertexInfos[i][2])),
+                    this.normals.get(Integer.parseInt(vertexInfos[i + 1][2]))
+                ));
+            }
+            else {
+                parsedTriangles.add(new Triangle(
+                    this.vertices.get(Integer.parseInt(vertexInfos[0][0])),
+                    this.vertices.get(Integer.parseInt(vertexInfos[i][0])),
+                    this.vertices.get(Integer.parseInt(vertexInfos[i + 1][0]))
+                ));
+            }
+        }
+        return parsedTriangles;
     }
 }

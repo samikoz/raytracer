@@ -4,6 +4,7 @@ import io.raytracer.geometry.Point;
 import io.raytracer.geometry.Vector;
 import io.raytracer.shapes.Group;
 import io.raytracer.shapes.Shape;
+import io.raytracer.shapes.SmoothTriangle;
 import io.raytracer.shapes.Triangle;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -162,5 +163,38 @@ class OBJParserTest {
         assertEquals(new Vector(0, 0, 1), parser.normals.get(1));
         assertEquals(new Vector(0.707, 0, -0.707), parser.normals.get(2));
         assertEquals(new Vector(1, 2, 3), parser.normals.get(3));
+    }
+
+    @Test
+    void parseFacesWithNormals(@TempDir File tempdir) throws IOException {
+        File testInput = new File(tempdir, "test.mth");
+        List<String> lines = Arrays.asList(
+            "v 0 1 0",
+            "v -1 0 0",
+            "v 1 0 0",
+            "",
+            "vn -1 0 0",
+            "vn 1 0 0",
+            "vn 0 1 0",
+            "",
+            "f 1//3 2//1 3//2",
+            "f 1/0/3 2/102/1 3/14/2"
+        );
+        Files.write(testInput.toPath(), lines);
+        OBJParser parser = new OBJParser();
+        parser.parse(testInput);
+
+        Group parsed = parser.getParsed();
+        assertEquals(2, parsed.children.size());
+        SmoothTriangle firstChild = (SmoothTriangle) parsed.children.get(0);
+        SmoothTriangle secondChild = (SmoothTriangle) parsed.children.get(1);
+
+        assertEquals(parser.vertices.get(1), firstChild.v1);
+        assertEquals(parser.vertices.get(2), firstChild.v2);
+        assertEquals(parser.vertices.get(3), firstChild.v3);
+        assertEquals(parser.normals.get(3), firstChild.n1);
+        assertEquals(parser.normals.get(1), firstChild.n2);
+        assertEquals(parser.normals.get(2), firstChild.n3);
+        assertEquals(secondChild, firstChild);
     }
 }

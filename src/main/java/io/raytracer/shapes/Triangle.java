@@ -1,11 +1,14 @@
 package io.raytracer.shapes;
 
 import io.raytracer.geometry.IPoint;
+import io.raytracer.geometry.ITuple;
 import io.raytracer.geometry.IVector;
 import io.raytracer.materials.Material;
 import io.raytracer.mechanics.IRay;
 import io.raytracer.mechanics.Intersection;
 import lombok.NonNull;
+
+import java.util.Arrays;
 
 public class Triangle extends Shape {
     public IPoint v1, v2, v3;
@@ -25,6 +28,19 @@ public class Triangle extends Shape {
 
     public Triangle(IPoint v1, IPoint v2, IPoint v3, @NonNull Material material) {
         super(material);
+    }
+
+    @Override
+    public int hashCode() {
+        return Arrays.hashCode(new double[] {v1.hashCode(), v2.hashCode(), v3.hashCode(),});
+    }
+
+    @Override
+    public boolean equals(Object them) {
+        if (them == null || this.getClass() != them.getClass()) return false;
+
+        Triangle themTriangle = (Triangle) them;
+        return this.v1.equals(themTriangle.v1) && this.v2.equals(themTriangle.v2) && this.v3.equals(themTriangle.v3);
     }
 
     @Override
