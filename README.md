@@ -8,6 +8,9 @@
 1. https://raytracing.github.io/
 
 # Technicalities
+- Should avoid inverting matrices as often as possible. e.g. for scenes with lots of spheres could implement
+simple sphere which for scaling and translation just changes radius and centre and implements general
+ray-intersection solver for these.
 - Think about the current recursive implementation of illuminate. Can't we pass the "colour so far"
 parameter and cut off the subsequent invocations if their contribution would be too small to notice
 - Groups have been implemented for grouping but not for bounding boxes

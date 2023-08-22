@@ -19,6 +19,10 @@ public class Interval {
         this.max = Math.max(i1.max, i2.max);
     }
 
+    public double[] toArray() {
+        return new double[] {this.min, this.max};
+    }
+
     public double size() {
         return this.max - this.min;
     }

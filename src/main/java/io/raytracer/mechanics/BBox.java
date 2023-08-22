@@ -1,13 +1,19 @@
 package io.raytracer.mechanics;
 
 import io.raytracer.geometry.IPoint;
+import io.raytracer.geometry.ITransform;
 import io.raytracer.geometry.Interval;
+import io.raytracer.geometry.Point;
 import lombok.RequiredArgsConstructor;
+
+import java.util.Arrays;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 
 @RequiredArgsConstructor
 public class BBox {
-    private final Interval x, y, z;
+    public final Interval x, y, z;
 
     public BBox() {
         this.x = new Interval();
@@ -25,6 +31,25 @@ public class BBox {
         this.x = new Interval(b1.x, b2.x);
         this.y = new Interval(b1.y, b2.y);
         this.z = new Interval(b1.z, b2.z);
+    }
+
+    public BBox transform(ITransform t) {
+        double[] x = this.x.toArray();
+        double[] y = this.y.toArray();
+        double[] z = this.z.toArray();
+        Stream<IPoint> mapped = IntStream.range(0, 8).mapToObj(n -> new Point(x[n & 1], y[(n & 2) >> 1], z[(n & 4) >> 2])).map(t::act);
+        Interval xex = new Interval(Double.POSITIVE_INFINITY, Double.NEGATIVE_INFINITY);
+        Interval yex = new Interval(Double.POSITIVE_INFINITY, Double.NEGATIVE_INFINITY);
+        Interval zex = new Interval(Double.POSITIVE_INFINITY, Double.NEGATIVE_INFINITY);
+        mapped.forEach(p -> {
+            xex.min = Math.min(p.get(0), xex.min);
+            xex.max = Math.max(p.get(0), xex.max);
+            yex.min = Math.min(p.get(1), yex.min);
+            yex.max = Math.max(p.get(1), yex.max);
+            zex.min = Math.min(p.get(2), zex.min);
+            zex.max = Math.max(p.get(2), zex.max);
+        });
+        return new BBox(xex, yex, zex);
     }
 
     public Interval axis(int n) {
