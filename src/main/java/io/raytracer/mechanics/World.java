@@ -61,7 +61,6 @@ public abstract class World {
                 Stream.of(Arrays.asList(x, y))
             ).flatMap(x -> x)
         ).flatMap(y -> y).parallel().forEach(pixelLocation -> {
-
             int countSoFar = rayCount.get();
             float progressPercent = (float)countSoFar/totalRaysCount*100;
             if (countSoFar % 100 == 0) {
