@@ -20,6 +20,20 @@ class BBoxTest {
     }
 
     @Test
+    void merging() {
+        BBox box1 = new BBox(new Point(0, 0, 0), new Point(1, 1, 1));
+        BBox box2 = new BBox(new Point(0, -1, 2), new Point(1, 2, 3));
+        BBox mergedBox = new BBox(box1, box2);
+
+        assertEquals(0, mergedBox.x.min, 1e-6);
+        assertEquals(1, mergedBox.x.max, 1e-6);
+        assertEquals(-1, mergedBox.y.min, 1e-6);
+        assertEquals(2, mergedBox.y.max, 1e-6);
+        assertEquals(0, mergedBox.z.min, 1e-6);
+        assertEquals(3, mergedBox.z.max, 1e-6);
+    }
+
+    @Test
     void translating() {
         BBox box = new BBox(new Point(0, 0, 0), new Point(1, 1, 1));
         BBox translated = box.transform(ThreeTransform.translation(1, 0, 0));

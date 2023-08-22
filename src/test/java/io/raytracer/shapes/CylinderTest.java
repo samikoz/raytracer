@@ -4,9 +4,11 @@ import io.raytracer.geometry.IPoint;
 import io.raytracer.geometry.IVector;
 import io.raytracer.geometry.Point;
 import io.raytracer.geometry.Vector;
+import io.raytracer.mechanics.BBox;
 import io.raytracer.mechanics.IRay;
 import io.raytracer.mechanics.Intersection;
 import io.raytracer.mechanics.Ray;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -137,5 +139,21 @@ class CylinderTest {
         IVector normal = cylinder.localNormalAt(normalPosition, 0, 0);
 
         assertEquals(expectedNormal, normal);
+    }
+
+    @Test
+    void boundingBox() {
+        Cylinder cylinder = new Cylinder();
+        cylinder.setLowerBound(-5);
+        cylinder.setUpperBound(10);
+        cylinder.setTopClosed(true);
+        BBox box = cylinder.getBoundingBox().get();
+
+        assertEquals(-1, box.x.min, 1e-6);
+        assertEquals(1, box.x.max, 1e-6);
+        assertEquals(-5, box.y.min, 1e-6);
+        assertEquals(10, box.y.max, 1e-6);
+        assertEquals(-1, box.z.min, 1e-6);
+        assertEquals(1, box.z.max, 1e-6);
     }
 }

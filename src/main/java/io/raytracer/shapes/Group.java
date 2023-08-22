@@ -13,16 +13,28 @@ import java.util.Optional;
 
 public class Group extends Shape {
     public final List<Shape> children;
+    private BBox bbox;
 
     public Group() {
         super();
         this.children = new ArrayList<>();
+        this.bbox = new BBox();
     }
 
     public Group add(Shape shape) {
         this.children.add(shape);
         shape.setParent(this);
+        shape.getBoundingBox().ifPresent(box -> this.bbox = new BBox(this.bbox, box));
         return this;
+    }
+
+    protected void protoadd(Shape shape) {
+        this.children.add(shape);
+        shape.setParent(this);
+    }
+
+    protected void setBoundingBox(BBox box) {
+        this.bbox = box;
     }
 
     @Override
@@ -58,6 +70,6 @@ public class Group extends Shape {
 
     @Override
     protected Optional<BBox> getLocalBoundingBox() {
-        return Optional.empty();
+        return Optional.of(this.bbox);
     }
 }
