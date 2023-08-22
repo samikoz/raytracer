@@ -2,10 +2,14 @@ package io.raytracer.shapes;
 
 import io.raytracer.geometry.IPoint;
 import io.raytracer.geometry.IVector;
+import io.raytracer.geometry.Point;
 import io.raytracer.geometry.Vector;
 import io.raytracer.materials.Material;
+import io.raytracer.mechanics.BBox;
 import io.raytracer.mechanics.IRay;
 import io.raytracer.mechanics.Intersection;
+
+import java.util.Optional;
 
 public class Rectangle extends Shape {
     public Rectangle() {
@@ -33,5 +37,10 @@ public class Rectangle extends Shape {
     @Override
     protected IVector localNormalAt(IPoint point, double u, double v) {
         return new Vector(0, 0, -1);
+    }
+
+    @Override
+    protected Optional<BBox> getLocalBoundingBox() {
+        return Optional.of(new BBox(new Point(0, -1e-3, 0), new Point(1, 1e-3, 1)));
     }
 }

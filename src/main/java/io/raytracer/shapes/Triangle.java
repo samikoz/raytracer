@@ -1,14 +1,16 @@
 package io.raytracer.shapes;
 
 import io.raytracer.geometry.IPoint;
-import io.raytracer.geometry.ITuple;
 import io.raytracer.geometry.IVector;
+import io.raytracer.geometry.Point;
 import io.raytracer.materials.Material;
+import io.raytracer.mechanics.BBox;
 import io.raytracer.mechanics.IRay;
 import io.raytracer.mechanics.Intersection;
 import lombok.NonNull;
 
 import java.util.Arrays;
+import java.util.Optional;
 
 public class Triangle extends Shape {
     public IPoint v1, v2, v3;
@@ -28,6 +30,12 @@ public class Triangle extends Shape {
 
     public Triangle(IPoint v1, IPoint v2, IPoint v3, @NonNull Material material) {
         super(material);
+        this.v1 = v1;
+        this.v2 = v2;
+        this.v3 = v3;
+        this.e1 = v2.subtract(v1);
+        this.e2 = v3.subtract(v1);
+        this.normal = this.e2.cross(this.e1).normalise();
     }
 
     @Override
@@ -71,5 +79,21 @@ public class Triangle extends Shape {
     @Override
     protected IVector localNormalAt(IPoint point, double u, double v) {
         return this.normal;
+    }
+
+    @Override
+    protected Optional<BBox> getLocalBoundingBox() {
+        return Optional.of(new BBox(
+            new Point(
+                Math.min(Math.min(this.v1.get(0), this.v2.get(0)), this.v3.get(0)),
+                Math.min(Math.min(this.v1.get(1), this.v2.get(1)), this.v3.get(1)),
+                Math.min(Math.min(this.v1.get(2), this.v2.get(2)), this.v3.get(2))
+            ),
+            new Point(
+                Math.max(Math.max(this.v1.get(0), this.v2.get(0)), this.v3.get(0)),
+                Math.max(Math.max(this.v1.get(1), this.v2.get(1)), this.v3.get(1)),
+                Math.max(Math.max(this.v1.get(2), this.v2.get(2)), this.v3.get(2))
+            )
+        ));
     }
 }

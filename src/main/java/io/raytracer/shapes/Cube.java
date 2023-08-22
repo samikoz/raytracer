@@ -2,13 +2,16 @@ package io.raytracer.shapes;
 
 import io.raytracer.geometry.IPoint;
 import io.raytracer.geometry.IVector;
+import io.raytracer.geometry.Point;
 import io.raytracer.geometry.Vector;
 import io.raytracer.materials.Material;
+import io.raytracer.mechanics.BBox;
 import io.raytracer.mechanics.IRay;
 import io.raytracer.mechanics.Intersection;
 import lombok.NonNull;
 
 import java.util.Arrays;
+import java.util.Optional;
 
 public class Cube extends Shape {
     public Cube() {
@@ -54,5 +57,10 @@ public class Cube extends Shape {
             return new Vector(0, point.get(1), 0);
         }
         return new Vector(0, 0, point.get(2));
+    }
+
+    @Override
+    public Optional<BBox> getLocalBoundingBox() {
+        return Optional.of(new BBox(new Point(-1, -1, -1), new Point(1, 1, 1)));
     }
 }

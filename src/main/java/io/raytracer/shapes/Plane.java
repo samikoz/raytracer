@@ -4,9 +4,12 @@ import io.raytracer.geometry.IPoint;
 import io.raytracer.geometry.IVector;
 import io.raytracer.geometry.Vector;
 import io.raytracer.materials.Material;
+import io.raytracer.mechanics.BBox;
 import io.raytracer.mechanics.IRay;
 import io.raytracer.mechanics.Intersection;
 import lombok.NonNull;
+
+import java.util.Optional;
 
 import static java.lang.Math.abs;
 
@@ -36,5 +39,10 @@ public class Plane extends Shape {
     @Override
     protected IVector localNormalAt(IPoint point, double u, double v) {
         return new Vector(0, 1, 0);
+    }
+
+    @Override
+    protected Optional<BBox> getLocalBoundingBox() {
+        return Optional.empty();
     }
 }

@@ -3,7 +3,6 @@ package io.raytracer.shapes;
 import io.raytracer.geometry.IPoint;
 import io.raytracer.geometry.ITransform;
 import io.raytracer.geometry.IVector;
-import io.raytracer.geometry.Point;
 import io.raytracer.geometry.ThreeTransform;
 import io.raytracer.materials.Material;
 import io.raytracer.mechanics.BBox;
@@ -55,9 +54,7 @@ public abstract class Shape {
 
     abstract protected IVector localNormalAt(IPoint point, double u, double v);
 
-    protected Optional<BBox> getLocalBoundingBox() {
-        return Optional.empty();
-    }
+    abstract protected Optional<BBox> getLocalBoundingBox();
 
     public Optional<BBox> getBoundingBox() {
         return this.getLocalBoundingBox().map(box -> box.transform(this.transform));

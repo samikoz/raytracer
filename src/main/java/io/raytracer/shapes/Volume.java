@@ -5,6 +5,7 @@ import io.raytracer.geometry.ITransform;
 import io.raytracer.geometry.IVector;
 import io.raytracer.geometry.Vector;
 import io.raytracer.materials.Material;
+import io.raytracer.mechanics.BBox;
 import io.raytracer.mechanics.IRay;
 import io.raytracer.mechanics.Intersection;
 import io.raytracer.mechanics.RayHit;
@@ -75,5 +76,10 @@ public class Volume extends Shape {
     @Override
     protected IVector localNormalAt(IPoint point, double u, double v) {
         return new Vector(1, 0, 0);
+    }
+
+    @Override
+    protected Optional<BBox> getLocalBoundingBox() {
+        return this.boundary.getLocalBoundingBox();
     }
 }

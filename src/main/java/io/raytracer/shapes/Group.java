@@ -2,12 +2,14 @@ package io.raytracer.shapes;
 
 import io.raytracer.geometry.IPoint;
 import io.raytracer.geometry.IVector;
+import io.raytracer.mechanics.BBox;
 import io.raytracer.mechanics.IRay;
 import io.raytracer.mechanics.Intersection;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 public class Group extends Shape {
     public final List<Shape> children;
@@ -52,5 +54,10 @@ public class Group extends Shape {
     public int hashCode() {
         int childrenHash = Arrays.hashCode(this.children.stream().mapToInt(Shape::hashCode).toArray());
         return Arrays.hashCode(new int[] { childrenHash, super.hashCode() });
+    }
+
+    @Override
+    protected Optional<BBox> getLocalBoundingBox() {
+        return Optional.empty();
     }
 }

@@ -2,8 +2,10 @@ package io.raytracer.shapes;
 
 import io.raytracer.geometry.IPoint;
 import io.raytracer.geometry.IVector;
+import io.raytracer.geometry.Point;
 import io.raytracer.geometry.Vector;
 import io.raytracer.materials.Material;
+import io.raytracer.mechanics.BBox;
 import io.raytracer.mechanics.IRay;
 import io.raytracer.mechanics.Intersection;
 import lombok.NonNull;
@@ -12,6 +14,7 @@ import lombok.Setter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.DoubleStream;
 
@@ -100,5 +103,13 @@ public class Cylinder extends Shape {
             return new Vector(0, -1, 0);
         }
         return new Vector(point.get(0), 0, point.get(2));
+    }
+
+    @Override
+    protected Optional<BBox> getLocalBoundingBox() {
+        if (Double.isInfinite(this.upperBound) || Double.isInfinite(this.lowerBound)) {
+            return Optional.empty();
+        }
+        return Optional.of(new BBox(new Point(-1, this.lowerBound, -1), new Point(1, this.upperBound, 1)));
     }
 }
