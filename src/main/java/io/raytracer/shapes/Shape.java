@@ -3,8 +3,10 @@ package io.raytracer.shapes;
 import io.raytracer.geometry.IPoint;
 import io.raytracer.geometry.ITransform;
 import io.raytracer.geometry.IVector;
+import io.raytracer.geometry.Point;
 import io.raytracer.geometry.ThreeTransform;
 import io.raytracer.materials.Material;
+import io.raytracer.mechanics.BBox;
 import io.raytracer.mechanics.IRay;
 import io.raytracer.mechanics.Intersection;
 import io.raytracer.tools.IColour;
@@ -17,6 +19,7 @@ import java.util.Optional;
 
 public abstract class Shape {
     private Group parent;
+    protected ITransform transform;
     @Getter private ITransform inverseTransform;
     @Getter private final Material material;
     @Getter @Setter private boolean isCastingShadows;
@@ -30,16 +33,19 @@ public abstract class Shape {
     }
 
     public void setTransform(ITransform transform) {
+        this.transform = transform;
         this.inverseTransform = transform.inverse();
     }
 
     Shape() {
+        this.transform = new ThreeTransform();
         this.inverseTransform = new ThreeTransform();
         this.material = Material.builder().build();
         this.isCastingShadows = true;
     }
 
     Shape(@NonNull Material material) {
+        this.transform = new ThreeTransform();
         this.inverseTransform = new ThreeTransform();
         this.material = material;
         this.isCastingShadows = true;
@@ -48,6 +54,14 @@ public abstract class Shape {
     abstract protected Intersection[] getLocalIntersections(IRay ray, double tmin, double tmax);
 
     abstract protected IVector localNormalAt(IPoint point, double u, double v);
+
+    protected Optional<BBox> getLocalBoundingBox() {
+        return Optional.empty();
+    }
+
+    public Optional<BBox> getBoundingBox() {
+        return this.getLocalBoundingBox().map(box -> box.transform(this.transform));
+    }
 
     @Override
     public boolean equals(Object them) {

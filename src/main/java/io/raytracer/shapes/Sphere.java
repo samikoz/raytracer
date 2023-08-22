@@ -5,11 +5,13 @@ import io.raytracer.geometry.Point;
 import io.raytracer.geometry.IVector;
 
 import io.raytracer.materials.Material;
+import io.raytracer.mechanics.BBox;
 import io.raytracer.mechanics.IRay;
 import io.raytracer.mechanics.Intersection;
 import lombok.NonNull;
 
 import java.util.Arrays;
+import java.util.Optional;
 
 public class Sphere extends Shape {
     public Sphere() {
@@ -41,5 +43,10 @@ public class Sphere extends Shape {
     @Override
     public IVector localNormalAt(@NonNull IPoint p, double u, double v) {
         return (p.subtract(new Point(0, 0, 0))).normalise();
+    }
+
+    @Override
+    public Optional<BBox> getLocalBoundingBox() {
+        return Optional.of(new BBox(new Point(-1, -1, -1), new Point(1, 1, 1)));
     }
 }

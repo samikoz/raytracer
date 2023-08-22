@@ -5,6 +5,7 @@ import io.raytracer.geometry.ThreeTransform;
 import io.raytracer.geometry.ITransform;
 import io.raytracer.geometry.IVector;
 import io.raytracer.geometry.Vector;
+import io.raytracer.mechanics.BBox;
 import io.raytracer.mechanics.IRay;
 import io.raytracer.mechanics.Intersection;
 import io.raytracer.mechanics.Ray;
@@ -164,4 +165,17 @@ public class SphereTest {
         assertEquals(0, intersections.length, "Should have no intersections.");
     }
 
+    @Test
+    void boundingBox() {
+        Sphere sphere = new Sphere();
+        sphere.setTransform(ThreeTransform.scaling(2, 2, 2).translate(0, 2, 0));
+        BBox box = sphere.getBoundingBox().get();
+
+        assertEquals(-2, box.x.min, 1e-6);
+        assertEquals(2, box.x.max, 1e-6);
+        assertEquals(4, box.y.max, 1e-6);
+        assertEquals(0, box.y.min, 1e-6);
+        assertEquals(-2, box.z.min, 1e-6);
+        assertEquals(2, box.z.max, 1e-6);
+    }
 }
