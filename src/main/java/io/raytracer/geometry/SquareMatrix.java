@@ -1,20 +1,25 @@
 package io.raytracer.geometry;
 
-import lombok.ToString;
 
 import java.util.Arrays;
 import java.util.stream.IntStream;
 
-@ToString
 public class SquareMatrix implements ISquareMatrix {
     private final int dim;
     private final double[][] entries;
     private final static double equalityTolerance = 1e-3;
 
+    protected static final double[][] id4 = new double[4][4];
+    static {
+        IntStream.range(0, 4).forEach(i -> id4[i][i] = 1);
+    }
+    private boolean isIdentity;
+
     private SquareMatrix(int dimension) {
         assert dimension > 0;
         dim = dimension;
         entries = new double[dim][dim];
+        isIdentity = false;
     }
 
     public SquareMatrix(double... entries) {
@@ -26,6 +31,7 @@ public class SquareMatrix implements ISquareMatrix {
         IntStream.range(0, dim).forEach(rowIndex ->
                 Arrays.setAll(this.entries[rowIndex], colIndex -> entries[dim * rowIndex + colIndex])
         );
+        this.isIdentity();
     }
 
     @Override
@@ -46,6 +52,15 @@ public class SquareMatrix implements ISquareMatrix {
         ).max().orElse(1);
 
         return (maxEntryDifference < equalityTolerance);
+    }
+
+    @Override
+    public String toString() {
+        return "SquareMatrix(" + Arrays.deepToString(this.entries) + ")";
+    }
+
+    private void isIdentity() {
+        this.isIdentity = Arrays.deepEquals(this.entries, SquareMatrix.id4);
     }
 
     @Override
@@ -77,12 +92,16 @@ public class SquareMatrix implements ISquareMatrix {
                     product.set(x, y, SquareMatrix.dot(this.entries[x], theirColumn))
             );
         });
+        product.isIdentity();
 
         return product;
     }
 
     @Override
-    public Tuple multiply(ITuple them) {
+    public ITuple multiply(ITuple them) {
+        if (this.isIdentity) {
+            return them;
+        }
         assert this.dim() == them.dim();
 
         double[] themArray = IntStream.range(0, them.dim()).mapToDouble(them::get).toArray();
@@ -92,16 +111,11 @@ public class SquareMatrix implements ISquareMatrix {
         ).toArray());
     }
 
-    public static ISquareMatrix id(int dim) {
-        SquareMatrix identity = new SquareMatrix(dim);
-
-        IntStream.range(0, dim).forEach(diagonalIndex -> identity.set(diagonalIndex, diagonalIndex, 1));
-
-        return identity;
-    }
-
     @Override
     public ISquareMatrix transpose() {
+        if (this.isIdentity) {
+            return this;
+        }
         SquareMatrix transposed = new SquareMatrix(dim);
         IntStream.range(0, dim).forEach(i ->
                 IntStream.range(0, dim).forEach(j -> transposed.set(i, j, this.get(j, i)))
@@ -140,6 +154,9 @@ public class SquareMatrix implements ISquareMatrix {
 
     @Override
     public ISquareMatrix inverse() {
+        if (this.isIdentity) {
+            return this;
+        }
         SquareMatrix inverted = new SquareMatrix(dim);
         double det = det();
         assert det != 0;

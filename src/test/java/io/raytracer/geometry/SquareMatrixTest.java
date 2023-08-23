@@ -82,19 +82,6 @@ class SquareMatrixTest {
     }
 
     @Test
-    void multiplicationByIdentityMatrix() {
-        ISquareMatrix id = SquareMatrix.id(4);
-        ISquareMatrix A = new SquareMatrix(
-            0, 1, 2, 4,
-            1, 2, 4, 8,
-            2, 4, 8, 16,
-            4, 8, 16, 32
-        );
-
-        assertEquals(A, id.multiply(A));
-    }
-
-    @Test
     void transpose() {
         ISquareMatrix A = new SquareMatrix(
             0, 9, 3, 0,

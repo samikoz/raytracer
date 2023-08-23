@@ -1,6 +1,7 @@
 package io.raytracer.shapes;
 
 import io.raytracer.geometry.IPoint;
+import io.raytracer.geometry.ITransform;
 import io.raytracer.geometry.IVector;
 import io.raytracer.geometry.Point;
 import io.raytracer.materials.Material;
@@ -49,6 +50,16 @@ public class Triangle extends Shape {
 
         Triangle themTriangle = (Triangle) them;
         return this.v1.equals(themTriangle.v1) && this.v2.equals(themTriangle.v2) && this.v3.equals(themTriangle.v3);
+    }
+
+    @Override
+    public void setTransform(ITransform transform) {
+        this.v1 = transform.act(this.v1);
+        this.v2 = transform.act(this.v2);
+        this.v3 = transform.act(this.v3);
+        this.e1 = v2.subtract(v1);
+        this.e2 = v3.subtract(v1);
+        this.normal = this.e2.cross(this.e1).normalise();
     }
 
     @Override

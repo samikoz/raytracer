@@ -28,15 +28,6 @@ public class Group extends Shape {
         return this;
     }
 
-    protected void protoadd(Shape shape) {
-        this.children.add(shape);
-        shape.setParent(this);
-    }
-
-    protected void setBoundingBox(BBox box) {
-        this.bbox = box;
-    }
-
     @Override
     public Intersection[] intersect(IRay ray) {
         IRay transformedRay = ray.getTransformed(this.getInverseTransform());
