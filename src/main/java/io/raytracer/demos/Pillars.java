@@ -87,10 +87,10 @@ public class Pillars {
             world.put(pillar);
         });
 
-        IPoint eyePosition = new Point(0, 30, 15);
-        IVector lookDirection = new Point(0, -3, -2).subtract(eyePosition);
+        IPoint eyePosition = new Point(-2, 30, 15);
+        IVector lookDirection = new Point(-2, -3, -2).subtract(eyePosition);
         IVector upDirection = new Vector(0, 1, 0);
-        Camera camera = new MultipleRayCamera(400, 1024, 768, Math.PI / 4, eyePosition, lookDirection, upDirection);
+        Camera camera = new MultipleRayCamera(400, 1080, 1080, Math.PI / 4, eyePosition, lookDirection, upDirection);
 
         String filename = "pillars.ppm";
         PrintWriter writer = new PrintWriter(new FileWriter(filename));
