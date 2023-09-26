@@ -17,6 +17,12 @@ public class LinearColour implements IColour {
     private final static double equalityTolerance = 1e-3;
     private final static int exportScale = 255;
 
+    public LinearColour(double greyscale) {
+        this.red = greyscale;
+        this.green = greyscale;
+        this.blue = greyscale;
+    }
+
     @Override
     public int hashCode() {
         return Arrays.hashCode(new double[]{this.getRed(), this.getGreen(), this.getBlue()});

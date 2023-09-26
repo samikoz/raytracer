@@ -11,8 +11,8 @@ import io.raytracer.mechanics.LambertianWorld;
 import io.raytracer.mechanics.Recasters;
 import io.raytracer.shapes.Cylinder;
 import io.raytracer.shapes.Plane;
-import io.raytracer.shapes.Rectangle;
 import io.raytracer.shapes.Shape;
+import io.raytracer.shapes.Sphere;
 import io.raytracer.textures.CheckerTexture;
 import io.raytracer.textures.MonocolourTexture;
 import io.raytracer.textures.Texture;
@@ -30,9 +30,10 @@ import java.util.stream.IntStream;
 
 public class Chamber {
     public static void main(String[] args) throws IOException {
-        int columnCount = 8;
-        int columnSeparation = 22;
-        double columnScale = 2;
+        int columnCount = 7;
+        int columnSeparation = 35;
+        double columnScale = 3;
+        int raysCount = Integer.parseInt(args[0]);
 
         Function<IRay, IColour> background = ray -> new GammaColour(0, 0, 0);
         LambertianWorld world = new LambertianWorld(background);
@@ -50,7 +51,7 @@ public class Chamber {
             .texture(new MonocolourTexture(new GammaColour(0.2, 0.2, 0.2)))
             .build();
         columnMaterial.addRecaster(Recasters.diffuse, 1);
-        IntStream.range(0, columnCount).mapToObj(columnIndex -> {
+        /*IntStream.range(0, columnCount).mapToObj(columnIndex -> {
             Shape cylinder = new Cylinder(columnMaterial);
             cylinder.setTransform(ThreeTransform.scaling(columnScale, 1, columnScale).translate(15-columnIndex*columnSeparation, 0, 0));
             return cylinder;
@@ -59,25 +60,25 @@ public class Chamber {
             Shape cylinder = new Cylinder(columnMaterial);
             cylinder.setTransform(ThreeTransform.scaling(columnScale, 1, columnScale).translate(15-columnIndex*columnSeparation, 0, 25));
             return cylinder;
-        }).forEach(world::put);
+        }).forEach(world::put);*/
         IntStream.range(0, columnCount).mapToObj(columnIndex -> {
             Shape cylinder = new Cylinder(columnMaterial);
             cylinder.setTransform(ThreeTransform.scaling(columnScale, 1, columnScale).translate(15-columnIndex*columnSeparation, 0, 50));
             return cylinder;
         }).forEach(world::put);
 
-        Material emitent = Material.builder().emit(new GammaColour(64, 64, 64)).build();
-        Shape lighting = new Rectangle(emitent);
-        lighting.setTransform(ThreeTransform.scaling(5, 5, 1).translate(10, 10, -6));
+        Material emitent = Material.builder().emit(new GammaColour(200, 200, 200)).build();
+        Shape lighting = new Sphere(emitent);
+        lighting.setTransform(ThreeTransform.scaling(5, 5, 5).translate(-5, 10, 80));
         world.put(lighting);
 
 
-        IPoint eyePosition = new Point(45, 12, 40);
-        IVector lookDirection = new Point(-15, 2, 25).subtract(eyePosition);
+        IPoint eyePosition = new Point(55, 12, 30);
+        IVector lookDirection = new Point(-15, 8, 25).subtract(eyePosition);
         IVector upDirection = new Vector(0, 1, 0);
-        Camera camera = new MultipleRayCamera(200, 1024, 768, Math.PI / 3, eyePosition, lookDirection, upDirection);
+        Camera camera = new MultipleRayCamera(1000, 1080, 1080, Math.PI / 3, eyePosition, lookDirection, upDirection);
 
-        String filename = "prison_3.ppm";
+        String filename = String.format("chamber_%3d.ppm", raysCount);
         PrintWriter writer = new PrintWriter(new FileWriter(filename));
         IPicture picture = world.render(camera);
         picture.export(writer);

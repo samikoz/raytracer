@@ -47,6 +47,15 @@ public class ThreeTransform implements ITransform {
         ));
     }
 
+    public static ThreeTransform scaling(double x) {
+        return new ThreeTransform(new SquareMatrix(
+                x, 0, 0, 0,
+                0, x, 0, 0,
+                0, 0, x, 0,
+                0, 0, 0, 1
+        ));
+    }
+
     public ThreeTransform scale(double x, double y, double z) {
         return new ThreeTransform(new SquareMatrix(
                 x, 0, 0, 0,
@@ -54,6 +63,16 @@ public class ThreeTransform implements ITransform {
                 0, 0, z, 0,
                 0, 0, 0, 1
         ).multiply(this.matrix));
+    }
+
+    public ThreeTransform scale(double x) {
+        return new ThreeTransform(new SquareMatrix(
+                x, 0, 0, 0,
+                0, x, 0, 0,
+                0, 0, x, 0,
+                0, 0, 0, 1
+            ).multiply(this.matrix)
+        );
     }
 
     public static ThreeTransform rotation_x(double angle) {

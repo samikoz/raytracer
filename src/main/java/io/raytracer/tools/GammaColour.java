@@ -8,6 +8,10 @@ public class GammaColour extends LinearColour {
         super(red, green, blue);
     }
 
+    public GammaColour(double greyscale) {
+        super(greyscale, greyscale, greyscale);
+    }
+
     private double gammaCorrect(double value) {
         return Math.sqrt(value);
     }
