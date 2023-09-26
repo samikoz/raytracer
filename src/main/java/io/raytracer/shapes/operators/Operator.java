@@ -5,18 +5,54 @@ import io.raytracer.geometry.IVector;
 import io.raytracer.mechanics.BBox;
 import io.raytracer.mechanics.IRay;
 import io.raytracer.mechanics.Intersection;
+import io.raytracer.mechanics.RayHit;
 import io.raytracer.shapes.Shape;
-import lombok.RequiredArgsConstructor;
+import io.raytracer.tools.IColour;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 
-@RequiredArgsConstructor
 public abstract class Operator extends Shape {
-    protected Shape left, right;
+    protected final Shape left, right;
 
-    abstract protected boolean filterIntersection(Intersection inter);
+    protected Operator(Shape left, Shape right) {
+        super();
+        this.left = left;
+        this.right = right;
+    }
+
+    private Intersection[] filterIntersection(Iterable<Intersection> inters) {
+        boolean insideLeft = false;
+        boolean insideRight = false;
+        List<Intersection> filtered = new ArrayList<>();
+
+        for (Intersection i : inters) {
+            boolean leftHit = this.left.doesInclude(i.object);
+
+            if (this.isIntersectionAdmitted(leftHit, insideLeft, insideRight)) {
+                filtered.add(i);
+            }
+
+            if (leftHit) {
+                insideLeft = !insideLeft;
+            }
+            else {
+                insideRight = !insideRight;
+            }
+        }
+        return filtered.toArray(new Intersection[0]);
+    }
+
+    @Override
+    public boolean doesInclude(Shape them) {
+        return this.left.doesInclude(them) || this.right.doesInclude(them);
+    }
+
+    abstract protected boolean isIntersectionAdmitted(boolean leftHit, boolean insideLeft, boolean insideRight);
 
     @Override
     protected Intersection[] getLocalIntersections(IRay ray, double tmin, double tmax) {
@@ -24,12 +60,18 @@ public abstract class Operator extends Shape {
         Intersection[] rightIntersections = this.right.intersect(ray, tmin, tmax);
         Intersection[] combined = Arrays.copyOf(this.left.intersect(ray, tmin, tmax), leftIntersections.length + rightIntersections.length);
         System.arraycopy(rightIntersections, 0, combined, leftIntersections.length, rightIntersections.length);
-        return Arrays.stream(combined).sorted().filter(this::filterIntersection).toArray(Intersection[]::new);
+        List<Intersection> combinedSorted = Arrays.stream(combined).sorted().collect(Collectors.toList());
+        return this.filterIntersection(combinedSorted);
+    }
+
+    @Override
+    public IColour getIntrinsicColour(RayHit hit) {
+        return hit.object.getIntrinsicColour(hit);
     }
 
     @Override
     protected IVector localNormalAt(IPoint point, double u, double v) {
-        return null;
+        throw new UnsupportedOperationException("no need to compute normal on an operator!");
     }
 
     @Override

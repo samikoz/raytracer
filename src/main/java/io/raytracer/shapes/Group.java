@@ -29,6 +29,11 @@ public class Group extends Shape {
     }
 
     @Override
+    public boolean doesInclude(Shape them) {
+        return children.stream().anyMatch(child -> child.doesInclude(them));
+    }
+
+    @Override
     public Intersection[] intersect(IRay ray) {
         IRay transformedRay = ray.getTransformed(this.getInverseTransform());
         return this.children.stream().map(child -> child.intersect(transformedRay))

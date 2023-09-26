@@ -8,6 +8,7 @@ import io.raytracer.materials.Material;
 import io.raytracer.mechanics.BBox;
 import io.raytracer.mechanics.IRay;
 import io.raytracer.mechanics.Intersection;
+import io.raytracer.mechanics.RayHit;
 import io.raytracer.tools.IColour;
 import lombok.Getter;
 import lombok.NonNull;
@@ -36,7 +37,7 @@ public abstract class Shape {
         this.inverseTransform = transform.inverse();
     }
 
-    Shape() {
+    public Shape() {
         this.transform = new ThreeTransform();
         this.inverseTransform = new ThreeTransform();
         this.material = Material.builder().build();
@@ -68,6 +69,10 @@ public abstract class Shape {
         return this.inverseTransform == themShape.inverseTransform && this.material == themShape.material;
     }
 
+    public boolean doesInclude(Shape them) {
+        return this.equals(them);
+    }
+
     @Override
     public int hashCode() {
         return Arrays.hashCode(new int[] { this.material.hashCode(), this.inverseTransform.hashCode() });
@@ -88,7 +93,11 @@ public abstract class Shape {
         return this.transformToWorldSpace(normal);
     }
 
-    public IColour getIntrinsicColour(IPoint point) {
+    public IColour getIntrinsicColour(RayHit hit) {
+        return this.getIntrinsicColour(hit.point);
+    }
+
+    IColour getIntrinsicColour(IPoint point) {
         IPoint objectPoint = this.transformToOwnSpace(point);
         Material material = this.getMaterial();
         return material.texture.colourAt(objectPoint);

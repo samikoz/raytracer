@@ -45,7 +45,7 @@ public class LambertianWorld extends World {
             float randVar = this.randomVariable.get();
             Optional<IRay> recastRay = this.getRecastRays(hitpoint, randVar);
             IColour recastColour = recastRay.map(this::illuminate).orElse(new GammaColour(0, 0, 0));
-            return hitpoint.object.getIntrinsicColour(hitpoint.point).mix(recastColour);
+            return hitpoint.object.getIntrinsicColour(hitpoint).mix(recastColour);
         }
         else {
             return this.getBackgroundAt(ray);
