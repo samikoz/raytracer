@@ -58,7 +58,7 @@ public abstract class Operator extends Shape {
     protected Intersection[] getLocalIntersections(IRay ray, double tmin, double tmax) {
         Intersection[] leftIntersections = this.left.intersect(ray, tmin, tmax);
         Intersection[] rightIntersections = this.right.intersect(ray, tmin, tmax);
-        Intersection[] combined = Arrays.copyOf(this.left.intersect(ray, tmin, tmax), leftIntersections.length + rightIntersections.length);
+        Intersection[] combined = Arrays.copyOf(leftIntersections, leftIntersections.length + rightIntersections.length);
         System.arraycopy(rightIntersections, 0, combined, leftIntersections.length, rightIntersections.length);
         List<Intersection> combinedSorted = Arrays.stream(combined).sorted().collect(Collectors.toList());
         return this.filterIntersection(combinedSorted);

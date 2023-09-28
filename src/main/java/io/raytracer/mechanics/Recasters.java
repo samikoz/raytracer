@@ -12,9 +12,7 @@ import java.util.function.Function;
 public class Recasters {
     private static final Random randGen = new Random();
 
-    public static Function<RayHit, Optional<IRay>> isotropic = hit -> {
-        return Optional.of(hit.ray.recast(hit.point, Recasters.getRandomInUnitSphere()));
-    };
+    public static Function<RayHit, Optional<IRay>> isotropic = hit -> Optional.of(hit.ray.recast(hit.point, Recasters.getRandomInUnitSphere()));
 
     public static Function<RayHit, Optional<IRay>> diffuse = hit -> {
         IPoint outerNormalCentre = hit.point.add(hit.normalVector.normalise());
@@ -50,8 +48,7 @@ public class Recasters {
 
     private static IVector getRandomInUnitSphere() {
         while (true) {
-            Random randGen = new Random();
-            IVector rand = new Vector(2*randGen.nextDouble()-1, 2*randGen.nextDouble()-1, 2*randGen.nextDouble()-1);
+            IVector rand = new Vector(2*Recasters.randGen.nextDouble()-1, 2*Recasters.randGen.nextDouble()-1, 2*Recasters.randGen.nextDouble()-1);
             if (rand.norm() >= 1) {
                 continue;
             }
