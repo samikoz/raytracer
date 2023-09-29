@@ -8,6 +8,7 @@ import io.raytracer.materials.Material;
 import io.raytracer.mechanics.BBox;
 import io.raytracer.mechanics.IRay;
 import io.raytracer.mechanics.Intersection;
+import io.raytracer.mechanics.TextureParameters;
 import lombok.NonNull;
 
 import java.util.Arrays;
@@ -84,7 +85,7 @@ public class Triangle extends Shape {
         if (intersection < tmin || intersection > tmax) {
             return new Intersection[] {};
         }
-        return new Intersection[] { new Intersection(this , ray, f*this.e2.dot(originCrossE1), u, v) };
+        return new Intersection[] { new Intersection(this , ray, f*this.e2.dot(originCrossE1), new TextureParameters(u, v)) };
     }
 
     @Override

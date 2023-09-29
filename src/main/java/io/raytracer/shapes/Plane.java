@@ -7,6 +7,7 @@ import io.raytracer.materials.Material;
 import io.raytracer.mechanics.BBox;
 import io.raytracer.mechanics.IRay;
 import io.raytracer.mechanics.Intersection;
+import io.raytracer.mechanics.TextureParameters;
 import lombok.NonNull;
 
 import java.util.Optional;
@@ -33,7 +34,7 @@ public class Plane extends Shape {
         if (intersection < tmin || intersection > tmax) {
             return new Intersection[] {};
         }
-        return new Intersection[] { new Intersection(this, ray, -ray.getOrigin().get(1) / ray.getDirection().get(1),0, 0) };
+        return new Intersection[] { new Intersection(this, ray, -ray.getOrigin().get(1) / ray.getDirection().get(1),new TextureParameters()) };
     }
 
     @Override

@@ -89,7 +89,7 @@ public abstract class Shape {
 
     public IVector normal(Intersection i) {
         IPoint transformedPoint = this.transformToOwnSpace(i.ray.getPosition(i.rayParameter));
-        IVector normal = this.localNormalAt(transformedPoint, i.u, i.v);
+        IVector normal = this.localNormalAt(transformedPoint, i.mapping.u, i.mapping.v);
         return this.transformToWorldSpace(normal);
     }
 

@@ -24,7 +24,7 @@ public class Ray implements IRay {
 
     @Override
     public Intersection reintersect(Intersection i) {
-        return new Intersection(i.object, this, i.rayParameter, i.u, i.v);
+        return new Intersection(i.object, this, i.rayParameter, i.mapping);
     }
 
     public IRay recast(IPoint from, IVector direction) {

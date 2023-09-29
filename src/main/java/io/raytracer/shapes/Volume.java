@@ -9,6 +9,7 @@ import io.raytracer.mechanics.BBox;
 import io.raytracer.mechanics.IRay;
 import io.raytracer.mechanics.Intersection;
 import io.raytracer.mechanics.RayHit;
+import io.raytracer.mechanics.TextureParameters;
 import lombok.NonNull;
 
 import java.util.Arrays;
@@ -69,7 +70,7 @@ public class Volume extends Shape {
         if (hitDist > distInside) {
             return new Intersection[]{};
         }
-        return new Intersection[] { new Intersection(this, ray, leftParameter + (hitDist / rayLength), 0, 0)};
+        return new Intersection[] { new Intersection(this, ray, leftParameter + (hitDist / rayLength), new TextureParameters(0, 0))};
 
     }
 

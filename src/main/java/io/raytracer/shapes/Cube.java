@@ -8,6 +8,7 @@ import io.raytracer.materials.Material;
 import io.raytracer.mechanics.BBox;
 import io.raytracer.mechanics.IRay;
 import io.raytracer.mechanics.Intersection;
+import io.raytracer.mechanics.TextureParameters;
 import lombok.NonNull;
 
 import java.util.Arrays;
@@ -34,9 +35,12 @@ public class Cube extends Shape {
         if (maxMinIntersection > minMaxIntersection) {
             return new Intersection[] {};
         }
+        //maps all sides to the same, linearly from (1,1,1)/(-1,-1,-1)
+        double[] maxMinMappingParameters = this.getMappingParameters(ray.getPosition(maxMinIntersection));
+        double[] minMaxMappingParameters = this.getMappingParameters(ray.getPosition(minMaxIntersection));
         Intersection[] is = new Intersection[] {
-            new Intersection(this, ray, maxMinIntersection, 0, 0),
-            new Intersection(this, ray, minMaxIntersection,0, 0)
+            new Intersection(this, ray, maxMinIntersection, new TextureParameters(maxMinMappingParameters[0], maxMinMappingParameters[1])),
+            new Intersection(this, ray, minMaxIntersection, new TextureParameters(minMaxMappingParameters[0], minMaxMappingParameters[1]))
         };
         return Arrays.stream(is).filter(i -> i.rayParameter > tmin && i.rayParameter < tmax).toArray(Intersection[]::new);
     }
@@ -45,6 +49,15 @@ public class Cube extends Shape {
         double oneIntersection = (-1 - originComponent)/directionComponent;
         double otherIntersection = (1 - originComponent)/directionComponent;
         return new double[] {Math.min(oneIntersection, otherIntersection), Math.max(oneIntersection, otherIntersection)};
+    }
+
+    private double[] getMappingParameters(IPoint intersectionPoint) {
+        double[] sideIntersectionCoords = Arrays.stream(new double[]{intersectionPoint.get(0), intersectionPoint.get(1), intersectionPoint.get(2)})
+            .filter(coord -> Math.abs(coord - 1) > 1e-3 && Math.abs(coord + 1) > 1e-3).toArray();
+        if (sideIntersectionCoords.length != 2) {
+            return new double[] {1, 1};
+        }
+        return Arrays.stream(sideIntersectionCoords).map(coord -> (1+coord)/2).toArray();
     }
 
     @Override

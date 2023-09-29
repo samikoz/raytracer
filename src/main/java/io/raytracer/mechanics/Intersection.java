@@ -12,7 +12,7 @@ public class Intersection implements Comparable<Intersection> {
     @NonNull public Shape object;
     public IRay ray;
     public double rayParameter;
-    public double u, v;
+    public TextureParameters mapping;
 
     @Override
     public int compareTo(@NotNull Intersection intersection) {

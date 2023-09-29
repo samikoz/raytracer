@@ -8,6 +8,7 @@ import io.raytracer.materials.Material;
 import io.raytracer.mechanics.BBox;
 import io.raytracer.mechanics.IRay;
 import io.raytracer.mechanics.Intersection;
+import io.raytracer.mechanics.TextureParameters;
 import lombok.NonNull;
 
 import java.util.Arrays;
@@ -36,7 +37,7 @@ public class Sphere extends Shape {
         double[] roots = new double[] { (-b - Math.sqrt(delta)) / (2 * a), (-b + Math.sqrt(delta)) / (2 * a) };
         return Arrays.stream(roots)
             .filter(root -> root > tmin && root < tmax)
-            .mapToObj(position -> new Intersection(this, ray, position, 0, 0))
+            .mapToObj(position -> new Intersection(this, ray, position, new TextureParameters()))
             .toArray(Intersection[]::new);
     }
 

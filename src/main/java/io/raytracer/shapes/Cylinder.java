@@ -8,6 +8,7 @@ import io.raytracer.materials.Material;
 import io.raytracer.mechanics.BBox;
 import io.raytracer.mechanics.IRay;
 import io.raytracer.mechanics.Intersection;
+import io.raytracer.mechanics.TextureParameters;
 import lombok.NonNull;
 import lombok.Setter;
 
@@ -58,7 +59,7 @@ public class Cylinder extends Shape {
         }
         return allIntersections.stream()
             .mapToDouble(d -> d).filter(i -> i > tmin && i< tmax)
-            .mapToObj(position -> new Intersection(this, ray, position, 0, 0))
+            .mapToObj(position -> new Intersection(this, ray, position, new TextureParameters()))
             .toArray(Intersection[]::new);
     }
 
