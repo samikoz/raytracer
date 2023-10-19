@@ -1,4 +1,4 @@
-package io.raytracer.mechanics;
+package io.raytracer.tools.parsers;
 
 import io.raytracer.geometry.IPoint;
 import io.raytracer.geometry.Point;

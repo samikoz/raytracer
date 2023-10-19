@@ -1,9 +1,9 @@
 package io.raytracer.mechanics;
 
-import io.raytracer.geometry.Point;
-import io.raytracer.geometry.Vector;
 import io.raytracer.materials.Material;
 import io.raytracer.shapes.Group;
+import io.raytracer.tools.parsers.LiteralParser;
+import io.raytracer.tools.parsers.Parser;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 

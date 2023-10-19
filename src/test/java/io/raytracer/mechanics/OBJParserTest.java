@@ -6,6 +6,7 @@ import io.raytracer.shapes.Group;
 import io.raytracer.shapes.Shape;
 import io.raytracer.shapes.SmoothTriangle;
 import io.raytracer.shapes.Triangle;
+import io.raytracer.tools.parsers.OBJParser;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
