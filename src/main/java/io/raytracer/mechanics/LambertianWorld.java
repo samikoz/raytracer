@@ -24,6 +24,11 @@ public class LambertianWorld extends World {
         this.randomVariable = (new Random())::nextFloat;
     }
 
+    public LambertianWorld(IColour backgroundColour) {
+        super(ray -> backgroundColour);
+        this.randomVariable = (new Random()::nextFloat);
+    }
+
     LambertianWorld(Supplier<Float> randomVariable) {
         this.randomVariable = randomVariable;
     }

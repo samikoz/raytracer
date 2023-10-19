@@ -6,12 +6,19 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Collection;
 import java.util.function.BiPredicate;
-import java.util.function.Predicate;
 
 public interface IPicture {
     int getWidth();
     int getHeight();
     void write(int x, int y, IColour colour);
+    default void fill(IColour colour) {
+        for (int y = 0; y < this.getHeight(); y++) {
+            for (int x = 0; x < this.getWidth(); x++) {
+                this.write(x, y, colour);
+            }
+        }
+    }
+
     IColour read(int x, int y);
     String export();
     default void embed(IPicture picture, IPoint embedPosition) {

@@ -28,7 +28,7 @@
                         </execution>
                     </executions>
                     <configuration>
-                        <mainClass>io.raytracer.demos.BasicWorld</mainClass>
+                        <mainClass>io.raytracer.demos.Pillars</mainClass>
                     </configuration>
                 </plugin>
             </plugins>

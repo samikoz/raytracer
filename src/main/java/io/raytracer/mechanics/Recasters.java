@@ -20,6 +20,7 @@ public class Recasters {
         return Optional.of(hit.ray.recast(hit.offsetAbove, recastDirection));
     };
 
+    //0 for no fuzziness
     public static Function<Double, Function<RayHit, Optional<IRay>>> fuzzilyReflective = fuzziness -> hit -> {
         IVector reflectionDirection = hit.ray.getDirection().reflect(hit.normalVector);
         IVector fuzzyDirection = reflectionDirection.add(Recasters.getRandomInUnitSphere().multiply(fuzziness));
