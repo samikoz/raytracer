@@ -113,7 +113,7 @@ class TriangleTest {
         Intersection[] is = t.getLocalIntersections(ray, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY);
 
         assertEquals(1, is.length);
-        assertEquals(0.45, is[0].u, 1e-3);
-        assertEquals(0.25, is[0].v, 1e-3);
+        assertEquals(0.45, is[0].mapping.u, 1e-3);
+        assertEquals(0.25, is[0].mapping.v, 1e-3);
     }
 }

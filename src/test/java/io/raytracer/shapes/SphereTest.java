@@ -9,6 +9,7 @@ import io.raytracer.mechanics.BBox;
 import io.raytracer.mechanics.IRay;
 import io.raytracer.mechanics.Intersection;
 import io.raytracer.mechanics.Ray;
+import io.raytracer.mechanics.TextureParameters;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -21,7 +22,7 @@ public class SphereTest {
         Intersection testIntersection = new Intersection(
             sphere,
             new Ray(new Point(1, 0, 0), new Vector(0, 0, 1)),
-            0, 0, 0
+            0, new TextureParameters()
         );
         IVector actualNormal = sphere.normal(testIntersection);
 
@@ -35,7 +36,7 @@ public class SphereTest {
         Intersection testIntersection = new Intersection(
             sphere,
             new Ray(new Point(Math.sqrt(3) / 3, Math.sqrt(3) / 3, Math.sqrt(3) / 3), new Vector(0, 0, 1)),
-            0, 0, 0
+            0, new TextureParameters()
         );
         IVector actualNormal = sphere.normal(testIntersection);
 
@@ -48,7 +49,7 @@ public class SphereTest {
         Intersection testIntersection = new Intersection(
             sphere,
             new Ray(new Point(Math.sqrt(3) / 3, Math.sqrt(3) / 3, Math.sqrt(3) / 3), new Vector(0, 0, 1)),
-            0, 0, 0
+            0, new TextureParameters()
         );
         IVector normal = sphere.normal(testIntersection);
 
@@ -62,7 +63,7 @@ public class SphereTest {
         Intersection testIntersection = new Intersection(
             sphere,
             new Ray(new Point(0, 1.70711, -0.70711), new Vector(0, 0, 1)),
-            0, 0, 0
+            0, new TextureParameters()
         );
         IVector actualNormal = sphere.normal(testIntersection);
         IVector expectedNormal = new Vector(0, 0.70711, -0.70711);
@@ -78,7 +79,7 @@ public class SphereTest {
         Intersection testIntersection = new Intersection(
             sphere,
             new Ray(new Point(0, Math.sqrt(2) / 2, -Math.sqrt(2) / 2), new Vector(0, 0, 1)),
-            0, 0, 0
+            0, new TextureParameters()
         );
         IVector actualNormal = sphere.normal(testIntersection);
         IVector expectedNormal = new Vector(0, 0.97014, -0.24254);

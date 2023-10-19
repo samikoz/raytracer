@@ -19,7 +19,7 @@ import java.util.Optional;
 
 public abstract class Shape {
     private Group parent;
-    protected ITransform transform;
+    @Getter protected ITransform transform;
     @Getter private ITransform inverseTransform;
     @Getter private final Material material;
     @Getter @Setter private boolean isCastingShadows;

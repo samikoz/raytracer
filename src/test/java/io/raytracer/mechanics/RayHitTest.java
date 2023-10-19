@@ -22,8 +22,8 @@ class RayHitTest {
 
     @Test
     void hitWithPositiveIntersections() {
-        Intersection i1 = new Intersection(new Sphere(), testRay,2.0, 0, 0);
-        Intersection i2 = new Intersection(new Sphere(), testRay,-0.1, 0, 0);
+        Intersection i1 = new Intersection(new Sphere(), testRay,2.0, new TextureParameters());
+        Intersection i2 = new Intersection(new Sphere(), testRay,-0.1, new TextureParameters());
         Optional<RayHit> expectedHit = RayHit.fromIntersections(Arrays.asList(i1, i2));
 
         assertTrue(expectedHit.isPresent());
@@ -35,7 +35,7 @@ class RayHitTest {
     void hitpointCreation() {
         Ray ray = new Ray(new Point(0, 0, -5), new Vector(0, 0, 1));
         Sphere sphere = new Sphere();
-        Optional<RayHit> hit = RayHit.fromIntersections(Collections.singletonList(new Intersection(sphere, ray,4, 0, 0)));
+        Optional<RayHit> hit = RayHit.fromIntersections(Collections.singletonList(new Intersection(sphere, ray,4, new TextureParameters())));
 
         assertTrue(hit.isPresent());
         RayHit hitpoint = hit.get();
@@ -50,7 +50,7 @@ class RayHitTest {
     void hitpointCreationFromInside() {
         Ray ray = new Ray(new Point(0, 0, 0), new Vector(0, 0, 1));
         Sphere sphere = new Sphere();
-        Optional<RayHit> hit = RayHit.fromIntersections(Collections.singletonList(new Intersection(sphere, ray,1, 0, 0)));
+        Optional<RayHit> hit = RayHit.fromIntersections(Collections.singletonList(new Intersection(sphere, ray,1, new TextureParameters())));
 
         assertTrue(hit.isPresent());
         RayHit hitpoint = hit.get();

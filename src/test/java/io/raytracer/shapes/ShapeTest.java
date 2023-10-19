@@ -8,6 +8,7 @@ import io.raytracer.geometry.Vector;
 import io.raytracer.materials.Material;
 import io.raytracer.mechanics.Intersection;
 import io.raytracer.mechanics.Ray;
+import io.raytracer.mechanics.TextureParameters;
 import io.raytracer.textures.StripedTexture;
 import io.raytracer.textures.Texture;
 import io.raytracer.tools.LinearColour;
@@ -112,7 +113,7 @@ class ShapeTest {
         Intersection testIntersection = new Intersection(
             sphere,
             new Ray(new Point(1.7321, 1.1547, -5.5774), new Vector(0, 0, 1)),
-            0, 0, 0
+            0, new TextureParameters()
         );
         IVector normal = sphere.normal(testIntersection);
         IVector expectedNormal = new Vector(0.2857, 0.4286, -0.8571);
