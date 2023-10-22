@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -33,7 +34,6 @@ public class Postprod {
             }
         });
 
-        PrintWriter writer = new PrintWriter(new FileWriter(postprodFile));
-        postPillars.export(writer);
+        postPillars.export(Paths.get(postprodFile));
     }
 }

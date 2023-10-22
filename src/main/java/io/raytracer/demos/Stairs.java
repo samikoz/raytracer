@@ -1,6 +1,5 @@
 package io.raytracer.demos;
 
-import io.raytracer.tools.PPMPicture;
 import io.raytracer.geometry.IVector;
 import io.raytracer.geometry.Point;
 import io.raytracer.geometry.ThreeTransform;
@@ -24,23 +23,22 @@ import java.io.IOException;
 
 public class Stairs {
     public static void main(String[] args) throws IOException {
-        int xSize = 540;
-        int ySize = 540;
+        int xSize = 1080;
+        int ySize = 1080;
         int trimSize = (int)(((float)768/1080)*ySize);
         double viewAngle = Math.PI / 4;
-        int rayCount = 250;
         IColour backgroundColour = new LinearColour(0, 0, 0);
 
         //setups
         DemoSetup horizontalSetup = DemoSetup.builder()
-                .rayCount(rayCount)
+                .rayCount(250)
                 .xSize(xSize)
                 .ySize(ySize)
                 .viewAngle(viewAngle)
                 .upDirection(new Vector(0, 0, -1))
                 .eyePosition(new Point(0, 5, 1))
                 .lookDirection(new Vector(0, -5, -1))
-                .filename("stairsHorizontal.ppm")
+                .filename("stairsHorizontal2.ppm")
                 .build();
         //--
         DemoSetup verticalSetup = horizontalSetup.toBuilder()
@@ -56,6 +54,7 @@ public class Stairs {
                 .build();
         blockMaterial.addRecaster(Recasters.diffuse, 1);
         Material emitentMaterial = Material.builder().emit(new LinearColour(10, 10, 10)).build();
+        Material verticalEmitentMaterial = Material.builder().emit(new LinearColour(15, 15, 15)).build();
 
         //horizontal blocks
         Shape horizontalLowerBlock = new Cube(blockMaterial);
@@ -79,12 +78,12 @@ public class Stairs {
             horizontalKeys.add(key);
         }
         //--
-        IVector vertDisp = new Vector(0.3, -1, 0.25);
+        IVector vertDisp = new Vector(0.6, -1, 0.25);
         Group verticalKeys = new Group();
-        ThreeTransform vertPush = ThreeTransform.scaling(1.4, 10, 0.1).translate(1 - vertDisp.get(0), -10 - vertDisp.get(1), -1.7 - vertDisp.get(2));
+        ThreeTransform vertPush = ThreeTransform.scaling(1.8, 10, 0.1).translate(1 - vertDisp.get(0), -10 - vertDisp.get(1), -1.7 - vertDisp.get(2));
         for (int i = 0; i < 13; i++) {
             Shape key = new Cube(blockMaterial);
-            vertPush = vertPush.translate(vertDisp.get(0), vertDisp.get(1), vertDisp.get(2)).scale(0.87, 1, 1);
+            vertPush = vertPush.translate(vertDisp.get(0), vertDisp.get(1), vertDisp.get(2)).scale(0.8, 1, 1);
             key.setTransform(vertPush);
             verticalKeys.add(key);
         }
@@ -92,6 +91,9 @@ public class Stairs {
         //light
         Shape emitent = new Rectangle(emitentMaterial);
         emitent.setTransform(ThreeTransform.rotation_x(Math.PI / 2).scale(5, 1, 5).translate(0, 10, -2));
+        //--
+        Shape verticalEmitent = new Rectangle(verticalEmitentMaterial);
+        verticalEmitent.setTransform(ThreeTransform.rotation_x(Math.PI / 2).scale(5, 1, 5).translate(0, 10, -2));
 
         //worlds
         World horizontalWorld = new LambertianWorld(backgroundColour);
@@ -102,13 +104,12 @@ public class Stairs {
         World verticalWorld = new LambertianWorld(backgroundColour);
         verticalWorld.put(verticalLowerBlock).put(verticalUpperBlock);
         verticalWorld.put(verticalKeys);
-        verticalWorld.put(emitent);
+        verticalWorld.put(verticalEmitent);
 
         //render
-        val currentSetup = verticalSetup;
-        val currentWorld = verticalWorld;
-        IPicture picture1 = horizontalSetup.render(horizontalWorld); //410
-        IPicture picture2 = verticalSetup.render(verticalWorld); //276
+        val currentSetup = horizontalSetup;
+        val currentWorld = horizontalWorld;
+        IPicture picture = currentSetup.render(currentWorld);
 
         /*
         IPicture red = new PPMPicture(xSize, ySize);
@@ -116,7 +117,6 @@ public class Stairs {
         picture.embed(red, (x, y) -> x < xSize/2 && (y == (ySize - trimSize)/2 || y == (ySize + trimSize)/2));
          */
 
-        picture1.export(horizontalSetup.getWriter());
-        picture2.export(verticalSetup.getWriter());
+        picture.export(currentSetup.getPath());
     }
 }

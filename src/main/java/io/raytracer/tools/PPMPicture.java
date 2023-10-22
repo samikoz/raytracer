@@ -5,7 +5,11 @@ import lombok.NonNull;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.Writer;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -48,6 +52,39 @@ public class PPMPicture implements IPicture {
         return pixelGrid.get(y).get(x);
     }
 
+    @Override
+    public void export(Path path) throws IOException {
+        Writer writer = Files.newBufferedWriter(path);
+        writer.write(this.export());
+        writer.close();
+    }
+
+    private String export() {
+        StringBuilder exported = new StringBuilder(exportHeader);
+
+        for (ArrayList<IColour> row : this.pixelGrid) {
+            exported.append(putLineBreaks(this.exportRow(row))).append("\n");
+        }
+        return exported.toString();
+    }
+
+    private String exportRow(ArrayList<IColour> ppmRow) {
+        List<String> exported = new ArrayList<>();
+        ppmRow.forEach(rowElement -> exported.add(rowElement.export()));
+        return String.join(" ", exported);
+    }
+
+    private String putLineBreaks(String exportedRow) {
+        StringBuilder rowToBreak = new StringBuilder(exportedRow);
+        int numberOfBreaks = (exportedRow.length() - 1) / exportedLineMaxLength;
+        for (int breakNumber = 1; breakNumber <= numberOfBreaks; breakNumber++) {
+            int whitespacePosition = breakNumber * exportedLineMaxLength;
+            while (rowToBreak.charAt(whitespacePosition) != ' ') whitespacePosition--;
+            rowToBreak.setCharAt(whitespacePosition, '\n');
+        }
+        return rowToBreak.toString();
+    }
+
     public static PPMPicture load(File file) throws FileNotFoundException {
         Scanner scanner = new Scanner(file);
         PPMPicture loaded = PPMPicture.parseHeader(scanner);
@@ -86,38 +123,5 @@ public class PPMPicture implements IPicture {
                 this.parsingResidue.clear();
             }
         });
-    }
-
-    @Override
-    public void export(PrintWriter writer) {
-        writer.write(this.export());
-        writer.close();
-    }
-
-    @Override
-    public String export() {
-        StringBuilder exported = new StringBuilder(exportHeader);
-
-        for (ArrayList<IColour> row : this.pixelGrid) {
-            exported.append(putLineBreaks(String.join(" ", this.export(row)))).append("\n");
-        }
-        return exported.toString();
-    }
-
-    private List<String> export(ArrayList<IColour> ppmRow) {
-        List<String> exported = new ArrayList<>();
-        ppmRow.forEach(rowElement -> exported.add(rowElement.export()));
-        return exported;
-    }
-
-    private String putLineBreaks(String exportRow) {
-        StringBuilder rowToBreak = new StringBuilder(exportRow);
-        int numberOfBreaks = (exportRow.length() - 1) / exportedLineMaxLength;
-        for (int breakNumber = 1; breakNumber <= numberOfBreaks; breakNumber++) {
-            int whitespacePosition = breakNumber * exportedLineMaxLength;
-            while (rowToBreak.charAt(whitespacePosition) != ' ') whitespacePosition--;
-            rowToBreak.setCharAt(whitespacePosition, '\n');
-        }
-        return rowToBreak.toString();
     }
 }

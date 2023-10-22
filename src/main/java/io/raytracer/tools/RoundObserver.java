@@ -7,9 +7,8 @@ import io.raytracer.geometry.Vector;
 import io.raytracer.mechanics.World;
 import lombok.AllArgsConstructor;
 
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.nio.file.Paths;
 
 @AllArgsConstructor
 public class RoundObserver {
@@ -21,8 +20,7 @@ public class RoundObserver {
 
         for (int i = 0; i < count; i++) {
             camera.transform(ThreeTransform.rotation_y(i*angle));
-            PrintWriter rightWriter = new PrintWriter(new FileWriter(String.format("%s_%d.ppm", this.name, i)));
-            world.render(camera).export(rightWriter);
+            world.render(camera).export(Paths.get(String.format("%s_%d.ppm", this.name, i)));
         }
     }
 

@@ -12,6 +12,8 @@ import lombok.RequiredArgsConstructor;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 
 @Builder(toBuilder = true)
@@ -31,7 +33,7 @@ public class DemoSetup {
         return world.render(cameraBottom);
     }
 
-    public PrintWriter getWriter() throws IOException {
-        return new PrintWriter(new FileWriter(filename));
+    public Path getPath() {
+        return Paths.get(this.filename);
     }
 }

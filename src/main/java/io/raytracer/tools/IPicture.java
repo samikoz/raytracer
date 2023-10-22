@@ -3,7 +3,7 @@ package io.raytracer.tools;
 import io.raytracer.geometry.IPoint;
 
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.nio.file.Path;
 import java.util.Collection;
 import java.util.function.BiPredicate;
 
@@ -20,7 +20,7 @@ public interface IPicture {
     }
 
     IColour read(int x, int y);
-    String export();
+    void export(Path path) throws IOException;
     default void embed(IPicture picture, IPoint embedPosition) {
         for (int y = 0; y < picture.getHeight(); y++) {
             for (int x = 0; x < picture.getWidth(); x++) {
@@ -53,5 +53,4 @@ public interface IPicture {
             }
         }
     }
-    void export(PrintWriter writer) throws IOException;
 }

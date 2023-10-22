@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,6 +23,6 @@ public class EyeAverage {
 
         PPMPicture averaged = new PPMPicture(leftPicture.getWidth(), leftPicture.getHeight());
         averaged.average(pictures);
-        averaged.export(new PrintWriter(new FileWriter(filename)));
+        averaged.export(Paths.get(filename));
     }
 }

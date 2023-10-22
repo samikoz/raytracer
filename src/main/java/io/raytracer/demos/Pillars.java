@@ -23,6 +23,7 @@ import io.raytracer.tools.MultipleRayCamera;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.function.Function;
 import java.util.stream.IntStream;
@@ -93,8 +94,7 @@ public class Pillars {
         Camera camera = new MultipleRayCamera(400, 1080, 1080, Math.PI / 4, eyePosition, lookDirection, upDirection);
 
         String filename = "pillars.ppm";
-        PrintWriter writer = new PrintWriter(new FileWriter(filename));
         IPicture picture = world.render(camera);
-        picture.export(writer);
+        picture.export(Paths.get(filename));
     }
 }

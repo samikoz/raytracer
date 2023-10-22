@@ -4,12 +4,13 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.stream.Stream;
 
 @ToString
 @RequiredArgsConstructor
-public class LinearColour implements IColour {
+public class LinearColour implements IColour, Serializable {
     @Getter private final double red;
     @Getter private final double green;
     @Getter private final double blue;

@@ -21,9 +21,8 @@ import io.raytracer.tools.IPicture;
 import io.raytracer.tools.LinearColour;
 import io.raytracer.tools.MultipleRayCamera;
 
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.nio.file.Paths;
 import java.util.function.Function;
 
 
@@ -105,8 +104,7 @@ public class Cage {
         //lower everything so that when we add white stripes the effect is as the present one
         String filename = String.format("cage_%3d.ppm", raysCount);
 
-        PrintWriter writer = new PrintWriter(new FileWriter(filename));
         IPicture picture = world.render(camera);
-        picture.export(writer);
+        picture.export(Paths.get(filename));
     }
 }

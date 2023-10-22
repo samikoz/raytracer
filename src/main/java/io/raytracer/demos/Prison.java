@@ -25,6 +25,7 @@ import io.raytracer.tools.MultipleRayCamera;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.file.Paths;
 import java.util.function.Function;
 
 public class Prison {
@@ -81,8 +82,7 @@ public class Prison {
         Camera camera = new MultipleRayCamera(400, 1024, 768, Math.PI / 3, eyePosition, lookDirection, upDirection);
 
         String filename = "prison.ppm";
-        PrintWriter writer = new PrintWriter(new FileWriter(filename));
         IPicture picture = world.render(camera);
-        picture.export(writer);
+        picture.export(Paths.get(filename));
     }
 }
