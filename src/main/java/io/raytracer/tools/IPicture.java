@@ -1,15 +1,18 @@
 package io.raytracer.tools;
 
 import io.raytracer.geometry.IPoint;
+import org.javatuples.Pair;
 
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Collection;
 import java.util.function.BiPredicate;
+import java.util.stream.Stream;
 
 public interface IPicture {
     int getWidth();
     int getHeight();
+    Stream<Pair<Integer, Integer>> getBlankPixels();
     void write(int x, int y, IColour colour);
     default void fill(IColour colour) {
         for (int y = 0; y < this.getHeight(); y++) {

@@ -1,6 +1,7 @@
 package io.raytracer.tools;
 
 import lombok.Getter;
+import org.javatuples.Pair;
 import org.javatuples.Triplet;
 
 import java.io.IOException;
@@ -10,6 +11,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 
@@ -29,7 +33,7 @@ public class BufferedPPMPicture implements IPicture {
         this.buffDir = bufferDirectory;
         this.buffer = new ArrayList<>();
         this.bufferSize = bufferSize;
-        this.persistedBufferIndex = 0;// + this.scanForBufferIndex();
+        this.persistedBufferIndex = this.scanForBufferIndex();
         this.loadedBuffer = new PPMPicture(this.width, this.height);
     }
 
@@ -51,6 +55,15 @@ public class BufferedPPMPicture implements IPicture {
                 .findFirst()
                 .map(Triplet::getValue2)
                 .orElse(this.loadedBuffer.read(x, y));
+    }
+
+    @Override
+    public Stream<Pair<Integer, Integer>> getBlankPixels() {
+        Stream<Pair<Integer, Integer>> allPixels = IntStream.range(0, this.height).mapToObj(y -> IntStream.range(0, this.width)
+                .mapToObj(x -> new Pair<>(x, y))).flatMap(y -> y);
+        Set<Pair<Integer, Integer>> writtenPixels = this.parsePersisted()
+                .map(triplet -> new Pair<>(triplet.getValue0(), triplet.getValue1())).collect(Collectors.toSet());
+        return allPixels.filter(pixelPair -> !writtenPixels.contains(pixelPair));
     }
 
     @Override
@@ -110,7 +123,7 @@ public class BufferedPPMPicture implements IPicture {
 
     private int scanForBufferIndex() throws IOException {
         try (Stream<Path> stream = Files.list(this.buffDir)) {
-            return stream.map(Path::toString).map(pathname -> pathname.replace(buffFileExtension, "")).mapToInt(Integer::parseInt).max().orElse(0);
+            return stream.map(path -> path.getFileName().toString()).map(pathname -> pathname.replace(buffFileExtension, "")).mapToInt(Integer::parseInt).max().orElse(0);
         }
     }
 }

@@ -2,6 +2,7 @@ package io.raytracer.tools;
 
 import lombok.Getter;
 import lombok.NonNull;
+import org.javatuples.Pair;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -15,6 +16,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 public class PPMPicture implements IPicture {
@@ -47,6 +49,11 @@ public class PPMPicture implements IPicture {
     @Override
     public IColour read(int x, int y) {
         return pixelGrid.get(y).get(x);
+    }
+
+    @Override
+    public Stream<Pair<Integer, Integer>> getBlankPixels() {
+        return IntStream.range(0, this.height).mapToObj(y -> IntStream.range(0, this.width).mapToObj(x -> new Pair<>(x, y))).flatMap(y -> y);
     }
 
     @Override

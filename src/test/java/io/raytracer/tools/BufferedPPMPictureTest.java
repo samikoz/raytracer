@@ -1,11 +1,15 @@
 package io.raytracer.tools;
 
+import org.javatuples.Pair;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -92,5 +96,30 @@ class BufferedPPMPictureTest {
         String pixelData = String.join("\n", Files.readAllLines(tempPath));
 
         assertTrue(pixelData.endsWith(expectedPixelData));
+    }
+
+    @Test
+    void getBlankPixelsReturnsUnpersistedPixels(@TempDir Path tempdir) throws IOException {
+        IPicture firstPicture = new BufferedPPMPicture(2, 2, tempdir, 2);
+        firstPicture.write(0, 0, new LinearColour(0.1, 0.2, 0.3));
+        firstPicture.write(1, 0, new LinearColour(0.2, 0.1, 0.3));
+        firstPicture.write(0, 1, new LinearColour(0.3, 0.2, 0.1));
+        IPicture secondPicture = new BufferedPPMPicture(2, 2, tempdir, 2);
+        Set<Pair<Integer, Integer>> unpersistedPixels = secondPicture.getBlankPixels().collect(Collectors.toSet());
+
+        assertEquals(new HashSet<>(Arrays.asList(new Pair<>(0, 1), new Pair<>(1, 1))), unpersistedPixels);
+    }
+
+    @Test
+    void persistedPixelsAccessibleAcrossBufferedPictures(@TempDir Path tempdir) throws IOException {
+        IPicture firstPicture = new BufferedPPMPicture(2, 2, tempdir, 2);
+        firstPicture.write(0, 0, new LinearColour(0.1, 0.2, 0.3));
+        firstPicture.write(1, 0, new LinearColour(0.2, 0.1, 0.3));
+        firstPicture.write(0, 1, new LinearColour(0.3, 0.2, 0.1));
+        BufferedPPMPicture secondPicture = new BufferedPPMPicture(2, 2, tempdir, 2);
+        secondPicture.loadPersisted();
+
+        assertEquals(new LinearColour(0.2, 0.1, 0.3), secondPicture.read(1, 0));
+        assertEquals(new LinearColour(0, 0, 0), secondPicture.read(0, 1));
     }
 }

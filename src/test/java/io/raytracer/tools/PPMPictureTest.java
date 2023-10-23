@@ -1,16 +1,20 @@
 package io.raytracer.tools;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertAll;
-
+import org.javatuples.Pair;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class PPMPictureTest {
     @Test
@@ -95,5 +99,16 @@ class PPMPictureTest {
         assertTrue(pixelData.endsWith(expectedPreLineBreak + "\n" + expectedPostLineBreak),
                 "Exporting should correctly break lines longer than 70 characters."
         );
+    }
+
+    @Test
+    void getBlankPixelsReturnCartesianProduct() {
+        IPicture picture = new PPMPicture(10, 15);
+        List<Pair<Integer, Integer>> pixels = picture.getBlankPixels().collect(Collectors.toList());
+
+        int[] secondColumnValues = pixels.stream().filter(pair -> pair.getValue0() == 2).mapToInt(Pair::getValue1).sorted().toArray();
+
+        assertEquals(150, pixels.size());
+        assertArrayEquals(IntStream.range(0, 15).toArray(), secondColumnValues);
     }
 }
