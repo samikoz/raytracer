@@ -53,6 +53,7 @@ public class BufferedPPMPicture implements IPicture {
         this.emptyBuffer();
         this.loadAllBuffered();
         this.loadedBuffer.export(path);
+        this.deleteAllBuffered();
     }
 
     private Path getBuffer(int index) {
@@ -88,5 +89,11 @@ public class BufferedPPMPicture implements IPicture {
             }
         }
         this.loadedBuffer = loaded;
+    }
+
+    private void deleteAllBuffered() throws IOException {
+        for (int bufferIndex = 1; bufferIndex < this.persistedBufferIndex+1; bufferIndex++) {
+            Files.delete(this.getBuffer(bufferIndex));
+        }
     }
 }

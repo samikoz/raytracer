@@ -3,10 +3,8 @@ package io.raytracer.tools;
 import lombok.Getter;
 import lombok.NonNull;
 
-import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.io.Writer;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -14,7 +12,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -85,31 +82,25 @@ public class PPMPicture implements IPicture {
         return rowToBreak.toString();
     }
 
-    public static PPMPicture load(File file) throws FileNotFoundException {
-        Scanner scanner = new Scanner(file);
-        PPMPicture loaded = PPMPicture.parseHeader(scanner);
-        while (scanner.hasNextLine()) {
-            String line = scanner.nextLine();
-            loaded.parseLoadedLine(line);
-        }
-        scanner.close();
-        return loaded;
+    public static PPMPicture load(Path file) throws IOException {
+        BufferedReader reader = Files.newBufferedReader(file);
+        PPMPicture loadedPicture = PPMPicture.parseHeader(reader);
+        reader.lines().forEach(loadedPicture::parseLoadedLine);
+        reader.close();
+        return loadedPicture;
     }
 
-    private static PPMPicture parseHeader(Scanner scanner) {
-        assert  scanner.hasNextLine();
-        String firstLine = scanner.nextLine();
+    private static PPMPicture parseHeader(BufferedReader reader) throws IOException {
+        String firstLine = reader.readLine();
         assert firstLine.startsWith("P3");
-        assert  scanner.hasNextLine();
-        String secondLine = scanner.nextLine();
+        String secondLine = reader.readLine();
+        String thirdLine = reader.readLine();
+        assert thirdLine.startsWith("255");
         Matcher sizeMatcher = Pattern.compile("(\\d+) (\\d+)").matcher(secondLine);
         boolean isFound = sizeMatcher.find();
         assert isFound;
         int x = Integer.parseInt(sizeMatcher.group(1));
         int y = Integer.parseInt(sizeMatcher.group(2));
-        assert scanner.hasNextLine();
-        String thirdLine = scanner.nextLine();
-        assert thirdLine.startsWith("255");
         return new PPMPicture(x, y);
     }
 
