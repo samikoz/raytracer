@@ -9,9 +9,6 @@ import io.raytracer.tools.MultipleRayCamera;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -28,9 +25,9 @@ public class DemoSetup {
     private final IVector upDirection;
     private final String filename;
 
-    public IPicture render(World world) {
+    public void render(IPicture picture, World world) {
         Camera cameraBottom = new MultipleRayCamera(this.rayCount, this.xSize, this.ySize, this.viewAngle, this.eyePosition, this.lookDirection, this.upDirection);
-        return world.render(cameraBottom);
+        world.render(picture, cameraBottom);
     }
 
     public Path getPath() {

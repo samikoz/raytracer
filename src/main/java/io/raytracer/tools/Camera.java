@@ -9,13 +9,12 @@ import io.raytracer.geometry.SquareMatrix;
 import io.raytracer.geometry.ThreeTransform;
 import io.raytracer.mechanics.IRay;
 import io.raytracer.mechanics.Ray;
-import lombok.Getter;
 
 import java.util.Collection;
 
 public abstract class Camera {
-    @Getter private final int pictureWidthPixels;
-    @Getter private final int pictureHeightPixels;
+    private final int pictureWidthPixels;
+    private final int pictureHeightPixels;
     private final double fieldOfView;
     private ITransform worldTransformation;
     private double pictureHalfWidth;

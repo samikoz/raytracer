@@ -16,6 +16,7 @@ import io.raytracer.textures.MonocolourTexture;
 import io.raytracer.tools.IColour;
 import io.raytracer.tools.IPicture;
 import io.raytracer.tools.LinearColour;
+import io.raytracer.tools.PPMPicture;
 import lombok.val;
 
 import java.io.IOException;
@@ -109,7 +110,8 @@ public class Stairs {
         //render
         val currentSetup = horizontalSetup;
         val currentWorld = horizontalWorld;
-        IPicture picture = currentSetup.render(currentWorld);
+        IPicture picture = new PPMPicture(xSize, ySize);
+        currentSetup.render(picture, currentWorld);
 
         /*
         IPicture red = new PPMPicture(xSize, ySize);

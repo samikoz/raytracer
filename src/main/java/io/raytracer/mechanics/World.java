@@ -1,22 +1,19 @@
 package io.raytracer.mechanics;
 
-import io.raytracer.tools.LinearColour;
+import io.raytracer.shapes.Shape;
 import io.raytracer.tools.Camera;
 import io.raytracer.tools.IColour;
 import io.raytracer.tools.IPicture;
-import io.raytracer.tools.PPMPicture;
-import io.raytracer.shapes.Shape;
+import io.raytracer.tools.LinearColour;
 import lombok.NonNull;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 public abstract class World {
     private final Function<IRay, IColour> background;
@@ -49,18 +46,13 @@ public abstract class World {
                 .flatMap(Arrays::stream).sorted().collect(Collectors.toList());
     }
 
-    public IPicture render(Camera camera) {
-        int totalRaysCount = camera.getPictureWidthPixels()*camera.getPictureHeightPixels();
-        IPicture picture = new PPMPicture(camera.getPictureWidthPixels(), camera.getPictureHeightPixels());
+    public void render(IPicture picture, Camera camera) {
+        int totalRaysCount = picture.getHeight()*picture.getWidth();
 
         long renderStart = System.nanoTime();
         AtomicInteger rayCount = new AtomicInteger(1);
 
-        IntStream.range(0, camera.getPictureHeightPixels()).mapToObj(y ->
-            IntStream.range(0, camera.getPictureWidthPixels()).mapToObj(x ->
-                Stream.of(Arrays.asList(x, y))
-            ).flatMap(x -> x)
-        ).flatMap(y -> y).parallel().forEach(pixelLocation -> {
+        picture.getBlankPixels().parallel().forEach(pixelPair -> {
             int countSoFar = rayCount.get();
             float progressPercent = (float)countSoFar/totalRaysCount*100;
             if (countSoFar % 100 == 0) {
@@ -69,9 +61,9 @@ public abstract class World {
                 renderMinutesLeft = (int)(timeLeft/(60*Math.pow(10,9)));
                 System.out.printf("\r%.2f%%  /  %d  / ~%d min left", progressPercent, totalRaysCount, renderMinutesLeft);
             }
-            Collection<IRay> rays = camera.getRaysThroughPixel(pixelLocation.get(0), pixelLocation.get(1));
+            Collection<IRay> rays = camera.getRaysThroughPixel(pixelPair.getValue0(), pixelPair.getValue1());
             IColour colour = this.illuminate(rays);
-            picture.write(pixelLocation.get(0), pixelLocation.get(1), colour);
+            picture.write(pixelPair.getValue0(), pixelPair.getValue1(), colour);
             rayCount.getAndIncrement();
         });
         long renderEnd = System.nanoTime();
@@ -79,8 +71,6 @@ public abstract class World {
         int minutes = seconds / 60;
         System.out.println();
         System.out.printf("render took %d min, %d sec%n", minutes, seconds % 60);
-
-        return picture;
     }
 
     public IColour getBackgroundAt(IRay ray) {

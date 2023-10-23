@@ -19,10 +19,9 @@ import io.raytracer.tools.IColour;
 import io.raytracer.tools.IPicture;
 import io.raytracer.tools.LinearColour;
 import io.raytracer.tools.MultipleRayCamera;
+import io.raytracer.tools.PPMPicture;
 
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.function.Function;
@@ -94,7 +93,8 @@ public class Pillars {
         Camera camera = new MultipleRayCamera(400, 1080, 1080, Math.PI / 4, eyePosition, lookDirection, upDirection);
 
         String filename = "pillars.ppm";
-        IPicture picture = world.render(camera);
+        IPicture picture = new PPMPicture(1080, 1080);
+        world.render(picture, camera);
         picture.export(Paths.get(filename));
     }
 }

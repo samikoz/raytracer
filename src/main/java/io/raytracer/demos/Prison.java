@@ -9,22 +9,19 @@ import io.raytracer.materials.Material;
 import io.raytracer.mechanics.IRay;
 import io.raytracer.mechanics.LambertianWorld;
 import io.raytracer.mechanics.Recasters;
-import io.raytracer.shapes.Cube;
 import io.raytracer.shapes.Cylinder;
 import io.raytracer.shapes.Plane;
 import io.raytracer.shapes.Rectangle;
 import io.raytracer.shapes.Shape;
-import io.raytracer.shapes.Volume;
 import io.raytracer.textures.MonocolourTexture;
 import io.raytracer.tools.Camera;
 import io.raytracer.tools.IColour;
 import io.raytracer.tools.IPicture;
 import io.raytracer.tools.LinearColour;
 import io.raytracer.tools.MultipleRayCamera;
+import io.raytracer.tools.PPMPicture;
 
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.nio.file.Paths;
 import java.util.function.Function;
 
@@ -82,7 +79,8 @@ public class Prison {
         Camera camera = new MultipleRayCamera(400, 1024, 768, Math.PI / 3, eyePosition, lookDirection, upDirection);
 
         String filename = "prison.ppm";
-        IPicture picture = world.render(camera);
+        IPicture picture = new PPMPicture(1024, 768);
+        world.render(picture, camera);
         picture.export(Paths.get(filename));
     }
 }

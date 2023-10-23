@@ -21,6 +21,7 @@ import io.raytracer.tools.GammaColour;
 import io.raytracer.tools.IColour;
 import io.raytracer.tools.IPicture;
 import io.raytracer.tools.MultipleRayCamera;
+import io.raytracer.tools.PPMPicture;
 
 import java.io.IOException;
 import java.nio.file.Paths;
@@ -78,7 +79,8 @@ public class Chamber {
         Camera camera = new MultipleRayCamera(1000, 1080, 1080, Math.PI / 3, eyePosition, lookDirection, upDirection);
 
         String filename = String.format("chamber_%3d.ppm", raysCount);
-        IPicture picture = world.render(camera);
+        IPicture picture = new PPMPicture(1080, 1080);
+        world.render(picture, camera);
         picture.export(Paths.get(filename));
     }
 }
