@@ -10,6 +10,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 
 public class BufferedPPMPicture implements IPicture {
@@ -20,47 +21,52 @@ public class BufferedPPMPicture implements IPicture {
     private List<Triplet<Integer, Integer, IColour>> buffer;
     private int persistedBufferIndex;
     private PPMPicture loadedBuffer;
+    private static final String buffFileExtension = ".buff";
 
-    public BufferedPPMPicture(int x, int y, Path bufferDirectory, int bufferSize) {
+    public BufferedPPMPicture(int x, int y, Path bufferDirectory, int bufferSize) throws IOException {
         this.width = x;
         this.height = y;
         this.buffDir = bufferDirectory;
         this.buffer = new ArrayList<>();
         this.bufferSize = bufferSize;
-        this.persistedBufferIndex = 1;
+        this.persistedBufferIndex = 0;// + this.scanForBufferIndex();
         this.loadedBuffer = new PPMPicture(this.width, this.height);
     }
 
-    public BufferedPPMPicture(int x, int y, Path bufferDirectory) {
+    public BufferedPPMPicture(int x, int y, Path bufferDirectory) throws IOException {
         this(x, y, bufferDirectory, x * y / 100);
     }
 
     public synchronized void write(int x, int y, IColour colour) {
         this.buffer.add(new Triplet<>(x, y, colour));
         if (this.buffer.size() >= this.bufferSize) {
-            this.emptyBuffer();
-            persistedBufferIndex++;
+            this.persistBuffer();
         }
     }
 
     @Override
     public IColour read(int x, int y) {
-        return this.loadedBuffer.read(x, y);
+        return this.buffer.stream()
+                .filter(triplet -> triplet.getValue0() == x && triplet.getValue1() == y)
+                .findFirst()
+                .map(Triplet::getValue2)
+                .orElse(this.loadedBuffer.read(x, y));
     }
 
     @Override
     public void export(Path path) throws IOException {
-        this.emptyBuffer();
-        this.loadAllBuffered();
+        this.persistBuffer();
+        this.loadPersisted();
         this.loadedBuffer.export(path);
-        this.deleteAllBuffered();
+        this.deletePersisted();
     }
 
     private Path getBuffer(int index) {
-        return this.buffDir.resolve(String.format("%03d.buff", index));
+        return this.buffDir.resolve(String.format("%03d%s", index, buffFileExtension));
     }
 
-    private void emptyBuffer() {
+    private void persistBuffer() {
+        persistedBufferIndex++;
         Path buffer = this.getBuffer(this.persistedBufferIndex);
         try {
             ObjectOutputStream outStream = new ObjectOutputStream(Files.newOutputStream(buffer));
@@ -73,27 +79,38 @@ public class BufferedPPMPicture implements IPicture {
         this.buffer = new ArrayList<>();
     }
 
-    public void loadAllBuffered() {
-        PPMPicture loaded = new PPMPicture(this.width, this.height);
+    private Stream<Triplet<Integer, Integer, IColour>> parsePersisted() {
+        Stream<Triplet<Integer, Integer, IColour>> parsed = Stream.empty();
         for (int bufferIndex = 1; bufferIndex < this.persistedBufferIndex+1; bufferIndex++) {
             try {
                 ObjectInputStream inStream = new ObjectInputStream(Files.newInputStream(this.getBuffer(bufferIndex)));
                 @SuppressWarnings("unchecked")
                 List<Triplet<Integer, Integer, IColour>> readBuffer = (List<Triplet<Integer, Integer, IColour>>) inStream.readObject();
                 inStream.close();
-                readBuffer.forEach(storedColour -> loaded.write(storedColour.getValue0(), storedColour.getValue1(), storedColour.getValue2()));
-            }
-            catch (IOException | ClassNotFoundException e) {
+                parsed = Stream.concat(parsed, readBuffer.stream());
+            } catch (IOException | ClassNotFoundException e) {
                 System.err.format("exception when loading buffer: %s%n", e);
                 System.exit(2);
             }
         }
+        return parsed;
+    }
+
+    public void loadPersisted() {
+        PPMPicture loaded = new PPMPicture(this.width, this.height);
+        this.parsePersisted().forEach(loadedColour -> loaded.write(loadedColour.getValue0(), loadedColour.getValue1(), loadedColour.getValue2()));
         this.loadedBuffer = loaded;
     }
 
-    private void deleteAllBuffered() throws IOException {
+    private void deletePersisted() throws IOException {
         for (int bufferIndex = 1; bufferIndex < this.persistedBufferIndex+1; bufferIndex++) {
             Files.delete(this.getBuffer(bufferIndex));
+        }
+    }
+
+    private int scanForBufferIndex() throws IOException {
+        try (Stream<Path> stream = Files.list(this.buffDir)) {
+            return stream.map(Path::toString).map(pathname -> pathname.replace(buffFileExtension, "")).mapToInt(Integer::parseInt).max().orElse(0);
         }
     }
 }

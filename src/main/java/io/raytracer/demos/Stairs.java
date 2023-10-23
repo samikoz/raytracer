@@ -38,7 +38,7 @@ public class Stairs {
                 .upDirection(new Vector(0, 0, -1))
                 .eyePosition(new Point(0, 5, 1))
                 .lookDirection(new Vector(0, -5, -1))
-                .filename("stairsHorizontal2.ppm")
+                .filename("stairsHorizontal.ppm")
                 .build();
         //--
         DemoSetup verticalSetup = horizontalSetup.toBuilder()
