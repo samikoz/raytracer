@@ -2,7 +2,6 @@ package io.raytracer.shapes.operators;
 
 import io.raytracer.geometry.IPoint;
 import io.raytracer.geometry.IVector;
-import io.raytracer.mechanics.BBox;
 import io.raytracer.mechanics.IRay;
 import io.raytracer.mechanics.Intersection;
 import io.raytracer.mechanics.RayHit;
@@ -12,7 +11,6 @@ import io.raytracer.tools.IColour;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 
@@ -72,10 +70,5 @@ public abstract class Operator extends Shape {
     @Override
     protected IVector localNormalAt(IPoint point, double u, double v) {
         throw new UnsupportedOperationException("no need to compute normal on an operator!");
-    }
-
-    @Override
-    protected Optional<BBox> getLocalBoundingBox() {
-        return Optional.empty();
     }
 }

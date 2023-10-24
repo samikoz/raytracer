@@ -12,6 +12,7 @@ import io.raytracer.mechanics.Recasters;
 import io.raytracer.shapes.Cylinder;
 import io.raytracer.shapes.Disc;
 import io.raytracer.shapes.Group;
+import io.raytracer.shapes.Hittable;
 import io.raytracer.shapes.Shape;
 import io.raytracer.shapes.Sphere;
 import io.raytracer.textures.MonocolourTexture;
@@ -24,6 +25,8 @@ import io.raytracer.tools.PPMPicture;
 
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Function;
 
 
@@ -50,10 +53,10 @@ public class Cage {
                 .build();
         barMaterial.addRecaster(Recasters.diffuse, 1);
 
-        Group backGroup = new Group();
-        Group rightGroup = new Group();
-        Group frontGroup = new Group();
-        Group leftGroup = new Group();
+        List<Hittable> backGroup = new ArrayList<>();
+        List<Hittable> rightGroup = new ArrayList<>();
+        List<Hittable> frontGroup = new ArrayList<>();
+        List<Hittable> leftGroup = new ArrayList<>();
         double barEndPosition = firstBarPosition + barSeparation*(barCount-1);
         for (int barIndex = 0; barIndex < barCount; barIndex++) {
             double barZPosition = firstBarPosition + barSeparation*barIndex;
@@ -91,10 +94,16 @@ public class Cage {
         Shape emitent = new Sphere(emitentMaterial);
         emitent.setTransform(ThreeTransform.scaling(4, 4, 4).translate(barSeparation*(barCount-1)/2.0, 30, firstBarPosition + (barSeparation*barCount-1)/2.0));
 
-        Group all = new Group();
-        all.setTransform(ThreeTransform.translation(0, 12, 0));
-        all.add(backGroup).add(leftGroup).add(frontGroup).add(rightGroup).add(floor).add(emitent);
-        world.put(all);
+        List<Hittable> all = new ArrayList<>();
+        all.addAll(backGroup);
+        all.addAll(leftGroup);
+        all.addAll(rightGroup);
+        all.addAll(frontGroup);
+        all.add(floor);
+        all.add(emitent);
+        Group allGroup = new Group(all.toArray(new Hittable[]{}));
+        allGroup.setTransform(ThreeTransform.translation(0, 12, 0));
+        world.put(allGroup);
 
         IPoint eyePosition = new Point(30, 15, 17.915974).multiply(2);
         IVector lookDirection = new Vector(-35, -18, -39);

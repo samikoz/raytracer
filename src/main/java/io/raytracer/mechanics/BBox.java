@@ -13,6 +13,7 @@ import java.util.stream.Stream;
 @RequiredArgsConstructor
 public class BBox {
     public final Interval x, y, z;
+    public static final double paddingMargin = 1e-3;
 
     public BBox() {
         this.x = new Interval();
@@ -51,16 +52,6 @@ public class BBox {
         return new BBox(xex, yex, zex);
     }
 
-    public Interval axis(int n) {
-        if (n == 1) {
-            return y;
-        }
-        if (n == 2) {
-            return z;
-        }
-        return x;
-    }
-
     public boolean isHit(IRay ray, Interval range) {
         for (int a = 0; a < 3; a++) {
             double invD = 1 / ray.getDirection().get(a);
@@ -85,5 +76,15 @@ public class BBox {
             }
         }
         return true;
+    }
+
+    public Interval axis(int n) {
+        if (n == 1) {
+            return y;
+        }
+        if (n == 2) {
+            return z;
+        }
+        return x;
     }
 }

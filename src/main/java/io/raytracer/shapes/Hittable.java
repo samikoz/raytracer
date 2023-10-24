@@ -43,10 +43,10 @@ public abstract class Hittable {
 
     abstract protected Intersection[] getLocalIntersections(IRay ray, double tmin, double tmax);
 
-    abstract protected Optional<BBox> getLocalBoundingBox();
+    abstract protected BBox getLocalBoundingBox();
 
-    public Optional<BBox> getBoundingBox() {
-        return this.getLocalBoundingBox().map(box -> box.transform(this.transform));
+    public BBox getBoundingBox() {
+        return this.getLocalBoundingBox().transform(this.transform);
     }
 
     @Override
@@ -70,7 +70,7 @@ public abstract class Hittable {
         return RayHit.fromIntersections(this.getIntersections(ray, tmin, tmax)).map(hit ->  hit.reintersect(ray));
     }
 
-    public Collection<Intersection> getIntersections(IRay ray, double tmin, double tmax) {
+    protected Collection<Intersection> getIntersections(IRay ray, double tmin, double tmax) {
         IRay transformedRay = ray.getTransformed(this.inverseTransform);
         return Arrays.stream(this.getLocalIntersections(transformedRay, tmin, tmax)).collect(Collectors.toList());
     }

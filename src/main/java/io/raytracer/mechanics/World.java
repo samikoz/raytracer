@@ -35,6 +35,11 @@ public abstract class World {
         return this;
     }
 
+    public World put(List<Hittable> objects) {
+        this.contents.addAll(objects);
+        return this;
+    }
+
     public IColour illuminate(Collection<IRay> rays) {
         return rays.stream().map(this::illuminate).reduce(new LinearColour(0, 0, 0), IColour::add).multiply((double)1/rays.size());
     }
@@ -48,19 +53,19 @@ public abstract class World {
     }
 
     public void render(IPicture picture, Camera camera) {
-        int totalRaysCount = picture.getHeight()*picture.getWidth();
+        int totalPixelCount = (int)picture.getBlankPixels().count();
 
         long renderStart = System.nanoTime();
         AtomicInteger rayCount = new AtomicInteger(1);
 
         picture.getBlankPixels().parallel().forEach(pixelPair -> {
             int countSoFar = rayCount.get();
-            float progressPercent = (float)countSoFar/totalRaysCount*100;
+            float progressPercent = (float)countSoFar/totalPixelCount*100;
             if (countSoFar % 100 == 0) {
                 long currentTime = System.nanoTime();
-                double timeLeft = (currentTime - renderStart)*(((double)totalRaysCount/countSoFar) - 1);
+                double timeLeft = (currentTime - renderStart)*(((double)totalPixelCount/countSoFar) - 1);
                 renderMinutesLeft = (int)(timeLeft/(60*Math.pow(10,9)));
-                System.out.printf("\r%.2f%%  /  %d  / ~%d min left", progressPercent, totalRaysCount, renderMinutesLeft);
+                System.out.printf("\r%.2f%%  /  %d  / ~%d min left", progressPercent, totalPixelCount, renderMinutesLeft);
             }
             Collection<IRay> rays = camera.getRaysThroughPixel(pixelPair.getValue0(), pixelPair.getValue1());
             IColour colour = this.illuminate(rays);

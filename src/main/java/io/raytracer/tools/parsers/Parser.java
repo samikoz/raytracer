@@ -1,13 +1,14 @@
 package io.raytracer.tools.parsers;
 
-import io.raytracer.shapes.Group;
+import io.raytracer.shapes.Hittable;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.List;
 import java.util.Scanner;
 
 public interface Parser {
-    Group getParsed();
+    List<Hittable> getParsed();
     void parseLine(String line);
 
     default void parse(File file) throws FileNotFoundException {

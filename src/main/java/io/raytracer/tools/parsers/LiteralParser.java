@@ -4,27 +4,29 @@ import io.raytracer.geometry.IPoint;
 import io.raytracer.geometry.Point;
 import io.raytracer.geometry.ThreeTransform;
 import io.raytracer.materials.Material;
-import io.raytracer.shapes.Group;
+import io.raytracer.shapes.Hittable;
 import io.raytracer.shapes.Sphere;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
 public class LiteralParser implements Parser {
-    private final Group loaded;
+    private final List<Hittable> loaded;
     private final Material material;
 
     private final String floatPoint = "(-?\\d+\\.\\d+)";
     private final String threePoint = "P\\(" + floatPoint + "," + floatPoint + "," + floatPoint + "\\)";
 
     public LiteralParser(Material material) {
-        this.loaded = new Group();
+        this.loaded = new ArrayList<>();
         this.material = material;
     }
 
     @Override
-    public Group getParsed() {
+    public List<Hittable> getParsed() {
         return this.loaded;
     }
 

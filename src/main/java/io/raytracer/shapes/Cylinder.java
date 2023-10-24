@@ -15,7 +15,6 @@ import lombok.Setter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.DoubleStream;
 
@@ -107,10 +106,7 @@ public class Cylinder extends Shape {
     }
 
     @Override
-    protected Optional<BBox> getLocalBoundingBox() {
-        if (Double.isInfinite(this.upperBound) || Double.isInfinite(this.lowerBound)) {
-            return Optional.empty();
-        }
-        return Optional.of(new BBox(new Point(-1, this.lowerBound, -1), new Point(1, this.upperBound, 1)));
+    protected BBox getLocalBoundingBox() {
+        return new BBox(new Point(-1, this.lowerBound, -1), new Point(1, this.upperBound, 1));
     }
 }

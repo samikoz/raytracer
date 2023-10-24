@@ -47,7 +47,7 @@ public class Corner extends Shape {
     }
 
     @Override
-    protected Optional<BBox> getLocalBoundingBox() {
+    protected BBox getLocalBoundingBox() {
         return this.outerCube.getLocalBoundingBox();
     }
 }

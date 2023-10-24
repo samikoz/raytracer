@@ -77,7 +77,7 @@ public class Volume extends Shape {
     }
 
     @Override
-    protected Optional<BBox> getLocalBoundingBox() {
+    protected BBox getLocalBoundingBox() {
         return this.boundary.getLocalBoundingBox();
     }
 }

@@ -1,9 +1,11 @@
 package io.raytracer.shapes.operators;
 
+import io.raytracer.geometry.Interval;
 import io.raytracer.geometry.Point;
 import io.raytracer.geometry.ThreeTransform;
 import io.raytracer.geometry.Vector;
 import io.raytracer.materials.Material;
+import io.raytracer.mechanics.BBox;
 import io.raytracer.mechanics.IRay;
 import io.raytracer.mechanics.Intersection;
 import io.raytracer.mechanics.Ray;
@@ -17,6 +19,7 @@ import org.junit.jupiter.api.Test;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class DifferenceTest {
@@ -47,5 +50,20 @@ class DifferenceTest {
 
         assertTrue(hitpoint.isPresent());
         assertEquals(new LinearColour(1, 0, 0), diff.getIntrinsicColour(hitpoint.get()));
+    }
+
+    @Test
+    void differenceBoundingBox() {
+        Shape leftSphere = new Sphere();
+        Shape righgtSphere = new Sphere();
+        righgtSphere.setTransform(ThreeTransform.translation(0.5, 0, 0));
+        Shape diff = new Difference(leftSphere, righgtSphere);
+        BBox bbox = diff.getBoundingBox();
+
+        IRay missingRay = new Ray(new Point(1 + 1e-3, 0, -2), new Vector(0, 0, 1));
+        IRay hittingRay = new Ray(new Point(1 - 1e-3, 0, -2), new Vector(0, 0, 1));
+
+        assertFalse(bbox.isHit(missingRay, new Interval(Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY)));
+        assertTrue(bbox.isHit(hittingRay, new Interval(Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY)));
     }
 }

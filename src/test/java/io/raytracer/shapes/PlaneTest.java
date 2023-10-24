@@ -1,13 +1,17 @@
 package io.raytracer.shapes;
 
+import io.raytracer.geometry.Interval;
 import io.raytracer.geometry.Point;
 import io.raytracer.geometry.Vector;
+import io.raytracer.mechanics.BBox;
 import io.raytracer.mechanics.IRay;
 import io.raytracer.mechanics.Intersection;
 import io.raytracer.mechanics.Ray;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class PlaneTest {
     @Test
@@ -58,5 +62,17 @@ class PlaneTest {
 
         assertEquals(1, intersectPositions.length);
         assertEquals(1, intersectPositions[0].rayParameter);
+    }
+
+    @Test
+    void planeBBox() {
+        Plane plane = new Plane();
+        BBox bbox = plane.getBoundingBox();
+
+        IRay parallelRay = new Ray(new Point(1e-2, 1e-2, 1e-2), new Vector(-1, 0, -1));
+        IRay hittingRay = new Ray(new Point(50, 15, -120), new Vector(23, -1, -10));
+
+        assertFalse(bbox.isHit(parallelRay, new Interval(Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY)));
+        assertTrue(bbox.isHit(hittingRay, new Interval(Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY)));
     }
 }

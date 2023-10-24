@@ -1,9 +1,8 @@
 package io.raytracer.shapes;
 
 import io.raytracer.geometry.IPoint;
-import io.raytracer.geometry.Point;
 import io.raytracer.geometry.IVector;
-
+import io.raytracer.geometry.Point;
 import io.raytracer.materials.Material;
 import io.raytracer.mechanics.BBox;
 import io.raytracer.mechanics.IRay;
@@ -12,7 +11,6 @@ import io.raytracer.mechanics.TextureParameters;
 import lombok.NonNull;
 
 import java.util.Arrays;
-import java.util.Optional;
 
 public class Sphere extends Shape {
     public Sphere() {
@@ -47,7 +45,7 @@ public class Sphere extends Shape {
     }
 
     @Override
-    public Optional<BBox> getLocalBoundingBox() {
-        return Optional.of(new BBox(new Point(-1, -1, -1), new Point(1, 1, 1)));
+    public BBox getLocalBoundingBox() {
+        return new BBox(new Point(-1, -1, -1), new Point(1, 1, 1));
     }
 }

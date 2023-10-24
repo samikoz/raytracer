@@ -17,4 +17,7 @@ parameter and cut off the subsequent invocations if their contribution would be 
 Could then pass this class to texture.colourAt and also implement matrix-transformations for it.
 - Can implement simplified form of finding refractive indices. Allow for specification which refindex algorithm
 one wants. Probably that would lead to some RayHitFactory implementation.
-- Awkwardness: 
+- Current hittable interface serves no purpose. Merge with Shape.
+- Employ Intervals in intersect methods.
+- Make RayHit encompass Intersection, not inherit.
+- Make BoundingBox non-optional

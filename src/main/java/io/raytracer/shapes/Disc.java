@@ -10,8 +10,6 @@ import io.raytracer.mechanics.IRay;
 import io.raytracer.mechanics.Intersection;
 import io.raytracer.mechanics.TextureParameters;
 
-import java.util.Optional;
-
 public class Disc extends Shape {
     public Disc() {
         super();
@@ -41,7 +39,7 @@ public class Disc extends Shape {
     }
 
     @Override
-    protected Optional<BBox> getLocalBoundingBox() {
-        return Optional.of(new BBox(new Point(0, -1e-3, 0), new Point(1, 1e-3, 1)));
+    protected BBox getLocalBoundingBox() {
+        return new BBox(new Point(-1, -1, -BBox.paddingMargin), new Point(1, 1, BBox.paddingMargin));
     }
 }

@@ -1,12 +1,14 @@
 package io.raytracer.shapes;
 
+import io.raytracer.geometry.Interval;
 import io.raytracer.geometry.Point;
 import io.raytracer.geometry.Vector;
+import io.raytracer.mechanics.BBox;
 import io.raytracer.mechanics.Intersection;
 import io.raytracer.mechanics.Ray;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class TriangleTest {
     @Test
@@ -115,5 +117,19 @@ class TriangleTest {
         assertEquals(1, is.length);
         assertEquals(0.45, is[0].mapping.u, 1e-3);
         assertEquals(0.25, is[0].mapping.v, 1e-3);
+    }
+
+    @Test
+    void triangleBBox() {
+        Triangle t = new Triangle(
+            new Point(-1, 2, 3),
+            new Point(1, -1, 0),
+            new Point(2, 2, 2)
+        );
+        BBox bbox = t.getBoundingBox();
+
+        assertEquals(new Interval(-1, 2), bbox.x);
+        assertEquals(new Interval(-1, 2), bbox.y);
+        assertEquals(new Interval(0, 3), bbox.z);
     }
 }

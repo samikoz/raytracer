@@ -2,6 +2,7 @@ package io.raytracer.shapes;
 
 import io.raytracer.geometry.IPoint;
 import io.raytracer.geometry.IVector;
+import io.raytracer.geometry.Point;
 import io.raytracer.geometry.Vector;
 import io.raytracer.materials.Material;
 import io.raytracer.mechanics.BBox;
@@ -9,8 +10,6 @@ import io.raytracer.mechanics.IRay;
 import io.raytracer.mechanics.Intersection;
 import io.raytracer.mechanics.TextureParameters;
 import lombok.NonNull;
-
-import java.util.Optional;
 
 import static java.lang.Math.abs;
 
@@ -43,7 +42,10 @@ public class Plane extends Shape {
     }
 
     @Override
-    protected Optional<BBox> getLocalBoundingBox() {
-        return Optional.empty();
+    protected BBox getLocalBoundingBox() {
+        return new BBox(
+            new Point(Double.NEGATIVE_INFINITY, -BBox.paddingMargin, Double.NEGATIVE_INFINITY),
+            new Point(Double.POSITIVE_INFINITY, BBox.paddingMargin, Double.POSITIVE_INFINITY)
+        );
     }
 }

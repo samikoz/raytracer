@@ -12,7 +12,6 @@ import io.raytracer.mechanics.TextureParameters;
 import lombok.NonNull;
 
 import java.util.Arrays;
-import java.util.Optional;
 
 public class Triangle extends Shape {
     public IPoint v1, v2, v3;
@@ -94,8 +93,8 @@ public class Triangle extends Shape {
     }
 
     @Override
-    protected Optional<BBox> getLocalBoundingBox() {
-        return Optional.of(new BBox(
+    protected BBox getLocalBoundingBox() {
+        return new BBox(
             new Point(
                 Math.min(Math.min(this.v1.get(0), this.v2.get(0)), this.v3.get(0)),
                 Math.min(Math.min(this.v1.get(1), this.v2.get(1)), this.v3.get(1)),
@@ -106,6 +105,6 @@ public class Triangle extends Shape {
                 Math.max(Math.max(this.v1.get(1), this.v2.get(1)), this.v3.get(1)),
                 Math.max(Math.max(this.v1.get(2), this.v2.get(2)), this.v3.get(2))
             )
-        ));
+        );
     }
 }

@@ -5,21 +5,23 @@ import io.raytracer.geometry.IVector;
 import io.raytracer.geometry.Point;
 import io.raytracer.geometry.Vector;
 import io.raytracer.shapes.Group;
+import io.raytracer.shapes.Hittable;
 import io.raytracer.shapes.SmoothTriangle;
 import io.raytracer.shapes.Triangle;
-import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class OBJParser implements Parser {
     public List<IPoint> vertices;
     public List<IVector> normals;
-    @Getter private final Group parsed;
-    private Group currentlyParsed;
+    private final List<List<Hittable>> parsed;
+    private List<Hittable> currentlyParsed;
 
     private final String floatPoint = "(-?\\d+(?:\\.\\d+)*)";
     private final Pattern vertexPattern = Pattern.compile("v " + floatPoint + " " + floatPoint + " " + floatPoint);
@@ -32,9 +34,23 @@ public class OBJParser implements Parser {
         this.normals = new ArrayList<>();
         this.vertices.add(null);
         this.normals.add(null);
-        this.parsed = new Group();
+        this.parsed = new ArrayList<>();
 
-        this.currentlyParsed = this.parsed;
+        this.currentlyParsed = new ArrayList<>();
+        this.parsed.add(currentlyParsed);
+    }
+
+    @Override
+    public List<Hittable> getParsed() {
+        if (this.parsed.size() == 1) {
+            return this.parsed.get(0);
+        }
+        else {
+            List<Hittable> parsedList = this.parsed.get(0);
+            Stream<Hittable> parsedGroups = this.parsed.stream()
+                    .skip(1).map(hitlist -> new Group(hitlist.toArray(new Hittable[] {})));
+            return Stream.concat(parsedList.stream(), parsedGroups).collect(Collectors.toList());
+        }
     }
 
     @Override
@@ -45,13 +61,13 @@ public class OBJParser implements Parser {
         }
         Matcher faceMatcher = facePattern.matcher(line);
         if (faceMatcher.find()) {
-            this.parseFace(faceMatcher).forEach(this.currentlyParsed::add);
+            this.currentlyParsed.addAll(this.parseFace(faceMatcher));
         }
         Matcher groupMatcher = groupPattern.matcher(line);
         if (groupMatcher.find()) {
-            Group newGroup = new Group();
-            this.parsed.add(newGroup);
-            this.currentlyParsed = newGroup;
+            List<Hittable> newList = new ArrayList<>();
+            this.parsed.add(newList);
+            this.currentlyParsed = newList;
         }
         Matcher normalMatcher = normalPattern.matcher(line);
         if (normalMatcher.find()) {

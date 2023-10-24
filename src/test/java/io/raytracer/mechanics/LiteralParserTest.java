@@ -1,7 +1,7 @@
 package io.raytracer.mechanics;
 
 import io.raytracer.materials.Material;
-import io.raytracer.shapes.Group;
+import io.raytracer.shapes.Hittable;
 import io.raytracer.tools.parsers.LiteralParser;
 import io.raytracer.tools.parsers.Parser;
 import org.junit.jupiter.api.Test;
@@ -13,7 +13,7 @@ import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class LiteralParserTest {
 
@@ -25,8 +25,8 @@ class LiteralParserTest {
         Parser parser = new LiteralParser(Material.builder().build());
 
         parser.parse(testInput);
-        Group group = parser.getParsed();
+        List<Hittable> group = parser.getParsed();
 
-        assertEquals(2, group.children.size());
+        assertEquals(2, group.size());
     }
 }

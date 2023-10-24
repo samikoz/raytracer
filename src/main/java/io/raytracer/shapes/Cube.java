@@ -12,7 +12,6 @@ import io.raytracer.mechanics.TextureParameters;
 import lombok.NonNull;
 
 import java.util.Arrays;
-import java.util.Optional;
 
 public class Cube extends Shape {
     public Cube() {
@@ -73,7 +72,7 @@ public class Cube extends Shape {
     }
 
     @Override
-    public Optional<BBox> getLocalBoundingBox() {
-        return Optional.of(new BBox(new Point(-1, -1, -1), new Point(1, 1, 1)));
+    public BBox getLocalBoundingBox() {
+        return new BBox(new Point(-1, -1, -1), new Point(1, 1, 1));
     }
 }

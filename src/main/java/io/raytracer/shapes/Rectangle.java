@@ -10,8 +10,6 @@ import io.raytracer.mechanics.IRay;
 import io.raytracer.mechanics.Intersection;
 import io.raytracer.mechanics.TextureParameters;
 
-import java.util.Optional;
-
 public class Rectangle extends Shape {
     public Rectangle() {
         super();
@@ -26,11 +24,11 @@ public class Rectangle extends Shape {
         if (ray.getDirection().get(2) == 0) {
             return new Intersection[] {};
         }
-        double positionAtZZero = -ray.getOrigin().get(2)/ray.getDirection().get(2);
-        double xCoordAtZZero = ray.getOrigin().get(0) + positionAtZZero*ray.getDirection().get(0);
-        double yCoordAtZZero = ray.getOrigin().get(1) + positionAtZZero*ray.getDirection().get(1);
-        if ((int)xCoordAtZZero == 0 && (int)yCoordAtZZero == 0 && positionAtZZero >= tmin && positionAtZZero <= tmax) {
-            return new Intersection[] { new Intersection(this, ray, positionAtZZero, new TextureParameters()) };
+        double rayAtZZero = -ray.getOrigin().get(2)/ray.getDirection().get(2);
+        double xCoordAtZZero = ray.getOrigin().get(0) + rayAtZZero*ray.getDirection().get(0);
+        double yCoordAtZZero = ray.getOrigin().get(1) + rayAtZZero*ray.getDirection().get(1);
+        if ((int)xCoordAtZZero == 0 && (int)yCoordAtZZero == 0 && rayAtZZero >= tmin && rayAtZZero <= tmax) {
+            return new Intersection[] { new Intersection(this, ray, rayAtZZero, new TextureParameters()) };
         }
         return new Intersection[] {};
     }
@@ -41,7 +39,7 @@ public class Rectangle extends Shape {
     }
 
     @Override
-    protected Optional<BBox> getLocalBoundingBox() {
-        return Optional.of(new BBox(new Point(0, -1e-3, 0), new Point(1, 1e-3, 1)));
+    protected BBox getLocalBoundingBox() {
+        return new BBox(new Point(0, 0, -BBox.paddingMargin), new Point(1, 1, BBox.paddingMargin));
     }
 }

@@ -2,6 +2,7 @@ package io.raytracer.shapes;
 
 import io.raytracer.geometry.IPoint;
 import io.raytracer.geometry.IVector;
+import io.raytracer.geometry.Interval;
 import io.raytracer.geometry.Point;
 import io.raytracer.geometry.Vector;
 import io.raytracer.mechanics.BBox;
@@ -142,12 +143,12 @@ class CylinderTest {
     }
 
     @Test
-    void boundingBox() {
+    void finiteBoundingBox() {
         Cylinder cylinder = new Cylinder();
         cylinder.setLowerBound(-5);
         cylinder.setUpperBound(10);
         cylinder.setTopClosed(true);
-        BBox box = cylinder.getBoundingBox().get();
+        BBox box = cylinder.getBoundingBox();
 
         assertEquals(-1, box.x.min, 1e-6);
         assertEquals(1, box.x.max, 1e-6);
@@ -155,5 +156,18 @@ class CylinderTest {
         assertEquals(10, box.y.max, 1e-6);
         assertEquals(-1, box.z.min, 1e-6);
         assertEquals(1, box.z.max, 1e-6);
+    }
+
+    @Test
+    void infiniteBoundingBox() {
+        Cylinder cylinder = new Cylinder();
+        cylinder.setLowerBound(-5);
+        BBox box = cylinder.getBoundingBox();
+
+        IRay missingRay = new Ray(new Point(-2, 0, -5-1e-3, 0), new Vector(1, 0, 0));
+        IRay hittingRay = new Ray(new Point(-2, 1e12, 0), new Vector(1, 0, 0));
+
+        assertFalse(box.isHit(missingRay, new Interval(Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY)));
+        assertTrue(box.isHit(hittingRay, new Interval(Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY)));
     }
 }

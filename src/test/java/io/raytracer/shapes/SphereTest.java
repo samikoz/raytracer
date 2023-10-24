@@ -170,7 +170,7 @@ public class SphereTest {
     void boundingBox() {
         Sphere sphere = new Sphere();
         sphere.setTransform(ThreeTransform.scaling(2, 2, 2).translate(0, 2, 0));
-        BBox box = sphere.getBoundingBox().get();
+        BBox box = sphere.getBoundingBox();
 
         assertEquals(-2, box.x.min, 1e-6);
         assertEquals(2, box.x.max, 1e-6);
