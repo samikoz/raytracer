@@ -15,3 +15,6 @@ parameter and cut off the subsequent invocations if their contribution would be 
 - Groups have been implemented for grouping but not for bounding boxes
 - For textures, look whether can group Mapping parameter together with IPoint in one class. 
 Could then pass this class to texture.colourAt and also implement matrix-transformations for it.
+- Can implement simplified form of finding refractive indices. Allow for specification which refindex algorithm
+one wants. Probably that would lead to some RayHitFactory implementation.
+- Awkwardness: 

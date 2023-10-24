@@ -4,7 +4,6 @@ import io.raytracer.materials.RecasterContribution;
 import io.raytracer.tools.GammaColour;
 import io.raytracer.tools.IColour;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
@@ -38,8 +37,7 @@ public class LambertianWorld extends World {
         if (ray.getRecast() >= LambertianWorld.lambertianDepth) {
             return new GammaColour(0, 0, 0);
         }
-        Collection<Intersection> intersections = this.intersect(ray);
-        Optional<RayHit> hit = RayHit.fromIntersections(intersections);
+        Optional<RayHit> hit = this.intersect(ray);
         if (hit.isPresent()) {
             RayHit hitpoint = hit.get();
             IColour emit = hitpoint.object.getMaterial().emit;

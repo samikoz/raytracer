@@ -42,6 +42,11 @@ public class RayHit extends Intersection {
         this.shadowed = false;
     }
 
+    public RayHit reintersect(IRay r) {
+        Intersection reintersection = new Intersection(this.object, r, this.rayParameter, this.mapping);
+        return new RayHit(reintersection, this.refractiveIndexFrom, this.refractiveIndexTo);
+    }
+
     public static Optional<RayHit> fromIntersections(Collection<Intersection> inters) {
         Optional<Intersection> firstPositive = inters.stream().min(Comparator.comparingDouble(i -> i.rayParameter));
         if (!firstPositive.isPresent()) { return Optional.empty(); }

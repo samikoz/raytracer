@@ -32,7 +32,7 @@ class GroupTest {
         Group group = new Group();
         IRay ray = new Ray(new Point(0, 0, 0), new Vector(1, 0, 0));
 
-        assertEquals(0, group.intersect(ray).length);
+        assertFalse(group.intersect(ray).isPresent());
     }
 
     @Test
@@ -46,7 +46,7 @@ class GroupTest {
         group.add(firstSphere).add(secondSphere).add(thirdSphere);
         IRay ray = new Ray(new Point(0, 0, -5), new Vector(0, 0, 1));
 
-        Intersection[] intersections = group.intersect(ray);
+        Intersection[] intersections = group.getIntersections(ray, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY).toArray(new Intersection[] {});
 
         assertEquals(4, intersections.length);
         assertEquals(secondSphere, intersections[0].object);
@@ -64,7 +64,7 @@ class GroupTest {
         group.add(sphere);
         IRay ray = new Ray(new Point(10, 0, -10), new Vector(0, 0, 1));
 
-        Intersection[] intersections = group.intersect(ray);
+        Intersection[] intersections = group.getIntersections(ray, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY).toArray(new Intersection[] {});
 
         assertEquals(2, intersections.length);
     }

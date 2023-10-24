@@ -3,7 +3,7 @@ package io.raytracer.mechanics;
 import io.raytracer.geometry.Point;
 import io.raytracer.geometry.Vector;
 import io.raytracer.shapes.Group;
-import io.raytracer.shapes.Shape;
+import io.raytracer.shapes.Hittable;
 import io.raytracer.shapes.SmoothTriangle;
 import io.raytracer.shapes.Triangle;
 import io.raytracer.tools.parsers.OBJParser;
@@ -16,7 +16,8 @@ import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 class OBJParserTest {
     @Test
@@ -66,7 +67,7 @@ class OBJParserTest {
         Files.write(testInput.toPath(), lines);
         OBJParser parser = new OBJParser();
         parser.parse(testInput);
-        List<Shape> parsed = parser.getParsed().children;
+        List<Hittable> parsed = parser.getParsed().children;
 
         assertEquals(2, parsed.size());
         Triangle firstParsed = (Triangle) parsed.get(0);
@@ -95,7 +96,7 @@ class OBJParserTest {
         Files.write(testInput.toPath(), lines);
         OBJParser parser = new OBJParser();
         parser.parse(testInput);
-        List<Shape> parsed = parser.getParsed().children;
+        List<Hittable> parsed = parser.getParsed().children;
 
         assertEquals(3, parsed.size());
         Triangle firstParsed = (Triangle) parsed.get(0);
@@ -130,7 +131,7 @@ class OBJParserTest {
         Files.write(testInput.toPath(), lines);
         OBJParser parser = new OBJParser();
         parser.parse(testInput);
-        List<Shape> parsed = parser.getParsed().children;
+        List<Hittable> parsed = parser.getParsed().children;
 
         assertEquals(2, parsed.size());
         Group firstGroup = (Group) parsed.get(0);

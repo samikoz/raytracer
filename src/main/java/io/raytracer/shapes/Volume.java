@@ -12,7 +12,6 @@ import io.raytracer.mechanics.RayHit;
 import io.raytracer.mechanics.TextureParameters;
 import lombok.NonNull;
 
-import java.util.Arrays;
 import java.util.Optional;
 import java.util.Random;
 
@@ -45,14 +44,12 @@ public class Volume extends Shape {
 
     @Override
     protected Intersection[] getLocalIntersections(IRay ray, double tmin, double tmax) {
-        Intersection[] boundaryIntersections = this.boundary.intersect(ray, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY);
-        Optional<RayHit> leftHit = RayHit.fromIntersections(Arrays.asList(boundaryIntersections));
+        Optional<RayHit> leftHit = this.boundary.intersect(ray, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY);
         if (!leftHit.isPresent()) {
             return new Intersection[]{};
         }
         double leftParameter = leftHit.get().rayParameter;
-        Intersection[] subsequentIntersections = this.boundary.intersect(ray, leftParameter + 0.0001, Double.POSITIVE_INFINITY);
-        Optional<RayHit> rightHit = RayHit.fromIntersections(Arrays.asList(subsequentIntersections));
+        Optional<RayHit> rightHit = this.boundary.intersect(ray, leftParameter + 0.0001, Double.POSITIVE_INFINITY);
         if (!rightHit.isPresent()) {
             return new Intersection[]{};
         }

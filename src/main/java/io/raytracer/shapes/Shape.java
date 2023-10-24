@@ -10,19 +10,9 @@ import lombok.Getter;
 import lombok.NonNull;
 
 import java.util.Arrays;
-import java.util.Optional;
 
 public abstract class Shape extends Hittable {
-    private Group parent;
     @Getter private final Material material;
-
-    public Optional<Group> getParent() {
-        return Optional.ofNullable(this.parent);
-    }
-
-    protected void setParent(Group group) {
-        this.parent = group;
-    }
 
     public Shape() {
         super();
@@ -67,22 +57,5 @@ public abstract class Shape extends Hittable {
         IPoint objectPoint = this.transformToOwnSpace(point);
         Material material = this.getMaterial();
         return material.texture.colourAt(objectPoint);
-    }
-
-    public IPoint transformToOwnSpace(IPoint worldPoint) {
-        Optional<Group> parent = this.getParent();
-        if (parent.isPresent()) {
-            worldPoint = parent.get().transformToOwnSpace(worldPoint);
-        }
-        return this.getInverseTransform().act(worldPoint);
-    }
-
-    protected IVector transformToWorldSpace(IVector ownNormal) {
-        IVector transposedNormal = this.getInverseTransform().transpose().act(ownNormal).normalise();
-        Optional<Group> parent = this.getParent();
-        if (parent.isPresent()) {
-            transposedNormal = parent.get().transformToWorldSpace(transposedNormal);
-        }
-        return transposedNormal;
     }
 }

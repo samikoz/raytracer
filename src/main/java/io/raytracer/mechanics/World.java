@@ -1,6 +1,6 @@
 package io.raytracer.mechanics;
 
-import io.raytracer.shapes.Shape;
+import io.raytracer.shapes.Hittable;
 import io.raytracer.tools.Camera;
 import io.raytracer.tools.IColour;
 import io.raytracer.tools.IPicture;
@@ -8,16 +8,16 @@ import io.raytracer.tools.LinearColour;
 import lombok.NonNull;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 public abstract class World {
     private final Function<IRay, IColour> background;
-    private final List<Shape> contents;
+    private final List<Hittable> contents;
     private volatile int renderMinutesLeft = 0;
 
     public World() {
@@ -30,7 +30,7 @@ public abstract class World {
         this.background = background;
     }
 
-    public World put(Shape object) {
+    public World put(Hittable object) {
         this.contents.add(object);
         return this;
     }
@@ -41,9 +41,10 @@ public abstract class World {
 
     abstract IColour illuminate(IRay ray);
 
-    Collection<Intersection> intersect(@NonNull IRay ray) {
+    Optional<RayHit> intersect(@NonNull IRay ray) {
         return contents.stream().map(object -> object.intersect(ray))
-                .flatMap(Arrays::stream).sorted().collect(Collectors.toList());
+                .filter(Optional::isPresent)
+                .map(Optional::get).min(Comparator.comparingDouble(hit -> hit.rayParameter));
     }
 
     public void render(IPicture picture, Camera camera) {

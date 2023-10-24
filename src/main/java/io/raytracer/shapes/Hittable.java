@@ -1,17 +1,23 @@
 package io.raytracer.shapes;
 
+import io.raytracer.geometry.IPoint;
 import io.raytracer.geometry.ITransform;
+import io.raytracer.geometry.IVector;
 import io.raytracer.geometry.ThreeTransform;
 import io.raytracer.mechanics.BBox;
 import io.raytracer.mechanics.IRay;
 import io.raytracer.mechanics.Intersection;
+import io.raytracer.mechanics.RayHit;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public abstract class Hittable {
+    private Group parent;
     @Getter protected ITransform transform;
     @Getter private ITransform inverseTransform;
     @Getter @Setter private boolean isCastingShadows;
@@ -25,6 +31,14 @@ public abstract class Hittable {
         this.transform = new ThreeTransform();
         this.inverseTransform = new ThreeTransform();
         this.isCastingShadows = true;
+    }
+
+    public Optional<Group> getParent() {
+        return Optional.ofNullable(this.parent);
+    }
+
+    protected void setParent(Group group) {
+        this.parent = group;
     }
 
     abstract protected Intersection[] getLocalIntersections(IRay ray, double tmin, double tmax);
@@ -48,12 +62,33 @@ public abstract class Hittable {
         return this.inverseTransform.hashCode();
     }
 
-    public Intersection[] intersect(IRay ray) {
+    public Optional<RayHit> intersect(IRay ray) {
         return this.intersect(ray, 0, Double.POSITIVE_INFINITY);
     }
 
-    public Intersection[] intersect(IRay ray, double tmin, double tmax) {
+    public Optional<RayHit> intersect(IRay ray, double tmin, double tmax) {
+        return RayHit.fromIntersections(this.getIntersections(ray, tmin, tmax)).map(hit ->  hit.reintersect(ray));
+    }
+
+    public Collection<Intersection> getIntersections(IRay ray, double tmin, double tmax) {
         IRay transformedRay = ray.getTransformed(this.inverseTransform);
-        return Arrays.stream(this.getLocalIntersections(transformedRay, tmin, tmax)).map(ray::reintersect).toArray(Intersection[]::new);
+        return Arrays.stream(this.getLocalIntersections(transformedRay, tmin, tmax)).collect(Collectors.toList());
+    }
+
+    public IPoint transformToOwnSpace(IPoint worldPoint) {
+        Optional<Group> parent = this.getParent();
+        if (parent.isPresent()) {
+            worldPoint = parent.get().transformToOwnSpace(worldPoint);
+        }
+        return this.getInverseTransform().act(worldPoint);
+    }
+
+    protected IVector transformToWorldSpace(IVector ownNormal) {
+        IVector transposedNormal = this.getInverseTransform().transpose().act(ownNormal).normalise();
+        Optional<Group> parent = this.getParent();
+        if (parent.isPresent()) {
+            transposedNormal = parent.get().transformToWorldSpace(transposedNormal);
+        }
+        return transposedNormal;
     }
 }

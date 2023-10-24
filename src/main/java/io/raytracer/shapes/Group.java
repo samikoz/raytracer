@@ -3,14 +3,18 @@ package io.raytracer.shapes;
 import io.raytracer.mechanics.BBox;
 import io.raytracer.mechanics.IRay;
 import io.raytracer.mechanics.Intersection;
+import io.raytracer.mechanics.RayHit;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class Group extends Hittable {
-    public final List<Shape> children;
+    public final List<Hittable> children;
     private BBox bbox;
 
     public Group() {
@@ -19,18 +23,30 @@ public class Group extends Hittable {
         this.bbox = new BBox();
     }
 
-    public Group add(Shape shape) {
-        this.children.add(shape);
-        shape.setParent(this);
-        shape.getBoundingBox().ifPresent(box -> this.bbox = new BBox(this.bbox, box));
+    public Group add(Hittable object) {
+        this.children.add(object);
+        object.setParent(this);
+        object.getBoundingBox().ifPresent(box -> this.bbox = new BBox(this.bbox, box));
         return this;
     }
 
     @Override
-    public Intersection[] intersect(IRay ray) {
+    public Optional<RayHit> intersect(IRay ray, double tmin, double tmax) {
         IRay transformedRay = ray.getTransformed(this.getInverseTransform());
-        return this.children.stream().map(child -> child.intersect(transformedRay))
-            .flatMap(Arrays::stream).sorted().map(ray::reintersect).toArray(Intersection[]::new);
+        return this.children.stream().map(child -> child.intersect(transformedRay, tmin, tmax))
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .map(hit -> hit.reintersect(ray)).min(Comparator.comparingDouble(hit -> hit.rayParameter));
+    }
+
+    @Override
+    public Collection<Intersection> getIntersections(IRay ray, double tmin, double tmax) {
+        IRay transformedRay = ray.getTransformed(this.getInverseTransform());
+        return this.children.stream().map(child -> child.getIntersections(transformedRay, tmin, tmax))
+                .flatMap(Collection::stream)
+                .map(i -> new Intersection(i.object, transformedRay, i.rayParameter, i.mapping))
+                .sorted()
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -48,7 +64,7 @@ public class Group extends Hittable {
 
     @Override
     public int hashCode() {
-        int childrenHash = Arrays.hashCode(this.children.stream().mapToInt(Shape::hashCode).toArray());
+        int childrenHash = Arrays.hashCode(this.children.stream().mapToInt(o -> o.hashCode()).toArray());
         return Arrays.hashCode(new int[] { childrenHash, super.hashCode() });
     }
 

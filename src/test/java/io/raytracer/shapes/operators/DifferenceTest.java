@@ -11,16 +11,13 @@ import io.raytracer.mechanics.RayHit;
 import io.raytracer.shapes.Shape;
 import io.raytracer.shapes.Sphere;
 import io.raytracer.textures.MonocolourTexture;
-import io.raytracer.textures.Textures;
-import io.raytracer.tools.IColour;
 import io.raytracer.tools.LinearColour;
 import org.junit.jupiter.api.Test;
 
-import java.util.Arrays;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class DifferenceTest {
     @Test
@@ -31,7 +28,7 @@ class DifferenceTest {
         Shape diff = new Difference(rightSphere, leftSphere);
 
         IRay ray = new Ray(new Point(-2, 0, 0), new Vector(1, 0, 0));
-        Intersection[] inters = diff.intersect(ray);
+        Intersection[] inters = diff.getIntersections(ray, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY).toArray(new Intersection[] {});
 
         assertEquals(2, inters.length);
         assertEquals(3, inters[0].rayParameter);
@@ -46,8 +43,7 @@ class DifferenceTest {
         Shape diff = new Difference(rightSphere, leftSphere);
 
         IRay ray = new Ray(new Point(-2, 0, 0), new Vector(1, 0, 0));
-        Intersection[] inters = diff.intersect(ray);
-        Optional<RayHit> hitpoint = RayHit.fromIntersections(Arrays.stream(inters).collect(Collectors.toList()));
+        Optional<RayHit> hitpoint = diff.intersect(ray);
 
         assertTrue(hitpoint.isPresent());
         assertEquals(new LinearColour(1, 0, 0), diff.getIntrinsicColour(hitpoint.get()));
