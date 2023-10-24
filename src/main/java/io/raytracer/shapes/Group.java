@@ -1,7 +1,5 @@
 package io.raytracer.shapes;
 
-import io.raytracer.geometry.IPoint;
-import io.raytracer.geometry.IVector;
 import io.raytracer.mechanics.BBox;
 import io.raytracer.mechanics.IRay;
 import io.raytracer.mechanics.Intersection;
@@ -11,7 +9,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-public class Group extends Shape {
+public class Group extends Hittable {
     public final List<Shape> children;
     private BBox bbox;
 
@@ -29,11 +27,6 @@ public class Group extends Shape {
     }
 
     @Override
-    public boolean doesInclude(Shape them) {
-        return children.stream().anyMatch(child -> child.doesInclude(them));
-    }
-
-    @Override
     public Intersection[] intersect(IRay ray) {
         IRay transformedRay = ray.getTransformed(this.getInverseTransform());
         return this.children.stream().map(child -> child.intersect(transformedRay))
@@ -43,11 +36,6 @@ public class Group extends Shape {
     @Override
     protected Intersection[] getLocalIntersections(IRay ray, double tmin, double tmax) {
         throw new UnsupportedOperationException("a group doesn't have own local intersections");
-    }
-
-    @Override
-    protected IVector localNormalAt(IPoint point, double u, double v) {
-        throw new UnsupportedOperationException("normal cannot be requested from a group");
     }
 
     @Override
