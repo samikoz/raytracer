@@ -3,8 +3,6 @@ package io.raytracer.mechanics;
 import io.raytracer.geometry.IPoint;
 import io.raytracer.geometry.ITransform;
 import io.raytracer.geometry.IVector;
-
-import io.raytracer.shapes.Shape;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
@@ -22,11 +20,6 @@ public class Ray implements IRay {
         this.recast = 0;
     }
 
-    @Override
-    public Intersection reintersect(Intersection i) {
-        return new Intersection(i.object, this, i.rayParameter, i.mapping);
-    }
-
     public IRay recast(IPoint from, IVector direction) {
         Ray recastRay = new Ray(from, direction);
         recastRay.recast = this.getRecast() + 1;
@@ -40,6 +33,9 @@ public class Ray implements IRay {
 
     @Override
     public IRay getTransformed(ITransform t) {
+        if (t.isId()) {
+            return this;
+        }
         Ray transformed = new Ray(this.origin.transform(t), this.direction.transform(t));
         transformed.recast = this.recast;
         return transformed;

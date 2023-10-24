@@ -1,6 +1,7 @@
 package io.raytracer.shapes;
 
 import io.raytracer.geometry.IVector;
+import io.raytracer.geometry.Interval;
 import io.raytracer.geometry.Point;
 import io.raytracer.geometry.Vector;
 import io.raytracer.mechanics.Intersection;
@@ -30,7 +31,7 @@ class CubeTest {
     @MethodSource("provideHittingRaysAndIntersections")
     void positiveLocalIntersectionPositions(Ray ray, double firstPosition, double secondPosition) {
         Shape cube = new Cube();
-        Intersection[] intersections = cube.getLocalIntersections(ray, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY);
+        Intersection[] intersections = cube.getLocalIntersections(ray, Interval.allReals());
         assertEquals(2, intersections.length);
         assertEquals(firstPosition, intersections[0].rayParameter, 1e-3);
         assertEquals(secondPosition, intersections[1].rayParameter, 1e-3);
@@ -51,7 +52,7 @@ class CubeTest {
     @MethodSource("provideMissingRays")
     void missingLocalIntersectionPositions(Ray ray) {
         Shape cube = new Cube();
-        Intersection[] intersections = cube.getLocalIntersections(ray, 0, Double.POSITIVE_INFINITY);
+        Intersection[] intersections = cube.getLocalIntersections(ray, Interval.positiveReals());
         assertEquals(0, intersections.length);
     }
 

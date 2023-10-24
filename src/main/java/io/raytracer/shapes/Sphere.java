@@ -1,9 +1,9 @@
 package io.raytracer.shapes;
 
 import io.raytracer.geometry.IPoint;
-import io.raytracer.geometry.Point;
 import io.raytracer.geometry.IVector;
-
+import io.raytracer.geometry.Interval;
+import io.raytracer.geometry.Point;
 import io.raytracer.materials.Material;
 import io.raytracer.mechanics.BBox;
 import io.raytracer.mechanics.IRay;
@@ -12,7 +12,6 @@ import io.raytracer.mechanics.TextureParameters;
 import lombok.NonNull;
 
 import java.util.Arrays;
-import java.util.Optional;
 
 public class Sphere extends Shape {
     public Sphere() {
@@ -24,7 +23,7 @@ public class Sphere extends Shape {
     }
 
     @Override
-    protected Intersection[] getLocalIntersections(IRay ray, double tmin, double tmax) {
+    protected Intersection[] getLocalIntersections(IRay ray, Interval rayDomain) {
         IVector rayOrigin = ray.getOrigin().subtract(new Point(0, 0, 0));
         double a = ray.getDirection().dot(ray.getDirection());
         double b = 2 * ray.getDirection().dot(rayOrigin);
@@ -36,7 +35,7 @@ public class Sphere extends Shape {
         }
         double[] roots = new double[] { (-b - Math.sqrt(delta)) / (2 * a), (-b + Math.sqrt(delta)) / (2 * a) };
         return Arrays.stream(roots)
-            .filter(root -> root > tmin && root < tmax)
+            .filter(root -> root > rayDomain.min && root < rayDomain.max)
             .mapToObj(position -> new Intersection(this, ray, position, new TextureParameters()))
             .toArray(Intersection[]::new);
     }
@@ -47,7 +46,7 @@ public class Sphere extends Shape {
     }
 
     @Override
-    public Optional<BBox> getLocalBoundingBox() {
-        return Optional.of(new BBox(new Point(-1, -1, -1), new Point(1, 1, 1)));
+    public BBox getLocalBoundingBox() {
+        return new BBox(new Point(-1, -1, -1), new Point(1, 1, 1));
     }
 }

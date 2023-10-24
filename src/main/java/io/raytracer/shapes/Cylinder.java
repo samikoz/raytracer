@@ -2,6 +2,7 @@ package io.raytracer.shapes;
 
 import io.raytracer.geometry.IPoint;
 import io.raytracer.geometry.IVector;
+import io.raytracer.geometry.Interval;
 import io.raytracer.geometry.Point;
 import io.raytracer.geometry.Vector;
 import io.raytracer.materials.Material;
@@ -15,7 +16,6 @@ import lombok.Setter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.DoubleStream;
 
@@ -44,7 +44,7 @@ public class Cylinder extends Shape {
     }
 
     @Override
-    protected Intersection[] getLocalIntersections(IRay ray, double tmin, double tmax) {
+    protected Intersection[] getLocalIntersections(IRay ray, Interval rayDomain) {
         double[] sideIntersections = this.getSideIntersections(ray);
         List<Double> allIntersections = DoubleStream.of(sideIntersections).boxed().collect(Collectors.toCollection(ArrayList::new));
         if (Math.abs(ray.getDirection().get(1)) > Cylinder.tolerance) {
@@ -58,7 +58,7 @@ public class Cylinder extends Shape {
             }
         }
         return allIntersections.stream()
-            .mapToDouble(d -> d).filter(i -> i > tmin && i< tmax)
+            .mapToDouble(d -> d).filter(i -> i > rayDomain.min && i< rayDomain.max)
             .mapToObj(position -> new Intersection(this, ray, position, new TextureParameters()))
             .toArray(Intersection[]::new);
     }
@@ -107,10 +107,7 @@ public class Cylinder extends Shape {
     }
 
     @Override
-    protected Optional<BBox> getLocalBoundingBox() {
-        if (Double.isInfinite(this.upperBound) || Double.isInfinite(this.lowerBound)) {
-            return Optional.empty();
-        }
-        return Optional.of(new BBox(new Point(-1, this.lowerBound, -1), new Point(1, this.upperBound, 1)));
+    protected BBox getLocalBoundingBox() {
+        return new BBox(new Point(-1, this.lowerBound, -1), new Point(1, this.upperBound, 1));
     }
 }

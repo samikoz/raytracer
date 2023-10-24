@@ -3,7 +3,7 @@ package io.raytracer.mechanics;
 import io.raytracer.geometry.Point;
 import io.raytracer.geometry.Vector;
 import io.raytracer.shapes.Group;
-import io.raytracer.shapes.Shape;
+import io.raytracer.shapes.Hittable;
 import io.raytracer.shapes.SmoothTriangle;
 import io.raytracer.shapes.Triangle;
 import io.raytracer.tools.parsers.OBJParser;
@@ -16,7 +16,8 @@ import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 class OBJParserTest {
     @Test
@@ -66,7 +67,7 @@ class OBJParserTest {
         Files.write(testInput.toPath(), lines);
         OBJParser parser = new OBJParser();
         parser.parse(testInput);
-        List<Shape> parsed = parser.getParsed().children;
+        List<Hittable> parsed = parser.getParsed();
 
         assertEquals(2, parsed.size());
         Triangle firstParsed = (Triangle) parsed.get(0);
@@ -95,7 +96,7 @@ class OBJParserTest {
         Files.write(testInput.toPath(), lines);
         OBJParser parser = new OBJParser();
         parser.parse(testInput);
-        List<Shape> parsed = parser.getParsed().children;
+        List<Hittable> parsed = parser.getParsed();
 
         assertEquals(3, parsed.size());
         Triangle firstParsed = (Triangle) parsed.get(0);
@@ -130,15 +131,15 @@ class OBJParserTest {
         Files.write(testInput.toPath(), lines);
         OBJParser parser = new OBJParser();
         parser.parse(testInput);
-        List<Shape> parsed = parser.getParsed().children;
+        List<Hittable> parsed = parser.getParsed();
 
         assertEquals(2, parsed.size());
         Group firstGroup = (Group) parsed.get(0);
         Group secondGroup = (Group) parsed.get(1);
-        assertEquals(1, firstGroup.children.size());
-        assertEquals(1, firstGroup.children.size());
-        Triangle firstTriangle = (Triangle) firstGroup.children.get(0);
-        Triangle secondTriangle = (Triangle) secondGroup.children.get(0);
+        assertEquals(1, firstGroup.getChildren().size());
+        assertEquals(1, firstGroup.getChildren().size());
+        Triangle firstTriangle = (Triangle) firstGroup.getChildren().get(0);
+        Triangle secondTriangle = (Triangle) secondGroup.getChildren().get(0);
 
         assertEquals(parser.vertices.get(1), firstTriangle.v1);
         assertEquals(parser.vertices.get(2), firstTriangle.v2);
@@ -185,10 +186,10 @@ class OBJParserTest {
         OBJParser parser = new OBJParser();
         parser.parse(testInput);
 
-        Group parsed = parser.getParsed();
-        assertEquals(2, parsed.children.size());
-        SmoothTriangle firstChild = (SmoothTriangle) parsed.children.get(0);
-        SmoothTriangle secondChild = (SmoothTriangle) parsed.children.get(1);
+        List<Hittable> parsed = parser.getParsed();
+        assertEquals(2, parsed.size());
+        SmoothTriangle firstChild = (SmoothTriangle) parsed.get(0);
+        SmoothTriangle secondChild = (SmoothTriangle) parsed.get(1);
 
         assertEquals(parser.vertices.get(1), firstChild.v1);
         assertEquals(parser.vertices.get(2), firstChild.v2);

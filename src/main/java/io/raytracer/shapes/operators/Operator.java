@@ -2,7 +2,7 @@ package io.raytracer.shapes.operators;
 
 import io.raytracer.geometry.IPoint;
 import io.raytracer.geometry.IVector;
-import io.raytracer.mechanics.BBox;
+import io.raytracer.geometry.Interval;
 import io.raytracer.mechanics.IRay;
 import io.raytracer.mechanics.Intersection;
 import io.raytracer.mechanics.RayHit;
@@ -12,7 +12,6 @@ import io.raytracer.tools.IColour;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 
@@ -55,9 +54,9 @@ public abstract class Operator extends Shape {
     abstract protected boolean isIntersectionAdmitted(boolean leftHit, boolean insideLeft, boolean insideRight);
 
     @Override
-    protected Intersection[] getLocalIntersections(IRay ray, double tmin, double tmax) {
-        Intersection[] leftIntersections = this.left.intersect(ray, tmin, tmax);
-        Intersection[] rightIntersections = this.right.intersect(ray, tmin, tmax);
+    protected Intersection[] getLocalIntersections(IRay ray, Interval rayDomain) {
+        Intersection[] leftIntersections = this.left.getIntersections(ray, rayDomain).toArray(new Intersection[] {});
+        Intersection[] rightIntersections = this.right.getIntersections(ray, rayDomain).toArray(new Intersection[] {});
         Intersection[] combined = Arrays.copyOf(leftIntersections, leftIntersections.length + rightIntersections.length);
         System.arraycopy(rightIntersections, 0, combined, leftIntersections.length, rightIntersections.length);
         List<Intersection> combinedSorted = Arrays.stream(combined).sorted().collect(Collectors.toList());
@@ -72,10 +71,5 @@ public abstract class Operator extends Shape {
     @Override
     protected IVector localNormalAt(IPoint point, double u, double v) {
         throw new UnsupportedOperationException("no need to compute normal on an operator!");
-    }
-
-    @Override
-    protected Optional<BBox> getLocalBoundingBox() {
-        return Optional.empty();
     }
 }

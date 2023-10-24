@@ -2,6 +2,7 @@ package io.raytracer.shapes;
 
 import io.raytracer.geometry.IPoint;
 import io.raytracer.geometry.IVector;
+import io.raytracer.geometry.Interval;
 import io.raytracer.geometry.Point;
 import io.raytracer.geometry.Vector;
 import io.raytracer.materials.Material;
@@ -12,7 +13,6 @@ import io.raytracer.mechanics.TextureParameters;
 import lombok.NonNull;
 
 import java.util.Arrays;
-import java.util.Optional;
 
 public class Cube extends Shape {
     public Cube() {
@@ -24,7 +24,7 @@ public class Cube extends Shape {
     }
 
     @Override
-    protected Intersection[] getLocalIntersections(IRay ray, double tmin, double tmax) {
+    protected Intersection[] getLocalIntersections(IRay ray, Interval rayDomain) {
         double[] xIntersections = this.getAxisIntersections(ray.getOrigin().get(0), ray.getDirection().get(0));
         double[] yIntersections = this.getAxisIntersections(ray.getOrigin().get(1), ray.getDirection().get(1));
         double[] zIntersections = this.getAxisIntersections(ray.getOrigin().get(2), ray.getDirection().get(2));
@@ -42,7 +42,7 @@ public class Cube extends Shape {
             new Intersection(this, ray, maxMinIntersection, new TextureParameters(maxMinMappingParameters[0], maxMinMappingParameters[1])),
             new Intersection(this, ray, minMaxIntersection, new TextureParameters(minMaxMappingParameters[0], minMaxMappingParameters[1]))
         };
-        return Arrays.stream(is).filter(i -> i.rayParameter > tmin && i.rayParameter < tmax).toArray(Intersection[]::new);
+        return Arrays.stream(is).filter(i -> i.rayParameter > rayDomain.min && i.rayParameter < rayDomain.max).toArray(Intersection[]::new);
     }
 
     private double[] getAxisIntersections(double originComponent, double directionComponent) {
@@ -73,7 +73,7 @@ public class Cube extends Shape {
     }
 
     @Override
-    public Optional<BBox> getLocalBoundingBox() {
-        return Optional.of(new BBox(new Point(-1, -1, -1), new Point(1, 1, 1)));
+    public BBox getLocalBoundingBox() {
+        return new BBox(new Point(-1, -1, -1), new Point(1, 1, 1));
     }
 }

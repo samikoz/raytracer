@@ -11,11 +11,11 @@ import io.raytracer.mechanics.Ray;
 import io.raytracer.mechanics.TextureParameters;
 import io.raytracer.textures.StripedTexture;
 import io.raytracer.textures.Texture;
-import io.raytracer.tools.LinearColour;
 import io.raytracer.tools.IColour;
+import io.raytracer.tools.LinearColour;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class ShapeTest {
     @Test
@@ -72,10 +72,9 @@ class ShapeTest {
     void patternOnObjectInTransformedGroup() {
         IColour white = new LinearColour(1, 1, 1);
         IColour black = new LinearColour(0, 0, 0);
-        Group group = new Group();
-        group.setTransform(ThreeTransform.scaling(2, 2, 2));
         Shape sphere = new Sphere(Material.builder().texture(new StripedTexture(white, black)).build());
-        group.add(sphere);
+        Group group = new Group(new Hittable[]{sphere});
+        group.setTransform(ThreeTransform.scaling(2, 2, 2));
 
         IColour objectColour = sphere.getIntrinsicColour(new Point(2.5, 0, 0));
 
@@ -84,14 +83,12 @@ class ShapeTest {
 
     @Test
     void transformToOwnSpace() {
-        Group outerGroup = new Group();
-        outerGroup.setTransform(ThreeTransform.rotation_y(Math.PI / 2));
-        Group innerGroup = new Group();
-        innerGroup.setTransform(ThreeTransform.scaling(2, 2, 2));
-        outerGroup.add(innerGroup);
         Shape sphere = new Sphere();
         sphere.setTransform(ThreeTransform.translation(5, 0, 0));
-        innerGroup.add(sphere);
+        Group innerGroup = new Group(new Hittable[] {sphere});
+        innerGroup.setTransform(ThreeTransform.scaling(2, 2, 2));
+        Group outerGroup = new Group(new Hittable[] {innerGroup});
+        outerGroup.setTransform(ThreeTransform.rotation_y(Math.PI / 2));
 
         IPoint transformedPoint = sphere.transformToOwnSpace(new Point(-2, 0, -10));
         IPoint expectedPoint = new Point(0, 0, -1);
@@ -101,14 +98,12 @@ class ShapeTest {
 
     @Test
     void normalOnObjectInTransformedGroup() {
-        Group outerGroup = new Group();
-        outerGroup.setTransform(ThreeTransform.rotation_y(Math.PI / 2));
-        Group innerGroup = new Group();
-        innerGroup.setTransform(ThreeTransform.scaling(1, 2, 3));
-        outerGroup.add(innerGroup);
         Shape sphere = new Sphere();
         sphere.setTransform(ThreeTransform.translation(5, 0, 0));
-        innerGroup.add(sphere);
+        Group innerGroup = new Group(new Hittable[] {sphere});
+        innerGroup.setTransform(ThreeTransform.scaling(1, 2, 3));
+        Group outerGroup = new Group(new Hittable[] {innerGroup});
+        outerGroup.setTransform(ThreeTransform.rotation_y(Math.PI / 2));
 
         Intersection testIntersection = new Intersection(
             sphere,

@@ -6,6 +6,8 @@ import lombok.ToString;
 @ToString
 public class ThreeTransform implements ITransform {
     @Getter private final ISquareMatrix matrix;
+    private final boolean isId;
+
 
     public ThreeTransform() {
         matrix = new SquareMatrix(
@@ -14,10 +16,17 @@ public class ThreeTransform implements ITransform {
                 0, 0, 1, 0,
                 0, 0, 0, 1
         );
+        this.isId = true;
     }
 
     private ThreeTransform(ISquareMatrix m) {
         matrix = m;
+        this.isId = m.equals(new SquareMatrix(
+                1, 0, 0, 0,
+                0, 1, 0, 0,
+                0, 0, 1, 0,
+                0, 0, 0, 1
+        ));
     }
 
     public static ThreeTransform translation(double x, double y, double z) {
@@ -166,6 +175,11 @@ public class ThreeTransform implements ITransform {
     @Override
     public int hashCode() {
         return this.matrix.hashCode();
+    }
+
+    @Override
+    public boolean isId() {
+        return this.isId;
     }
 
     @Override

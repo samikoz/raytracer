@@ -2,6 +2,7 @@ package io.raytracer.shapes;
 
 import io.raytracer.geometry.IPoint;
 import io.raytracer.geometry.IVector;
+import io.raytracer.geometry.Interval;
 import io.raytracer.geometry.Point;
 import io.raytracer.geometry.Vector;
 import io.raytracer.mechanics.BBox;
@@ -31,7 +32,7 @@ class CylinderTest {
     @MethodSource("provideMissingRays")
     void getLocalIntersectionsForMissingRay(IRay ray) {
         Shape cylinder = new Cylinder();
-        Intersection[] intersections = cylinder.getLocalIntersections(ray, 0, Double.POSITIVE_INFINITY);
+        Intersection[] intersections = cylinder.getLocalIntersections(ray, Interval.positiveReals());
 
         assertEquals(0, intersections.length);
     }
@@ -48,7 +49,7 @@ class CylinderTest {
     @MethodSource("provideHittingRaysAndIntersections")
     void positiveLocalIntersectionPositions(Ray ray, double firstPosition, double secondPosition) {
         Shape cylinder = new Cylinder();
-        Intersection[] intersections = cylinder.getLocalIntersections(ray, 0, Double.POSITIVE_INFINITY);
+        Intersection[] intersections = cylinder.getLocalIntersections(ray, Interval.positiveReals());
         assertEquals(2, intersections.length);
         assertEquals(firstPosition, intersections[0].rayParameter, 1e-3);
         assertEquals(secondPosition, intersections[1].rayParameter, 1e-3);
@@ -89,7 +90,7 @@ class CylinderTest {
         Cylinder cylinder = new Cylinder();
         cylinder.setLowerBound(1);
         cylinder.setUpperBound(2);
-        Intersection[] intersections = cylinder.getLocalIntersections(ray, 0, Double.POSITIVE_INFINITY);
+        Intersection[] intersections = cylinder.getLocalIntersections(ray, Interval.positiveReals());
 
         assertEquals(intersectionsCount, intersections.length);
     }
@@ -112,7 +113,7 @@ class CylinderTest {
         cylinder.setUpperBound(2);
         cylinder.setTopClosed(true);
         cylinder.setBottomClosed(true);
-        Intersection[] intersections = cylinder.getLocalIntersections(ray, 0, Double.POSITIVE_INFINITY);
+        Intersection[] intersections = cylinder.getLocalIntersections(ray, Interval.positiveReals());
 
         assertEquals(intersectionsCount, intersections.length);
     }
@@ -142,12 +143,12 @@ class CylinderTest {
     }
 
     @Test
-    void boundingBox() {
+    void finiteBoundingBox() {
         Cylinder cylinder = new Cylinder();
         cylinder.setLowerBound(-5);
         cylinder.setUpperBound(10);
         cylinder.setTopClosed(true);
-        BBox box = cylinder.getBoundingBox().get();
+        BBox box = cylinder.getBoundingBox();
 
         assertEquals(-1, box.x.min, 1e-6);
         assertEquals(1, box.x.max, 1e-6);
@@ -155,5 +156,18 @@ class CylinderTest {
         assertEquals(10, box.y.max, 1e-6);
         assertEquals(-1, box.z.min, 1e-6);
         assertEquals(1, box.z.max, 1e-6);
+    }
+
+    @Test
+    void infiniteBoundingBox() {
+        Cylinder cylinder = new Cylinder();
+        cylinder.setLowerBound(-5);
+        BBox box = cylinder.getBoundingBox();
+
+        IRay missingRay = new Ray(new Point(-2, 0, -5-1e-3, 0), new Vector(1, 0, 0));
+        IRay hittingRay = new Ray(new Point(-2, 1e12, 0), new Vector(1, 0, 0));
+
+        assertFalse(box.isHit(missingRay, new Interval(Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY)));
+        assertTrue(box.isHit(hittingRay, new Interval(Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY)));
     }
 }

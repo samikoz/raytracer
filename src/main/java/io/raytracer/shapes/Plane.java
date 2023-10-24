@@ -2,6 +2,8 @@ package io.raytracer.shapes;
 
 import io.raytracer.geometry.IPoint;
 import io.raytracer.geometry.IVector;
+import io.raytracer.geometry.Interval;
+import io.raytracer.geometry.Point;
 import io.raytracer.geometry.Vector;
 import io.raytracer.materials.Material;
 import io.raytracer.mechanics.BBox;
@@ -9,8 +11,6 @@ import io.raytracer.mechanics.IRay;
 import io.raytracer.mechanics.Intersection;
 import io.raytracer.mechanics.TextureParameters;
 import lombok.NonNull;
-
-import java.util.Optional;
 
 import static java.lang.Math.abs;
 
@@ -26,12 +26,12 @@ public class Plane extends Shape {
     }
 
     @Override
-    protected Intersection[] getLocalIntersections(IRay ray, double tmin, double tmax) {
+    protected Intersection[] getLocalIntersections(IRay ray, Interval rayDomain) {
         if (abs(ray.getDirection().get(1)) < parallelTolerance) {
             return new Intersection[]{};
         }
         double intersection = -ray.getOrigin().get(1) / ray.getDirection().get(1);
-        if (intersection < tmin || intersection > tmax) {
+        if (intersection < rayDomain.min || intersection > rayDomain.max) {
             return new Intersection[] {};
         }
         return new Intersection[] { new Intersection(this, ray, -ray.getOrigin().get(1) / ray.getDirection().get(1),new TextureParameters()) };
@@ -43,7 +43,10 @@ public class Plane extends Shape {
     }
 
     @Override
-    protected Optional<BBox> getLocalBoundingBox() {
-        return Optional.empty();
+    protected BBox getLocalBoundingBox() {
+        return new BBox(
+            new Point(Double.NEGATIVE_INFINITY, -BBox.paddingMargin, Double.NEGATIVE_INFINITY),
+            new Point(Double.POSITIVE_INFINITY, BBox.paddingMargin, Double.POSITIVE_INFINITY)
+        );
     }
 }

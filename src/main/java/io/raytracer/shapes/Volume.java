@@ -3,6 +3,7 @@ package io.raytracer.shapes;
 import io.raytracer.geometry.IPoint;
 import io.raytracer.geometry.ITransform;
 import io.raytracer.geometry.IVector;
+import io.raytracer.geometry.Interval;
 import io.raytracer.geometry.Vector;
 import io.raytracer.materials.Material;
 import io.raytracer.mechanics.BBox;
@@ -12,7 +13,6 @@ import io.raytracer.mechanics.RayHit;
 import io.raytracer.mechanics.TextureParameters;
 import lombok.NonNull;
 
-import java.util.Arrays;
 import java.util.Optional;
 import java.util.Random;
 
@@ -44,21 +44,19 @@ public class Volume extends Shape {
     }
 
     @Override
-    protected Intersection[] getLocalIntersections(IRay ray, double tmin, double tmax) {
-        Intersection[] boundaryIntersections = this.boundary.intersect(ray, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY);
-        Optional<RayHit> leftHit = RayHit.fromIntersections(Arrays.asList(boundaryIntersections));
+    protected Intersection[] getLocalIntersections(IRay ray, Interval rayDomain) {
+        Optional<RayHit> leftHit = this.boundary.intersect(ray, new Interval(Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY));
         if (!leftHit.isPresent()) {
             return new Intersection[]{};
         }
         double leftParameter = leftHit.get().rayParameter;
-        Intersection[] subsequentIntersections = this.boundary.intersect(ray, leftParameter + 0.0001, Double.POSITIVE_INFINITY);
-        Optional<RayHit> rightHit = RayHit.fromIntersections(Arrays.asList(subsequentIntersections));
+        Optional<RayHit> rightHit = this.boundary.intersect(ray, new Interval(leftParameter + 0.0001, Double.POSITIVE_INFINITY));
         if (!rightHit.isPresent()) {
             return new Intersection[]{};
         }
         double rightParameter = rightHit.get().rayParameter;
-        leftParameter = max(tmin, leftParameter);
-        rightParameter = min(tmax, rightParameter);
+        leftParameter = max(rayDomain.min, leftParameter);
+        rightParameter = min(rayDomain.max, rightParameter);
         if (leftParameter >= rightParameter) {
             return new Intersection[]{};
         }
@@ -80,7 +78,7 @@ public class Volume extends Shape {
     }
 
     @Override
-    protected Optional<BBox> getLocalBoundingBox() {
+    protected BBox getLocalBoundingBox() {
         return this.boundary.getLocalBoundingBox();
     }
 }

@@ -6,13 +6,15 @@ import io.raytracer.geometry.Interval;
 import io.raytracer.geometry.Point;
 import lombok.RequiredArgsConstructor;
 
+import java.util.Collection;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 
 @RequiredArgsConstructor
 public class BBox {
     public final Interval x, y, z;
+    public static final double paddingMargin = 1e-3;
 
     public BBox() {
         this.x = new Interval();
@@ -36,32 +38,27 @@ public class BBox {
         double[] x = this.x.toArray();
         double[] y = this.y.toArray();
         double[] z = this.z.toArray();
-        Stream<IPoint> mapped = IntStream.range(0, 8).mapToObj(n -> new Point(x[n & 1], y[(n & 2) >> 1], z[(n & 4) >> 2])).map(t::act);
-        Interval xex = new Interval(Double.POSITIVE_INFINITY, Double.NEGATIVE_INFINITY);
-        Interval yex = new Interval(Double.POSITIVE_INFINITY, Double.NEGATIVE_INFINITY);
-        Interval zex = new Interval(Double.POSITIVE_INFINITY, Double.NEGATIVE_INFINITY);
-        mapped.forEach(p -> {
-            xex.min = Math.min(p.get(0), xex.min);
-            xex.max = Math.max(p.get(0), xex.max);
-            yex.min = Math.min(p.get(1), yex.min);
-            yex.max = Math.max(p.get(1), yex.max);
-            zex.min = Math.min(p.get(2), zex.min);
-            zex.max = Math.max(p.get(2), zex.max);
-        });
-        return new BBox(xex, yex, zex);
-    }
-
-    public Interval axis(int n) {
-        if (n == 1) {
-            return y;
+        Collection<IPoint> mapped = IntStream.range(0, 8).mapToObj(n -> new Point(x[n & 1], y[(n & 2) >> 1], z[(n & 4) >> 2])).map(t::act).collect(Collectors.toList());
+        double xexMin = Double.POSITIVE_INFINITY;
+        double xexMax = Double.NEGATIVE_INFINITY;
+        double yexMin = Double.POSITIVE_INFINITY;
+        double yexMax = Double.NEGATIVE_INFINITY;
+        double zexMin = Double.POSITIVE_INFINITY;
+        double zexMax = Double.NEGATIVE_INFINITY;
+        for (IPoint p : mapped) {
+            xexMin = Math.min(p.get(0), xexMin);
+            xexMax = Math.max(p.get(0), xexMax);
+            yexMin = Math.min(p.get(1), yexMin);
+            yexMax = Math.max(p.get(1), yexMax);
+            zexMin = Math.min(p.get(2), zexMin);
+            zexMax = Math.max(p.get(2), zexMax);
         }
-        if (n == 2) {
-            return z;
-        }
-        return x;
+        return new BBox(new Interval(xexMin, xexMax), new Interval(yexMin, yexMax), new Interval(zexMin, zexMax));
     }
 
     public boolean isHit(IRay ray, Interval range) {
+        double min = range.min;
+        double max = range.max;
         for (int a = 0; a < 3; a++) {
             double invD = 1 / ray.getDirection().get(a);
             double orig = ray.getOrigin().get(a);
@@ -74,16 +71,26 @@ public class BBox {
                 t1 = swp;
             }
 
-            if (t0 > range.min) {
-                range.min = t0;
+            if (t0 > min) {
+                min = t0;
             }
-            if (t1 < range.max) {
-                range.max = t1;
+            if (t1 < max) {
+                max = t1;
             }
-            if (range.max <= range.min) {
+            if (max <= min) {
                 return false;
             }
         }
         return true;
+    }
+
+    public Interval axis(int n) {
+        if (n == 1) {
+            return y;
+        }
+        if (n == 2) {
+            return z;
+        }
+        return x;
     }
 }
