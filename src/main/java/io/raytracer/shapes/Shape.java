@@ -1,28 +1,20 @@
 package io.raytracer.shapes;
 
 import io.raytracer.geometry.IPoint;
-import io.raytracer.geometry.ITransform;
 import io.raytracer.geometry.IVector;
-import io.raytracer.geometry.ThreeTransform;
 import io.raytracer.materials.Material;
-import io.raytracer.mechanics.BBox;
-import io.raytracer.mechanics.IRay;
 import io.raytracer.mechanics.Intersection;
 import io.raytracer.mechanics.RayHit;
 import io.raytracer.tools.IColour;
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.Setter;
 
 import java.util.Arrays;
 import java.util.Optional;
 
-public abstract class Shape {
+public abstract class Shape extends Hittable {
     private Group parent;
-    @Getter protected ITransform transform;
-    @Getter private ITransform inverseTransform;
     @Getter private final Material material;
-    @Getter @Setter private boolean isCastingShadows;
 
     public Optional<Group> getParent() {
         return Optional.ofNullable(this.parent);
@@ -32,41 +24,24 @@ public abstract class Shape {
         this.parent = group;
     }
 
-    public void setTransform(ITransform transform) {
-        this.transform = transform;
-        this.inverseTransform = transform.inverse();
-    }
-
     public Shape() {
-        this.transform = new ThreeTransform();
-        this.inverseTransform = new ThreeTransform();
+        super();
         this.material = Material.builder().build();
-        this.isCastingShadows = true;
     }
 
     Shape(@NonNull Material material) {
-        this.transform = new ThreeTransform();
-        this.inverseTransform = new ThreeTransform();
+        super();
         this.material = material;
-        this.isCastingShadows = true;
     }
-
-    abstract protected Intersection[] getLocalIntersections(IRay ray, double tmin, double tmax);
 
     abstract protected IVector localNormalAt(IPoint point, double u, double v);
-
-    abstract protected Optional<BBox> getLocalBoundingBox();
-
-    public Optional<BBox> getBoundingBox() {
-        return this.getLocalBoundingBox().map(box -> box.transform(this.transform));
-    }
 
     @Override
     public boolean equals(Object them) {
         if (them == null || this.getClass() != them.getClass()) return false;
 
         Shape themShape = (Shape) them;
-        return this.inverseTransform == themShape.inverseTransform && this.material == themShape.material;
+        return this.getInverseTransform().equals(themShape.getInverseTransform()) && this.material == themShape.material;
     }
 
     public boolean doesInclude(Shape them) {
@@ -75,16 +50,7 @@ public abstract class Shape {
 
     @Override
     public int hashCode() {
-        return Arrays.hashCode(new int[] { this.material.hashCode(), this.inverseTransform.hashCode() });
-    }
-
-    public Intersection[] intersect(IRay ray) {
-        return this.intersect(ray, 0, Double.POSITIVE_INFINITY);
-    }
-
-    public Intersection[] intersect(IRay ray, double tmin, double tmax) {
-        IRay transformedRay = ray.getTransformed(this.inverseTransform);
-        return Arrays.stream(this.getLocalIntersections(transformedRay, tmin, tmax)).map(ray::reintersect).toArray(Intersection[]::new);
+        return Arrays.hashCode(new int[] { this.material.hashCode(), this.getInverseTransform().hashCode() });
     }
 
     public IVector normal(Intersection i) {
@@ -108,11 +74,11 @@ public abstract class Shape {
         if (parent.isPresent()) {
             worldPoint = parent.get().transformToOwnSpace(worldPoint);
         }
-        return this.inverseTransform.act(worldPoint);
+        return this.getInverseTransform().act(worldPoint);
     }
 
     protected IVector transformToWorldSpace(IVector ownNormal) {
-        IVector transposedNormal = this.inverseTransform.transpose().act(ownNormal).normalise();
+        IVector transposedNormal = this.getInverseTransform().transpose().act(ownNormal).normalise();
         Optional<Group> parent = this.getParent();
         if (parent.isPresent()) {
             transposedNormal = parent.get().transformToWorldSpace(transposedNormal);
