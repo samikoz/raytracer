@@ -65,18 +65,19 @@ public class Group extends Hittable {
         return this.children;
     }
 
-    public Optional<RayHit> intersect(IRay ray, double tmin, double tmax) {
+    public Optional<RayHit> intersect(IRay ray, Interval rayDomain) {
         IRay transformedRay = ray.getTransformed(this.getInverseTransform());
-        if (!this.bbox.isHit(transformedRay, new Interval(tmin, tmax))) {
+        if (!this.bbox.isHit(transformedRay, rayDomain)) {
             return Optional.empty();
         }
-        Optional<RayHit> leftHit = this.left.intersect(transformedRay, tmin, tmax);
-        Optional<RayHit> rightHit = this.right.intersect(transformedRay, tmin, leftHit.map(hit -> hit.rayParameter).orElse(tmax));
+        Optional<RayHit> leftHit = this.left.intersect(transformedRay, rayDomain);
+        Interval rightHitDomain = new Interval(rayDomain.min, leftHit.map(hit -> hit.rayParameter).orElse(rayDomain.max));
+        Optional<RayHit> rightHit = this.right.intersect(transformedRay, rightHitDomain);
         return Stream.of(leftHit, rightHit).filter(Optional::isPresent).map(Optional::get).min(Comparator.comparingDouble(hit -> hit.rayParameter));
     }
 
     @Override
-    protected Intersection[] getLocalIntersections(IRay ray, double tmin, double tmax) {
+    protected Intersection[] getLocalIntersections(IRay ray, Interval rayDomain) {
         throw new UnsupportedOperationException("a group doesn't have own local intersections");
     }
 

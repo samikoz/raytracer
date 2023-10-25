@@ -2,6 +2,7 @@ package io.raytracer.shapes.operators;
 
 import io.raytracer.geometry.IPoint;
 import io.raytracer.geometry.IVector;
+import io.raytracer.geometry.Interval;
 import io.raytracer.mechanics.IRay;
 import io.raytracer.mechanics.Intersection;
 import io.raytracer.mechanics.RayHit;
@@ -53,9 +54,9 @@ public abstract class Operator extends Shape {
     abstract protected boolean isIntersectionAdmitted(boolean leftHit, boolean insideLeft, boolean insideRight);
 
     @Override
-    protected Intersection[] getLocalIntersections(IRay ray, double tmin, double tmax) {
-        Intersection[] leftIntersections = this.left.getIntersections(ray, tmin, tmax).toArray(new Intersection[] {});
-        Intersection[] rightIntersections = this.right.getIntersections(ray, tmin, tmax).toArray(new Intersection[] {});
+    protected Intersection[] getLocalIntersections(IRay ray, Interval rayDomain) {
+        Intersection[] leftIntersections = this.left.getIntersections(ray, rayDomain).toArray(new Intersection[] {});
+        Intersection[] rightIntersections = this.right.getIntersections(ray, rayDomain).toArray(new Intersection[] {});
         Intersection[] combined = Arrays.copyOf(leftIntersections, leftIntersections.length + rightIntersections.length);
         System.arraycopy(rightIntersections, 0, combined, leftIntersections.length, rightIntersections.length);
         List<Intersection> combinedSorted = Arrays.stream(combined).sorted().collect(Collectors.toList());

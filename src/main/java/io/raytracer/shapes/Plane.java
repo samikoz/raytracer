@@ -2,6 +2,7 @@ package io.raytracer.shapes;
 
 import io.raytracer.geometry.IPoint;
 import io.raytracer.geometry.IVector;
+import io.raytracer.geometry.Interval;
 import io.raytracer.geometry.Point;
 import io.raytracer.geometry.Vector;
 import io.raytracer.materials.Material;
@@ -25,12 +26,12 @@ public class Plane extends Shape {
     }
 
     @Override
-    protected Intersection[] getLocalIntersections(IRay ray, double tmin, double tmax) {
+    protected Intersection[] getLocalIntersections(IRay ray, Interval rayDomain) {
         if (abs(ray.getDirection().get(1)) < parallelTolerance) {
             return new Intersection[]{};
         }
         double intersection = -ray.getOrigin().get(1) / ray.getDirection().get(1);
-        if (intersection < tmin || intersection > tmax) {
+        if (intersection < rayDomain.min || intersection > rayDomain.max) {
             return new Intersection[] {};
         }
         return new Intersection[] { new Intersection(this, ray, -ray.getOrigin().get(1) / ray.getDirection().get(1),new TextureParameters()) };

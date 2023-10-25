@@ -1,8 +1,8 @@
 package io.raytracer.shapes;
 
 import io.raytracer.geometry.IPoint;
-import io.raytracer.geometry.ITransform;
 import io.raytracer.geometry.IVector;
+import io.raytracer.geometry.Interval;
 import io.raytracer.geometry.ThreeTransform;
 import io.raytracer.materials.Material;
 import io.raytracer.mechanics.BBox;
@@ -37,8 +37,8 @@ public class Corner extends Shape {
     }
 
     @Override
-    protected Intersection[] getLocalIntersections(IRay ray, double tmin, double tmax) {
-        return this.itself.getLocalIntersections(ray, tmin, tmax);
+    protected Intersection[] getLocalIntersections(IRay ray, Interval rayDomain) {
+        return this.itself.getLocalIntersections(ray, rayDomain);
     }
 
     @Override

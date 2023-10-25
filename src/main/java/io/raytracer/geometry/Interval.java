@@ -4,7 +4,7 @@ package io.raytracer.geometry;
 import java.util.Arrays;
 
 public class Interval {
-    public double min, max;
+    public final double min, max;
     private static double equalityTolerance = 1e-3;
 
     public Interval() {
@@ -20,6 +20,14 @@ public class Interval {
     public Interval(Interval i1, Interval i2) {
         this.min = Math.min(i1.min, i2.min);
         this.max = Math.max(i1.max, i2.max);
+    }
+
+    public static Interval allReals() {
+        return new Interval(Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY);
+    }
+
+    public static Interval positiveReals() {
+        return new Interval(0, Double.POSITIVE_INFINITY);
     }
 
     @Override

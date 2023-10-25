@@ -48,7 +48,7 @@ class TriangleTest {
         );
         Ray ray = new Ray(new Point(0, -1, -2), new Vector(0, 1, 0));
 
-        assertEquals(0, t.getLocalIntersections(ray, 0, Double.POSITIVE_INFINITY).length);
+        assertEquals(0, t.getLocalIntersections(ray, Interval.positiveReals()).length);
     }
 
     @Test
@@ -59,7 +59,7 @@ class TriangleTest {
             new Point(1, 0, 0)
         );
         Ray ray = new Ray(new Point(1, 1, -2), new Vector(0, 0, 1));
-        Intersection[] intersections = t.getLocalIntersections(ray, 0, Double.POSITIVE_INFINITY);
+        Intersection[] intersections = t.getLocalIntersections(ray, Interval.positiveReals());
 
         assertEquals(0, intersections.length);
     }
@@ -72,7 +72,7 @@ class TriangleTest {
             new Point(1, 0, 0)
         );
         Ray ray = new Ray(new Point(-1, 1, -2), new Vector(0, 0, 1));
-        Intersection[] intersections = t.getLocalIntersections(ray, 0, Double.POSITIVE_INFINITY);
+        Intersection[] intersections = t.getLocalIntersections(ray, Interval.positiveReals());
 
         assertEquals(0, intersections.length);
     }
@@ -85,7 +85,7 @@ class TriangleTest {
             new Point(1, 0, 0)
         );
         Ray ray = new Ray(new Point(0, -1, -2), new Vector(0, 0, 1));
-        Intersection[] intersections = t.getLocalIntersections(ray, 0, Double.POSITIVE_INFINITY);
+        Intersection[] intersections = t.getLocalIntersections(ray, Interval.positiveReals());
 
         assertEquals(0, intersections.length);
     }
@@ -98,7 +98,7 @@ class TriangleTest {
             new Point(1, 0, 0)
         );
         Ray ray = new Ray(new Point(0, 0.5, -2), new Vector(0, 0, 1));
-        Intersection[] intersections = t.getLocalIntersections(ray, 0, Double.POSITIVE_INFINITY);
+        Intersection[] intersections = t.getLocalIntersections(ray, Interval.positiveReals());
 
         assertEquals(1, intersections.length);
         assertEquals(2, intersections[0].rayParameter);
@@ -112,7 +112,7 @@ class TriangleTest {
             new Point(1, 0, 0)
         );
         Ray ray = new Ray(new Point(-0.2, 0.3, -2), new Vector(0, 0, 1));
-        Intersection[] is = t.getLocalIntersections(ray, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY);
+        Intersection[] is = t.getLocalIntersections(ray, Interval.allReals());
 
         assertEquals(1, is.length);
         assertEquals(0.45, is[0].mapping.u, 1e-3);

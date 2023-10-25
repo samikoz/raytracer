@@ -19,9 +19,9 @@ class RectangleTest {
     void rayHitsRectangle() {
         Rectangle rectangle = new Rectangle();
         IRay hittingRay = new Ray(new Point(1, 1, -2), new Vector(-0.2, -0.3, 1));
-        Intersection[] firstHit = rectangle.getLocalIntersections(hittingRay, 0, Double.POSITIVE_INFINITY);
+        Intersection[] firstHit = rectangle.getLocalIntersections(hittingRay, new Interval(0, Double.POSITIVE_INFINITY));
         IRay rayStartingAtRectangle = new Ray(new Point(0.5, 0.5, 0), new Vector(5, -2, 13));
-        Intersection[] secondHit = rectangle.getLocalIntersections(rayStartingAtRectangle, 0, Double.POSITIVE_INFINITY);
+        Intersection[] secondHit = rectangle.getLocalIntersections(rayStartingAtRectangle, new Interval(0, Double.POSITIVE_INFINITY));
 
         assertEquals(2, firstHit[0].rayParameter, 1e-6);
         assertEquals(0, secondHit[0].rayParameter, 1e-6);
@@ -33,8 +33,8 @@ class RectangleTest {
         IRay parallelRay = new Ray(new Point(-3, 2, 0), new Vector(1, 2, 0));
         IRay missingRay = new Ray(new Point(0.5, -0.2, -3), new Vector(1, 1, 1));
 
-        assertEquals(0, rectangle.getLocalIntersections(parallelRay, 0, Double.POSITIVE_INFINITY).length);
-        assertEquals(0, rectangle.getLocalIntersections(missingRay, 0, Double.POSITIVE_INFINITY).length);
+        assertEquals(0, rectangle.getLocalIntersections(parallelRay, new Interval(0, Double.POSITIVE_INFINITY)).length);
+        assertEquals(0, rectangle.getLocalIntersections(missingRay, new Interval(0, Double.POSITIVE_INFINITY)).length);
     }
 
     @Test

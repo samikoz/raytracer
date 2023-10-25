@@ -3,6 +3,7 @@ package io.raytracer.shapes;
 import io.raytracer.geometry.IPoint;
 import io.raytracer.geometry.ITransform;
 import io.raytracer.geometry.IVector;
+import io.raytracer.geometry.Interval;
 import io.raytracer.geometry.Point;
 import io.raytracer.materials.Material;
 import io.raytracer.mechanics.BBox;
@@ -63,7 +64,7 @@ public class Triangle extends Shape {
     }
 
     @Override
-    protected Intersection[] getLocalIntersections(IRay ray, double tmin, double tmax) {
+    protected Intersection[] getLocalIntersections(IRay ray, Interval rayDomain) {
         IVector dirCrossE2 = ray.getDirection().cross(this.e2);
         double det = dirCrossE2.dot(this.e1);
         if (Math.abs(det) < Triangle.tolerance) {
@@ -81,7 +82,7 @@ public class Triangle extends Shape {
             return new Intersection[] {};
         }
         double intersection = f*this.e2.dot(originCrossE1);
-        if (intersection < tmin || intersection > tmax) {
+        if (intersection < rayDomain.min || intersection > rayDomain.max) {
             return new Intersection[] {};
         }
         return new Intersection[] { new Intersection(this , ray, f*this.e2.dot(originCrossE1), new TextureParameters(u, v)) };

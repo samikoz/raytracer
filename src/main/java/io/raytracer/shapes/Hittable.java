@@ -3,6 +3,7 @@ package io.raytracer.shapes;
 import io.raytracer.geometry.IPoint;
 import io.raytracer.geometry.ITransform;
 import io.raytracer.geometry.IVector;
+import io.raytracer.geometry.Interval;
 import io.raytracer.geometry.ThreeTransform;
 import io.raytracer.mechanics.BBox;
 import io.raytracer.mechanics.IRay;
@@ -41,7 +42,7 @@ public abstract class Hittable {
         this.parent = group;
     }
 
-    abstract protected Intersection[] getLocalIntersections(IRay ray, double tmin, double tmax);
+    abstract protected Intersection[] getLocalIntersections(IRay ray, Interval rayDomain);
 
     abstract protected BBox getLocalBoundingBox();
 
@@ -63,16 +64,16 @@ public abstract class Hittable {
     }
 
     public Optional<RayHit> intersect(IRay ray) {
-        return this.intersect(ray, 0, Double.POSITIVE_INFINITY);
+        return this.intersect(ray, Interval.positiveReals());
     }
 
-    public Optional<RayHit> intersect(IRay ray, double tmin, double tmax) {
-        return RayHit.fromIntersections(this.getIntersections(ray, tmin, tmax)).map(hit ->  hit.reintersect(ray));
+    public Optional<RayHit> intersect(IRay ray, Interval rayDomain) {
+        return RayHit.fromIntersections(this.getIntersections(ray, rayDomain)).map(hit ->  hit.reintersect(ray));
     }
 
-    protected Collection<Intersection> getIntersections(IRay ray, double tmin, double tmax) {
+    protected Collection<Intersection> getIntersections(IRay ray, Interval rayDomain) {
         IRay transformedRay = ray.getTransformed(this.inverseTransform);
-        return Arrays.stream(this.getLocalIntersections(transformedRay, tmin, tmax)).collect(Collectors.toList());
+        return Arrays.stream(this.getLocalIntersections(transformedRay, rayDomain)).collect(Collectors.toList());
     }
 
     public IPoint transformToOwnSpace(IPoint worldPoint) {

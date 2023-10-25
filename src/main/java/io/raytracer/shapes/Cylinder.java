@@ -2,6 +2,7 @@ package io.raytracer.shapes;
 
 import io.raytracer.geometry.IPoint;
 import io.raytracer.geometry.IVector;
+import io.raytracer.geometry.Interval;
 import io.raytracer.geometry.Point;
 import io.raytracer.geometry.Vector;
 import io.raytracer.materials.Material;
@@ -43,7 +44,7 @@ public class Cylinder extends Shape {
     }
 
     @Override
-    protected Intersection[] getLocalIntersections(IRay ray, double tmin, double tmax) {
+    protected Intersection[] getLocalIntersections(IRay ray, Interval rayDomain) {
         double[] sideIntersections = this.getSideIntersections(ray);
         List<Double> allIntersections = DoubleStream.of(sideIntersections).boxed().collect(Collectors.toCollection(ArrayList::new));
         if (Math.abs(ray.getDirection().get(1)) > Cylinder.tolerance) {
@@ -57,7 +58,7 @@ public class Cylinder extends Shape {
             }
         }
         return allIntersections.stream()
-            .mapToDouble(d -> d).filter(i -> i > tmin && i< tmax)
+            .mapToDouble(d -> d).filter(i -> i > rayDomain.min && i< rayDomain.max)
             .mapToObj(position -> new Intersection(this, ray, position, new TextureParameters()))
             .toArray(Intersection[]::new);
     }

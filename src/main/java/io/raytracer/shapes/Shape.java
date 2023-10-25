@@ -2,6 +2,7 @@ package io.raytracer.shapes;
 
 import io.raytracer.geometry.IPoint;
 import io.raytracer.geometry.IVector;
+import io.raytracer.geometry.Interval;
 import io.raytracer.materials.Material;
 import io.raytracer.mechanics.IRay;
 import io.raytracer.mechanics.Intersection;
@@ -28,8 +29,8 @@ public abstract class Shape extends Hittable {
 
     abstract protected IVector localNormalAt(IPoint point, double u, double v);
 
-    public Collection<Intersection> getIntersections(IRay ray, double tmin, double tmax) {
-        return super.getIntersections(ray, tmin, tmax);
+    public Collection<Intersection> getIntersections(IRay ray, Interval rayDomain) {
+        return super.getIntersections(ray, rayDomain);
     }
 
     @Override

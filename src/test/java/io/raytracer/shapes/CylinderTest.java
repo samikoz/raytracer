@@ -32,7 +32,7 @@ class CylinderTest {
     @MethodSource("provideMissingRays")
     void getLocalIntersectionsForMissingRay(IRay ray) {
         Shape cylinder = new Cylinder();
-        Intersection[] intersections = cylinder.getLocalIntersections(ray, 0, Double.POSITIVE_INFINITY);
+        Intersection[] intersections = cylinder.getLocalIntersections(ray, Interval.positiveReals());
 
         assertEquals(0, intersections.length);
     }
@@ -49,7 +49,7 @@ class CylinderTest {
     @MethodSource("provideHittingRaysAndIntersections")
     void positiveLocalIntersectionPositions(Ray ray, double firstPosition, double secondPosition) {
         Shape cylinder = new Cylinder();
-        Intersection[] intersections = cylinder.getLocalIntersections(ray, 0, Double.POSITIVE_INFINITY);
+        Intersection[] intersections = cylinder.getLocalIntersections(ray, Interval.positiveReals());
         assertEquals(2, intersections.length);
         assertEquals(firstPosition, intersections[0].rayParameter, 1e-3);
         assertEquals(secondPosition, intersections[1].rayParameter, 1e-3);
@@ -90,7 +90,7 @@ class CylinderTest {
         Cylinder cylinder = new Cylinder();
         cylinder.setLowerBound(1);
         cylinder.setUpperBound(2);
-        Intersection[] intersections = cylinder.getLocalIntersections(ray, 0, Double.POSITIVE_INFINITY);
+        Intersection[] intersections = cylinder.getLocalIntersections(ray, Interval.positiveReals());
 
         assertEquals(intersectionsCount, intersections.length);
     }
@@ -113,7 +113,7 @@ class CylinderTest {
         cylinder.setUpperBound(2);
         cylinder.setTopClosed(true);
         cylinder.setBottomClosed(true);
-        Intersection[] intersections = cylinder.getLocalIntersections(ray, 0, Double.POSITIVE_INFINITY);
+        Intersection[] intersections = cylinder.getLocalIntersections(ray, Interval.positiveReals());
 
         assertEquals(intersectionsCount, intersections.length);
     }

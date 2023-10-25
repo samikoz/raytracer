@@ -27,7 +27,7 @@ class PlaneTest {
         Plane plane = new Plane();
         IRay parallelRay = new Ray(new Point(0, 10, 0), new Vector(0, 0, 1));
 
-        Intersection[] intersectPositions = plane.getLocalIntersections(parallelRay, 0, Double.POSITIVE_INFINITY);
+        Intersection[] intersectPositions = plane.getLocalIntersections(parallelRay, Interval.positiveReals());
 
         assertEquals(0, intersectPositions.length);
     }
@@ -37,7 +37,7 @@ class PlaneTest {
         Plane plane = new Plane();
         IRay coplanarRay = new Ray(new Point(0, 0, 0), new Vector(1, 0, 0));
 
-        Intersection[] intersectPositions = plane.getLocalIntersections(coplanarRay, 0, Double.POSITIVE_INFINITY);
+        Intersection[] intersectPositions = plane.getLocalIntersections(coplanarRay, Interval.positiveReals());
 
         assertEquals(0, intersectPositions.length);
     }
@@ -47,7 +47,7 @@ class PlaneTest {
         Plane plane = new Plane();
         IRay ray = new Ray(new Point(0, 1, 0), new Vector(0, -1, 0));
 
-        Intersection[] intersectPositions = plane.getLocalIntersections(ray, 0, Double.POSITIVE_INFINITY);
+        Intersection[] intersectPositions = plane.getLocalIntersections(ray, Interval.positiveReals());
 
         assertEquals(1, intersectPositions.length);
         assertEquals(1, intersectPositions[0].rayParameter);
@@ -58,7 +58,7 @@ class PlaneTest {
         Plane plane = new Plane();
         IRay ray = new Ray(new Point(0, -1, 0), new Vector(0, 1, 0));
 
-        Intersection[] intersectPositions = plane.getLocalIntersections(ray, 0, Double.POSITIVE_INFINITY);
+        Intersection[] intersectPositions = plane.getLocalIntersections(ray, Interval.positiveReals());
 
         assertEquals(1, intersectPositions.length);
         assertEquals(1, intersectPositions[0].rayParameter);
@@ -72,7 +72,7 @@ class PlaneTest {
         IRay parallelRay = new Ray(new Point(1e-2, 1e-2, 1e-2), new Vector(-1, 0, -1));
         IRay hittingRay = new Ray(new Point(50, 15, -120), new Vector(23, -1, -10));
 
-        assertFalse(bbox.isHit(parallelRay, new Interval(Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY)));
-        assertTrue(bbox.isHit(hittingRay, new Interval(Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY)));
+        assertFalse(bbox.isHit(parallelRay, Interval.allReals()));
+        assertTrue(bbox.isHit(hittingRay, Interval.allReals()));
     }
 }
