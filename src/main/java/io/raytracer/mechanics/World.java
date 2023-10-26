@@ -8,6 +8,7 @@ import io.raytracer.tools.Camera;
 import io.raytracer.tools.IColour;
 import io.raytracer.tools.IPicture;
 import io.raytracer.tools.LinearColour;
+import io.raytracer.utils.StreamUtils;
 import lombok.NonNull;
 
 import java.util.ArrayList;
@@ -71,7 +72,7 @@ public abstract class World {
         Reporter reporter = this.reporterFactory.apply(
                 new RenderData(picture.getHeight()*picture.getWidth(), blankPixelCount, renderStart));
 
-        picture.getBlankPixels().parallel().forEach(pixelPair -> {
+        picture.getBlankPixels().parallel().collect(StreamUtils.shuffledCollector()).forEach(pixelPair -> {
             Collection<IRay> rays = camera.getRaysThroughPixel(pixelPair.getValue0(), pixelPair.getValue1());
             IColour colour = this.illuminate(rays);
             picture.write(pixelPair.getValue0(), pixelPair.getValue1(), colour);
