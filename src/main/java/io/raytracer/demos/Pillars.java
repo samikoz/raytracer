@@ -42,13 +42,6 @@ public class Pillars {
                 .build();
         cylinderMaterial.addRecaster(Recasters.diffuse, 1);
 
-        /*
-        int pillarsCount = 25;
-        Random randGen = new Random(1256);
-        Point[] pillarPositions = IntStream.range(0, pillarsCount)
-            .mapToObj(i -> new Point(20 - randGen.nextInt(40), 3 - randGen.nextInt(6), 20 - randGen.nextInt(40)))
-            .toArray(Point[]::new);
-         */
         Point[] prePillarPositions = new Point[] {
             new Point(-9.0, 3.0, 7.0),
             new Point(7.0, -2.0, 11.0),

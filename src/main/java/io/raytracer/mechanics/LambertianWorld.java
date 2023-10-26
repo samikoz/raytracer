@@ -1,6 +1,8 @@
 package io.raytracer.mechanics;
 
 import io.raytracer.materials.RecasterContribution;
+import io.raytracer.mechanics.reporters.RenderData;
+import io.raytracer.mechanics.reporters.Reporter;
 import io.raytracer.tools.GammaColour;
 import io.raytracer.tools.IColour;
 
@@ -20,6 +22,11 @@ public class LambertianWorld extends World {
     }
     public LambertianWorld(Function<IRay, IColour> background) {
         super(background);
+        this.randomVariable = (new Random())::nextFloat;
+    }
+
+    public LambertianWorld(Function<IRay, IColour> background, Function<RenderData, Reporter> reporterFactory) {
+        super(background, reporterFactory);
         this.randomVariable = (new Random())::nextFloat;
     }
 

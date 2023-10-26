@@ -1,5 +1,8 @@
 package io.raytracer.mechanics;
 
+import io.raytracer.mechanics.reporters.DefaultReporter;
+import io.raytracer.mechanics.reporters.RenderData;
+import io.raytracer.mechanics.reporters.Reporter;
 import io.raytracer.shapes.Hittable;
 import io.raytracer.tools.Camera;
 import io.raytracer.tools.IColour;
@@ -17,17 +20,25 @@ import java.util.function.Function;
 
 public abstract class World {
     private final Function<IRay, IColour> background;
+    private final Function<RenderData, Reporter> reporterFactory;
     private final List<Hittable> contents;
-    private volatile int renderMinutesLeft = 0;
 
     public World() {
         this.contents = new ArrayList<>();
         this.background = ray -> new LinearColour(0, 0, 0);
+        this.reporterFactory = DefaultReporter::new;
     }
 
     public World(Function<IRay, IColour> background) {
         this.contents = new ArrayList<>();
         this.background = background;
+        this.reporterFactory = DefaultReporter::new;
+    }
+
+    public World(Function<IRay, IColour> background, Function<RenderData, Reporter> reporterFactory) {
+        this.contents = new ArrayList<>();
+        this.background = background;
+        this.reporterFactory = reporterFactory;
     }
 
     public World put(Hittable object) {
@@ -53,30 +64,22 @@ public abstract class World {
     }
 
     public void render(IPicture picture, Camera camera) {
-        int totalPixelCount = (int)picture.getBlankPixels().count();
+        int blankPixelCount = (int)picture.getBlankPixels().count();
 
         long renderStart = System.nanoTime();
-        AtomicInteger rayCount = new AtomicInteger(1);
+        AtomicInteger pixelCount = new AtomicInteger(1);
+        Reporter reporter = this.reporterFactory.apply(
+                new RenderData(picture.getHeight()*picture.getWidth(), blankPixelCount, renderStart));
 
         picture.getBlankPixels().parallel().forEach(pixelPair -> {
-            int countSoFar = rayCount.get();
-            float progressPercent = (float)countSoFar/totalPixelCount*100;
-            if (countSoFar % 100 == 0) {
-                long currentTime = System.nanoTime();
-                double timeLeft = (currentTime - renderStart)*(((double)totalPixelCount/countSoFar) - 1);
-                renderMinutesLeft = (int)(timeLeft/(60*Math.pow(10,9)));
-                System.out.printf("\r%.2f%%  /  %d  / ~%d min left", progressPercent, totalPixelCount, renderMinutesLeft);
-            }
             Collection<IRay> rays = camera.getRaysThroughPixel(pixelPair.getValue0(), pixelPair.getValue1());
             IColour colour = this.illuminate(rays);
             picture.write(pixelPair.getValue0(), pixelPair.getValue1(), colour);
-            rayCount.getAndIncrement();
+            int renderedPixelCount = pixelCount.getAndIncrement();
+            reporter.report(renderedPixelCount);
         });
-        long renderEnd = System.nanoTime();
-        int seconds = (int)((renderEnd - renderStart)/Math.pow(10, 9));
-        int minutes = seconds / 60;
-        System.out.println();
-        System.out.printf("render took %d min, %d sec%n", minutes, seconds % 60);
+
+        reporter.summarise();
     }
 
     public IColour getBackgroundAt(IRay ray) {

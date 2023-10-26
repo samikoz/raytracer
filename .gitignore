@@ -3,3 +3,4 @@ target
 raytracer.iml
 artifacts/
 src/main/java/io/raytracer/demos/notyet
+src/test/java/io/raytracer/benchmarking/
