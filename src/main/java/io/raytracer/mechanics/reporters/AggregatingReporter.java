@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
 
 public class AggregatingReporter extends DefaultReporter {
     private final Path filepath;
@@ -21,7 +22,7 @@ public class AggregatingReporter extends DefaultReporter {
                     .replace(" /", ";")
                     .replaceAll("[^0-9.;%]", "") + "\n";
 
-            try (OutputStream outputStream = Files.newOutputStream(this.filepath)) {
+            try (OutputStream outputStream = Files.newOutputStream(this.filepath, StandardOpenOption.APPEND, StandardOpenOption.CREATE)) {
                 outputStream.write(message.getBytes());
             } catch (IOException e) {
                 throw new RuntimeException(e);
