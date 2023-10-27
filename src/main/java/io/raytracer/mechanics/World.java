@@ -10,6 +10,7 @@ import io.raytracer.tools.IPicture;
 import io.raytracer.tools.LinearColour;
 import io.raytracer.utils.StreamUtils;
 import lombok.NonNull;
+import org.javatuples.Pair;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -18,6 +19,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
+import java.util.stream.Stream;
 
 public abstract class World {
     private final Function<IRay, IColour> background;
@@ -67,12 +69,14 @@ public abstract class World {
     public void render(IPicture picture, Camera camera) {
         int blankPixelCount = (int)picture.getBlankPixels().count();
 
-        long renderStart = System.nanoTime();
         AtomicInteger pixelCount = new AtomicInteger(1);
+        Stream<Pair<Integer, Integer>> blankPixels = picture.getBlankPixels().parallel().collect(StreamUtils.shuffledCollector());
+
+        long renderStart = System.nanoTime();
         Reporter reporter = this.reporterFactory.apply(
                 new RenderData(picture.getHeight()*picture.getWidth(), blankPixelCount, renderStart));
 
-        picture.getBlankPixels().parallel().collect(StreamUtils.shuffledCollector()).forEach(pixelPair -> {
+        blankPixels.forEach(pixelPair -> {
             Collection<IRay> rays = camera.getRaysThroughPixel(pixelPair.getValue0(), pixelPair.getValue1());
             IColour colour = this.illuminate(rays);
             picture.write(pixelPair.getValue0(), pixelPair.getValue1(), colour);
