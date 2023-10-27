@@ -13,10 +13,9 @@ import lombok.NonNull;
 import org.javatuples.Pair;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
-import java.util.Comparator;
 import java.util.List;
-import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
 import java.util.stream.Stream;
@@ -60,10 +59,8 @@ public abstract class World {
 
     abstract IColour illuminate(IRay ray);
 
-    Optional<RayHit> intersect(@NonNull IRay ray) {
-        return contents.stream().map(object -> object.intersect(ray))
-                .filter(Optional::isPresent)
-                .map(Optional::get).min(Comparator.comparingDouble(hit -> hit.rayParameter));
+    Intersection[] intersect(@NonNull IRay ray) {
+        return contents.stream().map(object -> object.intersect(ray)).flatMap(Arrays::stream).sorted().toArray(Intersection[]::new);
     }
 
     public void render(IPicture picture, Camera camera) {

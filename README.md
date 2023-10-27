@@ -12,12 +12,7 @@ simple sphere which for scaling and translation just changes radius and centre a
 ray-intersection solver for these.
 - Think about the current recursive implementation of illuminate. Can't we pass the "colour so far"
 parameter and cut off the subsequent invocations if their contribution would be too small to notice
-- Groups have been implemented for grouping but not for bounding boxes
 - For textures, look whether can group Mapping parameter together with IPoint in one class. 
 Could then pass this class to texture.colourAt and also implement matrix-transformations for it.
 - Can implement simplified form of finding refractive indices. Allow for specification which refindex algorithm
 one wants. Probably that would lead to some RayHitFactory implementation.
-- Current hittable interface serves no purpose. Merge with Shape.
-- Employ Intervals in intersect methods.
-- Make RayHit encompass Intersection, not inherit.
-- Make BoundingBox non-optional

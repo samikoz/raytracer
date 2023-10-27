@@ -45,12 +45,12 @@ public class Volume extends Shape {
 
     @Override
     protected Intersection[] getLocalIntersections(IRay ray, Interval rayDomain) {
-        Optional<RayHit> leftHit = this.boundary.intersect(ray, new Interval(Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY));
+        Optional<RayHit> leftHit = RayHit.fromIntersections(this.boundary.intersect(ray, new Interval(Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY)));
         if (!leftHit.isPresent()) {
             return new Intersection[]{};
         }
         double leftParameter = leftHit.get().rayParameter;
-        Optional<RayHit> rightHit = this.boundary.intersect(ray, new Interval(leftParameter + 0.0001, Double.POSITIVE_INFINITY));
+        Optional<RayHit> rightHit = RayHit.fromIntersections(this.boundary.intersect(ray, new Interval(leftParameter + 0.0001, Double.POSITIVE_INFINITY)));
         if (!rightHit.isPresent()) {
             return new Intersection[]{};
         }

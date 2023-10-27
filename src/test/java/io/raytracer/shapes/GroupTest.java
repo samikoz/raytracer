@@ -6,14 +6,13 @@ import io.raytracer.geometry.ThreeTransform;
 import io.raytracer.geometry.Vector;
 import io.raytracer.mechanics.BBox;
 import io.raytracer.mechanics.IRay;
+import io.raytracer.mechanics.Intersection;
 import io.raytracer.mechanics.Ray;
-import io.raytracer.mechanics.RayHit;
 import org.junit.jupiter.api.Test;
-
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class GroupTest {
@@ -43,9 +42,9 @@ class GroupTest {
         group.setTransform(ThreeTransform.scaling(2, 2, 2));
         IRay ray = new Ray(new Point(10, 0, -10), new Vector(0, 0, 1));
 
-        Optional<RayHit> hit = group.intersect(ray);
+        Intersection[] inters = group.intersect(ray);
 
-        assertTrue(hit.isPresent());
+        assertNotEquals(0, inters.length);
     }
 
     @Test
@@ -64,10 +63,32 @@ class GroupTest {
         IRay centreMissingRay = new Ray(new Point(0, 0, -2), upVector);
         IRay leftHittingRay = new Ray(new Point(-2.5, 0, -2), upVector);
 
-        assertTrue(untransformedGroup.intersect(rightHittingRay).isPresent());
-        assertFalse(untransformedGroup.intersect(rightMissingRay).isPresent());
-        assertFalse(untransformedGroup.intersect(centreMissingRay).isPresent());
-        assertTrue(untransformedGroup.intersect(leftHittingRay).isPresent());
+        assertNotEquals(0, untransformedGroup.intersect(rightHittingRay).length);
+        assertEquals(0, untransformedGroup.intersect(rightMissingRay).length);
+        assertEquals(0, untransformedGroup.intersect(centreMissingRay).length);
+        assertNotEquals(0, untransformedGroup.intersect(leftHittingRay).length);
+    }
+
+    @Test
+    void groupCorrectlyHitsChildren() {
+        Shape sphere1 = new Sphere();
+        Shape sphere2 = new Sphere();
+        sphere2.setTransform(ThreeTransform.translation(0.5, -0.1, 0));
+        Group group1 = new Group(new Hittable[] {sphere1, sphere2}, () -> 0);
+        group1.setTransform(ThreeTransform.translation(1, 0, 0));
+        Group group2 = new Group(new Hittable[] {sphere2, sphere1}, () -> 1);
+        group2.setTransform(ThreeTransform.translation(1, 0, 0));
+        IRay ray = new Ray(new Point(-2, 0, 0), new Vector(1, 0, 0));
+
+        Intersection[] intersections1 = group1.intersect(ray);
+        Intersection[] intersections2 = group2.intersect(ray);
+
+        assertEquals(sphere1, intersections1[0].object);
+        assertEquals(ray, intersections1[0].ray);
+        assertEquals(2, intersections1[0].rayParameter, 1e-3);
+        assertEquals(sphere1, intersections2[0].object);
+        assertEquals(ray, intersections2[0].ray);
+        assertEquals(2, intersections2[0].rayParameter, 1e-3);
     }
 
     @Test

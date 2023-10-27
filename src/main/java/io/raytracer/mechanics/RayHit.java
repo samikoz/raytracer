@@ -7,7 +7,6 @@ import lombok.ToString;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Comparator;
 import java.util.Optional;
 
@@ -42,20 +41,30 @@ public class RayHit extends Intersection {
         this.shadowed = false;
     }
 
-    public RayHit reintersect(IRay r) {
-        Intersection reintersection = new Intersection(this.object, r, this.rayParameter, this.mapping);
-        return new RayHit(reintersection, this.refractiveIndexFrom, this.refractiveIndexTo);
+    @Override
+    public boolean equals(Object them) {
+        if (them == null || this.getClass() != them.getClass()) return false;
+
+        RayHit themHit = (RayHit) them;
+        return (this.ray == themHit.ray && (int)this.rayParameter*1000 == (int)themHit.rayParameter*1000);
     }
 
-    public static Optional<RayHit> fromIntersections(Collection<Intersection> inters) {
-        Optional<Intersection> firstPositive = inters.stream().min(Comparator.comparingDouble(i -> i.rayParameter));
+    @Override
+    public int hashCode() {
+        return Arrays.hashCode(new int[] { this.ray.hashCode(), (int)this.rayParameter*1000 });
+    }
+
+    public static Optional<RayHit> fromIntersections(Intersection[] inters) {
+        Optional<Intersection> firstPositive = Arrays.stream(inters).min(Comparator.comparingDouble(i -> i.rayParameter));
         if (!firstPositive.isPresent()) { return Optional.empty(); }
         Intersection hitIntersection = firstPositive.get();
         double[] refractiveIndices = RayHit.findRefractiveIndices(inters, hitIntersection);
         return Optional.of(new RayHit(hitIntersection, refractiveIndices[0], refractiveIndices[1]));
     }
 
-    static double[] findRefractiveIndices(Collection<Intersection> inters, Intersection hitIntersection) {
+    static double[] findRefractiveIndices(Intersection[] inters, Intersection hitIntersection) {
+        //respects overlapping objects when finding proper refractive indices
+        //if ever gonna use it, make sure no shortcuts taken when computing intersection list e.g. in Group
         ArrayList<Shape> containers = new ArrayList<>();
         double[] refractiveIndices = new double[2];
         for (Intersection currentIntersection : inters) {
@@ -83,18 +92,5 @@ public class RayHit extends Intersection {
             }
         }
         return refractiveIndices;
-    }
-
-    @Override
-    public boolean equals(Object them) {
-        if (them == null || this.getClass() != them.getClass()) return false;
-
-        RayHit themHit = (RayHit) them;
-        return (this.ray == themHit.ray && (int)this.rayParameter*1000 == (int)themHit.rayParameter*1000);
-    }
-
-    @Override
-    public int hashCode() {
-        return Arrays.hashCode(new int[] { this.ray.hashCode(), (int)this.rayParameter*1000 });
     }
 }

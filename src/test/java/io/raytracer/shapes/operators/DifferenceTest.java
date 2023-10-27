@@ -31,7 +31,7 @@ class DifferenceTest {
         Shape diff = new Difference(rightSphere, leftSphere);
 
         IRay ray = new Ray(new Point(-2, 0, 0), new Vector(1, 0, 0));
-        Intersection[] inters = diff.getIntersections(ray, Interval.allReals()).toArray(new Intersection[] {});
+        Intersection[] inters = diff.intersect(ray, Interval.allReals());
 
         assertEquals(2, inters.length);
         assertEquals(3, inters[0].rayParameter);
@@ -46,7 +46,7 @@ class DifferenceTest {
         Shape diff = new Difference(rightSphere, leftSphere);
 
         IRay ray = new Ray(new Point(-2, 0, 0), new Vector(1, 0, 0));
-        Optional<RayHit> hitpoint = diff.intersect(ray);
+        Optional<RayHit> hitpoint = RayHit.fromIntersections(diff.intersect(ray));
 
         assertTrue(hitpoint.isPresent());
         assertEquals(new LinearColour(1, 0, 0), diff.getIntrinsicColour(hitpoint.get()));

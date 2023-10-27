@@ -44,7 +44,7 @@ public class LambertianWorld extends World {
         if (ray.getRecast() >= LambertianWorld.lambertianDepth) {
             return new GammaColour(0, 0, 0);
         }
-        Optional<RayHit> hit = this.intersect(ray);
+        Optional<RayHit> hit = RayHit.fromIntersections(this.intersect(ray));
         if (hit.isPresent()) {
             RayHit hitpoint = hit.get();
             IColour emit = hitpoint.object.getMaterial().emit;

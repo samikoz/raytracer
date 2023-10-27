@@ -2,9 +2,7 @@ package io.raytracer.shapes;
 
 import io.raytracer.geometry.IPoint;
 import io.raytracer.geometry.IVector;
-import io.raytracer.geometry.Interval;
 import io.raytracer.materials.Material;
-import io.raytracer.mechanics.IRay;
 import io.raytracer.mechanics.Intersection;
 import io.raytracer.mechanics.RayHit;
 import io.raytracer.tools.IColour;
@@ -12,7 +10,6 @@ import lombok.Getter;
 import lombok.NonNull;
 
 import java.util.Arrays;
-import java.util.Collection;
 
 public abstract class Shape extends Hittable {
     @Getter private final Material material;
@@ -28,10 +25,6 @@ public abstract class Shape extends Hittable {
     }
 
     abstract protected IVector localNormalAt(IPoint point, double u, double v);
-
-    public Collection<Intersection> getIntersections(IRay ray, Interval rayDomain) {
-        return super.getIntersections(ray, rayDomain);
-    }
 
     @Override
     public boolean equals(Object them) {

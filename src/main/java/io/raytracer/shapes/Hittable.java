@@ -8,14 +8,11 @@ import io.raytracer.geometry.ThreeTransform;
 import io.raytracer.mechanics.BBox;
 import io.raytracer.mechanics.IRay;
 import io.raytracer.mechanics.Intersection;
-import io.raytracer.mechanics.RayHit;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 public abstract class Hittable {
     private Group parent;
@@ -63,17 +60,13 @@ public abstract class Hittable {
         return this.inverseTransform.hashCode();
     }
 
-    public Optional<RayHit> intersect(IRay ray) {
+    public Intersection[] intersect(IRay ray) {
         return this.intersect(ray, Interval.positiveReals());
     }
 
-    public Optional<RayHit> intersect(IRay ray, Interval rayDomain) {
-        return RayHit.fromIntersections(this.getIntersections(ray, rayDomain)).map(hit ->  hit.reintersect(ray));
-    }
-
-    protected Collection<Intersection> getIntersections(IRay ray, Interval rayDomain) {
+    public Intersection[] intersect(IRay ray, Interval rayDomain) {
         IRay transformedRay = ray.getTransformed(this.inverseTransform);
-        return Arrays.stream(this.getLocalIntersections(transformedRay, rayDomain)).collect(Collectors.toList());
+        return Arrays.stream(this.getLocalIntersections(transformedRay, rayDomain)).map(i -> i.reintersect(ray)).toArray(Intersection[]::new);
     }
 
     public IPoint transformToOwnSpace(IPoint worldPoint) {
