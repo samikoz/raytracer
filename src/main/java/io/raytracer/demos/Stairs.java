@@ -9,17 +9,20 @@ import io.raytracer.mechanics.LambertianWorld;
 import io.raytracer.mechanics.Recasters;
 import io.raytracer.mechanics.World;
 import io.raytracer.shapes.Cube;
-import io.raytracer.shapes.Group;
+import io.raytracer.shapes.Hittable;
 import io.raytracer.shapes.Rectangle;
 import io.raytracer.shapes.Shape;
 import io.raytracer.textures.MonocolourTexture;
+import io.raytracer.tools.BufferedPPMPicture;
 import io.raytracer.tools.IColour;
 import io.raytracer.tools.IPicture;
 import io.raytracer.tools.LinearColour;
-import io.raytracer.tools.PPMPicture;
 import lombok.val;
 
 import java.io.IOException;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class Stairs {
@@ -42,8 +45,9 @@ public class Stairs {
                 .filename("stairsHorizontal.ppm")
                 .build();
         //--
+        // rather increase brightness maybe to 22 and then make columns brighter so that reflexes are not so eminent
         DemoSetup verticalSetup = horizontalSetup.toBuilder()
-                .rayCount(300)
+                .rayCount(400)
                 .eyePosition(new Point(0, 5, 1.55))
                 .lookDirection(new Vector(0, -5, -1.55))
                 .filename("stairsVertical.ppm")
@@ -70,7 +74,7 @@ public class Stairs {
 
         //stairs
         IVector horDisp = new Vector(0.6, -1, 0);
-        Group horizontalKeys = new Group();
+        List<Hittable> horizontalKeys = new ArrayList<>();
         ThreeTransform horPush = ThreeTransform.scaling(0.2, 10, 0.6).translate(-1.9 - horDisp.get(0), -10 - horDisp.get(1), -1 - horDisp.get(2));
         for (int i = 0; i < 20; i++) {
             Shape key = new Cube(blockMaterial);
@@ -80,7 +84,7 @@ public class Stairs {
         }
         //--
         IVector vertDisp = new Vector(0.6, -1, 0.25);
-        Group verticalKeys = new Group();
+        List<Hittable> verticalKeys = new ArrayList<>();
         ThreeTransform vertPush = ThreeTransform.scaling(1.8, 10, 0.1).translate(1 - vertDisp.get(0), -10 - vertDisp.get(1), -1.7 - vertDisp.get(2));
         for (int i = 0; i < 13; i++) {
             Shape key = new Cube(blockMaterial);
@@ -94,7 +98,7 @@ public class Stairs {
         emitent.setTransform(ThreeTransform.rotation_x(Math.PI / 2).scale(5, 1, 5).translate(0, 10, -2));
         //--
         Shape verticalEmitent = new Rectangle(verticalEmitentMaterial);
-        verticalEmitent.setTransform(ThreeTransform.rotation_x(Math.PI / 2).scale(5, 1, 5).translate(0, 10, -2));
+        verticalEmitent.setTransform(ThreeTransform.rotation_x(Math.PI / 2 + Math.PI/6).scale(5, 1, 5).translate(0, 10, -2));
 
         //worlds
         World horizontalWorld = new LambertianWorld(backgroundColour);
@@ -108,9 +112,9 @@ public class Stairs {
         verticalWorld.put(verticalEmitent);
 
         //render
-        val currentSetup = horizontalSetup;
-        val currentWorld = horizontalWorld;
-        IPicture picture = new PPMPicture(xSize, ySize);
+        val currentSetup = verticalSetup;
+        val currentWorld = verticalWorld;
+        IPicture picture = new BufferedPPMPicture(xSize, ySize, Paths.get("./buffStairsVertical/"), xSize*ySize / 100);
         currentSetup.render(picture, currentWorld);
 
         /*
