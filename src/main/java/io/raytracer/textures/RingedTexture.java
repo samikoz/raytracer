@@ -14,7 +14,7 @@ public class RingedTexture extends Texture {
 
     @Override
     public IColour ownColourAt(IPoint p) {
-        return Math.floor(Math.sqrt(Math.pow(p.get(0), 2) + Math.pow(p.get(2), 2))) % 2 == 0 ? this.firstColour : this.secondColour;
+        return Math.floor(Math.sqrt(Math.pow(p.x(), 2) + Math.pow(p.z(), 2))) % 2 == 0 ? this.firstColour : this.secondColour;
     }
 
     @Override

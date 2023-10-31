@@ -97,14 +97,14 @@ public class Triangle extends Shape {
     protected BBox getLocalBoundingBox() {
         return new BBox(
             new Point(
-                Math.min(Math.min(this.v1.get(0), this.v2.get(0)), this.v3.get(0)),
-                Math.min(Math.min(this.v1.get(1), this.v2.get(1)), this.v3.get(1)),
-                Math.min(Math.min(this.v1.get(2), this.v2.get(2)), this.v3.get(2))
+                Math.min(Math.min(this.v1.x(), this.v2.x()), this.v3.x()),
+                Math.min(Math.min(this.v1.y(), this.v2.y()), this.v3.y()),
+                Math.min(Math.min(this.v1.z(), this.v2.z()), this.v3.z())
             ),
             new Point(
-                Math.max(Math.max(this.v1.get(0), this.v2.get(0)), this.v3.get(0)),
-                Math.max(Math.max(this.v1.get(1), this.v2.get(1)), this.v3.get(1)),
-                Math.max(Math.max(this.v1.get(2), this.v2.get(2)), this.v3.get(2))
+                Math.max(Math.max(this.v1.x(), this.v2.x()), this.v3.x()),
+                Math.max(Math.max(this.v1.y(), this.v2.y()), this.v3.y()),
+                Math.max(Math.max(this.v1.z(), this.v2.z()), this.v3.z())
             )
         );
     }

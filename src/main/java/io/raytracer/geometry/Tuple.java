@@ -1,25 +1,22 @@
 package io.raytracer.geometry;
 
+import lombok.ToString;
+
 import java.util.Arrays;
-import java.util.stream.IntStream;
-import java.util.function.IntToDoubleFunction;
 
+@ToString
 class Tuple implements ITuple {
-    private final int dim;
-    private final double[] coords;
+    private final double x, y, z;
 
-    public Tuple(double... coordinates) {
-        dim = coordinates.length;
-        coords = coordinates;
-    }
-
-    private int[] roundCoordinates(ITuple t) {
-        return IntStream.range(0, dim).map(i -> (int)(t.get(i)*1000)).toArray();
+    public Tuple(double x, double y, double z) {
+        this.x = x;
+        this.y = y;
+        this.z = z;
     }
 
     @Override
     public int hashCode() {
-        return Arrays.hashCode(this.roundCoordinates(this));
+        return Arrays.hashCode(new double[] {(int)this.x*1000, (int)this.y*1000, (int)this.z*1000});
     }
 
     @Override
@@ -27,46 +24,30 @@ class Tuple implements ITuple {
         if (them == null || this.getClass() != them.getClass()) return false;
 
         ITuple themTuple = (ITuple) them;
-        return (this.dim == themTuple.dim() && Arrays.equals(this.roundCoordinates(this), this.roundCoordinates(themTuple)));
+        return ((int)(this.x*1000) == (int)(themTuple.x()*1000) && (int)(this.y*1000) == (int)(themTuple.y()*1000) && (int)(this.z*1000) == (int)(themTuple.z()*1000));
     }
 
-    @Override
-    public int dim() {
-        return dim;
+    public double x() {
+        return this.x;
     }
 
-    @Override
-    public double get(int coordinate) {
-        assert coordinate < dim;
-        return coords[coordinate];
+    public double y() {
+        return this.y;
     }
 
-    double[] toArray() {
-        return this.coords.clone();
+    public double z() {
+        return this.z;
     }
 
-    Tuple applyCoordinatewise(IntToDoubleFunction action) {
-        return new Tuple(IntStream.range(0, dim).mapToDouble(action).toArray());
+    ITuple add(ITuple them) {
+        return new Tuple(this.x + them.x(), this.y + them.y(), this.z + them.z());
+    }
+
+    public ITuple multiply(double scalar) {
+        return new Tuple(scalar*this.x, scalar*this.y, scalar*this.z);
     }
 
     double euclideanDistance(ITuple them) {
-        assert this.dim == them.dim();
-
-        return Math.sqrt(IntStream.range(0, dim).mapToDouble(i -> Math.pow(this.get(i) - them.get(i), 2)).sum());
-    }
-
-    Tuple add(ITuple them) {
-        assert this.dim == them.dim();
-
-        return applyCoordinatewise(i -> this.get(i) + them.get(i));
-    }
-
-    public Tuple multiply(double scalar) {
-        return applyCoordinatewise(i -> get(i) * scalar);
-    }
-
-    @Override
-    public String toString() {
-        return this.getClass().getSimpleName() + Arrays.toString(this.coords);
+        return Math.sqrt(Math.pow(this.x - them.x(), 2) + Math.pow(this.y - them.y(), 2) + Math.pow(this.z - them.z(), 2));
     }
 }

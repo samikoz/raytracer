@@ -25,9 +25,9 @@ public class Cube extends Shape {
 
     @Override
     protected Intersection[] getLocalIntersections(IRay ray, Interval rayDomain) {
-        double[] xIntersections = this.getAxisIntersections(ray.getOrigin().get(0), ray.getDirection().get(0));
-        double[] yIntersections = this.getAxisIntersections(ray.getOrigin().get(1), ray.getDirection().get(1));
-        double[] zIntersections = this.getAxisIntersections(ray.getOrigin().get(2), ray.getDirection().get(2));
+        double[] xIntersections = this.getAxisIntersections(ray.getOrigin().x(), ray.getDirection().x());
+        double[] yIntersections = this.getAxisIntersections(ray.getOrigin().y(), ray.getDirection().y());
+        double[] zIntersections = this.getAxisIntersections(ray.getOrigin().z(), ray.getDirection().z());
 
         double maxMinIntersection = Math.max(Math.max(xIntersections[0], yIntersections[0]), zIntersections[0]);
         double minMaxIntersection = Math.min(Math.min(xIntersections[1], yIntersections[1]), zIntersections[1]);
@@ -52,7 +52,7 @@ public class Cube extends Shape {
     }
 
     private double[] getMappingParameters(IPoint intersectionPoint) {
-        double[] sideIntersectionCoords = Arrays.stream(new double[]{intersectionPoint.get(0), intersectionPoint.get(1), intersectionPoint.get(2)})
+        double[] sideIntersectionCoords = Arrays.stream(new double[]{intersectionPoint.x(), intersectionPoint.y(), intersectionPoint.z()})
             .filter(coord -> Math.abs(coord - 1) > 1e-3 && Math.abs(coord + 1) > 1e-3).toArray();
         if (sideIntersectionCoords.length != 2) {
             return new double[] {1, 1};
@@ -62,14 +62,14 @@ public class Cube extends Shape {
 
     @Override
     protected IVector localNormalAt(IPoint point, double u, double v) {
-        double maxComponent = Math.max(Math.abs(point.get(0)), Math.max(Math.abs(point.get(1)), Math.abs(point.get(2))));
+        double maxComponent = Math.max(Math.abs(point.x()), Math.max(Math.abs(point.y()), Math.abs(point.z())));
 
-        if (maxComponent == Math.abs(point.get(0))) {
-            return new Vector(point.get(0), 0, 0);
-        } else if (maxComponent == Math.abs(point.get(1))) {
-            return new Vector(0, point.get(1), 0);
+        if (maxComponent == Math.abs(point.x())) {
+            return new Vector(point.x(), 0, 0);
+        } else if (maxComponent == Math.abs(point.y())) {
+            return new Vector(0, point.y(), 0);
         }
-        return new Vector(0, 0, point.get(2));
+        return new Vector(0, 0, point.z());
     }
 
     @Override

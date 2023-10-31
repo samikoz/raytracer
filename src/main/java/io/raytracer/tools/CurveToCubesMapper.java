@@ -38,7 +38,7 @@ public class CurveToCubesMapper {
 
     private ThreeTransform mapCurveData(CurvepointData curvepointData) {
         IVector tv = this.getTranslationVector(curvepointData.point);
-        return this.getScaledRotation(curvepointData.vector).translate(tv.get(0), tv.get(1), tv.get(2));
+        return this.getScaledRotation(curvepointData.vector).translate(tv.x(), tv.y(), tv.z());
     }
 
     private IVector getTranslationVector(IPoint point) {
@@ -46,6 +46,6 @@ public class CurveToCubesMapper {
     }
 
     private ThreeTransform getScaledRotation(IVector normal) {
-        return ThreeTransform.rotation_z(Math.atan2(normal.get(1), normal.get(0)));
+        return ThreeTransform.rotation_z(Math.atan2(normal.y(), normal.x()));
     }
 }

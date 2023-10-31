@@ -1,15 +1,16 @@
 package io.raytracer.geometry;
 
-import java.util.stream.DoubleStream;
-import java.util.stream.IntStream;
-
 public class Vector extends Tuple implements IVector {
-    public Vector(double... coordinates) {
-        super(coordinates);
+    public Vector(double x, double y, double z) {
+        super(x, y, z);
     }
 
-    private Vector(Tuple them) {
-        this(them.toArray());
+    Vector(double[] coords) {
+        this(coords[0], coords[1], coords[2]);
+    }
+
+    Vector(ITuple them) {
+        this(them.x(), them.y(), them.z());
     }
 
     @Override
@@ -29,7 +30,7 @@ public class Vector extends Tuple implements IVector {
 
     @Override
     public double norm() {
-        return distance(new Vector(DoubleStream.generate(() -> 0).limit(dim()).toArray()));
+        return distance(new Vector(0, 0, 0));
     }
 
     @Override
@@ -39,20 +40,15 @@ public class Vector extends Tuple implements IVector {
 
     @Override
     public double dot(IVector them) {
-        assert this.dim() == them.dim();
-
-        return IntStream.range(0, dim()).mapToDouble(i -> this.get(i) * them.get(i)).sum();
+        return this.x()*them.x() + this.y()*them.y() + this.z()*them.z();
     }
 
     @Override
     public Vector cross(IVector them) {
-        assert this.dim() == 3;
-        assert them.dim() == 3;
-
         return new Vector(
-                this.get(1) * them.get(2) - this.get(2) * them.get(1),
-                this.get(2) * them.get(0) - this.get(0) * them.get(2),
-                this.get(0) * them.get(1) - this.get(1) * them.get(0)
+                this.y() * them.z() - this.z() * them.y(),
+                this.z() * them.x() - this.x() * them.z(),
+                this.x() * them.y() - this.y() * them.x()
         );
     }
 

@@ -18,14 +18,14 @@ public enum CubeCorner {
     }
 
     public int x() {
-        return (int) this.coords.get(0);
+        return (int) this.coords.x();
     }
 
     public int y() {
-        return (int) this.coords.get(1);
+        return (int) this.coords.y();
     }
 
     public int z() {
-        return (int) this.coords.get(2);
+        return (int) this.coords.z();
     }
 }

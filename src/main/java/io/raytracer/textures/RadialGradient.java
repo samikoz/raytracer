@@ -2,7 +2,6 @@ package io.raytracer.textures;
 
 import io.raytracer.geometry.IPoint;
 import io.raytracer.tools.IColour;
-import io.raytracer.tools.LinearColour;
 
 import java.util.Arrays;
 
@@ -17,7 +16,7 @@ public class RadialGradient extends Texture {
 
     @Override
     IColour ownColourAt(IPoint p) {
-        double radius = Math.sqrt(Math.pow(p.get(0), 2) + Math.pow(p.get(1), 2));
+        double radius = Math.sqrt(Math.pow(p.x(), 2) + Math.pow(p.y(), 2));
         return this.centreColour.interpolate(this.brimColour, radius);
     }
 

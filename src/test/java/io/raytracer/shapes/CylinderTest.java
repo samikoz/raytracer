@@ -164,7 +164,7 @@ class CylinderTest {
         cylinder.setLowerBound(-5);
         BBox box = cylinder.getBoundingBox();
 
-        IRay missingRay = new Ray(new Point(-2, 0, -5-1e-3, 0), new Vector(1, 0, 0));
+        IRay missingRay = new Ray(new Point(-2, 0, -5-1e-3), new Vector(1, 0, 0));
         IRay hittingRay = new Ray(new Point(-2, 1e12, 0), new Vector(1, 0, 0));
 
         assertFalse(box.isHit(missingRay, new Interval(Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY)));

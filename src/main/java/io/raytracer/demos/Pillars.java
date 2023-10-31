@@ -69,14 +69,14 @@ public class Pillars {
             new Point(-2.0, 2.0, -14.0),
             new Point(-11.0, 0.0, 10.0)
         };
-        Point[] pillarPositions = Arrays.stream(prePillarPositions).map(p -> new Point(1.2*p.get(0), 1.2*p.get(1), 1.2*p.get(2))).toArray(Point[]::new);
+        Point[] pillarPositions = Arrays.stream(prePillarPositions).map(p -> new Point(1.2*p.x(), 1.2*p.y(), 1.2*p.z())).toArray(Point[]::new);
         IntStream.range(0, pillarPositions.length).forEach(positionIndex -> {
             Cylinder pillar = new Cylinder(cylinderMaterial);
             Point currentPosition = pillarPositions[positionIndex];
-            pillar.setUpperBound(2 + currentPosition.get(1));
+            pillar.setUpperBound(2 + currentPosition.y());
             pillar.setLowerBound(-100);
             pillar.setTopClosed(true);
-            pillar.setTransform(ThreeTransform.scaling(2, 2, 2).translate(currentPosition.get(0), 0, currentPosition.get(2)));
+            pillar.setTransform(ThreeTransform.scaling(2, 2, 2).translate(currentPosition.x(), 0, currentPosition.z()));
             world.put(pillar);
         });
 

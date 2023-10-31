@@ -75,20 +75,20 @@ public class Stairs {
         //stairs
         IVector horDisp = new Vector(0.6, -1, 0);
         List<Hittable> horizontalKeys = new ArrayList<>();
-        ThreeTransform horPush = ThreeTransform.scaling(0.2, 10, 0.6).translate(-1.9 - horDisp.get(0), -10 - horDisp.get(1), -1 - horDisp.get(2));
+        ThreeTransform horPush = ThreeTransform.scaling(0.2, 10, 0.6).translate(-1.9 - horDisp.x(), -10 - horDisp.y(), -1 - horDisp.z());
         for (int i = 0; i < 20; i++) {
             Shape key = new Cube(blockMaterial);
-            horPush = horPush.translate(horDisp.get(0), horDisp.get(1), horDisp.get(2));
+            horPush = horPush.translate(horDisp.x(), horDisp.y(), horDisp.z());
             key.setTransform(horPush);
             horizontalKeys.add(key);
         }
         //--
         IVector vertDisp = new Vector(0.6, -1, 0.25);
         List<Hittable> verticalKeys = new ArrayList<>();
-        ThreeTransform vertPush = ThreeTransform.scaling(1.8, 10, 0.1).translate(1 - vertDisp.get(0), -10 - vertDisp.get(1), -1.7 - vertDisp.get(2));
+        ThreeTransform vertPush = ThreeTransform.scaling(1.8, 10, 0.1).translate(1 - vertDisp.x(), -10 - vertDisp.y(), -1.7 - vertDisp.z());
         for (int i = 0; i < 13; i++) {
             Shape key = new Cube(blockMaterial);
-            vertPush = vertPush.translate(vertDisp.get(0), vertDisp.get(1), vertDisp.get(2)).scale(0.8, 1, 1);
+            vertPush = vertPush.translate(vertDisp.x(), vertDisp.y(), vertDisp.z()).scale(0.8, 1, 1);
             key.setTransform(vertPush);
             verticalKeys.add(key);
         }

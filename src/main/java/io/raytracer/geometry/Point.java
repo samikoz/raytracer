@@ -2,15 +2,13 @@ package io.raytracer.geometry;
 
 import lombok.NonNull;
 
-import java.util.stream.IntStream;
-
 public class Point extends Tuple implements IPoint {
-    public Point(double... coordinates) {
-        super(coordinates);
+    public Point(double x, double y, double z) {
+        super(x, y, z);
     }
 
-    private Point(Tuple them) {
-        this(them.toArray());
+    private Point(ITuple them) {
+        this(them.x(), them.y(), them.z());
     }
 
     @Override
@@ -30,11 +28,7 @@ public class Point extends Tuple implements IPoint {
 
     @Override
     public IVector subtract(@NonNull IPoint toSubtract) {
-        IVector toMoveBack = new Vector(
-                IntStream.range(0, toSubtract.dim()).mapToDouble(toSubtract::get).toArray()
-        );
-        IPoint movedBack = subtract(toMoveBack);
-        return new Vector(IntStream.range(0, movedBack.dim()).mapToDouble(movedBack::get).toArray());
+        return new Vector(this.x() - toSubtract.x(), this.y() - toSubtract.y(), this.z() - toSubtract.z());
     }
 
     @Override

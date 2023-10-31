@@ -15,7 +15,7 @@ public class GradientTexture extends Texture {
 
     @Override
     public IColour ownColourAt(IPoint p) {
-        return firstColour.interpolate(this.secondColour, p.get(0) - Math.floor(p.get(0)));
+        return firstColour.interpolate(this.secondColour, p.x() - Math.floor(p.x()));
     }
 
     @Override

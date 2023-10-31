@@ -1,7 +1,7 @@
 package io.raytracer.geometry;
 
 public interface ITuple {
-    int dim();
-
-    double get(int coordinate);
+    double x();
+    double y();
+    double z();
 }

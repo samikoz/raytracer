@@ -50,7 +50,7 @@ public class LiteralParser implements Parser {
         );
         sphere.setTransform(
             ThreeTransform.scaling(parsedRadius, parsedRadius, parsedRadius)
-            .translate(parsedCentre.get(0), parsedCentre.get(1), parsedCentre.get(2))
+            .translate(parsedCentre.x(), parsedCentre.y(), parsedCentre.z())
         );
         return sphere;
     }

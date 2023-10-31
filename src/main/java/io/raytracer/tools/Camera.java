@@ -5,7 +5,7 @@ import io.raytracer.geometry.ISquareMatrix;
 import io.raytracer.geometry.ITransform;
 import io.raytracer.geometry.IVector;
 import io.raytracer.geometry.Point;
-import io.raytracer.geometry.SquareMatrix;
+import io.raytracer.geometry.FourMatrix;
 import io.raytracer.geometry.ThreeTransform;
 import io.raytracer.mechanics.IRay;
 import io.raytracer.mechanics.Ray;
@@ -75,13 +75,13 @@ public abstract class Camera {
         IVector leftDirection = forwardDirection.cross(upNormalised);
         IVector realUpDirection = leftDirection.cross(forwardDirection);
 
-        ISquareMatrix originTransformation = new SquareMatrix(
-                leftDirection.get(0), leftDirection.get(1), leftDirection.get(2), 0,
-                realUpDirection.get(0), realUpDirection.get(1), realUpDirection.get(2), 0,
-                -forwardDirection.get(0), -forwardDirection.get(1), -forwardDirection.get(2), 0,
+        ISquareMatrix originTransformation = new FourMatrix(
+                leftDirection.x(), leftDirection.y(), leftDirection.z(), 0,
+                realUpDirection.x(), realUpDirection.y(), realUpDirection.z(), 0,
+                -forwardDirection.x(), -forwardDirection.y(), -forwardDirection.z(), 0,
                 0, 0, 0, 1);
 
-        return ThreeTransform.translation(-eyePosition.get(0), -eyePosition.get(1), -eyePosition.get(2))
+        return ThreeTransform.translation(-eyePosition.x(), -eyePosition.y(), -eyePosition.z())
                 .transform(originTransformation);
     }
 

@@ -18,9 +18,9 @@ public class CheckerTexture extends Texture {
 
     @Override
     public IColour ownColourAt(IPoint p) {
-        double roundedFirst = this.roundToTolerance(p.get(0));
-        double roundedSecond = this.roundToTolerance(p.get(1));
-        double roundedThird = this.roundToTolerance(p.get(2));
+        double roundedFirst = this.roundToTolerance(p.x());
+        double roundedSecond = this.roundToTolerance(p.y());
+        double roundedThird = this.roundToTolerance(p.z());
         return (Math.floor(roundedFirst) + Math.floor(roundedSecond) + Math.floor(roundedThird)) % 2 == 0 ? this.firstColour : this.secondColour;
     }
 

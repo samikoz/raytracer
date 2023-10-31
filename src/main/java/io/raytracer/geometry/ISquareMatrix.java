@@ -1,12 +1,11 @@
 package io.raytracer.geometry;
 
 public interface ISquareMatrix {
-    int dim();
 
     double get(int x, int y);
 
     ISquareMatrix multiply(ISquareMatrix them);
-    ITuple multiply(ITuple them);
+    Tuple4 multiply(Tuple4 them);
 
     ISquareMatrix transpose();
 

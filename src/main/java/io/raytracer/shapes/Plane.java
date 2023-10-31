@@ -27,14 +27,14 @@ public class Plane extends Shape {
 
     @Override
     protected Intersection[] getLocalIntersections(IRay ray, Interval rayDomain) {
-        if (abs(ray.getDirection().get(1)) < parallelTolerance) {
+        if (abs(ray.getDirection().y()) < parallelTolerance) {
             return new Intersection[]{};
         }
-        double intersection = -ray.getOrigin().get(1) / ray.getDirection().get(1);
+        double intersection = -ray.getOrigin().y() / ray.getDirection().y();
         if (intersection < rayDomain.min || intersection > rayDomain.max) {
             return new Intersection[] {};
         }
-        return new Intersection[] { new Intersection(this, ray, -ray.getOrigin().get(1) / ray.getDirection().get(1),new TextureParameters()) };
+        return new Intersection[] { new Intersection(this, ray, -ray.getOrigin().y() / ray.getDirection().y(),new TextureParameters()) };
     }
 
     @Override

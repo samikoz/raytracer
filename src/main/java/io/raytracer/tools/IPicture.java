@@ -27,7 +27,7 @@ public interface IPicture {
     default void embed(IPicture picture, IPoint embedPosition) {
         for (int y = 0; y < picture.getHeight(); y++) {
             for (int x = 0; x < picture.getWidth(); x++) {
-                this.write((int)embedPosition.get(0) + x, (int)embedPosition.get(1) + y, picture.read(x, y));
+                this.write((int)embedPosition.x() + x, (int)embedPosition.y() + y, picture.read(x, y));
             }
         }
     }

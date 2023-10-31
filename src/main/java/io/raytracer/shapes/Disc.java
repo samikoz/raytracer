@@ -22,12 +22,12 @@ public class Disc extends Shape {
 
     @Override
     protected Intersection[] getLocalIntersections(IRay ray, Interval rayDomain) {
-        if (ray.getDirection().get(2) == 0) {
+        if (ray.getDirection().z() == 0) {
             return new Intersection[] {};
         }
-        double positionAtZZero = -ray.getOrigin().get(2)/ray.getDirection().get(2);
-        double xCoordAtZZero = ray.getOrigin().get(0) + positionAtZZero*ray.getDirection().get(0);
-        double yCoordAtZZero = ray.getOrigin().get(1) + positionAtZZero*ray.getDirection().get(1);
+        double positionAtZZero = -ray.getOrigin().z()/ray.getDirection().z();
+        double xCoordAtZZero = ray.getOrigin().x() + positionAtZZero*ray.getDirection().x();
+        double yCoordAtZZero = ray.getOrigin().y() + positionAtZZero*ray.getDirection().y();
         if (Math.pow(xCoordAtZZero,2) + Math.pow(yCoordAtZZero,2) < 1 && positionAtZZero >= rayDomain.min && positionAtZZero <= rayDomain.max) {
             return new Intersection[]{new Intersection(this, ray, positionAtZZero, new TextureParameters())};
         }

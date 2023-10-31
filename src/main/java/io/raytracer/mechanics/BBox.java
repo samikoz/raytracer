@@ -2,9 +2,11 @@ package io.raytracer.mechanics;
 
 import io.raytracer.geometry.IPoint;
 import io.raytracer.geometry.ITransform;
+import io.raytracer.geometry.IVector;
 import io.raytracer.geometry.Interval;
 import io.raytracer.geometry.Point;
 import lombok.RequiredArgsConstructor;
+import org.javatuples.Pair;
 
 import java.util.Collection;
 import java.util.stream.Collectors;
@@ -23,9 +25,9 @@ public class BBox {
     }
 
     public BBox(IPoint corner1, IPoint corner2) {
-        this.x = new Interval(Math.min(corner1.get(0), corner2.get(0)), Math.max(corner1.get(0), corner2.get(0)));
-        this.y = new Interval(Math.min(corner1.get(1), corner2.get(1)), Math.max(corner1.get(1), corner2.get(1)));
-        this.z = new Interval(Math.min(corner1.get(2), corner2.get(2)), Math.max(corner1.get(2), corner2.get(2)));
+        this.x = new Interval(Math.min(corner1.x(), corner2.x()), Math.max(corner1.x(), corner2.x()));
+        this.y = new Interval(Math.min(corner1.y(), corner2.y()), Math.max(corner1.y(), corner2.y()));
+        this.z = new Interval(Math.min(corner1.z(), corner2.z()), Math.max(corner1.z(), corner2.z()));
     }
 
     public BBox(BBox b1, BBox b2) {
@@ -46,12 +48,12 @@ public class BBox {
         double zexMin = Double.POSITIVE_INFINITY;
         double zexMax = Double.NEGATIVE_INFINITY;
         for (IPoint p : mapped) {
-            xexMin = Math.min(p.get(0), xexMin);
-            xexMax = Math.max(p.get(0), xexMax);
-            yexMin = Math.min(p.get(1), yexMin);
-            yexMax = Math.max(p.get(1), yexMax);
-            zexMin = Math.min(p.get(2), zexMin);
-            zexMax = Math.max(p.get(2), zexMax);
+            xexMin = Math.min(p.x(), xexMin);
+            xexMax = Math.max(p.x(), xexMax);
+            yexMin = Math.min(p.y(), yexMin);
+            yexMax = Math.max(p.y(), yexMax);
+            zexMin = Math.min(p.z(), zexMin);
+            zexMax = Math.max(p.z(), zexMax);
         }
         return new BBox(new Interval(xexMin, xexMax), new Interval(yexMin, yexMax), new Interval(zexMin, zexMax));
     }
@@ -59,11 +61,14 @@ public class BBox {
     public boolean isHit(IRay ray, Interval range) {
         double min = range.min;
         double max = range.max;
-        for (int a = 0; a < 3; a++) {
-            double invD = 1 / ray.getDirection().get(a);
-            double orig = ray.getOrigin().get(a);
-            double t0 = (this.axis(a).min - orig)*invD;
-            double t1 = (this.axis(a).max - orig)*invD;
+        IVector rayDir = ray.getDirection();
+        IPoint rayOrg = ray.getOrigin();
+        int axisIndex = 0;
+        for (Pair<Double, Double> dirOrg : new Pair[] { new Pair<>(rayDir.x(), rayOrg.x()), new Pair<>(rayDir.y(), rayOrg.y()), new Pair<>(rayDir.z(), rayOrg.z()) }) {
+            double invD = 1 / dirOrg.getValue0();
+            double orig = dirOrg.getValue1();
+            double t0 = (this.axis(axisIndex).min - orig)*invD;
+            double t1 = (this.axis(axisIndex).max - orig)*invD;
 
             if (invD < 0) {
                 double swp = t0;
@@ -80,6 +85,7 @@ public class BBox {
             if (max <= min) {
                 return false;
             }
+            axisIndex++;
         }
         return true;
     }

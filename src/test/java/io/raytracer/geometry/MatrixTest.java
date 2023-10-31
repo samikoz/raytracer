@@ -1,16 +1,16 @@
 package io.raytracer.geometry;
 
+import org.junit.jupiter.api.Test;
+
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
-import org.junit.jupiter.api.Test;
-
-class SquareMatrixTest {
+class MatrixTest {
     @Test
     void correctEntryAccess() {
-        ISquareMatrix m = new SquareMatrix(
+        ThreeMatrix m = new ThreeMatrix(
             -3, -5, 0,
             1, -2, -7,
             0, 1, 1
@@ -23,41 +23,35 @@ class SquareMatrixTest {
 
     @Test
     void equalityUpToADelta() {
-        ISquareMatrix first = new SquareMatrix(0.0, -2.0, 1e-4, 12);
-        ISquareMatrix second = new SquareMatrix(0.0, -2.0, 0.0, 12);
+        TwoMatrix first = new TwoMatrix(0.0, -2.0, 1e-4, 12);
+        TwoMatrix second = new TwoMatrix(0.0, -2.0, 0.0, 12);
         assertEquals(first, second, "Equality of matrices should be up to a small delta");
     }
 
     @Test
     void inequality() {
-        ISquareMatrix first = new SquareMatrix(0.0, -2.0, 1e-4, 12);
-        ISquareMatrix second = new SquareMatrix(0, 0, 0, 0);
+        TwoMatrix first = new TwoMatrix(0.0, -2.0, 1e-4, 12);
+        TwoMatrix second = new TwoMatrix(0, 0, 0, 0);
         assertNotEquals(first, second, "Should not give false equality for same dimensions");
     }
 
-    @Test
-    void comparingDifferentDimensionMatrices() {
-        ISquareMatrix first = new SquareMatrix(0.0, -2.0, 1e-4, 12);
-        ISquareMatrix second = new SquareMatrix(0, -2, -2, 12, 1, 1, 1, 1, 1);
-        assertNotEquals(first, second, "Matrices of different dimensions should be different");
-    }
 
     @Test
     void matrixMultiplication() {
-        ISquareMatrix first = new SquareMatrix(
+        ISquareMatrix first = new FourMatrix(
             1, 2, 3, 4,
             5, 6, 7, 8,
             9, 8, 7, 6,
             5, 4, 3, 2
         );
-        ISquareMatrix second = new SquareMatrix(
+        ISquareMatrix second = new FourMatrix(
             -2, 1, 2, 3,
             3, 2, 1, -1,
             4, 3, 6, 5,
             1, 2, 7, 8
         );
         ISquareMatrix product = first.multiply(second);
-        ISquareMatrix expectedProduct = new SquareMatrix(
+        ISquareMatrix expectedProduct = new FourMatrix(
             20, 22, 50, 48,
             44, 54, 114, 108,
             40, 58, 110, 102,
@@ -69,28 +63,29 @@ class SquareMatrixTest {
 
     @Test
     void multiplicationByTuple() {
-        ISquareMatrix A = new SquareMatrix(
-            1, 2, 3,
-            2, 4, 4,
-            8, 6, 4
+        ISquareMatrix A = new FourMatrix(
+            1, 2, 3, 0,
+            2, 4, 4, 0,
+            8, 6, 4, 0,
+            1, 1, 1, 0
         );
-        ITuple x = new Tuple(1, 2, 3);
-        ITuple multiplied = A.multiply(x);
-        ITuple expectedProduct = new Tuple(14, 22, 32);
+        Tuple4 x = new Tuple4(1, 2, 3, 0);
+        Tuple4 multiplied = A.multiply(x);
+        Tuple4 expectedProduct = new Tuple4(14, 22, 32, 6);
 
         assertEquals(expectedProduct, multiplied);
     }
 
     @Test
     void transpose() {
-        ISquareMatrix A = new SquareMatrix(
+        ISquareMatrix A = new FourMatrix(
             0, 9, 3, 0,
             9, 8, 0, 8,
             1, 8, 5, 3,
             0, 0, 5, 8
         );
         ISquareMatrix transposed = A.transpose();
-        ISquareMatrix expectedTranspose = new SquareMatrix(
+        ISquareMatrix expectedTranspose = new FourMatrix(
             0, 9, 1, 0,
             9, 8, 8, 0,
             3, 0, 5, 5,
@@ -102,14 +97,14 @@ class SquareMatrixTest {
 
     @Test
     void determinant2x2() {
-        ISquareMatrix A = new SquareMatrix(1, 5, -3, 2);
+        TwoMatrix A = new TwoMatrix(1, 5, -3, 2);
         double expected2x2Determinant = 17;
         assertEquals(expected2x2Determinant, A.det());
     }
 
     @Test
     void determinant3x3() {
-        ISquareMatrix B = new SquareMatrix(
+        ThreeMatrix B = new ThreeMatrix(
             1, 2, 6,
             -5, 8, -4,
            2, 6, 4
@@ -120,7 +115,7 @@ class SquareMatrixTest {
 
     @Test
     void determinant4x4() {
-        ISquareMatrix C = new SquareMatrix(
+        ISquareMatrix C = new FourMatrix(
             -2, -8, 3, 5,
             -3, 1, 7, 3,
             1, 2, -9, 6,
@@ -131,37 +126,28 @@ class SquareMatrixTest {
     }
 
     @Test
-    void submatrix2x2() {
-        SquareMatrix M = new SquareMatrix(1, 2, 3, 4);
-        SquareMatrix subM = M.submatrix(1, 1);
-        SquareMatrix expectedSubmatrix = new SquareMatrix(1);
-
-        assertEquals(expectedSubmatrix, subM);
-    }
-
-    @Test
     void submatrix3x3() {
-        SquareMatrix A = new SquareMatrix(
+        ThreeMatrix A = new ThreeMatrix(
             1, 5, 0,
             -3, 2, 7,
             0, 6, -3
         );
-        SquareMatrix subA = A.submatrix(0, 2);
-        SquareMatrix expectedSubmatrix = new SquareMatrix(-3, 2, 0, 6);
+        CofactorDetMatrix subA = A.submatrix(0, 2);
+        CofactorDetMatrix expectedSubmatrix = new TwoMatrix(-3, 2, 0, 6);
 
         assertEquals(expectedSubmatrix, subA);
     }
 
     @Test
     void submatrix4x4() {
-        SquareMatrix B = new SquareMatrix(
+        FourMatrix B = new FourMatrix(
             -6, 1, 1, 6,
             -8, 5, 8, 6,
             -1, 0, 8, 2,
             -7, 1, -1, 1
         );
-        SquareMatrix subB = B.submatrix(2, 1);
-        SquareMatrix expectedSubmatrix = new SquareMatrix(
+        ThreeMatrix subB = B.submatrix(2, 1);
+        ThreeMatrix expectedSubmatrix = new ThreeMatrix(
             -6, 1, 6,
             -8, 8, 6,
             -7, -1, 1
@@ -172,7 +158,7 @@ class SquareMatrixTest {
 
     @Test
     void cofactor() {
-        SquareMatrix A = new SquareMatrix(
+        ThreeMatrix A = new ThreeMatrix(
             3, 5, 0,
             2, -1, -7,
             6, -1, 5
@@ -185,7 +171,7 @@ class SquareMatrixTest {
 
     @Test
     void isInvertible() {
-        ISquareMatrix notInvertible = new SquareMatrix(
+        ISquareMatrix notInvertible = new FourMatrix(
             -4, 2, -2, -3,
             9, 6, 2, 6,
             0, -5, 1, -5,
@@ -197,13 +183,13 @@ class SquareMatrixTest {
 
     @Test
     void inverse() {
-        ISquareMatrix invertibleA = new SquareMatrix(
+        ISquareMatrix invertibleA = new FourMatrix(
                 -5, 2, 6, -8,
                 1, -5, 1, 8,
                 7, 7, -6, -7,
                 1, -3, 7, 4
         );
-        ISquareMatrix expectedAInverse = new SquareMatrix(
+        ISquareMatrix expectedAInverse = new FourMatrix(
                 0.21805, 0.45113, 0.24060, -0.04511,
                 -0.80827, -1.45677, -0.44361, 0.52068,
                 -0.07895, -0.22368, -0.05263, 0.19737,
@@ -212,13 +198,13 @@ class SquareMatrixTest {
 
         assertEquals(expectedAInverse, invertibleA.inverse());
 
-        ISquareMatrix invertibleB = new SquareMatrix(
+        ISquareMatrix invertibleB = new FourMatrix(
                 8, -5, 9, 2,
                 7, 5, 6, 1,
                 -6, 0, 9, 6,
                 -3, 0, -9, -4
         );
-        ISquareMatrix expectedBInverse = new SquareMatrix(
+        ISquareMatrix expectedBInverse = new FourMatrix(
                 -0.15385, -0.15385, -0.28205, -0.53846,
                 -0.07692, 0.12308, 0.02564, 0.03077,
                 0.35897, 0.35897, 0.43590, 0.92308,
@@ -229,13 +215,13 @@ class SquareMatrixTest {
 
     @Test
     void multiplyingInversesCancelsOut() {
-        ISquareMatrix firstFactor = new SquareMatrix(
+        ISquareMatrix firstFactor = new FourMatrix(
             9, 3, 0, 9,
             -5, -2, -6, -3,
             -4, 9, 6, 4,
             -7, 6, 6, 2
         );
-        ISquareMatrix secondFactor = new SquareMatrix(
+        ISquareMatrix secondFactor = new FourMatrix(
             8, 2, 2, 2,
             3, -1, 7, 0,
             7, 0, 5, 4,

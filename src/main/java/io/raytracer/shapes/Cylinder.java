@@ -47,12 +47,12 @@ public class Cylinder extends Shape {
     protected Intersection[] getLocalIntersections(IRay ray, Interval rayDomain) {
         double[] sideIntersections = this.getSideIntersections(ray);
         List<Double> allIntersections = DoubleStream.of(sideIntersections).boxed().collect(Collectors.toCollection(ArrayList::new));
-        if (Math.abs(ray.getDirection().get(1)) > Cylinder.tolerance) {
-            double lowerEndParameter = (this.lowerBound - ray.getOrigin().get(1)) / ray.getDirection().get(1);
+        if (Math.abs(ray.getDirection().y()) > Cylinder.tolerance) {
+            double lowerEndParameter = (this.lowerBound - ray.getOrigin().y()) / ray.getDirection().y();
             if (this.isBottomClosed && this.isWithinAtParameter(ray, lowerEndParameter)) {
                 allIntersections.add(lowerEndParameter);
             }
-            double upperEndParameter = (this.upperBound - ray.getOrigin().get(1)) / ray.getDirection().get(1);
+            double upperEndParameter = (this.upperBound - ray.getOrigin().y()) / ray.getDirection().y();
             if (this.isTopClosed && this.isWithinAtParameter(ray, upperEndParameter)) {
                 allIntersections.add(upperEndParameter);
             }
@@ -66,13 +66,13 @@ public class Cylinder extends Shape {
     private double[] getSideIntersections(IRay ray) {
         IVector rayDirection = ray.getDirection();
         IPoint rayOrigin = ray.getOrigin();
-        double a = Math.pow(rayDirection.get(0), 2) + Math.pow(rayDirection.get(2), 2);
+        double a = Math.pow(rayDirection.x(), 2) + Math.pow(rayDirection.z(), 2);
         if (Math.abs(a) < tolerance) {
             return new double[] {};
         }
 
-        double b = 2*rayOrigin.get(0)*rayDirection.get(0) + 2*rayOrigin.get(2)*rayDirection.get(2);
-        double c = Math.pow(rayOrigin.get(0), 2) + Math.pow(rayOrigin.get(2), 2) - 1;
+        double b = 2*rayOrigin.x()*rayDirection.x() + 2*rayOrigin.z()*rayDirection.z();
+        double c = Math.pow(rayOrigin.x(), 2) + Math.pow(rayOrigin.z(), 2) - 1;
         double delta = Math.pow(b, 2) - 4*a*c;
         if (delta < 0) {
             return new double[] {};
@@ -83,27 +83,27 @@ public class Cylinder extends Shape {
             (-b + Math.sqrt(delta))/(2*a)
         };
         return Arrays.stream(fullCylinderIntersections)
-            .filter(i -> ray.getPosition(i).get(1) > this.lowerBound && ray.getPosition(i).get(1) < this.upperBound)
+            .filter(i -> ray.getPosition(i).y() > this.lowerBound && ray.getPosition(i).y() < this.upperBound)
             .toArray();
     }
 
     private boolean isWithinAtParameter(IRay ray, double t) {
-        double x = ray.getOrigin().get(0) + t*ray.getDirection().get(0);
-        double z = ray.getOrigin().get(2) + t*ray.getDirection().get(2);
+        double x = ray.getOrigin().x() + t*ray.getDirection().x();
+        double z = ray.getOrigin().z() + t*ray.getDirection().z();
         return Math.pow(x, 2) + Math.pow(z, 2) <= 1;
     }
 
     @Override
     protected IVector localNormalAt(IPoint point, double u, double v) {
-        double yDistance = Math.pow(point.get(0), 2) + Math.pow(point.get(2), 2);
+        double yDistance = Math.pow(point.x(), 2) + Math.pow(point.z(), 2);
 
-        if (yDistance < 1  && point.get(1) >= this.upperBound - Cylinder.tolerance) {
+        if (yDistance < 1  && point.y() >= this.upperBound - Cylinder.tolerance) {
             return new Vector(0, 1, 0);
         }
-        if (yDistance < 1 && point.get(1) <= this.lowerBound + Cylinder.tolerance) {
+        if (yDistance < 1 && point.y() <= this.lowerBound + Cylinder.tolerance) {
             return new Vector(0, -1, 0);
         }
-        return new Vector(point.get(0), 0, point.get(2));
+        return new Vector(point.x(), 0, point.z());
     }
 
     @Override
