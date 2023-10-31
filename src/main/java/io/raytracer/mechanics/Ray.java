@@ -9,10 +9,11 @@ import lombok.Setter;
 
 import java.util.Arrays;
 
+@Getter
 public class Ray implements IRay {
-    @Getter private final IPoint origin;
-    @Getter private final IVector direction;
-    @Getter @Setter private int recast;
+    private final IPoint origin;
+    private final IVector direction;
+    @Setter private int recast;
 
     public Ray(@NonNull IPoint origin, @NonNull IVector direction) {
         this.origin = origin;

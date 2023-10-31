@@ -5,7 +5,7 @@ import java.util.Arrays;
 
 public class Interval {
     public final double min, max;
-    private static double equalityTolerance = 1e-3;
+    private static final double equalityTolerance = 1e-3;
 
     public Interval() {
         this.min = 0;

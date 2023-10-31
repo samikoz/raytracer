@@ -42,7 +42,7 @@ class Tuple implements ITuple {
     }
 
     double[] toArray() {
-        return IntStream.range(0, dim).mapToDouble(this::get).toArray();
+        return this.coords.clone();
     }
 
     Tuple applyCoordinatewise(IntToDoubleFunction action) {

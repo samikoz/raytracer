@@ -6,6 +6,7 @@ import io.raytracer.mechanics.BBox;
 import io.raytracer.mechanics.IRay;
 import io.raytracer.mechanics.Intersection;
 import io.raytracer.mechanics.RayHit;
+import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -21,6 +22,7 @@ public class Group extends Hittable {
     private final Hittable right;
     private final BBox bbox;
     private static final Random randGen = new Random();
+    @Getter
     private final List<Hittable> children;
 
     public Group(Hittable[] objects) {
@@ -64,10 +66,6 @@ public class Group extends Hittable {
     public void setTransform(ITransform transform) {
         super.setTransform(transform);
         this.children.forEach(child -> child.setParent(this));
-    }
-    
-    public List<Hittable> getChildren() {
-        return this.children;
     }
 
     public Intersection[] intersect(IRay ray, Interval rayDomain) {
