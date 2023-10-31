@@ -33,13 +33,12 @@ public class Recasters {
     };
 
     public static Function<RayHit, Optional<IRay>> refractive = hit -> {
-        double refractedRatio = hit.refractiveIndexFrom / hit.refractiveIndexTo;
         double cosIncident = hit.eyeVector.dot(hit.normalVector);
-        double sinRefractedSquared = Math.pow(refractedRatio, 2)*(1 - Math.pow(cosIncident, 2));
-        if (sinRefractedSquared <= 1 && Recasters.getReflectance(cosIncident, refractedRatio) < Recasters.randGen.nextDouble()) {
+        double sinRefractedSquared = Math.pow(hit.refractiveRatio, 2)*(1 - Math.pow(cosIncident, 2));
+        if (sinRefractedSquared <= 1 && Recasters.getReflectance(cosIncident, hit.refractiveRatio) < Recasters.randGen.nextDouble()) {
             double cosRefracted = Math.sqrt(1 - sinRefractedSquared);
-            IVector refractedDirection = hit.normalVector.multiply(refractedRatio * cosIncident - cosRefracted)
-                    .subtract(hit.eyeVector.multiply(refractedRatio));
+            IVector refractedDirection = hit.normalVector.multiply(hit.refractiveRatio * cosIncident - cosRefracted)
+                    .subtract(hit.eyeVector.multiply(hit.refractiveRatio));
             return Optional.of(hit.ray.recast(hit.offsetBelow, refractedDirection));
         }
         else {

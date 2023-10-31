@@ -16,3 +16,5 @@ parameter and cut off the subsequent invocations if their contribution would be 
 Could then pass this class to texture.colourAt and also implement matrix-transformations for it.
 - Can implement simplified form of finding refractive indices. Allow for specification which refindex algorithm
 one wants. Probably that would lead to some RayHitFactory implementation.
+- No tests for reflection, refraction etc. Have messed with refraction, so before you use
+it make sure it works properly.

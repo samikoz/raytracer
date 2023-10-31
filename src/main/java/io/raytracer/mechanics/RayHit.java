@@ -2,10 +2,8 @@ package io.raytracer.mechanics;
 
 import io.raytracer.geometry.IPoint;
 import io.raytracer.geometry.IVector;
-import io.raytracer.shapes.Shape;
 import lombok.ToString;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Optional;
@@ -18,11 +16,10 @@ public class RayHit extends Intersection {
     public final IPoint offsetBelow;
     public final IVector eyeVector;
     public final IVector normalVector;
-    public final double refractiveIndexFrom;
-    public final double refractiveIndexTo;
+    public final double refractiveRatio;
     public boolean shadowed;
 
-    private RayHit(Intersection i, double refractiveFrom, double refractiveTo) {
+    private RayHit(Intersection i) {
         super(i.object, i.ray, i.rayParameter, i.mapping);
 
         IPoint intersectionPoint = this.ray.getPosition(this.rayParameter);
@@ -30,14 +27,15 @@ public class RayHit extends Intersection {
         IVector eyeVector = this.ray.getDirection().negate();
         if (surfaceNormal.dot(eyeVector) < 0) {
             surfaceNormal = surfaceNormal.negate();
+            this.refractiveRatio = 1/i.object.getMaterial().refractiveIndex;
+        } else {
+            this.refractiveRatio = object.getMaterial().refractiveIndex;
         }
         this.point = intersectionPoint;
         this.eyeVector = eyeVector.normalise();
         this.normalVector = surfaceNormal.normalise();
         this.offsetAbove = this.point.add(this.normalVector.multiply(1e-6));
         this.offsetBelow = this.point.subtract(this.normalVector.multiply(1e-6));
-        this.refractiveIndexFrom = refractiveFrom;
-        this.refractiveIndexTo = refractiveTo;
         this.shadowed = false;
     }
 
@@ -58,10 +56,10 @@ public class RayHit extends Intersection {
         Optional<Intersection> firstPositive = Arrays.stream(inters).min(Comparator.comparingDouble(i -> i.rayParameter));
         if (!firstPositive.isPresent()) { return Optional.empty(); }
         Intersection hitIntersection = firstPositive.get();
-        double[] refractiveIndices = RayHit.findRefractiveIndices(inters, hitIntersection);
-        return Optional.of(new RayHit(hitIntersection, refractiveIndices[0], refractiveIndices[1]));
+        return Optional.of(new RayHit(hitIntersection));
     }
 
+    /*
     static double[] findRefractiveIndices(Intersection[] inters, Intersection hitIntersection) {
         //respects overlapping objects when finding proper refractive indices
         //if ever gonna use it, make sure no shortcuts taken when computing intersection list e.g. in Group
@@ -93,4 +91,5 @@ public class RayHit extends Intersection {
         }
         return refractiveIndices;
     }
+    */
 }
