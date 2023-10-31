@@ -4,7 +4,6 @@ import io.raytracer.mechanics.IRay;
 import io.raytracer.mechanics.RayHit;
 import io.raytracer.textures.MonocolourTexture;
 import io.raytracer.textures.Texture;
-import io.raytracer.tools.GammaColour;
 import io.raytracer.tools.IColour;
 import io.raytracer.tools.LinearColour;
 import lombok.Builder;
@@ -22,7 +21,7 @@ public class Material {
     public final double refractiveIndex;
     public final IColour emit;
     @Getter private final List<RecasterContribution> recasterContributions;
-    private static final IColour defaultEmit = new GammaColour(0, 0, 0);
+    private static final IColour defaultEmit = new LinearColour(0, 0, 0);
     private static final double defaultRefractiveIndex = 1;
     private static final double equalityTolerance = 1e-3;
 

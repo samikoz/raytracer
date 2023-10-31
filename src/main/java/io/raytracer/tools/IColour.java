@@ -6,6 +6,8 @@ public interface IColour {
     double getGreen();
     double getBlue();
 
+    double getBrightness();
+
     IColour multiply(double scalar);
 
     IColour add(IColour them);

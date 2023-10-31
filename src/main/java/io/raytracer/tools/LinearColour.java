@@ -45,6 +45,11 @@ public class LinearColour implements IColour, Serializable {
         );
     }
 
+    @Override
+    public double getBrightness() {
+        return Math.max(Math.max(this.getRed(), this.getGreen()), this.getBlue());
+    }
+
     protected double clamp(double componentValue) {
         if (componentValue <= 0) {
             componentValue = 0;
