@@ -13,18 +13,10 @@ import java.util.Arrays;
 public class Ray implements IRay {
     private final IPoint origin;
     private final IVector direction;
-    @Setter private int recast;
 
     public Ray(@NonNull IPoint origin, @NonNull IVector direction) {
         this.origin = origin;
         this.direction = direction;
-        this.recast = 0;
-    }
-
-    public IRay recast(IPoint from, IVector direction) {
-        Ray recastRay = new Ray(from, direction);
-        recastRay.recast = this.getRecast() + 1;
-        return recastRay;
     }
 
     @Override
@@ -37,9 +29,7 @@ public class Ray implements IRay {
         if (t.isId()) {
             return this;
         }
-        Ray transformed = new Ray(this.origin.transform(t), this.direction.transform(t));
-        transformed.recast = this.recast;
-        return transformed;
+        return new Ray(this.origin.transform(t), this.direction.transform(t));
     }
 
     @Override
@@ -47,15 +37,12 @@ public class Ray implements IRay {
         if (them == null || this.getClass() != them.getClass()) return false;
 
         Ray themRay = (Ray) them;
-        return (
-            this.origin.equals(themRay.origin) && this.direction.equals(themRay.direction) &&
-            this.recast == themRay.recast
-        );
+        return this.origin.equals(themRay.origin) && this.direction.equals(themRay.direction);
     }
 
     @Override
     public int hashCode() {
-        return Arrays.hashCode(new int[] { this.origin.hashCode(), this.direction.hashCode(), this.recast});
+        return Arrays.hashCode(new int[] { this.origin.hashCode(), this.direction.hashCode()});
     }
 
     @Override

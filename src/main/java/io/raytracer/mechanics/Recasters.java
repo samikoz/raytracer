@@ -12,12 +12,12 @@ import java.util.function.Function;
 public class Recasters {
     private static final Random randGen = new Random();
 
-    public static Function<RayHit, Optional<IRay>> isotropic = hit -> Optional.of(hit.ray.recast(hit.point, Recasters.getRandomInUnitSphere()));
+    public static Function<RayHit, Optional<IRay>> isotropic = hit -> Optional.of(new Ray(hit.point, Recasters.getRandomInUnitSphere()));
 
     public static Function<RayHit, Optional<IRay>> diffuse = hit -> {
         IPoint outerNormalCentre = hit.point.add(hit.normalVector.normalise());
         IVector recastDirection = outerNormalCentre.add(Recasters.getRandomInUnitSphere()).subtract(hit.point);
-        return Optional.of(hit.ray.recast(hit.offsetAbove, recastDirection));
+        return Optional.of(new Ray(hit.offsetAbove, recastDirection));
     };
 
     //0 for no fuzziness
@@ -25,7 +25,7 @@ public class Recasters {
         IVector reflectionDirection = hit.ray.getDirection().reflect(hit.normalVector);
         IVector fuzzyDirection = reflectionDirection.add(Recasters.getRandomInUnitSphere().multiply(fuzziness));
         if (fuzzyDirection.dot(hit.normalVector) > 0) {
-            return Optional.of(hit.ray.recast(hit.offsetAbove, fuzzyDirection));
+            return Optional.of(new Ray(hit.offsetAbove, fuzzyDirection));
         }
         else {
             return Optional.empty();
@@ -39,7 +39,7 @@ public class Recasters {
             double cosRefracted = Math.sqrt(1 - sinRefractedSquared);
             IVector refractedDirection = hit.normalVector.multiply(hit.refractiveRatio * cosIncident - cosRefracted)
                     .subtract(hit.eyeVector.multiply(hit.refractiveRatio));
-            return Optional.of(hit.ray.recast(hit.offsetBelow, refractedDirection));
+            return Optional.of(new Ray(hit.offsetBelow, refractedDirection));
         }
         else {
             return Recasters.fuzzilyReflective.apply(0.0).apply(hit);

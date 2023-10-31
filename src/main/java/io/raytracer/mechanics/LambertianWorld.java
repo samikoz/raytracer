@@ -14,7 +14,6 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 public class LambertianWorld extends World {
-    private static final int lambertianDepth = 50;
     private static final double imperceptibleColourThreshold = 0.02;
     private final Supplier<Float> randomVariable;
 
@@ -47,9 +46,6 @@ public class LambertianWorld extends World {
     }
 
     private IColour illuminate(IRay ray, IColour colourSoFar) {
-        if (ray.getRecast() >= LambertianWorld.lambertianDepth) {
-            return new LinearColour(0, 0, 0);
-        }
         Optional<RayHit> hit = RayHit.fromIntersections(this.intersect(ray));
         if (hit.isPresent()) {
             RayHit hitpoint = hit.get();

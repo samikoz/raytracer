@@ -10,8 +10,6 @@ public interface IRay {
 
     IPoint getPosition(double parameter);
 
-    IRay recast(IPoint from, IVector direction);
-    int getRecast();
 
     IRay getTransformed(ITransform t);
 }
