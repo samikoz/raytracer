@@ -5,7 +5,6 @@ import io.raytracer.geometry.IVector;
 import lombok.ToString;
 
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.Optional;
 
 
@@ -53,10 +52,16 @@ public class RayHit extends Intersection {
     }
 
     public static Optional<RayHit> fromIntersections(Intersection[] inters) {
-        Optional<Intersection> firstPositive = Arrays.stream(inters).min(Comparator.comparingDouble(i -> i.rayParameter));
-        if (!firstPositive.isPresent()) { return Optional.empty(); }
-        Intersection hitIntersection = firstPositive.get();
-        return Optional.of(new RayHit(hitIntersection));
+        if (inters.length == 0) {
+            return Optional.empty();
+        }
+        Intersection closestIntersection = inters[0];
+        for (int intersectionIndex = 1; intersectionIndex < inters.length; intersectionIndex++) {
+            if (inters[intersectionIndex].rayParameter < closestIntersection.rayParameter) {
+                closestIntersection = inters[intersectionIndex];
+            }
+        }
+        return Optional.of(new RayHit(closestIntersection));
     }
 
     /*

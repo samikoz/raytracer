@@ -5,10 +5,6 @@ public class Vector extends Tuple implements IVector {
         super(x, y, z);
     }
 
-    Vector(double[] coords) {
-        this(coords[0], coords[1], coords[2]);
-    }
-
     Vector(ITuple them) {
         this(them.x(), them.y(), them.z());
     }

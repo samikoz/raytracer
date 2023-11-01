@@ -11,7 +11,8 @@ import io.raytracer.mechanics.Intersection;
 import io.raytracer.mechanics.TextureParameters;
 import lombok.NonNull;
 
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Sphere extends Shape {
     public Sphere() {
@@ -33,11 +34,13 @@ public class Sphere extends Shape {
         if (delta < 0) {
             return new Intersection[] {};
         }
-        double[] roots = new double[] { (-b - Math.sqrt(delta)) / (2 * a), (-b + Math.sqrt(delta)) / (2 * a) };
-        return Arrays.stream(roots)
-            .filter(root -> root > rayDomain.min && root < rayDomain.max)
-            .mapToObj(position -> new Intersection(this, ray, position, new TextureParameters()))
-            .toArray(Intersection[]::new);
+        List<Intersection> filteredIntersections = new ArrayList<>();
+        for(double root : new double[] { (-b - Math.sqrt(delta)) / (2 * a), (-b + Math.sqrt(delta)) / (2 * a) } ) {
+            if (root > rayDomain.min && root < rayDomain.max) {
+                filteredIntersections.add(new Intersection(this, ray, root, new TextureParameters()));
+            }
+        }
+        return filteredIntersections.toArray(new Intersection[] {});
     }
 
     @Override
