@@ -7,14 +7,14 @@
 1. https://raytracing.github.io/
 
 # Dev
-- Before looking at below - now Cylinder intersections are the bottleneck. Try to make faster.
-- Revisit and make right the matrices if you feel like that.
-- Could inverting matrices as often as possible. e.g. for scenes with lots of spheres could implement
+- Can do optimisations on the level localIntersections - Hittable.intersect. Can we move filtering above?
+Should we return Stream from below (need to filter and reintersect)? Do we have to return an array - prbly not, return List.
+First look at all shapes to make sure how the abstraction should look like.
+- Revisit and make right the matrices if you feel like.
+- Could avoid inverting matrices as often as possible. e.g. for scenes with lots of spheres could implement
 simple sphere which for scaling and translation just changes radius and centre and implements general
 ray-intersection solver for these.
-- For textures, look whether can group Mapping parameter together with IPoint in one class. 
-Could then pass this class to texture.colourAt and also implement matrix-transformations for it.
-- Can implement simplified form of finding refractive indices. Allow for specification which refindex algorithm
-one wants. Probably that would lead to some RayHitFactory implementation.
 - No tests for reflection, refraction etc. Have messed with refraction, so before you use
 it make sure it works properly.
+- For texture parameters add separate methods to interface. Write separate classes so that can switch between them.
+Spring, finally? look whether can group Mapping parameter together with IPoint in one class.
