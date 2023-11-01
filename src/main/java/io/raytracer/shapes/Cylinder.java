@@ -86,7 +86,7 @@ public class Cylinder extends Shape {
                 (-b - Math.sqrt(delta))/(2*a),
                 (-b + Math.sqrt(delta))/(2*a)
         } ) {
-            double rayYPosition = ray.getPosition(solution).y();
+            double rayYPosition = ray.getOrigin().y() + solution*ray.getDirection().y();
             if (rayYPosition > this.lowerBound && rayYPosition < this.upperBound) {
                 intersections.add(solution);
             }
@@ -95,8 +95,9 @@ public class Cylinder extends Shape {
     }
 
     private boolean isWithinAtParameter(IRay ray, double t) {
-        IPoint position = ray.getPosition(t);
-        return Math.pow(position.x(), 2) + Math.pow(position.z(), 2) <= 1;
+        double xPosition = ray.getOrigin().x() + t*ray.getDirection().x();
+        double zPosition = ray.getOrigin().z() + t*ray.getDirection().z();
+        return Math.pow(xPosition, 2) + Math.pow(zPosition, 2) <= 1;
     }
 
     @Override

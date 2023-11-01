@@ -1,7 +1,6 @@
 package io.raytracer.geometry;
 
 public interface ITransform {
-    boolean isId();
     ITransform inverse();
     ITransform transpose();
     ISquareMatrix getMatrix();

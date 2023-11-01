@@ -3,10 +3,10 @@ package io.raytracer.geometry;
 import lombok.Getter;
 import lombok.ToString;
 
+@Getter
 @ToString
 public class ThreeTransform implements ITransform {
-    @Getter private final ISquareMatrix matrix;
-    private final boolean isId;
+    private final ISquareMatrix matrix;
 
 
     public ThreeTransform() {
@@ -16,17 +16,10 @@ public class ThreeTransform implements ITransform {
                 0, 0, 1, 0,
                 0, 0, 0, 1
         );
-        this.isId = true;
     }
 
     private ThreeTransform(ISquareMatrix m) {
         matrix = m;
-        this.isId = m.equals(new FourMatrix(
-                1, 0, 0, 0,
-                0, 1, 0, 0,
-                0, 0, 1, 0,
-                0, 0, 0, 1
-        ));
     }
 
     @Override
@@ -40,11 +33,6 @@ public class ThreeTransform implements ITransform {
     @Override
     public int hashCode() {
         return this.matrix.hashCode();
-    }
-
-    @Override
-    public boolean isId() {
-        return this.isId;
     }
 
     public static ThreeTransform translation(double x, double y, double z) {

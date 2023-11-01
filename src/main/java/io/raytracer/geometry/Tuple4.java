@@ -5,7 +5,7 @@ import lombok.ToString;
 import java.util.Arrays;
 
 @ToString
-class Tuple4 {
+public class Tuple4 {
     public final double x, y, z, w;
 
     public Tuple4(double x, double y, double z, double w) {

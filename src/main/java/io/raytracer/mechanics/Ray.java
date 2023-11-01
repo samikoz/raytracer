@@ -5,7 +5,6 @@ import io.raytracer.geometry.ITransform;
 import io.raytracer.geometry.IVector;
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.Setter;
 
 import java.util.Arrays;
 
@@ -26,9 +25,6 @@ public class Ray implements IRay {
 
     @Override
     public IRay getTransformed(ITransform t) {
-        if (t.isId()) {
-            return this;
-        }
         return new Ray(this.origin.transform(t), this.direction.transform(t));
     }
 
