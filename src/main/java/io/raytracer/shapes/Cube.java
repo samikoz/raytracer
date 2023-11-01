@@ -12,7 +12,9 @@ import io.raytracer.mechanics.Intersection;
 import io.raytracer.mechanics.TextureParameters;
 import lombok.NonNull;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class Cube extends Shape {
     public Cube() {
@@ -35,6 +37,7 @@ public class Cube extends Shape {
         if (maxMinIntersection > minMaxIntersection) {
             return new Intersection[] {};
         }
+        /*
         //maps all sides to the same, linearly from (1,1,1)/(-1,-1,-1)
         double[] maxMinMappingParameters = this.getMappingParameters(ray.getPosition(maxMinIntersection));
         double[] minMaxMappingParameters = this.getMappingParameters(ray.getPosition(minMaxIntersection));
@@ -42,13 +45,25 @@ public class Cube extends Shape {
             new Intersection(this, ray, maxMinIntersection, new TextureParameters(maxMinMappingParameters[0], maxMinMappingParameters[1])),
             new Intersection(this, ray, minMaxIntersection, new TextureParameters(minMaxMappingParameters[0], minMaxMappingParameters[1]))
         };
-        return Arrays.stream(is).filter(i -> i.rayParameter > rayDomain.min && i.rayParameter < rayDomain.max).toArray(Intersection[]::new);
+         */
+        List<Intersection> filteredIntersections = new ArrayList<>(2);
+        for (double position : new double[] {maxMinIntersection, minMaxIntersection}) {
+            if (position > rayDomain.min && position < rayDomain.max) {
+                filteredIntersections.add(new Intersection(this, ray, position, new TextureParameters()));
+            }
+        }
+        return filteredIntersections.toArray(new Intersection[] {});
     }
 
     private double[] getAxisIntersections(double originComponent, double directionComponent) {
         double oneIntersection = (-1 - originComponent)/directionComponent;
         double otherIntersection = (1 - originComponent)/directionComponent;
-        return new double[] {Math.min(oneIntersection, otherIntersection), Math.max(oneIntersection, otherIntersection)};
+        if (oneIntersection < otherIntersection) {
+            return new double[] {oneIntersection, otherIntersection};
+        }
+        else {
+            return new double[] {otherIntersection, oneIntersection};
+        }
     }
 
     private double[] getMappingParameters(IPoint intersectionPoint) {
