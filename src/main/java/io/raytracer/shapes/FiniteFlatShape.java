@@ -1,8 +1,10 @@
 package io.raytracer.shapes;
 
-import io.raytracer.geometry.*;
+import io.raytracer.geometry.IPoint;
+import io.raytracer.geometry.IVector;
+import io.raytracer.geometry.Interval;
+import io.raytracer.geometry.Vector;
 import io.raytracer.materials.Material;
-import io.raytracer.mechanics.BBox;
 import io.raytracer.mechanics.IRay;
 import io.raytracer.mechanics.Intersection;
 import io.raytracer.mechanics.TextureParameters;
@@ -29,20 +31,15 @@ public abstract class FiniteFlatShape extends Shape{
         double xCoordAtZZero = ray.getOrigin().x() + positionAtZZero*ray.getDirection().x();
         double yCoordAtZZero = ray.getOrigin().y() + positionAtZZero*ray.getDirection().y();
         ZeroZData data = new ZeroZData(positionAtZZero, xCoordAtZZero, yCoordAtZZero);
-        if (this.hitCondition(data) && positionAtZZero >= rayDomain.min && positionAtZZero <= rayDomain.max) {
+        if (this.hitCondition(data)) {
             return new Intersection[]{new Intersection(this, ray, positionAtZZero, new TextureParameters())};
         }
         return new Intersection[] {};
     }
 
     @Override
-    protected IVector localNormalAt(IPoint point, double u, double v) {
+    protected IVector localNormalAt(IPoint point, TextureParameters p) {
         return new Vector(0, 0, -1);
-    }
-
-    @Override
-    protected BBox getLocalBoundingBox() {
-        return new BBox(new Point(-1, -1, -BBox.paddingMargin), new Point(1, 1, BBox.paddingMargin));
     }
 }
 

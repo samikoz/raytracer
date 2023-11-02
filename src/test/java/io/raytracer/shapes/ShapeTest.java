@@ -1,10 +1,6 @@
 package io.raytracer.shapes;
 
-import io.raytracer.geometry.IPoint;
-import io.raytracer.geometry.IVector;
-import io.raytracer.geometry.Point;
-import io.raytracer.geometry.ThreeTransform;
-import io.raytracer.geometry.Vector;
+import io.raytracer.geometry.*;
 import io.raytracer.materials.Material;
 import io.raytracer.mechanics.Intersection;
 import io.raytracer.mechanics.Ray;
@@ -108,7 +104,8 @@ class ShapeTest {
         Intersection testIntersection = new Intersection(
             sphere,
             new Ray(new Point(1.7321, 1.1547, -5.5774), new Vector(0, 0, 1)),
-            0, new TextureParameters()
+            0,
+                new TextureParameters()
         );
         IVector normal = sphere.normal(testIntersection);
         IVector expectedNormal = new Vector(0.2857, 0.4286, -0.8571);

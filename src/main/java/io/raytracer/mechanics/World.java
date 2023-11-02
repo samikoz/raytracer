@@ -13,7 +13,6 @@ import lombok.NonNull;
 import org.javatuples.Pair;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -59,8 +58,10 @@ public abstract class World {
 
     abstract IColour illuminate(IRay ray);
 
-    Intersection[] intersect(@NonNull IRay ray) {
-        return contents.stream().map(object -> object.intersect(ray)).flatMap(Arrays::stream).sorted().toArray(Intersection[]::new);
+    List<Intersection> intersect(@NonNull IRay ray) {
+        List<Intersection> intersections = new ArrayList<>(this.contents.size()*2);
+        this.contents.forEach(object -> intersections.addAll(object.intersect(ray)));
+        return intersections;
     }
 
     public void render(IPicture picture, Camera camera) {

@@ -6,6 +6,7 @@ import io.raytracer.geometry.Point;
 import io.raytracer.geometry.Vector;
 import io.raytracer.mechanics.Intersection;
 import io.raytracer.mechanics.Ray;
+import io.raytracer.mechanics.TextureParameters;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -73,7 +74,7 @@ class CubeTest {
     @MethodSource("providePointsAndNormals")
     void normalLocally(Point point, Vector normal) {
         Shape cube = new Cube();
-        IVector actualNormal = cube.localNormalAt(point, 0, 0);
+        IVector actualNormal = cube.localNormalAt(point, new TextureParameters());
         assertEquals(normal, actualNormal);
     }
 }

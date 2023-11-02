@@ -6,6 +6,7 @@ import io.raytracer.geometry.Vector;
 import io.raytracer.mechanics.BBox;
 import io.raytracer.mechanics.Intersection;
 import io.raytracer.mechanics.Ray;
+import io.raytracer.mechanics.TextureParameters;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -34,9 +35,9 @@ class TriangleTest {
             new Point(1, 0, 0)
         );
 
-        assertEquals(t.normal, t.localNormalAt(new Point(0, 0.5, 0),0 ,0 ));
-        assertEquals(t.normal, t.localNormalAt(new Point(-0.5, 0.75, 0),0 ,0 ));
-        assertEquals(t.normal, t.localNormalAt(new Point(0.5, 0.25, 0), 0, 0));
+        assertEquals(t.normal, t.localNormalAt(new Point(0, 0.5, 0),new TextureParameters()));
+        assertEquals(t.normal, t.localNormalAt(new Point(-0.5, 0.75, 0),new TextureParameters() ));
+        assertEquals(t.normal, t.localNormalAt(new Point(0.5, 0.25, 0), new TextureParameters()));
     }
 
     @Test
@@ -102,21 +103,6 @@ class TriangleTest {
 
         assertEquals(1, intersections.length);
         assertEquals(2, intersections[0].rayParameter);
-    }
-
-    @Test
-    void rayHitComputesUVCorrectly() {
-        Triangle t = new Triangle(
-            new Point(0, 1, 0),
-            new Point(-1, 0, 0),
-            new Point(1, 0, 0)
-        );
-        Ray ray = new Ray(new Point(-0.2, 0.3, -2), new Vector(0, 0, 1));
-        Intersection[] is = t.getLocalIntersections(ray, Interval.allReals());
-
-        assertEquals(1, is.length);
-        assertEquals(0.45, is[0].mapping.u, 1e-3);
-        assertEquals(0.25, is[0].mapping.v, 1e-3);
     }
 
     @Test

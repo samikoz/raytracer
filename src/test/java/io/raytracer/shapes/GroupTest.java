@@ -10,6 +10,8 @@ import io.raytracer.mechanics.Intersection;
 import io.raytracer.mechanics.Ray;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
@@ -42,9 +44,9 @@ class GroupTest {
         group.setTransform(ThreeTransform.scaling(2, 2, 2));
         IRay ray = new Ray(new Point(10, 0, -10), new Vector(0, 0, 1));
 
-        Intersection[] inters = group.intersect(ray);
+        List<Intersection> inters = group.intersect(ray);
 
-        assertNotEquals(0, inters.length);
+        assertNotEquals(0, inters.size());
     }
 
     @Test
@@ -63,10 +65,10 @@ class GroupTest {
         IRay centreMissingRay = new Ray(new Point(0, 0, -2), upVector);
         IRay leftHittingRay = new Ray(new Point(-2.5, 0, -2), upVector);
 
-        assertNotEquals(0, untransformedGroup.intersect(rightHittingRay).length);
-        assertEquals(0, untransformedGroup.intersect(rightMissingRay).length);
-        assertEquals(0, untransformedGroup.intersect(centreMissingRay).length);
-        assertNotEquals(0, untransformedGroup.intersect(leftHittingRay).length);
+        assertNotEquals(0, untransformedGroup.intersect(rightHittingRay).size());
+        assertEquals(0, untransformedGroup.intersect(rightMissingRay).size());
+        assertEquals(0, untransformedGroup.intersect(centreMissingRay).size());
+        assertNotEquals(0, untransformedGroup.intersect(leftHittingRay).size());
     }
 
     @Test
@@ -80,15 +82,15 @@ class GroupTest {
         group2.setTransform(ThreeTransform.translation(1, 0, 0));
         IRay ray = new Ray(new Point(-2, 0, 0), new Vector(1, 0, 0));
 
-        Intersection[] intersections1 = group1.intersect(ray);
-        Intersection[] intersections2 = group2.intersect(ray);
+        List<Intersection> intersections1 = group1.intersect(ray);
+        List<Intersection> intersections2 = group2.intersect(ray);
 
-        assertEquals(sphere1, intersections1[0].object);
-        assertEquals(ray, intersections1[0].ray);
-        assertEquals(2, intersections1[0].rayParameter, 1e-3);
-        assertEquals(sphere1, intersections2[0].object);
-        assertEquals(ray, intersections2[0].ray);
-        assertEquals(2, intersections2[0].rayParameter, 1e-3);
+        assertEquals(sphere1, intersections1.get(0).object);
+        assertEquals(ray, intersections1.get(0).ray);
+        assertEquals(2, intersections1.get(0).rayParameter, 1e-3);
+        assertEquals(sphere1, intersections2.get(0).object);
+        assertEquals(ray, intersections2.get(0).ray);
+        assertEquals(2, intersections2.get(0).rayParameter, 1e-3);
     }
 
     @Test

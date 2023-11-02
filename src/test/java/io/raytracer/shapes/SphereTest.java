@@ -1,17 +1,10 @@
 package io.raytracer.shapes;
 
-import io.raytracer.geometry.Interval;
-import io.raytracer.geometry.Point;
-import io.raytracer.geometry.ThreeTransform;
-import io.raytracer.geometry.ITransform;
-import io.raytracer.geometry.IVector;
-import io.raytracer.geometry.Vector;
-import io.raytracer.mechanics.BBox;
-import io.raytracer.mechanics.IRay;
-import io.raytracer.mechanics.Intersection;
-import io.raytracer.mechanics.Ray;
-import io.raytracer.mechanics.TextureParameters;
+import io.raytracer.geometry.*;
+import io.raytracer.mechanics.*;
 import org.junit.jupiter.api.Test;
+
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -23,7 +16,8 @@ public class SphereTest {
         Intersection testIntersection = new Intersection(
             sphere,
             new Ray(new Point(1, 0, 0), new Vector(0, 0, 1)),
-            0, new TextureParameters()
+            0,
+                new TextureParameters()
         );
         IVector actualNormal = sphere.normal(testIntersection);
 
@@ -37,7 +31,8 @@ public class SphereTest {
         Intersection testIntersection = new Intersection(
             sphere,
             new Ray(new Point(Math.sqrt(3) / 3, Math.sqrt(3) / 3, Math.sqrt(3) / 3), new Vector(0, 0, 1)),
-            0, new TextureParameters()
+            0,
+            new TextureParameters()
         );
         IVector actualNormal = sphere.normal(testIntersection);
 
@@ -50,7 +45,8 @@ public class SphereTest {
         Intersection testIntersection = new Intersection(
             sphere,
             new Ray(new Point(Math.sqrt(3) / 3, Math.sqrt(3) / 3, Math.sqrt(3) / 3), new Vector(0, 0, 1)),
-            0, new TextureParameters()
+            0,
+            new TextureParameters()
         );
         IVector normal = sphere.normal(testIntersection);
 
@@ -64,7 +60,8 @@ public class SphereTest {
         Intersection testIntersection = new Intersection(
             sphere,
             new Ray(new Point(0, 1.70711, -0.70711), new Vector(0, 0, 1)),
-            0, new TextureParameters()
+            0,
+            new TextureParameters()
         );
         IVector actualNormal = sphere.normal(testIntersection);
         IVector expectedNormal = new Vector(0, 0.70711, -0.70711);
@@ -80,7 +77,8 @@ public class SphereTest {
         Intersection testIntersection = new Intersection(
             sphere,
             new Ray(new Point(0, Math.sqrt(2) / 2, -Math.sqrt(2) / 2), new Vector(0, 0, 1)),
-            0, new TextureParameters()
+            0,
+            new TextureParameters()
         );
         IVector actualNormal = sphere.normal(testIntersection);
         IVector expectedNormal = new Vector(0, 0.97014, -0.24254);
@@ -92,58 +90,58 @@ public class SphereTest {
     void intersectCorrectParameters() {
         IRay ray = new Ray(new Point(0, 0, -5), new Vector(0, 0, 1));
         Sphere sphere = new Sphere();
-        Intersection[] intersections = sphere.intersect(ray, Interval.allReals());
+        List<Intersection> intersections = sphere.intersect(ray, Interval.allReals());
 
-        assertEquals(2, intersections.length, "Should have two intersections.");
-        assertEquals(4.0, intersections[0].rayParameter, "The first intersection should be at 4.0.");
+        assertEquals(2, intersections.size(), "Should have two intersections.");
+        assertEquals(4.0, intersections.get(0).rayParameter, "The first intersection should be at 4.0.");
     }
 
     @Test
     void intersectionCorrectObject() {
         IRay ray = new Ray(new Point(0, 0, -5), new Vector(0, 0, 1));
         Sphere sphere = new Sphere();
-        Intersection[] intersections = sphere.intersect(ray, Interval.allReals());
+        List<Intersection> intersections = sphere.intersect(ray, Interval.allReals());
 
-        assertEquals(sphere, intersections[0].object, "The first intersection should be with the sphere.");
+        assertEquals(sphere, intersections.get(0).object, "The first intersection should be with the sphere.");
     }
 
     @Test
     void intersectWhenRayTangent() {
         IRay ray = new Ray(new Point(0, 1, -5), new Vector(0, 0, 1));
         Sphere sphere = new Sphere();
-        Intersection[] intersections = sphere.intersect(ray, Interval.allReals());
+        List<Intersection> intersections = sphere.intersect(ray, Interval.allReals());
 
-        assertEquals(2, intersections.length, "Should have two (tangent) intersections.");
-        assertEquals(5.0, intersections[1].rayParameter, "The second intersection should be at 5.0.");
+        assertEquals(2, intersections.size(), "Should have two (tangent) intersections.");
+        assertEquals(5.0, intersections.get(1).rayParameter, "The second intersection should be at 5.0.");
     }
 
     @Test
     void intersectWhenRayMisses() {
         IRay ray = new Ray(new Point(0, 2, -5), new Vector(0, 0, 1));
         Sphere sphere = new Sphere();
-        Intersection[] intersections = sphere.intersect(ray, Interval.allReals());
+        List<Intersection> intersections = sphere.intersect(ray, Interval.allReals());
 
-        assertEquals(0, intersections.length, "Shouldn't have any intersections.");
+        assertEquals(0, intersections.size(), "Shouldn't have any intersections.");
     }
 
     @Test
     void intersectRayInside() {
         IRay ray = new Ray(new Point(0, 0, 0), new Vector(0, 0, 1));
         Sphere sphere = new Sphere();
-        Intersection[] intersections = sphere.intersect(ray, Interval.allReals());
+        List<Intersection> intersections = sphere.intersect(ray, Interval.allReals());
 
-        assertEquals(2, intersections.length, "Should have two intersections.");
-        assertEquals(-1, intersections[0].rayParameter, "The first intersection should be at -1.0.");
+        assertEquals(2, intersections.size(), "Should have two intersections.");
+        assertEquals(-1, intersections.get(0).rayParameter, "The first intersection should be at -1.0.");
     }
 
     @Test
     void intersectionBehindRay() {
         IRay ray = new Ray(new Point(0, 0, 5), new Vector(0, 0, 1));
         Sphere sphere = new Sphere();
-        Intersection[] intersections = sphere.intersect(ray, Interval.allReals());
+        List<Intersection> intersections = sphere.intersect(ray, Interval.allReals());
 
-        assertEquals(2, intersections.length, "Should have two intersections.");
-        assertEquals(-4.0, intersections[1].rayParameter, "The second intersection should be at -4.0.");
+        assertEquals(2, intersections.size(), "Should have two intersections.");
+        assertEquals(-4.0, intersections.get(1).rayParameter, "The second intersection should be at -4.0.");
     }
 
     @Test
@@ -151,10 +149,10 @@ public class SphereTest {
         IRay ray = new Ray(new Point(0, 0, -5), new Vector(0, 0, 1));
         Sphere sphere = new Sphere();
         sphere.setTransform(ThreeTransform.scaling(2, 2, 2));
-        Intersection[] intersections = sphere.intersect(ray, Interval.allReals());
+        List<Intersection> intersections = sphere.intersect(ray);
 
-        assertEquals(2, intersections.length, "Should have two intersections.");
-        assertEquals(7, intersections[1].rayParameter, "The second intersection should be at 7.");
+        assertEquals(2, intersections.size(), "Should have two intersections.");
+        assertEquals(7, intersections.get(1).rayParameter, "The second intersection should be at 7.");
     }
 
     @Test
@@ -162,9 +160,9 @@ public class SphereTest {
         IRay ray = new Ray(new Point(0, 0, -5), new Vector(0, 0, 1));
         Sphere sphere = new Sphere();
         sphere.setTransform(ThreeTransform.translation(5, 0, 0));
-        Intersection[] intersections = sphere.intersect(ray, Interval.allReals());
+        List<Intersection> intersections = sphere.intersect(ray, Interval.allReals());
 
-        assertEquals(0, intersections.length, "Should have no intersections.");
+        assertEquals(0, intersections.size(), "Should have no intersections.");
     }
 
     @Test

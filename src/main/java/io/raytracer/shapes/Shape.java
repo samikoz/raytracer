@@ -5,6 +5,7 @@ import io.raytracer.geometry.IVector;
 import io.raytracer.materials.Material;
 import io.raytracer.mechanics.Intersection;
 import io.raytracer.mechanics.RayHit;
+import io.raytracer.mechanics.TextureParameters;
 import io.raytracer.tools.IColour;
 import lombok.Getter;
 import lombok.NonNull;
@@ -24,7 +25,7 @@ public abstract class Shape extends Hittable {
         this.material = material;
     }
 
-    abstract protected IVector localNormalAt(IPoint point, double u, double v);
+    abstract protected IVector localNormalAt(IPoint point, TextureParameters p);
 
     @Override
     public boolean equals(Object them) {
@@ -45,7 +46,7 @@ public abstract class Shape extends Hittable {
 
     public IVector normal(Intersection i) {
         IPoint transformedPoint = this.transformToOwnSpace(i.ray.getPosition(i.rayParameter));
-        IVector normal = this.localNormalAt(transformedPoint, i.mapping.u, i.mapping.v);
+        IVector normal = this.localNormalAt(transformedPoint, i.mapping);
         return this.transformToWorldSpace(normal);
     }
 

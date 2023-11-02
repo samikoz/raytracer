@@ -38,7 +38,7 @@ class RectangleTest {
     }
 
     @Test
-    void rectangleBBOx() {
+    void rectangleBbox() {
         Rectangle rectangle = new Rectangle();
         BBox bbox = rectangle.getBoundingBox();
 

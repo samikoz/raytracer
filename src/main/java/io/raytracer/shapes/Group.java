@@ -8,13 +8,7 @@ import io.raytracer.mechanics.Intersection;
 import io.raytracer.mechanics.RayHit;
 import lombok.Getter;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
-import java.util.Random;
+import java.util.*;
 import java.util.function.Supplier;
 
 public class Group extends Hittable {
@@ -68,27 +62,17 @@ public class Group extends Hittable {
         this.children.forEach(child -> child.setParent(this));
     }
 
-    public Intersection[] intersect(IRay ray, Interval rayDomain) {
+    public ArrayList<Intersection> intersect(IRay ray, Interval rayDomain) {
         IRay transformedRay = ray.getTransformed(this.getInverseTransform());
         if (!this.bbox.isHit(transformedRay, rayDomain)) {
-            return new Intersection[] {};
+            return new ArrayList<>();
         }
         Optional<RayHit> leftHit = RayHit.fromIntersections(this.left.intersect(transformedRay, rayDomain));
         Interval rightHitDomain = new Interval(rayDomain.min, leftHit.map(hit -> hit.rayParameter).orElse(rayDomain.max));
-        Intersection[] rightIntersections = this.right.intersect(transformedRay, rightHitDomain);
-        List<Intersection> rightIntersList = new ArrayList<>(Arrays.asList(rightIntersections));
-        if (leftHit.isPresent()) {
-            Intersection hitIntersection = leftHit.get();
-            Optional<Intersection> firstFartherIntersection = rightIntersList.stream().filter(i -> i.rayParameter > hitIntersection.rayParameter).findFirst();
-            if (firstFartherIntersection.isPresent()) {
-                int fartherIntersectionIndex = rightIntersList.indexOf(firstFartherIntersection.get());
-                rightIntersList.add(fartherIntersectionIndex, hitIntersection);
-            }
-            else {
-                rightIntersList.add(hitIntersection);
-            }
-        }
-        return rightIntersList.stream().map(i -> i.reintersect(ray)).toArray(Intersection[]::new);
+        ArrayList<Intersection> rightIntersections = this.right.intersect(transformedRay, rightHitDomain);
+        leftHit.ifPresent(rightIntersections::add);
+        rightIntersections.forEach(i -> i.reintersect(ray));
+        return rightIntersections;
     }
 
     @Override

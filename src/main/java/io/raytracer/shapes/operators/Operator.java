@@ -6,13 +6,12 @@ import io.raytracer.geometry.Interval;
 import io.raytracer.mechanics.IRay;
 import io.raytracer.mechanics.Intersection;
 import io.raytracer.mechanics.RayHit;
+import io.raytracer.mechanics.TextureParameters;
 import io.raytracer.shapes.Shape;
 import io.raytracer.tools.IColour;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 public abstract class Operator extends Shape {
@@ -43,7 +42,7 @@ public abstract class Operator extends Shape {
                 insideRight = !insideRight;
             }
         }
-        return filtered.toArray(new Intersection[0]);
+        return filtered.toArray(new Intersection[] {});
     }
 
     @Override
@@ -55,12 +54,11 @@ public abstract class Operator extends Shape {
 
     @Override
     protected Intersection[] getLocalIntersections(IRay ray, Interval rayDomain) {
-        Intersection[] leftIntersections = this.left.intersect(ray, rayDomain);
-        Intersection[] rightIntersections = this.right.intersect(ray, rayDomain);
-        Intersection[] combined = Arrays.copyOf(leftIntersections, leftIntersections.length + rightIntersections.length);
-        System.arraycopy(rightIntersections, 0, combined, leftIntersections.length, rightIntersections.length);
-        List<Intersection> combinedSorted = Arrays.stream(combined).sorted().collect(Collectors.toList());
-        return this.filterIntersection(combinedSorted);
+        List<Intersection> leftIntersections = this.left.intersect(ray, rayDomain);
+        List<Intersection> rightIntersections = this.right.intersect(ray, rayDomain);
+        leftIntersections.addAll(rightIntersections);
+        leftIntersections.sort(Intersection::compareTo);
+        return filterIntersection(leftIntersections);
     }
 
     @Override
@@ -69,7 +67,7 @@ public abstract class Operator extends Shape {
     }
 
     @Override
-    protected IVector localNormalAt(IPoint point, double u, double v) {
+    protected IVector localNormalAt(IPoint point, TextureParameters p) {
         throw new UnsupportedOperationException("no need to compute normal on an operator!");
     }
 }

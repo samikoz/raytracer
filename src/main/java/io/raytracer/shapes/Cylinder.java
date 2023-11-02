@@ -1,10 +1,6 @@
 package io.raytracer.shapes;
 
-import io.raytracer.geometry.IPoint;
-import io.raytracer.geometry.IVector;
-import io.raytracer.geometry.Interval;
-import io.raytracer.geometry.Point;
-import io.raytracer.geometry.Vector;
+import io.raytracer.geometry.*;
 import io.raytracer.materials.Material;
 import io.raytracer.mechanics.BBox;
 import io.raytracer.mechanics.IRay;
@@ -14,7 +10,6 @@ import lombok.NonNull;
 import lombok.Setter;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class Cylinder extends Shape {
     @Setter public double upperBound;
@@ -40,7 +35,6 @@ public class Cylinder extends Shape {
         this.isBottomClosed = false;
     }
 
-    @Override
     protected Intersection[] getLocalIntersections(IRay ray, Interval rayDomain) {
         ArrayList<Double> intersectionPositions = this.getSideIntersections(ray);
         if (Math.abs(ray.getDirection().y()) > Cylinder.tolerance) {
@@ -57,13 +51,11 @@ public class Cylinder extends Shape {
                 }
             }
         }
-        List<Intersection> filteredIntersections = new ArrayList<>();
-        for (double position : intersectionPositions) {
-            if (position > rayDomain.min && position < rayDomain.max) {
-                filteredIntersections.add(new Intersection(this, ray, position, new TextureParameters()));
-            }
+        Intersection[] intersections = new Intersection[intersectionPositions.size()];
+        for (int i = 0; i < intersectionPositions.size(); i++) {
+            intersections[i] = new Intersection(this, ray, intersectionPositions.get(i), new TextureParameters());
         }
-        return filteredIntersections.toArray(new Intersection[] {});
+        return intersections;
     }
 
     private ArrayList<Double> getSideIntersections(IRay ray) {
@@ -101,7 +93,7 @@ public class Cylinder extends Shape {
     }
 
     @Override
-    protected IVector localNormalAt(IPoint point, double u, double v) {
+    protected IVector localNormalAt(IPoint point, TextureParameters p) {
         double yDistance = Math.pow(point.x(), 2) + Math.pow(point.z(), 2);
 
         if (yDistance < 1  && point.y() >= this.upperBound - Cylinder.tolerance) {

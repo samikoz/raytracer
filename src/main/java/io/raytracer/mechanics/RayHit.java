@@ -5,6 +5,7 @@ import io.raytracer.geometry.IVector;
 import lombok.ToString;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 
@@ -19,7 +20,7 @@ public class RayHit extends Intersection {
     public boolean shadowed;
 
     private RayHit(Intersection i) {
-        super(i.object, i.ray, i.rayParameter, i.mapping);
+        super(i.object, i.ray, i.rayParameter);
 
         IPoint intersectionPoint = this.ray.getPosition(this.rayParameter);
         IVector surfaceNormal = this.object.normal(i);
@@ -51,17 +52,12 @@ public class RayHit extends Intersection {
         return Arrays.hashCode(new int[] { this.ray.hashCode(), (int)this.rayParameter*1000 });
     }
 
-    public static Optional<RayHit> fromIntersections(Intersection[] inters) {
-        if (inters.length == 0) {
+    public static Optional<RayHit> fromIntersections(List<Intersection> inters) {
+        if (inters.isEmpty()) {
             return Optional.empty();
         }
-        Intersection closestIntersection = inters[0];
-        for (int intersectionIndex = 1; intersectionIndex < inters.length; intersectionIndex++) {
-            if (inters[intersectionIndex].rayParameter < closestIntersection.rayParameter) {
-                closestIntersection = inters[intersectionIndex];
-            }
-        }
-        return Optional.of(new RayHit(closestIntersection));
+        inters.sort(Intersection::compareTo);
+        return Optional.of(new RayHit(inters.get(0)));
     }
 
     /*

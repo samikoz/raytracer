@@ -5,22 +5,17 @@ import io.raytracer.geometry.Point;
 import io.raytracer.geometry.ThreeTransform;
 import io.raytracer.geometry.Vector;
 import io.raytracer.materials.Material;
-import io.raytracer.mechanics.BBox;
-import io.raytracer.mechanics.IRay;
-import io.raytracer.mechanics.Intersection;
-import io.raytracer.mechanics.Ray;
-import io.raytracer.mechanics.RayHit;
+import io.raytracer.mechanics.*;
 import io.raytracer.shapes.Shape;
 import io.raytracer.shapes.Sphere;
 import io.raytracer.textures.MonocolourTexture;
 import io.raytracer.tools.LinearColour;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 class DifferenceTest {
     @Test
@@ -31,11 +26,11 @@ class DifferenceTest {
         Shape diff = new Difference(rightSphere, leftSphere);
 
         IRay ray = new Ray(new Point(-2, 0, 0), new Vector(1, 0, 0));
-        Intersection[] inters = diff.intersect(ray, Interval.allReals());
+        List<Intersection> inters = diff.intersect(ray, Interval.allReals());
 
-        assertEquals(2, inters.length);
-        assertEquals(3, inters[0].rayParameter);
-        assertEquals(3.5, inters[1].rayParameter);
+        assertEquals(2, inters.size());
+        assertEquals(3, inters.get(0).rayParameter);
+        assertEquals(3.5, inters.get(1).rayParameter);
     }
 
     @Test

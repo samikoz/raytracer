@@ -1,17 +1,14 @@
 package io.raytracer.shapes;
 
-import io.raytracer.geometry.IPoint;
-import io.raytracer.geometry.ITransform;
-import io.raytracer.geometry.IVector;
-import io.raytracer.geometry.Interval;
-import io.raytracer.geometry.ThreeTransform;
+import io.raytracer.geometry.*;
 import io.raytracer.mechanics.BBox;
 import io.raytracer.mechanics.IRay;
 import io.raytracer.mechanics.Intersection;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 public abstract class Hittable {
@@ -60,13 +57,19 @@ public abstract class Hittable {
         return this.inverseTransform.hashCode();
     }
 
-    public Intersection[] intersect(IRay ray) {
+    public List<Intersection> intersect(IRay ray) {
         return this.intersect(ray, Interval.positiveReals());
     }
 
-    public Intersection[] intersect(IRay ray, Interval rayDomain) {
+    public ArrayList<Intersection> intersect(IRay ray, Interval rayDomain) {
         IRay transformedRay = ray.getTransformed(this.inverseTransform);
-        return Arrays.stream(this.getLocalIntersections(transformedRay, rayDomain)).map(i -> i.reintersect(ray)).toArray(Intersection[]::new);
+        ArrayList<Intersection> intersections = new ArrayList<>(4);
+        for (Intersection i : this.getLocalIntersections(transformedRay, rayDomain)) {
+            if (i.rayParameter > rayDomain.min && i.rayParameter < rayDomain.max) {
+                intersections.add(i.reintersect(ray));
+            }
+        }
+        return intersections;
     }
 
     public IPoint transformToOwnSpace(IPoint worldPoint) {

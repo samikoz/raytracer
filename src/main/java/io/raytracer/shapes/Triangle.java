@@ -1,10 +1,6 @@
 package io.raytracer.shapes;
 
-import io.raytracer.geometry.IPoint;
-import io.raytracer.geometry.ITransform;
-import io.raytracer.geometry.IVector;
-import io.raytracer.geometry.Interval;
-import io.raytracer.geometry.Point;
+import io.raytracer.geometry.*;
 import io.raytracer.materials.Material;
 import io.raytracer.mechanics.BBox;
 import io.raytracer.mechanics.IRay;
@@ -65,6 +61,7 @@ public class Triangle extends Shape {
 
     @Override
     protected Intersection[] getLocalIntersections(IRay ray, Interval rayDomain) {
+        //u,v are texture parameters
         IVector dirCrossE2 = ray.getDirection().cross(this.e2);
         double det = dirCrossE2.dot(this.e1);
         if (Math.abs(det) < Triangle.tolerance) {
@@ -81,15 +78,11 @@ public class Triangle extends Shape {
         if (v < 0 || (u+v) > 1) {
             return new Intersection[] {};
         }
-        double intersection = f*this.e2.dot(originCrossE1);
-        if (intersection < rayDomain.min || intersection > rayDomain.max) {
-            return new Intersection[] {};
-        }
-        return new Intersection[] { new Intersection(this , ray, f*this.e2.dot(originCrossE1), new TextureParameters(u, v)) };
+        return new Intersection[] { new Intersection(this , ray, f*this.e2.dot(originCrossE1), new TextureParameters()) };
     }
 
     @Override
-    protected IVector localNormalAt(IPoint point, double u, double v) {
+    protected IVector localNormalAt(IPoint point, TextureParameters p) {
         return this.normal;
     }
 

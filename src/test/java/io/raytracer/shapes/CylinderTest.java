@@ -5,10 +5,7 @@ import io.raytracer.geometry.IVector;
 import io.raytracer.geometry.Interval;
 import io.raytracer.geometry.Point;
 import io.raytracer.geometry.Vector;
-import io.raytracer.mechanics.BBox;
-import io.raytracer.mechanics.IRay;
-import io.raytracer.mechanics.Intersection;
-import io.raytracer.mechanics.Ray;
+import io.raytracer.mechanics.*;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -68,7 +65,7 @@ class CylinderTest {
     @MethodSource("provideNormalPositionsAndNormals")
     void normalToCylinders(IPoint normalPosition, IVector expectedNormal) {
         Shape cylinder = new Cylinder();
-        IVector normal = cylinder.localNormalAt(normalPosition, 0, 0);
+        IVector normal = cylinder.localNormalAt(normalPosition, new TextureParameters());
 
         assertEquals(expectedNormal, normal);
     }
@@ -137,7 +134,7 @@ class CylinderTest {
         cylinder.setUpperBound(2);
         cylinder.setTopClosed(true);
         cylinder.setBottomClosed(true);
-        IVector normal = cylinder.localNormalAt(normalPosition, 0, 0);
+        IVector normal = cylinder.localNormalAt(normalPosition, new TextureParameters());
 
         assertEquals(expectedNormal, normal);
     }

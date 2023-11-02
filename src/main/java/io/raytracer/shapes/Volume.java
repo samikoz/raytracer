@@ -68,12 +68,12 @@ public class Volume extends Shape {
         if (hitDist > distInside) {
             return new Intersection[]{};
         }
-        return new Intersection[] { new Intersection(this, ray, leftParameter + (hitDist / rayLength), new TextureParameters(0, 0))};
+        return new Intersection[] { new Intersection(this, ray, leftParameter + (hitDist / rayLength), new TextureParameters())};
 
     }
 
     @Override
-    protected IVector localNormalAt(IPoint point, double u, double v) {
+    protected IVector localNormalAt(IPoint point, TextureParameters p) {
         return new Vector(1, 0, 0);
     }
 

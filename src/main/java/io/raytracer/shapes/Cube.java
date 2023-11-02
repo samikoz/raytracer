@@ -1,20 +1,12 @@
 package io.raytracer.shapes;
 
-import io.raytracer.geometry.IPoint;
-import io.raytracer.geometry.IVector;
-import io.raytracer.geometry.Interval;
-import io.raytracer.geometry.Point;
-import io.raytracer.geometry.Vector;
+import io.raytracer.geometry.*;
 import io.raytracer.materials.Material;
 import io.raytracer.mechanics.BBox;
 import io.raytracer.mechanics.IRay;
 import io.raytracer.mechanics.Intersection;
 import io.raytracer.mechanics.TextureParameters;
 import lombok.NonNull;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 public class Cube extends Shape {
     public Cube() {
@@ -46,13 +38,9 @@ public class Cube extends Shape {
             new Intersection(this, ray, minMaxIntersection, new TextureParameters(minMaxMappingParameters[0], minMaxMappingParameters[1]))
         };
          */
-        List<Intersection> filteredIntersections = new ArrayList<>(2);
-        for (double position : new double[] {maxMinIntersection, minMaxIntersection}) {
-            if (position > rayDomain.min && position < rayDomain.max) {
-                filteredIntersections.add(new Intersection(this, ray, position, new TextureParameters()));
-            }
-        }
-        return filteredIntersections.toArray(new Intersection[] {});
+        return new Intersection[] {
+            new Intersection(this, ray, maxMinIntersection, new TextureParameters()),
+            new Intersection(this, ray, minMaxIntersection, new TextureParameters())};
     }
 
     private double[] getAxisIntersections(double originComponent, double directionComponent) {
@@ -66,6 +54,7 @@ public class Cube extends Shape {
         }
     }
 
+    /*
     private double[] getMappingParameters(IPoint intersectionPoint) {
         double[] sideIntersectionCoords = Arrays.stream(new double[]{intersectionPoint.x(), intersectionPoint.y(), intersectionPoint.z()})
             .filter(coord -> Math.abs(coord - 1) > 1e-3 && Math.abs(coord + 1) > 1e-3).toArray();
@@ -74,9 +63,10 @@ public class Cube extends Shape {
         }
         return Arrays.stream(sideIntersectionCoords).map(coord -> (1+coord)/2).toArray();
     }
+     */
 
     @Override
-    protected IVector localNormalAt(IPoint point, double u, double v) {
+    protected IVector localNormalAt(IPoint point, TextureParameters p) {
         double maxComponent = Math.max(Math.abs(point.x()), Math.max(Math.abs(point.y()), Math.abs(point.z())));
 
         if (maxComponent == Math.abs(point.x())) {

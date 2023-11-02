@@ -6,6 +6,8 @@ import io.raytracer.shapes.Sphere;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -21,9 +23,9 @@ class RayHitTest {
 
     @Test
     void hitWithPositiveIntersections() {
-        Intersection i1 = new Intersection(new Sphere(), testRay,2.0, new TextureParameters());
-        Intersection i2 = new Intersection(new Sphere(), testRay,-0.1, new TextureParameters());
-        Optional<RayHit> expectedHit = RayHit.fromIntersections(new Intersection[] {i1, i2});
+        Intersection i1 = new Intersection(new Sphere(), testRay,2.0);
+        Intersection i2 = new Intersection(new Sphere(), testRay,-0.1);
+        Optional<RayHit> expectedHit = RayHit.fromIntersections(Arrays.asList(i1, i2));
 
         assertTrue(expectedHit.isPresent());
         assertEquals(-0.1, expectedHit.get().rayParameter, 1e-3,
@@ -34,7 +36,7 @@ class RayHitTest {
     void hitpointCreation() {
         Ray ray = new Ray(new Point(0, 0, -5), new Vector(0, 0, 1));
         Sphere sphere = new Sphere();
-        Optional<RayHit> hit = RayHit.fromIntersections(new Intersection[] {new Intersection(sphere, ray,4, new TextureParameters())});
+        Optional<RayHit> hit = RayHit.fromIntersections(Collections.singletonList(new Intersection(sphere, ray, 4)));
 
         assertTrue(hit.isPresent());
         RayHit hitpoint = hit.get();
@@ -49,7 +51,7 @@ class RayHitTest {
     void hitpointCreationFromInside() {
         Ray ray = new Ray(new Point(0, 0, 0), new Vector(0, 0, 1));
         Sphere sphere = new Sphere();
-        Optional<RayHit> hit = RayHit.fromIntersections(new Intersection[] {new Intersection(sphere, ray,1, new TextureParameters())});
+        Optional<RayHit> hit = RayHit.fromIntersections(Collections.singletonList(new Intersection(sphere, ray,1)));
 
         assertTrue(hit.isPresent());
         RayHit hitpoint = hit.get();

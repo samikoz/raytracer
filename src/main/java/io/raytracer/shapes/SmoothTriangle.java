@@ -3,6 +3,7 @@ package io.raytracer.shapes;
 import io.raytracer.geometry.IPoint;
 import io.raytracer.geometry.IVector;
 import io.raytracer.materials.Material;
+import io.raytracer.mechanics.TextureParameters;
 import lombok.NonNull;
 
 import java.util.Arrays;
@@ -48,8 +49,8 @@ public class SmoothTriangle extends Triangle {
     }
 
     @Override
-    protected IVector localNormalAt(IPoint point, double u, double v) {
-        return this.n2.multiply(u).add(this.n3.multiply(v)).add(this.n1.multiply(1 - u - v));
+    protected IVector localNormalAt(IPoint point, TextureParameters p) {
+        return this.n2.multiply(p.u).add(this.n3.multiply(p.v)).add(this.n1.multiply(1 - p.u - p.v));
     }
 
 }

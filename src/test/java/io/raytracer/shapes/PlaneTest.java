@@ -3,10 +3,7 @@ package io.raytracer.shapes;
 import io.raytracer.geometry.Interval;
 import io.raytracer.geometry.Point;
 import io.raytracer.geometry.Vector;
-import io.raytracer.mechanics.BBox;
-import io.raytracer.mechanics.IRay;
-import io.raytracer.mechanics.Intersection;
-import io.raytracer.mechanics.Ray;
+import io.raytracer.mechanics.*;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -18,8 +15,8 @@ class PlaneTest {
     void normalToPlaneIsConstant() {
         Plane plane = new Plane();
 
-        assertEquals(new Vector(0, 1, 0), plane.localNormalAt(new Point(0, 0, 0), 0, 0));
-        assertEquals(new Vector(0, 1, 0), plane.localNormalAt(new Point(10, 0, -150), 0, 0));
+        assertEquals(new Vector(0, 1, 0), plane.localNormalAt(new Point(0, 0, 0), new TextureParameters()));
+        assertEquals(new Vector(0, 1, 0), plane.localNormalAt(new Point(10, 0, -150), new TextureParameters()));
     }
 
     @Test

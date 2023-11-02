@@ -1,7 +1,6 @@
 package io.raytracer.mechanics;
 
 import io.raytracer.shapes.Shape;
-import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import lombok.ToString;
 import org.jetbrains.annotations.NotNull;
@@ -9,12 +8,22 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Arrays;
 
 @ToString
-@AllArgsConstructor
 public class Intersection implements Comparable<Intersection> {
     @NonNull public Shape object;
     public IRay ray;
     public double rayParameter;
     public TextureParameters mapping;
+
+    public Intersection(@NotNull Shape object, IRay ray, double parameter, TextureParameters mapping) {
+        this.object = object;
+        this.ray = ray;
+        this.rayParameter = parameter;
+        this.mapping = mapping;
+    }
+
+    Intersection(Shape object, IRay ray, double parameter) {
+        this(object, ray, parameter, new TextureParameters());
+    }
 
     private static final double equalityTolerance = 1e-3;
 
@@ -24,7 +33,8 @@ public class Intersection implements Comparable<Intersection> {
     }
 
     public Intersection reintersect(IRay ray) {
-        return new Intersection(this.object, ray, this.rayParameter, this.mapping);
+        this.ray = ray;
+        return this;
     }
 
     @Override

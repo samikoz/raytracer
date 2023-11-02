@@ -5,6 +5,7 @@ import io.raytracer.materials.Material;
 import io.raytracer.mechanics.BBox;
 import io.raytracer.mechanics.IRay;
 import io.raytracer.mechanics.Intersection;
+import io.raytracer.mechanics.TextureParameters;
 import io.raytracer.shapes.operators.Difference;
 import lombok.Builder;
 
@@ -39,8 +40,8 @@ public class Corner extends Shape {
     }
 
     @Override
-    protected IVector localNormalAt(IPoint point, double u, double v) {
-        return this.itself.localNormalAt(point, u ,v);
+    protected IVector localNormalAt(IPoint point, TextureParameters p) {
+        return this.itself.localNormalAt(point, p);
     }
 
     @Override

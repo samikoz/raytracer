@@ -36,16 +36,14 @@ public class Sphere extends Shape {
         }
         List<Intersection> filteredIntersections = new ArrayList<>();
         for(double root : new double[] { (-b - Math.sqrt(delta)) / (2 * a), (-b + Math.sqrt(delta)) / (2 * a) } ) {
-            if (root > rayDomain.min && root < rayDomain.max) {
-                filteredIntersections.add(new Intersection(this, ray, root, new TextureParameters()));
-            }
+            filteredIntersections.add(new Intersection(this, ray, root, new TextureParameters()));
         }
         return filteredIntersections.toArray(new Intersection[] {});
     }
 
     @Override
-    public IVector localNormalAt(@NonNull IPoint p, double u, double v) {
-        return (p.subtract(new Point(0, 0, 0))).normalise();
+    public IVector localNormalAt(@NonNull IPoint pt, TextureParameters p) {
+        return (pt.subtract(new Point(0, 0, 0))).normalise();
     }
 
     @Override
