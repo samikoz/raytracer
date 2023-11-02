@@ -3,19 +3,16 @@ package io.raytracer.demos;
 import io.raytracer.geometry.IPoint;
 import io.raytracer.geometry.IVector;
 import io.raytracer.mechanics.World;
-import io.raytracer.tools.Camera;
-import io.raytracer.tools.IPicture;
-import io.raytracer.tools.MultipleRayCamera;
+import io.raytracer.tools.*;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.RequiredArgsConstructor;
 
 import java.io.IOException;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 
 
 @Builder(toBuilder = true)
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class DemoSetup {
     private final int rayCount;
     private final int xSize;
@@ -25,13 +22,25 @@ public class DemoSetup {
     private final IVector lookDirection;
     private final IVector upDirection;
     private final String filename;
+    private final String bufferDir;
+    private final int bufferFileCount;
 
-    public void render(IPicture picture, World world) throws IOException {
-        Camera cameraBottom = new MultipleRayCamera(this.rayCount, this.xSize, this.ySize, this.viewAngle, this.eyePosition, this.lookDirection, this.upDirection);
-        world.render(picture, cameraBottom);
+    public IPicture picture;
+
+    public void render(World world) throws IOException {
+        Camera camera = new MultipleRayCamera(this.rayCount, this.xSize, this.ySize, this.viewAngle, this.eyePosition, this.lookDirection, this.upDirection);
+        IPicture picture;
+        if (this.bufferDir != null && bufferFileCount != 0) {
+            picture = new BufferedPPMPicture(xSize, ySize, Paths.get(this.bufferDir), xSize * ySize / this.bufferFileCount);
+        }
+        else {
+            picture = new PPMPicture(xSize, ySize);
+        }
+        world.render(picture, camera);
+        this.picture = picture;
     }
 
-    public Path getPath() {
-        return Paths.get(this.filename);
+    public void export() throws IOException {
+        this.picture.export(Paths.get(this.filename));
     }
 }

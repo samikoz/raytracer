@@ -18,10 +18,10 @@ public class DefaultReporter implements Reporter {
 
     protected String formatMessage(int renderedPixelCount) {
         long currentTime = System.nanoTime();
-        double timeLeft = (currentTime - this.data.renderStart)*(((double)this.data.totalPixelCount/renderedPixelCount) - 1);
+        double timeLeft = (currentTime - this.data.renderStart)*(((double)this.data.blankPixelCount/renderedPixelCount) - 1);
         int minutesElapsed = (int)((currentTime - this.data.renderStart)/(60*Math.pow(10,9)));
         int minutesLeft = (int)(timeLeft/(60*Math.pow(10,9)));
-        float progressPercent = (float)renderedPixelCount/this.data.totalPixelCount*100;
+        double progressPercent = (double)(this.data.totalPixelCount - this.data.blankPixelCount + renderedPixelCount)/this.data.totalPixelCount*100;
         return String.format("\r%.2f%% / %d min elapsed / ~%d min left", progressPercent, minutesElapsed, minutesLeft);
     }
 
