@@ -32,7 +32,7 @@ public class DefaultReporter implements Reporter {
         int minutes = totalSeconds / 60;
         int hours = minutes / 60;
         String hoursSummary = hours > 0 ? String.format("%d h, ", hours) : "";
-        String minSummary = String.format("%d min, %d sec%n", minutes, totalSeconds % 60);
+        String minSummary = String.format("%d min, %d sec%n", hours > 0 ? minutes % 60 : minutes, totalSeconds % 60);
         System.out.printf("%nrender took " + hoursSummary + minSummary);
     }
 }
