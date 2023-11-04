@@ -18,4 +18,10 @@ public class Line implements ILine {
     public IPoint pointAt(double t) {
         return this.origin.add(this.direction.multiply(t));
     }
+
+    @Override
+    public IPoint closestTo(IPoint p) {
+        double t = -this.direction.dot(new Vector(p).add(new Vector(this.origin)))/(this.direction.dot(this.direction));
+        return this.pointAt(t);
+    }
 }
