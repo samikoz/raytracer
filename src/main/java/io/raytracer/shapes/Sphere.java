@@ -1,9 +1,6 @@
 package io.raytracer.shapes;
 
-import io.raytracer.geometry.IPoint;
-import io.raytracer.geometry.IVector;
-import io.raytracer.geometry.Interval;
-import io.raytracer.geometry.Point;
+import io.raytracer.geometry.*;
 import io.raytracer.materials.Material;
 import io.raytracer.mechanics.BBox;
 import io.raytracer.mechanics.IRay;
@@ -29,16 +26,13 @@ public class Sphere extends Shape {
         double a = ray.getDirection().dot(ray.getDirection());
         double b = 2 * ray.getDirection().dot(rayOrigin);
         double c = rayOrigin.dot(rayOrigin) - 1;
-        double delta = Math.pow(b, 2) - 4 * a * c;
 
-        if (delta < 0) {
-            return new Intersection[] {};
+        IEquation eqn = new Equation(c, b, a);
+        List<Intersection> intersections = new ArrayList<>();
+        for(double root : eqn.solve() ) {
+            intersections.add(new Intersection(this, ray, root, new TextureParameters()));
         }
-        List<Intersection> filteredIntersections = new ArrayList<>();
-        for(double root : new double[] { (-b - Math.sqrt(delta)) / (2 * a), (-b + Math.sqrt(delta)) / (2 * a) } ) {
-            filteredIntersections.add(new Intersection(this, ray, root, new TextureParameters()));
-        }
-        return filteredIntersections.toArray(new Intersection[] {});
+        return intersections.toArray(new Intersection[] {});
     }
 
     @Override

@@ -62,22 +62,12 @@ public class Cylinder extends Shape {
         IVector rayDirection = ray.getDirection();
         IPoint rayOrigin = ray.getOrigin();
         double a = Math.pow(rayDirection.x(), 2) + Math.pow(rayDirection.z(), 2);
-        if (Math.abs(a) < tolerance) {
-            return new ArrayList<>();
-        }
-
         double b = 2*rayOrigin.x()*rayDirection.x() + 2*rayOrigin.z()*rayDirection.z();
         double c = Math.pow(rayOrigin.x(), 2) + Math.pow(rayOrigin.z(), 2) - 1;
-        double delta = Math.pow(b, 2) - 4*a*c;
-        if (delta < 0) {
-            return new ArrayList<>();
-        }
+        IEquation eqn = new Equation(c, b, a);
 
-        ArrayList<Double> intersections = new ArrayList<>(4);
-        for (double solution : new double[] {
-                (-b - Math.sqrt(delta))/(2*a),
-                (-b + Math.sqrt(delta))/(2*a)
-        } ) {
+        ArrayList<Double> intersections = new ArrayList<>(2);
+        for (double solution : eqn.solve()) {
             double rayYPosition = ray.getOrigin().y() + solution*ray.getDirection().y();
             if (rayYPosition > this.lowerBound && rayYPosition < this.upperBound) {
                 intersections.add(solution);
