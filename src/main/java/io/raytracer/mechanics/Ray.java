@@ -3,24 +3,24 @@ package io.raytracer.mechanics;
 import io.raytracer.geometry.IPoint;
 import io.raytracer.geometry.ITransform;
 import io.raytracer.geometry.IVector;
-import lombok.Getter;
+import io.raytracer.geometry.Line;
 import lombok.NonNull;
 
 import java.util.Arrays;
 
-@Getter
-public class Ray implements IRay {
-    private final IPoint origin;
-    private final IVector direction;
-
+public class Ray extends Line implements IRay{
     public Ray(@NonNull IPoint origin, @NonNull IVector direction) {
-        this.origin = origin;
-        this.direction = direction;
+        super(origin, direction);
     }
 
     @Override
-    public IPoint getPosition(double parameter) {
-        return origin.add(direction.multiply(parameter));
+    public IVector getDirection() {
+        return this.direction;
+    }
+
+    @Override
+    public IPoint getOrigin() {
+        return this.origin;
     }
 
     @Override

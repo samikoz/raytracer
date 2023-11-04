@@ -8,7 +8,7 @@ public interface IRay {
     IVector getDirection();
     IPoint getOrigin();
 
-    IPoint getPosition(double parameter);
+    IPoint pointAt(double parameter);
 
 
     IRay getTransformed(ITransform t);

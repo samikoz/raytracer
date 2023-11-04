@@ -45,7 +45,7 @@ public abstract class Shape extends Hittable {
     }
 
     public IVector normal(Intersection i) {
-        IPoint transformedPoint = this.transformToOwnSpace(i.ray.getPosition(i.rayParameter));
+        IPoint transformedPoint = this.transformToOwnSpace(i.ray.pointAt(i.rayParameter));
         IVector normal = this.localNormalAt(transformedPoint, i.mapping);
         return this.transformToWorldSpace(normal);
     }

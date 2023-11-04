@@ -14,7 +14,7 @@ class RayTest {
     void rayPosition() {
         IRay ray = new Ray(new Point(2, 3, 4), new Vector(1, 0, 0));
         IPoint expectedPosition = new Point(3, 3, 4);
-        IPoint actualPosition = ray.getPosition(1);
+        IPoint actualPosition = ray.pointAt(1);
 
         assertEquals(expectedPosition, actualPosition);
     }
