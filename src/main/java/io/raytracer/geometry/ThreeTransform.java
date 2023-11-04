@@ -99,6 +99,10 @@ public class ThreeTransform implements ITransform {
         ));
     }
 
+    public static ThreeTransform rotation_x(double angle, IPoint around) {
+        return ThreeTransform.rotation_x(angle).conjugateTranslating(around);
+    }
+
     public ThreeTransform rotate_x(double angle) {
         return new ThreeTransform(new FourMatrix(
                 1, 0, 0, 0,
@@ -106,6 +110,10 @@ public class ThreeTransform implements ITransform {
                 0, Math.sin(angle), Math.cos(angle), 0,
                 0, 0, 0, 1
         ).multiply(this.matrix));
+    }
+
+    public ThreeTransform rotate_x(double angle, IPoint around) {
+        return this.rotate_x(angle).conjugateTranslating(around);
     }
 
     public static ThreeTransform rotation_y(double angle) {
@@ -117,6 +125,10 @@ public class ThreeTransform implements ITransform {
         ));
     }
 
+    public static ThreeTransform rotation_y(double angle, IPoint around) {
+        return ThreeTransform.rotation_y(angle).conjugateTranslating(around);
+    }
+
     public ThreeTransform rotate_y(double angle) {
         return new ThreeTransform(new FourMatrix(
                 Math.cos(angle), 0, Math.sin(angle), 0,
@@ -124,6 +136,10 @@ public class ThreeTransform implements ITransform {
                 -Math.sin(angle), 0, Math.cos(angle), 0,
                 0, 0, 0, 1
         ).multiply(this.matrix));
+    }
+
+    public ThreeTransform rotate_y(double angle, IPoint around) {
+        return this.rotate_y(angle).conjugateTranslating(around);
     }
 
     public static ThreeTransform rotation_z(double angle) {
@@ -135,6 +151,10 @@ public class ThreeTransform implements ITransform {
         ));
     }
 
+    public static ThreeTransform rotation_z(double angle, IPoint around) {
+        return ThreeTransform.rotation_z(angle).conjugateTranslating(around);
+    }
+
     public ThreeTransform rotate_z(double angle) {
         return new ThreeTransform(new FourMatrix(
                 Math.cos(angle), -Math.sin(angle), 0, 0,
@@ -142,6 +162,10 @@ public class ThreeTransform implements ITransform {
                 0, 0, 1, 0,
                 0, 0, 0, 1
         ).multiply(this.matrix));
+    }
+
+    public ThreeTransform rotate_z(double angle, IPoint around) {
+        return this.rotate_z(angle).conjugateTranslating(around);
     }
 
     public static ThreeTransform shear(double xy, double xz, double yx, double yz, double zx, double zy) {
@@ -161,6 +185,12 @@ public class ThreeTransform implements ITransform {
                 0, 0, 0, 1
         ).multiply(this.matrix));
     }
+
+    public ThreeTransform conjugateTranslating(IPoint pointToOrigin) {
+        return ThreeTransform.translation(-pointToOrigin.x(), -pointToOrigin.y(), -pointToOrigin.z())
+                .transform(this)
+                .translate(pointToOrigin.x(), pointToOrigin.y(), pointToOrigin.z());
+    }
     
     public static ThreeTransform transformation(ISquareMatrix m) {
         return new ThreeTransform(m);
@@ -168,6 +198,10 @@ public class ThreeTransform implements ITransform {
     
     public ThreeTransform transform(ISquareMatrix m) {
         return new ThreeTransform(m.multiply(this.matrix));
+    }
+
+    private ThreeTransform transform(ThreeTransform t) {
+        return this.transform(t.matrix);
     }
 
     @Override

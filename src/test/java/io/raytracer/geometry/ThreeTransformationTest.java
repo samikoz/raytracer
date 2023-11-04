@@ -1,10 +1,11 @@
 package io.raytracer.geometry;
 
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.junit.jupiter.params.ParameterizedTest;
+
 import java.util.stream.Stream;
-import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
@@ -93,6 +94,16 @@ class ThreeTransformationTest {
         IPoint aPoint = new Point(0, 1, 0);
         IPoint expectedRotatedPoint = new Point(0, Math.sqrt(2) / 2, Math.sqrt(2) / 2);
         IPoint actualRotatedPoint = aPoint.transform(halfQuarterRotation);
+
+        assertEquals(expectedRotatedPoint, actualRotatedPoint);
+    }
+
+    @Test
+    void rotationXAroundNonZero() {
+        ITransform halfQuarter = ThreeTransform.rotation_x(Math.PI / 4, new Point(1, 2, 3));
+        IPoint aPoint = new Point(1, 3, 3);
+        IPoint expectedRotatedPoint = new Point(1, 2 + Math.sqrt(2)/2, 3 + Math.sqrt(2) / 2);
+        IPoint actualRotatedPoint = aPoint.transform(halfQuarter);
 
         assertEquals(expectedRotatedPoint, actualRotatedPoint);
     }
