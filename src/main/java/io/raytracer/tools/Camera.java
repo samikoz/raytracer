@@ -54,7 +54,7 @@ public abstract class Camera {
         return new Ray(origin, direction);
     }
     private void computePixelSize() {
-        // the picture == canvas is always one unit away from the camera
+        // the picture == canvas is always one unit behind the camera
         double halfView = Math.tan(fieldOfView / 2);
         double ratio = (double) pictureWidthPixels / pictureHeightPixels;
 

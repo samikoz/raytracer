@@ -81,4 +81,8 @@ public class Cube extends Shape {
     public BBox getLocalBoundingBox() {
         return new BBox(new Point(-1, -1, -1), new Point(1, 1, 1));
     }
+
+    public IPoint getCornerPoint(CubeCorner corner) {
+        return this.getTransform().act(new Point(corner.x(), corner.y(), corner.z()));
+    }
 }
