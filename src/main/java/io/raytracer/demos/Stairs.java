@@ -28,87 +28,70 @@ public class Stairs {
         int xSize = 1080;
         int ySize = 1080;
         int trimSize = (int)(((float)768/1080)*ySize);
-        double viewAngle = Math.PI / 4;
+        double viewAngle = Math.PI / 3.5;
         IColour backgroundColour = new LinearColour(0, 0, 0);
 
         //setups
-        DemoSetup horizontalSetup = DemoSetup.builder()
-                .rayCount(250)
+        DemoSetup verticalSetup = DemoSetup.builder()
+                .rayCount(100)
                 .xSize(xSize)
                 .ySize(ySize)
                 .viewAngle(viewAngle)
-                .upDirection(new Vector(0, 0, -1))
-                .eyePosition(new Point(0, 5, 1))
-                .lookDirection(new Vector(0, -5, -1))
-                .filename("stairsHorizontal.ppm")
-                .build();
-        //--
-        DemoSetup verticalSetup = horizontalSetup.toBuilder()
-                .rayCount(400)
+                .upDirection(new Vector(0, 0, 1))
                 .eyePosition(new Point(0, 5, 1.55))
                 .lookDirection(new Vector(0, -5, -1.55))
                 .filename("stairsVertical.ppm")
-                .bufferDir("./buffStairsVertical/")
-                .bufferFileCount(20)
                 .build();
         List<Hittable> verticalObjects = new ArrayList<>();
 
         //materials
-        Material blockMaterial = Material.builder()
+        Material keyMaterial = Material.builder()
                 .texture(new MonocolourTexture(new LinearColour(0.73, 0.73, 0.73)))
                 .build();
-        blockMaterial.addRecaster(Recasters.diffuse, 1);
-        Material emitentMaterial = Material.builder().emit(new LinearColour(10, 10, 10)).build();
+        keyMaterial.addRecaster(Recasters.diffuse, 1);
         Material verticalEmitentMaterial = Material.builder().emit(new LinearColour(22, 22, 22)).build();
+        //--
+        Material blockMaterial = keyMaterial.toBuilder().build();
+        blockMaterial.addRecaster(Recasters.diffuse, 0.7);
+        blockMaterial.addRecaster(Recasters.fuzzilyReflective.apply(0.0), 0.3);
 
         //horizontal blocks
-        Shape horizontalLowerBlock = new Cube(blockMaterial);
-        horizontalLowerBlock.setTransform(ThreeTransform.scaling(11, 10, 0.3).translate(0, -10, 1.78));
-        Shape horizontalUpperBlock = new Cube(blockMaterial);
-        horizontalUpperBlock.setTransform(ThreeTransform.scaling(11, 10, 0.37).translate(0, -10, -2.04));
-        //--
-        Shape verticalLowerBlock = new Cube(blockMaterial);
-        verticalLowerBlock.setTransform(ThreeTransform.scaling(11, 10, 0.3).translate(0, -10, 1.85));
-        Shape verticalUpperBlock = new Cube(blockMaterial);
-        verticalUpperBlock.setTransform(ThreeTransform.scaling(11, 20, 0.45).translate(0, -10, -2.31));
-        verticalObjects.add(verticalUpperBlock);
+        Shape upperBlock = new Cube(keyMaterial);
+        upperBlock.setTransform(ThreeTransform.scaling(11, 10, 0.3).translate(0, -10, 3));
+        Shape lowerBlock = new Cube(keyMaterial);
+        lowerBlock.setTransform(ThreeTransform.scaling(11, 20, 0.45).translate(0, -10, -2.31));
+        verticalObjects.add(upperBlock);
+        verticalObjects.add(lowerBlock);
 
         //stairs
-        IVector horDisp = new Vector(0.6, -1, 0);
-        List<Hittable> horizontalKeys = new ArrayList<>();
-        ThreeTransform horPush = ThreeTransform.scaling(0.2, 10, 0.6).translate(-1.9 - horDisp.x(), -10 - horDisp.y(), -1 - horDisp.z());
-        for (int i = 0; i < 20; i++) {
-            Shape key = new Cube(blockMaterial);
-            horPush = horPush.translate(horDisp.x(), horDisp.y(), horDisp.z());
-            key.setTransform(horPush);
-            horizontalKeys.add(key);
-        }
-        //--
         IVector vertDisp = new Vector(0.6, -1, 0.25);
         List<Hittable> verticalStairs = new ArrayList<>();
         ThreeTransform vertPush = ThreeTransform.scaling(1.8, 10, 0.1).translate(1 - vertDisp.x(), -10 - vertDisp.y(), -1.7 - vertDisp.z());
         for (int i = 0; i < 13; i++) {
-            Shape key = new Cube(blockMaterial);
+            Shape key = new Cube(keyMaterial);
             vertPush = vertPush.translate(vertDisp.x(), vertDisp.y(), vertDisp.z()).scale(0.8, 1, 1);
             key.setTransform(vertPush);
             verticalStairs.add(key);
         }
+        /*
+        for (int i = 0; i < 25; i++) {
+            Shape key = new Cube(keyMaterial);
+            vertPush = vertPush.translate(vertDisp.x(), vertDisp.y(), vertDisp.z()).scale(0.8, 1, 1);
+            vertPush = vertPush.translate(-8.39696581394432, 0 ,0)
+                    .scale(Math.pow(10/0.8, 2), 1, 1)
+                    .translate(8.39696581394432, 0, 0);
+            key.setTransform(vertPush);
+            verticalStairs.add(key);
+        }
+        */
         verticalObjects.add(new Group(verticalStairs.toArray(new Hittable[] {})));
 
         //light
-        Shape emitent = new Rectangle(emitentMaterial);
-        emitent.setTransform(ThreeTransform.rotation_x(Math.PI / 2).scale(5, 1, 5).translate(0, 10, -2));
-        //--
         Shape verticalEmitent = new Rectangle(verticalEmitentMaterial);
         verticalEmitent.setTransform(ThreeTransform.rotation_x(Math.PI / 2 + Math.PI/6).scale(5, 1, 5).translate(0, 10, -2));
         verticalObjects.add(verticalEmitent);
 
         //worlds
-        World horizontalWorld = new LambertianWorld(backgroundColour);
-        horizontalWorld.put(horizontalLowerBlock).put(horizontalUpperBlock);
-        horizontalWorld.put(horizontalKeys);
-        horizontalWorld.put(emitent);
-        //--
         World verticalWorld = new LambertianWorld(backgroundColour);
         verticalWorld.put(new Group(verticalObjects.toArray(new Hittable[] {})));
 
@@ -117,11 +100,5 @@ public class Stairs {
         val currentWorld = verticalWorld;
         currentSetup.render(currentWorld);
         currentSetup.export();
-
-        /*
-        IPicture red = new PPMPicture(xSize, ySize);
-        red.fill(new LinearColour(1, 0, 0));
-        picture.embed(red, (x, y) -> x < xSize/2 && (y == (ySize - trimSize)/2 || y == (ySize + trimSize)/2));
-         */
     }
 }
