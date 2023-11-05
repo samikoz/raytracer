@@ -45,24 +45,35 @@ public class Spiral {
         stairMaterial.addRecaster(Recasters.diffuse, 1);
 
         SpiralParameters parameters = SpiralParameters.builder()
-                .count(15)
+                .count(26)
                 .radius(10)
-                .stairDrop(1)
+                .elevationDiff(-1)
                 .stairHeight(10)
                 .stairDepth(1)
                 .stairWidth(2)
                 .stairSeparation(0.1)
                 .stairMaterial(stairMaterial)
-                .centre(new Point(0, 0, 0))
                 .orientation(false)
+                .build();
+        SpiralParameters parameters1 = parameters.toBuilder()
+                .count(21)
+                .initialHeight(2)
+                .build();
+        SpiralParameters parameters2 = parameters.toBuilder()
+                .count(31)
+                .initialHeight(-2)
                 .build();
 
         Material lighting = Material.builder().emit(new GammaColour(lightIntensity, lightIntensity, lightIntensity)).build();
         Shape light = new Rectangle(lighting);
-        light.setTransform(ThreeTransform.scaling(10, 10, 11).translate(0, 22, 0));
+        light.setTransform(ThreeTransform.scaling(10, 10, 1).translate(0, 22, 0));
 
-        Group stairs = SpiralStairs.form(parameters);
-        Group all = new Group(new Hittable[]{stairs, light});
+        Group stairsLeft = new Group(SpiralStairs.form(parameters).toArray(new Hittable[] {}));
+        Group stairs1 = new Group(SpiralStairs.form(parameters1).toArray(new Hittable[] {}));
+        stairs1.setTransform(ThreeTransform.translation(Math.sqrt(2), 0, Math.sqrt(2)));
+        Group stairs2 = new Group(SpiralStairs.form(parameters2).toArray(new Hittable[] {}));
+        stairs2.setTransform(ThreeTransform.translation(-Math.sqrt(2), 0, -Math.sqrt(2)));
+        Group all = new Group(new Hittable[]{stairsLeft, stairs1, stairs2, light});
         world.put(all);
 
         setup.render(world);

@@ -33,7 +33,7 @@ public class Stairs {
 
         //setups
         DemoSetup verticalSetup = DemoSetup.builder()
-                .rayCount(100)
+                .rayCount(800)
                 .xSize(xSize)
                 .ySize(ySize)
                 .viewAngle(viewAngle)
@@ -41,6 +41,8 @@ public class Stairs {
                 .eyePosition(new Point(0, 5, 1.55))
                 .lookDirection(new Vector(0, -5, -1.55))
                 .filename("stairsVertical.ppm")
+                .bufferFileCount(50)
+                .bufferDir("./buffStairsVertical")
                 .build();
         List<Hittable> verticalObjects = new ArrayList<>();
 
@@ -55,9 +57,9 @@ public class Stairs {
         blockMaterial.addRecaster(Recasters.diffuse, 0.7);
         blockMaterial.addRecaster(Recasters.fuzzilyReflective.apply(0.0), 0.3);
 
-        //horizontal blocks
-        Shape upperBlock = new Cube(keyMaterial);
-        upperBlock.setTransform(ThreeTransform.scaling(11, 10, 0.3).translate(0, -10, 3));
+        //keys
+        Shape upperBlock = new Cube(blockMaterial);
+        upperBlock.setTransform(ThreeTransform.scaling(11, 10, 0.3).translate(0, -10, 3.5));
         Shape lowerBlock = new Cube(keyMaterial);
         lowerBlock.setTransform(ThreeTransform.scaling(11, 20, 0.45).translate(0, -10, -2.31));
         verticalObjects.add(upperBlock);
@@ -68,7 +70,7 @@ public class Stairs {
         List<Hittable> verticalStairs = new ArrayList<>();
         ThreeTransform vertPush = ThreeTransform.scaling(1.8, 10, 0.1).translate(1 - vertDisp.x(), -10 - vertDisp.y(), -1.7 - vertDisp.z());
         for (int i = 0; i < 13; i++) {
-            Shape key = new Cube(keyMaterial);
+            Cube key = new Cube(keyMaterial);
             vertPush = vertPush.translate(vertDisp.x(), vertDisp.y(), vertDisp.z()).scale(0.8, 1, 1);
             key.setTransform(vertPush);
             verticalStairs.add(key);
@@ -77,13 +79,17 @@ public class Stairs {
         for (int i = 0; i < 25; i++) {
             Shape key = new Cube(keyMaterial);
             vertPush = vertPush.translate(vertDisp.x(), vertDisp.y(), vertDisp.z()).scale(0.8, 1, 1);
-            vertPush = vertPush.translate(-8.39696581394432, 0 ,0)
+            vertPush = vertPush.translate(-2.3890048837222406, 0 ,0)
                     .scale(Math.pow(10/0.8, 2), 1, 1)
-                    .translate(8.39696581394432, 0, 0);
+                    .translate(2.3890048837222406, 0, 0);
             key.setTransform(vertPush);
             verticalStairs.add(key);
         }
+
+        IPlane sensorPlane = new AbstractPlane(new Vector(0, 0, 1), new Point(0, 0, -1));
         */
+
+
         verticalObjects.add(new Group(verticalStairs.toArray(new Hittable[] {})));
 
         //light

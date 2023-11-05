@@ -3,9 +3,14 @@ package io.raytracer.demos;
 import io.raytracer.geometry.IPoint;
 import io.raytracer.geometry.IVector;
 import io.raytracer.mechanics.World;
-import io.raytracer.tools.*;
+import io.raytracer.tools.BufferedPPMPicture;
+import io.raytracer.tools.Camera;
+import io.raytracer.tools.IPicture;
+import io.raytracer.tools.MultipleRayCamera;
+import io.raytracer.tools.PPMPicture;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
 
 import java.io.IOException;
 import java.nio.file.Paths;
@@ -25,10 +30,11 @@ public class DemoSetup {
     private final String bufferDir;
     private final int bufferFileCount;
 
-    public IPicture picture;
+    @Getter private Camera camera;
+    @Getter private IPicture picture;
 
     public void render(World world) throws IOException {
-        Camera camera = new MultipleRayCamera(this.rayCount, this.xSize, this.ySize, this.viewAngle, this.eyePosition, this.lookDirection, this.upDirection);
+        this.camera = new MultipleRayCamera(this.rayCount, this.xSize, this.ySize, this.viewAngle, this.eyePosition, this.lookDirection, this.upDirection);
         IPicture picture;
         if (this.bufferDir != null && bufferFileCount != 0) {
             picture = new BufferedPPMPicture(xSize, ySize, Paths.get(this.bufferDir), xSize * ySize / this.bufferFileCount);
