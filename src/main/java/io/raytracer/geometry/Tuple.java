@@ -1,10 +1,7 @@
 package io.raytracer.geometry;
 
-import lombok.ToString;
-
 import java.util.Arrays;
 
-@ToString
 class Tuple implements ITuple {
     private final double x, y, z;
 

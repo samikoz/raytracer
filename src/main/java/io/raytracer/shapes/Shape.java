@@ -20,7 +20,7 @@ public abstract class Shape extends Hittable {
         this.material = Material.builder().build();
     }
 
-    Shape(@NonNull Material material) {
+    public Shape(@NonNull Material material) {
         super();
         this.material = material;
     }

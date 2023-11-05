@@ -35,4 +35,9 @@ public class Point extends Tuple implements IPoint {
     public IPoint transform(ITransform t) {
         return t.act(this);
     }
+
+    @Override
+    public String toString() {
+        return String.format("Point(%f,%f,%f)", x(), y(), z());
+    }
 }

@@ -57,7 +57,12 @@ public class RayHit extends Intersection {
             return Optional.empty();
         }
         inters.sort(Intersection::compareTo);
-        return Optional.of(new RayHit(inters.get(0)));
+        for (Intersection i : inters) {
+            if (i.rayParameter >= 0) {
+                return Optional.of(new RayHit(i));
+            }
+        }
+        return Optional.empty();
     }
 
     /*

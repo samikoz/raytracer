@@ -22,14 +22,14 @@ class RayHitTest {
     }
 
     @Test
-    void hitWithPositiveIntersections() {
+    void hitChoosingIntersectionCorrectly() {
         Intersection i1 = new Intersection(new Sphere(), testRay,2.0);
         Intersection i2 = new Intersection(new Sphere(), testRay,-0.1);
         Optional<RayHit> expectedHit = RayHit.fromIntersections(Arrays.asList(i1, i2));
 
         assertTrue(expectedHit.isPresent());
-        assertEquals(-0.1, expectedHit.get().rayParameter, 1e-3,
-                "Hit should be with lowest parameter value");
+        assertEquals(2, expectedHit.get().rayParameter, 1e-3,
+                "Hit should be with lowest positive parameter value");
     }
 
     @Test

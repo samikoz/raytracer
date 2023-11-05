@@ -5,7 +5,7 @@ public class Vector extends Tuple implements IVector {
         super(x, y, z);
     }
 
-    Vector(ITuple them) {
+    public Vector(ITuple them) {
         this(them.x(), them.y(), them.z());
     }
 
@@ -56,5 +56,10 @@ public class Vector extends Tuple implements IVector {
     @Override
     public IVector transform(ITransform t) {
         return t.act(this);
+    }
+
+    @Override
+    public String toString() {
+        return String.format("Vector(%f,%f,%f)", x(), y(), z());
     }
 }
