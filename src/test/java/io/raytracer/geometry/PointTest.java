@@ -1,5 +1,6 @@
 package io.raytracer.geometry;
 
+import io.raytracer.shapes.Plane;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -23,5 +24,15 @@ class PointTest {
         IVector actualDifference = first.subtract(second);
 
         assertEquals(expectedDifference, actualDifference);
+    }
+
+    @Test
+    void project() {
+        IPoint projectionCentre = new Point(1, 0, 0);
+        IPlane projectionPlane = new Plane(new Vector(1, 0, 0), new Point(2, 0, 0));
+        IPoint projectionPoint = new Point(16, 10, 0);
+        IPoint projection = new Point(2, 2.0/3, 0);
+
+        assertEquals(projection, projectionPoint.project(projectionPlane, projectionCentre));
     }
 }

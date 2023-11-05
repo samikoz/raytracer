@@ -37,6 +37,12 @@ public class Point extends Tuple implements IPoint {
     }
 
     @Override
+    public IPoint project(IPlane onto, IPoint through) {
+        ILine lineThrough = new Line(this, through);
+        return onto.intersect(lineThrough);
+    }
+
+    @Override
     public String toString() {
         return String.format("Point(%f,%f,%f)", x(), y(), z());
     }

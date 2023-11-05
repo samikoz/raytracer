@@ -13,4 +13,6 @@ public interface IPoint extends ITuple {
     IVector subtract(IPoint them);
 
     IPoint transform(ITransform t);
+
+    IPoint project(IPlane onto, IPoint through);
 }
