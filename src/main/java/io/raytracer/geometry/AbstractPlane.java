@@ -1,6 +1,7 @@
 package io.raytracer.geometry;
 
 import io.raytracer.mechanics.BBox;
+import io.raytracer.mechanics.FullSpace;
 import io.raytracer.mechanics.IRay;
 import io.raytracer.mechanics.Intersection;
 import io.raytracer.mechanics.TextureParameters;
@@ -29,36 +30,13 @@ public class AbstractPlane extends Shape implements IPlane {
 
     @Override
     public void setTransform(ITransform transform) {
-        throw new UnsupportedOperationException("use AbstractPlane .rotate(), .translate() methods");
+        this.normal = transform.act(this.normal);
+        this.point = transform.act(this.point);
     }
 
     @Override
     public boolean doesContain(IPoint point) {
         return Math.abs(new Vector(point).dot(this.normal) - new Vector(this.point).dot(this.normal)) < AbstractPlane.tolerance;
-    }
-
-    @Override
-    public IPlane translate(IVector translation) {
-        this.point = this.point.add(translation);
-        return this;
-    }
-
-    @Override
-    public IPlane rotate_x(double angle) {
-        this.normal = ThreeTransform.rotation_x(angle).act(this.normal);
-        return this;
-    }
-
-    @Override
-    public IPlane rotate_y(double angle) {
-        this.normal = ThreeTransform.rotation_y(angle).act(this.normal);
-        return this;
-    }
-
-    @Override
-    public IPlane rotate_z(double angle) {
-        this.normal = ThreeTransform.rotation_z(angle).act(this.normal);
-        return this;
     }
 
     @Override
@@ -78,7 +56,7 @@ public class AbstractPlane extends Shape implements IPlane {
 
     @Override
     protected BBox getLocalBoundingBox() {
-        throw new UnsupportedOperationException("unsupported now!");
+        return new FullSpace();
     }
 
     @Override

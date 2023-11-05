@@ -24,7 +24,7 @@ class Tuple implements ITuple {
         if (them == null || this.getClass() != them.getClass()) return false;
 
         ITuple themTuple = (ITuple) them;
-        return ((int)(this.x*1000) == (int)(themTuple.x()*1000) && (int)(this.y*1000) == (int)(themTuple.y()*1000) && (int)(this.z*1000) == (int)(themTuple.z()*1000));
+        return (Math.round(this.x*1000) == Math.round(themTuple.x()*1000) && Math.round(this.y*1000) == Math.round(themTuple.y()*1000) && Math.round(this.z*1000) == Math.round(themTuple.z()*1000));
     }
 
     public double x() {
