@@ -79,10 +79,10 @@ public class SingleRayCameraTest {
         IRay bRay = camera.getRayThroughPixel(71, 29);
         IPlane aPlane = new Plane(new Vector(1, 2, 3), new Point(-3, 4, -5));
         IPlane bPlane = new Plane(new Vector(-1, 5, 0), new Point(1, 1, 1));
-        IPoint aIntersection = aPlane.intersect(aRay);
-        Optional<Pixel> aPixel = camera.projectOntoSensor(aIntersection);
-        IPoint bIntersection = bPlane.intersect(bRay);
-        Optional<Pixel> bPixel = camera.projectOntoSensor(bIntersection);
+        Optional<IPoint> aIntersection = aPlane.intersect(aRay);
+        Optional<Pixel> aPixel = aIntersection.flatMap(camera::projectOntoSensor);
+        Optional<IPoint> bIntersection = bPlane.intersect(bRay);
+        Optional<Pixel> bPixel = bIntersection.flatMap(camera::projectOntoSensor);
 
         assertTrue(aPixel.isPresent());
         assertTrue(bPixel.isPresent());

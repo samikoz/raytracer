@@ -3,11 +3,14 @@ package io.raytracer.geometry;
 import lombok.Getter;
 
 import java.util.Arrays;
+import java.util.Optional;
 
 @Getter
 public class Line implements ILine {
     private final IPoint origin;
     private final IVector direction;
+
+    private static final double tolerance = 1e-6;
 
     public Line(IPoint from, IVector direction) {
         this.origin = from;
@@ -33,9 +36,13 @@ public class Line implements ILine {
     }
 
     @Override
-    public double intersect(IPlane plane) {
+    public Optional<Double> intersect(IPlane plane) {
         IVector n = plane.getNormal();
-        return -n.dot(this.getOrigin().subtract(plane.getPoint()))/(n.dot(this.getDirection()));
+        double dottedDirection = n.dot(this.getDirection());
+        if (Math.abs(dottedDirection) < Line.tolerance) {
+            return Optional.empty();
+        }
+        return Optional.of(-n.dot(this.getOrigin().subtract(plane.getPoint()))/(n.dot(this.getDirection())));
     }
 
     @Override

@@ -18,6 +18,7 @@ import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Optional;
 
 @Getter
 public class Plane extends Shape implements IPlane {
@@ -67,13 +68,17 @@ public class Plane extends Shape implements IPlane {
     }
 
     @Override
-    public IPoint intersect(ILine line) {
-        return line.pointAt(line.intersect(this));
+    public Optional<IPoint> intersect(ILine line) {
+        Optional<Double> intersectionParameter = line.intersect(this);
+        return intersectionParameter.map(line::pointAt);
     }
 
     @Override
     public ArrayList<Intersection> intersect(IRay ray, Interval rayDomain) {
-        return new ArrayList<>(Collections.singletonList(new Intersection(this, ray, ray.intersect(this), new TextureParameters())));
+        Optional<Double> intersectionParameter = ray.intersect(this);
+        return intersectionParameter
+            .map(p -> new ArrayList<>(Collections.singletonList(new Intersection(this, ray, p, new TextureParameters()))))
+            .orElse(new ArrayList<>());
     }
 
     @Override

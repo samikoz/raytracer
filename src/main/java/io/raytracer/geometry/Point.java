@@ -2,6 +2,8 @@ package io.raytracer.geometry;
 
 import lombok.NonNull;
 
+import java.util.Optional;
+
 public class Point extends Tuple implements IPoint {
     public Point(double x, double y, double z) {
         super(x, y, z);
@@ -37,7 +39,7 @@ public class Point extends Tuple implements IPoint {
     }
 
     @Override
-    public IPoint project(IPlane onto, IPoint through) {
+    public Optional<IPoint> project(IPlane onto, IPoint through) {
         ILine lineThrough = new Line(this, through);
         return onto.intersect(lineThrough);
     }

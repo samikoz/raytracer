@@ -1,5 +1,7 @@
 package io.raytracer.geometry;
 
+import java.util.Optional;
+
 public interface IPoint extends ITuple {
     double distance(IPoint them);
 
@@ -14,5 +16,5 @@ public interface IPoint extends ITuple {
 
     IPoint transform(ITransform t);
 
-    IPoint project(IPlane onto, IPoint through);
+    Optional<IPoint> project(IPlane onto, IPoint through);
 }
