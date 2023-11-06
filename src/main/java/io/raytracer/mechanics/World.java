@@ -8,9 +8,9 @@ import io.raytracer.tools.Camera;
 import io.raytracer.tools.IColour;
 import io.raytracer.tools.IPicture;
 import io.raytracer.tools.LinearColour;
+import io.raytracer.tools.Pixel;
 import io.raytracer.utils.StreamUtils;
 import lombok.NonNull;
-import org.javatuples.Pair;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -68,16 +68,16 @@ public abstract class World {
         int blankPixelCount = (int)picture.getBlankPixels().count();
 
         AtomicInteger pixelCount = new AtomicInteger(1);
-        Stream<Pair<Integer, Integer>> blankPixels = picture.getBlankPixels().parallel().collect(StreamUtils.shuffledCollector());
+        Stream<Pixel> blankPixels = picture.getBlankPixels().parallel().collect(StreamUtils.shuffledCollector());
 
         long renderStart = System.nanoTime();
         Reporter reporter = this.reporterFactory.apply(
                 new RenderData(picture.getHeight()*picture.getWidth(), blankPixelCount, renderStart));
 
-        blankPixels.forEach(pixelPair -> {
-            Collection<IRay> rays = camera.getRaysThroughPixel(pixelPair.getValue0(), pixelPair.getValue1());
+        blankPixels.forEach(pixel -> {
+            Collection<IRay> rays = camera.getRaysThroughPixel(pixel);
             IColour colour = this.illuminate(rays);
-            picture.write(pixelPair.getValue0(), pixelPair.getValue1(), colour);
+            picture.write(pixel, colour);
             int renderedPixelCount = pixelCount.getAndIncrement();
             reporter.report(renderedPixelCount);
         });

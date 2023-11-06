@@ -1,5 +1,6 @@
 package io.raytracer.demos;
 
+import io.raytracer.shapes.Plane;
 import io.raytracer.geometry.IPoint;
 import io.raytracer.geometry.IVector;
 import io.raytracer.geometry.Point;
@@ -10,7 +11,6 @@ import io.raytracer.mechanics.IRay;
 import io.raytracer.mechanics.LambertianWorld;
 import io.raytracer.mechanics.Recasters;
 import io.raytracer.shapes.Cylinder;
-import io.raytracer.shapes.Plane;
 import io.raytracer.shapes.Shape;
 import io.raytracer.shapes.Sphere;
 import io.raytracer.textures.CheckerTexture;
@@ -44,7 +44,7 @@ public class Chamber {
             .texture(floorTexture)
             .build();
         floorMaterial.addRecaster(Recasters.diffuse, 1);
-        Shape floor = new Plane(floorMaterial);
+        Shape floor = new Plane(new Vector(0, 1, 0), floorMaterial);
         world.put(floor);
 
         Material columnMaterial = Material.builder()

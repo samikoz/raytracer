@@ -2,7 +2,6 @@ package io.raytracer.tools;
 
 import lombok.Getter;
 import lombok.NonNull;
-import org.javatuples.Pair;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -42,8 +41,8 @@ public class PPMPicture implements IPicture {
     }
 
     @Override
-    public void write(int x, int y, @NonNull IColour colour) {
-        pixelGrid.get(y).set(x, colour);
+    public void write(Pixel p, @NonNull IColour colour) {
+        pixelGrid.get(p.y).set(p.x, colour);
     }
 
     @Override
@@ -52,8 +51,8 @@ public class PPMPicture implements IPicture {
     }
 
     @Override
-    public Stream<Pair<Integer, Integer>> getBlankPixels() {
-        return IntStream.range(0, this.height).mapToObj(y -> IntStream.range(0, this.width).mapToObj(x -> new Pair<>(x, y))).flatMap(y -> y);
+    public Stream<Pixel> getBlankPixels() {
+        return IntStream.range(0, this.height).mapToObj(y -> IntStream.range(0, this.width).mapToObj(x -> new Pixel(x, y))).flatMap(y -> y);
     }
 
     @Override
@@ -116,7 +115,7 @@ public class PPMPicture implements IPicture {
             this.parsingResidue.add(colorPart);
             if (this.parsingResidue.size() == 3) {
                 IColour parsedColour = new LinearColour(this.parsingResidue.get(0)/255.0, this.parsingResidue.get(1)/255.0, this.parsingResidue.get(2)/255.0);
-                this.write(this.loadingPointer % this.getWidth(), this.loadingPointer / this.getWidth(), parsedColour);
+                this.write(new Pixel(this.loadingPointer % this.getWidth(), this.loadingPointer / this.getWidth()), parsedColour);
                 this.loadingPointer++;
                 this.parsingResidue.clear();
             }

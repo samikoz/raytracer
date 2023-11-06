@@ -1,6 +1,5 @@
 package io.raytracer.tools;
 
-import org.javatuples.Pair;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
@@ -33,8 +32,8 @@ class BufferedPPMPictureTest {
         IColour second = new LinearColour(0, 0, 0.4);
         BufferedPPMPicture picture = new BufferedPPMPicture(10, 20, tempDir, 3);
 
-        picture.write(0, 19, first);
-        picture.write(2, 0, second);
+        picture.write(new Pixel(0, 19), first);
+        picture.write(new Pixel(2, 0), second);
 
         picture.loadPersisted();
         IColour firstRead = picture.read(0, 19);
@@ -52,8 +51,8 @@ class BufferedPPMPictureTest {
         IColour second = new LinearColour(0, 0, 0.4);
         BufferedPPMPicture picture = new BufferedPPMPicture(10, 20, tempDir, 2);
 
-        picture.write(0, 19, first);
-        picture.write(2, 0, second);
+        picture.write(new Pixel(0, 19), first);
+        picture.write(new Pixel(2, 0), second);
 
         picture.loadPersisted();
         IColour firstRead = picture.read(0, 19);
@@ -84,9 +83,9 @@ class BufferedPPMPictureTest {
         Path tempPath = tempdir.resolve("test.mth");
 
         IPicture picture = new BufferedPPMPicture(5, 3, tempdir);
-        picture.write(0, 0, new GammaColour(1, 0, 0));
-        picture.write(2, 1, new GammaColour(0, 0.5, 0));
-        picture.write(4, 2, new GammaColour(-0.5, 0, 1));
+        picture.write(new Pixel(0, 0), new GammaColour(1, 0, 0));
+        picture.write(new Pixel(2, 1), new GammaColour(0, 0.5, 0));
+        picture.write(new Pixel(4, 2), new GammaColour(-0.5, 0, 1));
 
         String expectedFirstRowData = "255 0 0 0 0 0 0 0 0 0 0 0 0 0 0\n";
         String expectedSecondRowData = "0 0 0 0 0 0 0 180 0 0 0 0 0 0 0\n";
@@ -101,21 +100,21 @@ class BufferedPPMPictureTest {
     @Test
     void getBlankPixelsReturnsUnpersistedPixels(@TempDir Path tempdir) throws IOException {
         IPicture firstPicture = new BufferedPPMPicture(2, 2, tempdir, 2);
-        firstPicture.write(0, 0, new LinearColour(0.1, 0.2, 0.3));
-        firstPicture.write(1, 0, new LinearColour(0.2, 0.1, 0.3));
-        firstPicture.write(0, 1, new LinearColour(0.3, 0.2, 0.1));
+        firstPicture.write(new Pixel(0, 0), new LinearColour(0.1, 0.2, 0.3));
+        firstPicture.write(new Pixel(1, 0), new LinearColour(0.2, 0.1, 0.3));
+        firstPicture.write(new Pixel(0, 1), new LinearColour(0.3, 0.2, 0.1));
         IPicture secondPicture = new BufferedPPMPicture(2, 2, tempdir, 2);
-        Set<Pair<Integer, Integer>> unpersistedPixels = secondPicture.getBlankPixels().collect(Collectors.toSet());
+        Set<Pixel> unpersistedPixels = secondPicture.getBlankPixels().collect(Collectors.toSet());
 
-        assertEquals(new HashSet<>(Arrays.asList(new Pair<>(0, 1), new Pair<>(1, 1))), unpersistedPixels);
+        assertEquals(new HashSet<>(Arrays.asList(new Pixel(0, 1), new Pixel(1, 1))), unpersistedPixels);
     }
 
     @Test
     void persistedPixelsAccessibleAcrossBufferedPictures(@TempDir Path tempdir) throws IOException {
         IPicture firstPicture = new BufferedPPMPicture(2, 2, tempdir, 2);
-        firstPicture.write(0, 0, new LinearColour(0.1, 0.2, 0.3));
-        firstPicture.write(1, 0, new LinearColour(0.2, 0.1, 0.3));
-        firstPicture.write(0, 1, new LinearColour(0.3, 0.2, 0.1));
+        firstPicture.write(new Pixel(0, 0), new LinearColour(0.1, 0.2, 0.3));
+        firstPicture.write(new Pixel(1, 0), new LinearColour(0.2, 0.1, 0.3));
+        firstPicture.write(new Pixel(0, 1), new LinearColour(0.3, 0.2, 0.1));
         BufferedPPMPicture secondPicture = new BufferedPPMPicture(2, 2, tempdir, 2);
         secondPicture.loadPersisted();
 

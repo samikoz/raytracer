@@ -200,8 +200,8 @@ public class ThreeTransform implements ITransform {
         return new ThreeTransform(m.multiply(this.matrix));
     }
 
-    private ThreeTransform transform(ThreeTransform t) {
-        return this.transform(t.matrix);
+    public ThreeTransform transform(ITransform t) {
+        return this.transform(t.getMatrix());
     }
 
     @Override

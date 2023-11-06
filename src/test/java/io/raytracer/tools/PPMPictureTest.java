@@ -1,6 +1,5 @@
 package io.raytracer.tools;
 
-import org.javatuples.Pair;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
@@ -33,8 +32,8 @@ class PPMPictureTest {
         IColour second = new LinearColour(0, 0, 0.4);
         IPicture picture = new PPMPicture(10, 20);
 
-        picture.write(0, 19, first);
-        picture.write(2, 0, second);
+        picture.write(new Pixel(0, 19), first);
+        picture.write(new Pixel(2, 0), second);
 
         IColour firstRead = picture.read(0, 19);
         IColour secondRead = picture.read(2, 0);
@@ -64,9 +63,9 @@ class PPMPictureTest {
         Path tempPath = tempdir.resolve("test.mth");
 
         IPicture picture = new PPMPicture(5, 3);
-        picture.write(0, 0, new GammaColour(1, 0, 0));
-        picture.write(2, 1, new GammaColour(0, 0.5, 0));
-        picture.write(4, 2, new GammaColour(-0.5, 0, 1));
+        picture.write(new Pixel(0, 0), new GammaColour(1, 0, 0));
+        picture.write(new Pixel(2, 1), new GammaColour(0, 0.5, 0));
+        picture.write(new Pixel(4, 2), new GammaColour(-0.5, 0, 1));
 
         String expectedFirstRowData = "255 0 0 0 0 0 0 0 0 0 0 0 0 0 0\n";
         String expectedSecondRowData = "0 0 0 0 0 0 0 180 0 0 0 0 0 0 0\n";
@@ -86,8 +85,8 @@ class PPMPictureTest {
         IColour aColour = new GammaColour(1, 0.8, 0.6);
 
         for (int i = 0; i < 10; ++i) {
-            picture.write(i, 0, aColour);
-            picture.write(i, 1, aColour);
+            picture.write(new Pixel(i, 0), aColour);
+            picture.write(new Pixel(i, 1), aColour);
         }
 
         String expectedPreLineBreak = "255 228 198 255 228 198 255 228 198 255 228 198 255 228 198 255 228";
@@ -104,9 +103,9 @@ class PPMPictureTest {
     @Test
     void getBlankPixelsReturnCartesianProduct() {
         IPicture picture = new PPMPicture(10, 15);
-        List<Pair<Integer, Integer>> pixels = picture.getBlankPixels().collect(Collectors.toList());
+        List<Pixel> pixels = picture.getBlankPixels().collect(Collectors.toList());
 
-        int[] secondColumnValues = pixels.stream().filter(pair -> pair.getValue0() == 2).mapToInt(Pair::getValue1).sorted().toArray();
+        int[] secondColumnValues = pixels.stream().filter(p -> p.x == 2).mapToInt(p -> p.y).sorted().toArray();
 
         assertEquals(150, pixels.size());
         assertArrayEquals(IntStream.range(0, 15).toArray(), secondColumnValues);

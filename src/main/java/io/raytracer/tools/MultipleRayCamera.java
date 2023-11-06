@@ -26,8 +26,8 @@ public class MultipleRayCamera extends Camera {
     }
 
     @Override
-    public Collection<IRay> getRaysThroughPixel(int x, int y) {
-        return IntStream.range(0, rayCount).mapToObj(i -> this.getRayThroughPixel(x + this.randGen.nextDouble() - 0.5, y + this.randGen.nextDouble() - 0.5))
+    public Collection<IRay> getRaysThroughPixel(Pixel pixel) {
+        return IntStream.range(0, rayCount).mapToObj(i -> this.getRayThroughPixel(pixel.x + this.randGen.nextDouble() - 0.5, pixel.y + this.randGen.nextDouble() - 0.5))
                 .collect(Collectors.toList());
     }
 }

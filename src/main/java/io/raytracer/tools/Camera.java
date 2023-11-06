@@ -1,22 +1,26 @@
 package io.raytracer.tools;
 
+import io.raytracer.geometry.FourMatrix;
 import io.raytracer.geometry.IPoint;
 import io.raytracer.geometry.ISquareMatrix;
 import io.raytracer.geometry.ITransform;
 import io.raytracer.geometry.IVector;
 import io.raytracer.geometry.Point;
-import io.raytracer.geometry.FourMatrix;
 import io.raytracer.geometry.ThreeTransform;
+import io.raytracer.geometry.Vector;
 import io.raytracer.mechanics.IRay;
 import io.raytracer.mechanics.Ray;
+import io.raytracer.shapes.Plane;
 
 import java.util.Collection;
+import java.util.Optional;
 
 public abstract class Camera {
     private final int pictureWidthPixels;
     private final int pictureHeightPixels;
     private final double fieldOfView;
     private ITransform worldTransformation;
+    private ITransform inverseWorld;
     private double pictureHalfWidth;
     private double pictureHalfHeight;
     private double pixelSize;
@@ -26,6 +30,7 @@ public abstract class Camera {
         this.pictureHeightPixels = vsize;
         this.fieldOfView = fieldOfView;
         this.worldTransformation = new ThreeTransform();
+        this.inverseWorld = new ThreeTransform();
 
         computePixelSize();
     }
@@ -35,10 +40,11 @@ public abstract class Camera {
         this.pictureHeightPixels = vsize;
         this.fieldOfView = fieldOfView;
         this.worldTransformation = this.makeViewTransformation(eyePosition, lookDirection, upDirection).inverse();
+        this.inverseWorld = this.worldTransformation.inverse();
 
         computePixelSize();
     }
-    public abstract Collection<IRay> getRaysThroughPixel(int x, int y);
+    public abstract Collection<IRay> getRaysThroughPixel(Pixel p);
 
     protected IRay getRayThroughPixel(double x, double y) {
         double canvasXOffset = (x + 0.5) * this.pixelSize;
@@ -86,6 +92,18 @@ public abstract class Camera {
     }
 
     public void transform(ITransform t) {
-        this.worldTransformation = ThreeTransform.transformation(t.inverse().getMatrix().multiply(this.worldTransformation.getMatrix()));
+        this.worldTransformation = this.worldTransformation.transform(t.inverse());
+        this.inverseWorld = this.worldTransformation.inverse();
+    }
+
+    public Optional<Pixel> projectOntoSensor(IPoint p) {
+        IPoint pCameraCoords = this.inverseWorld.act(p);
+        IPoint projectedPoint = pCameraCoords.project(new Plane(new Vector(0, 0, 1), new Point(0, 0, -1)), new Point(0, 0, 0));
+        IPoint reflectedImage = new Point(this.pictureHalfWidth - projectedPoint.x(), this.pictureHalfHeight - projectedPoint.y(), projectedPoint.z());
+        Pixel pixel = new Pixel((int)(reflectedImage.x()/this.pixelSize), (int)(reflectedImage.y()/this.pixelSize));
+        if (pixel.x >= 0 && pixel.x < this.pictureWidthPixels && pixel.y > 0 && pixel.y < this.pictureHeightPixels) {
+            return Optional.of(pixel);
+        }
+        return Optional.empty();
     }
 }

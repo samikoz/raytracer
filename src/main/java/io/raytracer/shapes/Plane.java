@@ -62,6 +62,11 @@ public class Plane extends Shape implements IPlane {
     }
 
     @Override
+    public IPoint reflect(IPoint p) {
+        return p.subtract(this.normal.multiply(2*p.subtract(this.point).dot(this.normal)));
+    }
+
+    @Override
     public IPoint intersect(ILine line) {
         return line.pointAt(line.intersect(this));
     }

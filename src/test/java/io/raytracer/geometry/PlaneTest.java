@@ -38,7 +38,7 @@ class PlaneTest {
     }
 
     @Test
-    void rotaterddx_x() {
+    void rotate_x() {
         IPoint aPoint = new Point(5, 2, 0);
         Plane aPlane = new Plane(new Vector(0, 1, 0), aPoint);
         aPlane.setTransform(ThreeTransform.rotation_x(Math.PI / 2));
@@ -61,5 +61,13 @@ class PlaneTest {
         assertEquals(new Vector(1, 0, 0), aPlane.getNormal());
         assertEquals(new Point(-2, 0, -5), aPlane.getPoint());
         assertEquals(-2, testLine.intersect(aPlane), 1e-3);
+    }
+
+    @Test
+    void reflect() {
+        IPoint aPoint = new Point(3, 1, -1);
+        IPlane aPlane = new Plane(new Vector(1, 1, 1), new Point(2, 0 ,0));
+
+        assertEquals(new Point(1, -1, -3), aPlane.reflect(aPoint));
     }
 }

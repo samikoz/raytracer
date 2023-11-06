@@ -2,7 +2,6 @@ package io.raytracer.tools;
 
 import lombok.Getter;
 import org.javatuples.Pair;
-import org.javatuples.Triplet;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -22,7 +21,7 @@ public class BufferedPPMPicture implements IPicture {
     @Getter private final int height;
     private final Path buffDir;
     private final int bufferSize;
-    private List<Triplet<Integer, Integer, IColour>> buffer;
+    private List<Pair<Pixel, IColour>> buffer;
     private int persistedBufferIndex;
     private PPMPicture loadedBuffer;
     private static final String buffFileExtension = ".buff";
@@ -41,8 +40,8 @@ public class BufferedPPMPicture implements IPicture {
         this(x, y, bufferDirectory, x * y / 100);
     }
 
-    public synchronized void write(int x, int y, IColour colour) {
-        this.buffer.add(new Triplet<>(x, y, colour));
+    public synchronized void write(Pixel p, IColour colour) {
+        this.buffer.add(new Pair<>(p, colour));
         if (this.buffer.size() >= this.bufferSize) {
             this.persistBuffer();
         }
@@ -51,19 +50,19 @@ public class BufferedPPMPicture implements IPicture {
     @Override
     public IColour read(int x, int y) {
         return this.buffer.stream()
-                .filter(triplet -> triplet.getValue0() == x && triplet.getValue1() == y)
+                .filter(pair -> pair.getValue0().x == x && pair.getValue0().y == y)
                 .findFirst()
-                .map(Triplet::getValue2)
+                .map(Pair::getValue1)
                 .orElse(this.loadedBuffer.read(x, y));
     }
 
     @Override
-    public Stream<Pair<Integer, Integer>> getBlankPixels() {
-        Stream<Pair<Integer, Integer>> allPixels = IntStream.range(0, this.height).mapToObj(y -> IntStream.range(0, this.width)
-                .mapToObj(x -> new Pair<>(x, y))).flatMap(y -> y);
-        Set<Pair<Integer, Integer>> writtenPixels = this.parsePersisted()
-                .map(triplet -> new Pair<>(triplet.getValue0(), triplet.getValue1())).collect(Collectors.toSet());
-        return allPixels.filter(pixelPair -> !writtenPixels.contains(pixelPair));
+    public Stream<Pixel> getBlankPixels() {
+        Stream<Pixel> allPixels = IntStream.range(0, this.height).mapToObj(y -> IntStream.range(0, this.width)
+                .mapToObj(x -> new Pixel(x, y))).flatMap(y -> y);
+        Set<Pixel> writtenPixels = this.parsePersisted()
+                .map(pair -> new Pixel(pair.getValue0().x, pair.getValue0().y)).collect(Collectors.toSet());
+        return allPixels.filter(pixel -> !writtenPixels.contains(pixel));
     }
 
     @Override
@@ -92,13 +91,13 @@ public class BufferedPPMPicture implements IPicture {
         this.buffer = new ArrayList<>();
     }
 
-    private Stream<Triplet<Integer, Integer, IColour>> parsePersisted() {
-        Stream<Triplet<Integer, Integer, IColour>> parsed = Stream.empty();
+    private Stream<Pair<Pixel, IColour>> parsePersisted() {
+        Stream<Pair<Pixel, IColour>> parsed = Stream.empty();
         for (int bufferIndex = 1; bufferIndex < this.persistedBufferIndex+1; bufferIndex++) {
             try {
                 ObjectInputStream inStream = new ObjectInputStream(Files.newInputStream(this.getBuffer(bufferIndex)));
                 @SuppressWarnings("unchecked")
-                List<Triplet<Integer, Integer, IColour>> readBuffer = (List<Triplet<Integer, Integer, IColour>>) inStream.readObject();
+                List<Pair<Pixel, IColour>> readBuffer = (List<Pair<Pixel, IColour>>) inStream.readObject();
                 inStream.close();
                 parsed = Stream.concat(parsed, readBuffer.stream());
             } catch (IOException | ClassNotFoundException e) {
@@ -111,7 +110,7 @@ public class BufferedPPMPicture implements IPicture {
 
     public void loadPersisted() {
         PPMPicture loaded = new PPMPicture(this.width, this.height);
-        this.parsePersisted().forEach(loadedColour -> loaded.write(loadedColour.getValue0(), loadedColour.getValue1(), loadedColour.getValue2()));
+        this.parsePersisted().forEach(loadedColour -> loaded.write(loadedColour.getValue0(), loadedColour.getValue1()));
         this.loadedBuffer = loaded;
     }
 

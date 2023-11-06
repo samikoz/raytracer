@@ -17,7 +17,7 @@ public class SingleRayCamera extends Camera {
     }
 
     @Override
-    public Collection<IRay> getRaysThroughPixel(int x, int y) {
-        return Collections.singletonList(this.getRayThroughPixel(x, y));
+    public Collection<IRay> getRaysThroughPixel(Pixel pixel) {
+        return Collections.singletonList(this.getRayThroughPixel(pixel.x, pixel.y));
     }
 }
