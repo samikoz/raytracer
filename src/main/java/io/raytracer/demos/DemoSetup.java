@@ -30,11 +30,11 @@ public class DemoSetup {
     private final String bufferDir;
     private final int bufferFileCount;
 
-    @Getter private Camera camera;
+    private Camera camera;
     @Getter private IPicture picture;
 
     public void render(World world) throws IOException {
-        this.camera = new MultipleRayCamera(this.rayCount, this.xSize, this.ySize, this.viewAngle, this.eyePosition, this.lookDirection, this.upDirection);
+        this.camera = this.makeCamera();
         IPicture picture;
         if (this.bufferDir != null && bufferFileCount != 0) {
             picture = new BufferedPPMPicture(xSize, ySize, Paths.get(this.bufferDir), xSize * ySize / this.bufferFileCount);
@@ -44,6 +44,10 @@ public class DemoSetup {
         }
         world.render(picture, camera);
         this.picture = picture;
+    }
+
+    public Camera makeCamera() {
+        return new MultipleRayCamera(this.rayCount, this.xSize, this.ySize, this.viewAngle, this.eyePosition, this.lookDirection, this.upDirection);
     }
 
     public void export() throws IOException {

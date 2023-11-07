@@ -19,6 +19,7 @@ public class LiteralParser implements Parser {
 
     private final String floatPoint = "(-?\\d+\\.\\d+)";
     private final String threePoint = "P\\(" + floatPoint + "," + floatPoint + "," + floatPoint + "\\)";
+    private final Pattern spherePattern = Pattern.compile("Sphere\\(" + this.threePoint + "," + this.floatPoint + "\\)");
 
     public LiteralParser(Material material) {
         this.loaded = new ArrayList<>();
@@ -31,8 +32,7 @@ public class LiteralParser implements Parser {
     }
 
     public void parseLine(String line) {
-        Pattern spherePattern = Pattern.compile("Sphere\\(" + this.threePoint + "," + this.floatPoint + "\\)");
-        Matcher sphereMatcher = spherePattern.matcher(line);
+        Matcher sphereMatcher = this.spherePattern.matcher(line);
         if (sphereMatcher.find()) {
             this.loaded.add(this.parseSphere(sphereMatcher));
         } else {

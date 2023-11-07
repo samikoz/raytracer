@@ -14,7 +14,7 @@ public class SpiralStairs {
         List<Cube> stairs = new ArrayList<>();
         ThreeTransform transform = ThreeTransform.scaling(params.stairWidth/2, params.stairHeight/2, params.stairDepth/2)
                 .translate(cubeXPosition(params), params.initialHeight-params.stairHeight/2, 0)
-                .rotate_y(params.angleOffset);
+                .rotate_y(params.angleOffset+params.skip*rotationAngle);
 
         for (int stairIndex = 0; stairIndex < params.count; stairIndex++) {
             Cube stair = new Cube(params.stairMaterial);
@@ -27,6 +27,6 @@ public class SpiralStairs {
     }
 
     private static double cubeXPosition(SpiralParameters params) {
-        return -params.radius+params.stairWidth/2;
+        return -(params.radius+params.stairWidth/2);
     }
 }
