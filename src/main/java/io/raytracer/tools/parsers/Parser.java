@@ -15,6 +15,9 @@ public interface Parser {
         Scanner scanner = new Scanner(file);
         while (scanner.hasNextLine()) {
             String line = scanner.nextLine();
+            if (line.startsWith("//") || line.trim().equals("")) {
+                continue;
+            }
             this.parseLine(line);
         }
         scanner.close();

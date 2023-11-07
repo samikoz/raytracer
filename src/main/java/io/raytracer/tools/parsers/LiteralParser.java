@@ -6,6 +6,7 @@ import io.raytracer.geometry.ThreeTransform;
 import io.raytracer.materials.Material;
 import io.raytracer.shapes.Hittable;
 import io.raytracer.shapes.Sphere;
+import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,30 +15,41 @@ import java.util.regex.Pattern;
 
 
 public class LiteralParser implements Parser {
-    private final List<Hittable> loaded;
+    @Getter private final List<Hittable> parsed;
+    @Getter private final List<IPoint> parsedPoints;
     private final Material material;
 
     private final String floatPoint = "(-?\\d+\\.\\d+)";
-    private final String threePoint = "P\\(" + floatPoint + "," + floatPoint + "," + floatPoint + "\\)";
-    private final Pattern spherePattern = Pattern.compile("Sphere\\(" + this.threePoint + "," + this.floatPoint + "\\)");
+    private final String threeFloatPoint = "P\\(" + floatPoint + "," + floatPoint + "," + floatPoint + "\\)";
+    private final Pattern threeIntPoint = Pattern.compile("Point\\((\\d+),(\\d+),(\\d+)\\)");
+    private final Pattern spherePattern = Pattern.compile("Sphere\\(" + this.threeFloatPoint + "," + this.floatPoint + "\\)");
 
-    public LiteralParser(Material material) {
-        this.loaded = new ArrayList<>();
-        this.material = material;
+    public LiteralParser() {
+        this.parsed = new ArrayList<>();
+        this.parsedPoints = new ArrayList<>();
+        this.material = Material.builder().build();
     }
 
-    @Override
-    public List<Hittable> getParsed() {
-        return this.loaded;
+    public LiteralParser(Material material) {
+        this.parsed = new ArrayList<>();
+        this.parsedPoints = new ArrayList<>();
+        this.material = material;
     }
 
     public void parseLine(String line) {
         Matcher sphereMatcher = this.spherePattern.matcher(line);
         if (sphereMatcher.find()) {
-            this.loaded.add(this.parseSphere(sphereMatcher));
-        } else {
-            throw new RuntimeException(String.format("Could not parse line: %s", line));
+            this.parsed.add(this.parseSphere(sphereMatcher));
+            return;
         }
+        Matcher pointMatcher = this.threeIntPoint.matcher(line);
+        if (pointMatcher.find()) {
+            this.parsedPoints.add(this.parsePoint(pointMatcher));
+            return;
+        }
+
+        throw new RuntimeException(String.format("Could not parse line: %s", line));
+
     }
 
     private Sphere parseSphere(Matcher sphereMatcher) {
@@ -53,5 +65,13 @@ public class LiteralParser implements Parser {
             .translate(parsedCentre.x(), parsedCentre.y(), parsedCentre.z())
         );
         return sphere;
+    }
+
+    private IPoint parsePoint(Matcher pointMatcher) {
+        return new Point(
+            Integer.parseInt(pointMatcher.group(1)),
+            Integer.parseInt(pointMatcher.group(2)),
+            Integer.parseInt(pointMatcher.group(3))
+        );
     }
 }
