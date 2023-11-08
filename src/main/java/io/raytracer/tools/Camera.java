@@ -46,7 +46,7 @@ public abstract class Camera {
     }
     public abstract Collection<IRay> getRaysThroughPixel(Pixel p);
 
-    protected IRay getRayThroughPixel(double x, double y) {
+    public IRay getRayThroughPixel(double x, double y) {
         double canvasXOffset = (x + 0.5) * this.pixelSize;
         double canvasYOffset = (y + 0.5) * this.pixelSize;
 
@@ -96,16 +96,14 @@ public abstract class Camera {
         this.inverseWorld = this.worldTransformation.inverse();
     }
 
-    public Optional<Pixel> projectOntoSensor(IPoint p) {
+    public Optional<Pixel> projectOnSensorPlane(IPoint p) {
         IPoint pCameraCoords = this.inverseWorld.act(p);
         Optional<IPoint> projected = pCameraCoords.project(new Plane(new Vector(0, 0, 1), new Point(0, 0, -1)), new Point(0, 0, 0));
         if (projected.isPresent()) {
             IPoint projectedPoint = projected.get();
             IPoint reflectedImage = new Point(this.pictureHalfWidth - projectedPoint.x(), this.pictureHalfHeight - projectedPoint.y(), projectedPoint.z());
-            Pixel pixel = new Pixel((int) (reflectedImage.x() / this.pixelSize), (int) (reflectedImage.y() / this.pixelSize));
-            if (pixel.x >= 0 && pixel.x < this.pictureWidthPixels && pixel.y > 0 && pixel.y < this.pictureHeightPixels) {
-                return Optional.of(pixel);
-            }
+            Pixel pixel = new Pixel(Math.round((reflectedImage.x() / this.pixelSize)), Math.round((reflectedImage.y() / this.pixelSize)));
+            return Optional.of(pixel);
         }
         return Optional.empty();
     }

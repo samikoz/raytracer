@@ -16,6 +16,11 @@ public class Pixel implements Serializable {
     public int x;
     public int y;
 
+    public Pixel(double x, double y) {
+        this.x = Math.round((float)x);
+        this.y = Math.round((float)y);
+    }
+
     public Pixel interpolate(Pixel p, double t) {
         IPoint from = new Point(this.x, this.y, 0);
         IPoint to = new Point(p.x, p.y, 0);

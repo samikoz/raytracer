@@ -15,7 +15,6 @@ import java.util.Collection;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class SingleRayCameraTest {
@@ -75,14 +74,14 @@ public class SingleRayCameraTest {
         IVector upDirection = new Vector(0, 1, 0);
         Camera camera = new SingleRayCamera(100, 100, Math.PI/3, eyePosition, lookDirection, upDirection);
 
-        IRay aRay = camera.getRayThroughPixel(12, 28);
-        IRay bRay = camera.getRayThroughPixel(71, 29);
-        IPlane aPlane = new Plane(new Vector(1, 2, 3), new Point(-3, 4, -5));
-        IPlane bPlane = new Plane(new Vector(-1, 5, 0), new Point(1, 1, 1));
+        IRay aRay = camera.getRayThroughPixel(11.7, 27.8);
+        IRay bRay = camera.getRayThroughPixel(70.7, 28.6);
+        IPlane aPlane = new Plane(new Vector(1, 2, 3), new Point(-30, 40, -50));
+        IPlane bPlane = new Plane(new Vector(-1, 5, 0), new Point(10, 10, 10));
         Optional<IPoint> aIntersection = aPlane.intersect(aRay);
-        Optional<Pixel> aPixel = aIntersection.flatMap(camera::projectOntoSensor);
+        Optional<Pixel> aPixel = aIntersection.flatMap(camera::projectOnSensorPlane);
         Optional<IPoint> bIntersection = bPlane.intersect(bRay);
-        Optional<Pixel> bPixel = bIntersection.flatMap(camera::projectOntoSensor);
+        Optional<Pixel> bPixel = bIntersection.flatMap(camera::projectOnSensorPlane);
 
         assertTrue(aPixel.isPresent());
         assertTrue(bPixel.isPresent());
@@ -96,8 +95,11 @@ public class SingleRayCameraTest {
         IVector lookDirection = new Vector(1, 0, 0);
         IVector upDirection = new Vector(0, 1, 0);
         Camera camera = new SingleRayCamera(100, 100, Math.PI/2, eyePosition, lookDirection, upDirection);
-        IPoint invisiblePoint = new Point(10, 11, 2);
+        IPoint invisiblePoint = new Point(10, 12, 2);
 
-        assertFalse(camera.projectOntoSensor(invisiblePoint).isPresent());
+        Optional<Pixel> aPixel = camera.projectOnSensorPlane(invisiblePoint);
+
+        assertTrue(aPixel.isPresent());
+        assertEquals(new Pixel(40, -10), aPixel.get());
     }
 }
