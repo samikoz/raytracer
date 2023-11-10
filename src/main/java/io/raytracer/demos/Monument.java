@@ -1,5 +1,8 @@
 package io.raytracer.demos;
 
+import io.raytracer.geometry.ILine;
+import io.raytracer.geometry.IPoint;
+import io.raytracer.geometry.ITransform;
 import io.raytracer.geometry.IVector;
 import io.raytracer.geometry.Point;
 import io.raytracer.geometry.ThreeTransform;
@@ -9,40 +12,47 @@ import io.raytracer.mechanics.LambertianWorld;
 import io.raytracer.mechanics.Recasters;
 import io.raytracer.mechanics.World;
 import io.raytracer.shapes.Cube;
+import io.raytracer.shapes.CubeCorner;
 import io.raytracer.shapes.Group;
 import io.raytracer.shapes.Hittable;
+import io.raytracer.shapes.Plane;
 import io.raytracer.shapes.Rectangle;
 import io.raytracer.shapes.Shape;
 import io.raytracer.textures.MonocolourTexture;
+import io.raytracer.tools.Camera;
+import io.raytracer.tools.ClosedPixelCurve;
 import io.raytracer.tools.IColour;
 import io.raytracer.tools.LinearColour;
-import lombok.val;
+import io.raytracer.tools.Pixel;
+import io.raytracer.tools.parsers.LiteralParser;
+import org.javatuples.Pair;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
-public class Stairs {
+public class Monument {
     public static void main(String[] args) throws IOException {
         int xSize = 1080;
         int ySize = 1080;
-        int trimSize = (int)(((float)768/1080)*ySize);
         double viewAngle = Math.PI / 3.5;
         IColour backgroundColour = new LinearColour(0, 0, 0);
 
         //setups
         DemoSetup verticalSetup = DemoSetup.builder()
-                .rayCount(800)
+                .rayCount(1000)
                 .xSize(xSize)
                 .ySize(ySize)
                 .viewAngle(viewAngle)
                 .upDirection(new Vector(0, 0, 1))
                 .eyePosition(new Point(0, 5, 1.55))
                 .lookDirection(new Vector(0, -5, -1.55))
-                .filename("stairsVertical.ppm")
-                .bufferFileCount(50)
-                .bufferDir("./buffStairsVertical")
+                .filename("monument.ppm")
+                .bufferDir("./buffStairsVertical/")
+                .bufferFileCount(100)
                 .build();
         List<Hittable> verticalObjects = new ArrayList<>();
 
@@ -59,36 +69,38 @@ public class Stairs {
 
         //keys
         Shape upperBlock = new Cube(blockMaterial);
-        upperBlock.setTransform(ThreeTransform.scaling(11, 10, 0.3).translate(0, -10, 3.5));
+        upperBlock.setTransform(ThreeTransform.scaling(11, 12, 0.3).translate(0, -10, 6.15));
         Shape lowerBlock = new Cube(keyMaterial);
         lowerBlock.setTransform(ThreeTransform.scaling(11, 20, 0.45).translate(0, -10, -2.31));
         verticalObjects.add(upperBlock);
         verticalObjects.add(lowerBlock);
 
         //stairs
+        LiteralParser parser = new LiteralParser();
+        parser.parse(new File("monumentCurve.pxs"));
+        List<Pixel> pixelList = parser.getParsedPoints().stream().map(point -> new Pixel(point.x(), point.y())).collect(Collectors.toList());
+        ClosedPixelCurve pixelCurve = new ClosedPixelCurve(pixelList);
+
         IVector vertDisp = new Vector(0.6, -1, 0.25);
         List<Hittable> verticalStairs = new ArrayList<>();
         ThreeTransform vertPush = ThreeTransform.scaling(1.8, 10, 0.1).translate(1 - vertDisp.x(), -10 - vertDisp.y(), -1.7 - vertDisp.z());
-        for (int i = 0; i < 13; i++) {
-            Cube key = new Cube(keyMaterial);
-            vertPush = vertPush.translate(vertDisp.x(), vertDisp.y(), vertDisp.z()).scale(0.8, 1, 1);
-            key.setTransform(vertPush);
-            verticalStairs.add(key);
-        }
-        /*
-        for (int i = 0; i < 25; i++) {
-            Shape key = new Cube(keyMaterial);
-            vertPush = vertPush.translate(vertDisp.x(), vertDisp.y(), vertDisp.z()).scale(0.8, 1, 1);
-            vertPush = vertPush.translate(-2.3890048837222406, 0 ,0)
-                    .scale(Math.pow(10/0.8, 2), 1, 1)
-                    .translate(2.3890048837222406, 0, 0);
-            key.setTransform(vertPush);
-            verticalStairs.add(key);
-        }
+        Camera camera = verticalSetup.makeCamera();
 
-        IPlane sensorPlane = new AbstractPlane(new Vector(0, 0, 1), new Point(0, 0, -1));
-        */
-
+        IPoint initialPosition = new Cube().getCornerPoint(CubeCorner.FOURTH);
+        for (int i = 0; i < 35; i++) {
+            vertPush = vertPush.translate(vertDisp.x(), vertDisp.y(), vertDisp.z()).scale(0.8, 1, 1);
+            IPoint positionPoint = vertPush.act(initialPosition);
+            Plane positionPlane = new Plane(new Vector(0, 1, 0), positionPoint);
+            Pixel positionPixel = camera.projectOnSensorPlane(positionPoint).get();
+            for (Pair<Integer, Integer> xBounds : pixelCurve.getBoundsForY(positionPixel.y)) {
+                Cube block = new Cube(keyMaterial);
+                IPoint fourthCornerPosition = positionPlane.intersect((ILine) camera.getRayThroughPixel(xBounds.getValue0(), positionPixel.y)).get();
+                IPoint seventhCornerPosition = positionPlane.intersect((ILine) camera.getRayThroughPixel(xBounds.getValue1(), positionPixel.y)).get();
+                ITransform cubeTransform = Monument.makePositionTransform(fourthCornerPosition, seventhCornerPosition);
+                block.setTransform(cubeTransform);
+                verticalStairs.add(block);
+            }
+        }
 
         verticalObjects.add(new Group(verticalStairs.toArray(new Hittable[] {})));
 
@@ -102,9 +114,19 @@ public class Stairs {
         verticalWorld.put(new Group(verticalObjects.toArray(new Hittable[] {})));
 
         //render
-        val currentSetup = verticalSetup;
-        val currentWorld = verticalWorld;
-        currentSetup.render(currentWorld);
-        currentSetup.export();
+        verticalSetup.render(verticalWorld);
+        verticalSetup.export();
+    }
+
+    private static ITransform makePositionTransform(IPoint fourthPosition, IPoint seventhPosition) {
+        ThreeTransform scale = ThreeTransform.scaling(1, 10, 0.1);
+        Cube c = new Cube();
+        c.setTransform(scale);
+        ITransform xPositionTransform = ThreeTransform
+                .translation(-c.getCornerPoint(CubeCorner.FOURTH).x(), -c.getCornerPoint(CubeCorner.FOURTH).y(), -c.getCornerPoint(CubeCorner.FOURTH).z())
+                .scale(Math.abs(fourthPosition.x() - seventhPosition.x())/2, 1, 1)
+                .translate(fourthPosition.x(), fourthPosition.y(), fourthPosition.z());
+        return scale.transform(xPositionTransform);
+
     }
 }

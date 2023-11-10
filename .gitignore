@@ -2,5 +2,6 @@
 target
 raytracer.iml
 artifacts/
+inputs/
 src/main/java/io/raytracer/demos/notyet
 src/test/java/io/raytracer/benchmarking/
