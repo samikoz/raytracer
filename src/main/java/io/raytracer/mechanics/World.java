@@ -75,7 +75,7 @@ public abstract class World {
                 new RenderData(picture.getHeight()*picture.getWidth(), blankPixelCount, renderStart));
 
         blankPixels.forEach(pixel -> {
-            Collection<IRay> rays = camera.getRaysThroughPixel(pixel);
+            Collection<IRay> rays = camera.getRaysThrough(pixel);
             IColour colour = this.illuminate(rays);
             picture.write(pixel, colour);
             int renderedPixelCount = pixelCount.getAndIncrement();

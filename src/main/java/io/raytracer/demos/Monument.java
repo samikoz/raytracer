@@ -94,8 +94,8 @@ public class Monument {
             Pixel positionPixel = camera.projectOnSensorPlane(positionPoint).get();
             for (Pair<Integer, Integer> xBounds : pixelCurve.getBoundsForY(positionPixel.y)) {
                 Cube block = new Cube(keyMaterial);
-                IPoint fourthCornerPosition = positionPlane.intersect((ILine) camera.getRayThroughPixel(xBounds.getValue0(), positionPixel.y)).get();
-                IPoint seventhCornerPosition = positionPlane.intersect((ILine) camera.getRayThroughPixel(xBounds.getValue1(), positionPixel.y)).get();
+                IPoint fourthCornerPosition = positionPlane.intersect((ILine) camera.getRayThrough(new Pixel(xBounds.getValue0(), positionPixel.y))).get();
+                IPoint seventhCornerPosition = positionPlane.intersect((ILine) camera.getRayThrough(new Pixel(xBounds.getValue1(), positionPixel.y))).get();
                 ITransform cubeTransform = Monument.makePositionTransform(fourthCornerPosition, seventhCornerPosition);
                 block.setTransform(cubeTransform);
                 verticalStairs.add(block);

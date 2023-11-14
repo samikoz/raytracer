@@ -11,6 +11,7 @@ import io.raytracer.geometry.Vector;
 import io.raytracer.mechanics.IRay;
 import io.raytracer.mechanics.Ray;
 import io.raytracer.shapes.Plane;
+import lombok.Getter;
 
 import java.util.Collection;
 import java.util.Optional;
@@ -24,31 +25,25 @@ public abstract class Camera {
     private double pictureHalfWidth;
     private double pictureHalfHeight;
     private double pixelSize;
-
-    public Camera(int hsize, int vsize, double fieldOfView) {
-        this.pictureWidthPixels = hsize;
-        this.pictureHeightPixels = vsize;
-        this.fieldOfView = fieldOfView;
-        this.worldTransformation = new ThreeTransform();
-        this.inverseWorld = new ThreeTransform();
-
-        computePixelSize();
-    }
+    @Getter private final IPoint eyePosition;
+    @Getter private final IVector lookDirection;
 
     public Camera(int hsize, int vsize, double fieldOfView, IPoint eyePosition, IVector lookDirection, IVector upDirection) {
         this.pictureWidthPixels = hsize;
         this.pictureHeightPixels = vsize;
         this.fieldOfView = fieldOfView;
-        this.worldTransformation = this.makeViewTransformation(eyePosition, lookDirection, upDirection).inverse();
-        this.inverseWorld = this.worldTransformation.inverse();
+        this.eyePosition = eyePosition;
+        this.lookDirection = lookDirection;
+        this.inverseWorld = this.makeViewTransformation(eyePosition, lookDirection, upDirection);
+        this.worldTransformation = this.inverseWorld.inverse();
 
         computePixelSize();
     }
-    public abstract Collection<IRay> getRaysThroughPixel(Pixel p);
+    public abstract Collection<IRay> getRaysThrough(Pixel p);
 
-    public IRay getRayThroughPixel(double x, double y) {
-        double canvasXOffset = (x + 0.5) * this.pixelSize;
-        double canvasYOffset = (y + 0.5) * this.pixelSize;
+    public IRay getRayThrough(Pixel p) {
+        double canvasXOffset = (p.x + 0.5) * this.pixelSize;
+        double canvasYOffset = (p.y + 0.5) * this.pixelSize;
 
         double worldXCoordinate = this.pictureHalfWidth - canvasXOffset;
         double worldYCoordinate = this.pictureHalfHeight - canvasYOffset;

@@ -13,12 +13,6 @@ public class MultipleRayCamera extends Camera {
     private final int rayCount;
     private final Random randGen;
 
-    public MultipleRayCamera(int rayCount, int hsize, int vsize, double fieldOfView) {
-        super(hsize, vsize, fieldOfView);
-        this.randGen = new Random();
-        this.rayCount = rayCount;
-    }
-
     public MultipleRayCamera(int rayCount, int hsize, int vsize, double fieldOfView, IPoint eyePosition, IVector lookDirection, IVector upDirection) {
         super(hsize, vsize, fieldOfView, eyePosition, lookDirection, upDirection);
         this.randGen = new Random();
@@ -26,8 +20,9 @@ public class MultipleRayCamera extends Camera {
     }
 
     @Override
-    public Collection<IRay> getRaysThroughPixel(Pixel pixel) {
-        return IntStream.range(0, rayCount).mapToObj(i -> this.getRayThroughPixel(pixel.x + this.randGen.nextDouble() - 0.5, pixel.y + this.randGen.nextDouble() - 0.5))
+    public Collection<IRay> getRaysThrough(Pixel pixel) {
+        Pixel modifiedPixel = new Pixel(pixel.x + this.randGen.nextDouble() - 0.5, pixel.y + this.randGen.nextDouble() - 0.5);
+        return IntStream.range(0, rayCount).mapToObj(i -> this.getRayThrough(modifiedPixel))
                 .collect(Collectors.toList());
     }
 }

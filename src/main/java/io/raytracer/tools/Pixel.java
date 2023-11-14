@@ -1,8 +1,10 @@
 package io.raytracer.tools;
 
+import io.raytracer.geometry.IPlane;
 import io.raytracer.geometry.IPoint;
 import io.raytracer.geometry.Line;
 import io.raytracer.geometry.Point;
+import io.raytracer.shapes.Plane;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -26,5 +28,10 @@ public class Pixel implements Serializable {
         IPoint to = new Point(p.x, p.y, 0);
         IPoint interpolated = new Line(from, to).pointAt(t);
         return new Pixel(Math.round((float)interpolated.x()), Math.round((float)interpolated.y()));
+    }
+
+    public IPoint materialise(Camera cam, double distance) {
+        IPlane parallelPlane = new Plane(cam.getLookDirection(), cam.getEyePosition().add(cam.getLookDirection().multiply(distance)));
+        return parallelPlane.intersect(cam.getRayThrough(this)).get();
     }
 }
