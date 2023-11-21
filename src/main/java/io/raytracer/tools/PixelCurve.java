@@ -9,14 +9,14 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.function.Function;
 
-public class ClosedPixelCurve {
+public class PixelCurve {
     private final Pixel[] pixelPoints;
 
-    public ClosedPixelCurve(Collection<Pixel> pixels) {
+    public PixelCurve(Collection<Pixel> pixels) {
         this.pixelPoints = pixels.toArray(new Pixel[]{});
     }
 
-    public List<Pair<Integer, Integer>> getBoundsForY(int yLevel) {
+    public List<Pair<Integer, Integer>> getXCoordsForY(int yLevel) {
         List<Integer> bounds = new ArrayList<>();
         List<Pair<Integer, Integer>> boundPairs = new ArrayList<>();
         List<Function<Integer, Boolean>> comparators = new ArrayList<>(Arrays.asList(
@@ -33,10 +33,11 @@ public class ClosedPixelCurve {
                 currentComparator = comparators.get(++comparatorIndex % 2);
             }
         }
-        assert bounds.size() % 2 == 0;
-        bounds.sort(Comparator.comparingInt(x -> -x));
-        for (int i = 0; i < bounds.size(); i+=2) {
-            boundPairs.add(new Pair<>(bounds.get(i), bounds.get(i+1)));
+        if (bounds.size() % 2 == 0) {
+            bounds.sort(Comparator.comparingInt(x -> -x));
+            for (int i = 0; i < bounds.size(); i += 2) {
+                boundPairs.add(new Pair<>(bounds.get(i), bounds.get(i + 1)));
+            }
         }
         return boundPairs;
     }
