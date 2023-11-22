@@ -23,6 +23,10 @@ public class Group extends Hittable {
         this(objects, 0, objects.length, () -> Group.randGen.nextInt(3));
     }
 
+    public Group(List<Hittable> objects) {
+        this(objects.toArray(new Hittable[0]));
+    }
+
     private Group(Hittable[] objects, int startIndex, int endIndex, Supplier<Integer> axisSupplier) {
         super();
         this.children = Collections.unmodifiableList(Arrays.asList(objects));
