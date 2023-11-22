@@ -3,11 +3,11 @@ package io.raytracer.demos;
 import io.raytracer.geometry.IPoint;
 import io.raytracer.geometry.IVector;
 import io.raytracer.mechanics.World;
+import io.raytracer.tools.AveragingPPMPicture;
 import io.raytracer.tools.BufferedPPMPicture;
 import io.raytracer.tools.Camera;
 import io.raytracer.tools.IPicture;
 import io.raytracer.tools.MultipleRayCamera;
-import io.raytracer.tools.PPMPicture;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -37,10 +37,12 @@ public class DemoSetup {
         this.camera = this.makeCamera();
         IPicture picture;
         if (this.bufferDir != null && bufferFileCount != 0) {
-            picture = new BufferedPPMPicture(xSize, ySize, Paths.get(this.bufferDir), xSize * ySize / this.bufferFileCount, PPMPicture::new);
+            picture = new BufferedPPMPicture(
+                xSize, ySize, Paths.get(this.bufferDir), xSize * ySize / this.bufferFileCount,
+                (xSize, ySize) -> new AveragingPPMPicture(xSize, ySize, rayCount));
         }
         else {
-            picture = new PPMPicture(xSize, ySize);
+            picture = new AveragingPPMPicture(xSize, ySize, rayCount);
         }
         world.render(picture, camera);
         this.picture = picture;

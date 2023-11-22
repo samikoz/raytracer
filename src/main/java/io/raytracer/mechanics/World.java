@@ -53,7 +53,7 @@ public abstract class World {
     }
 
     public IColour illuminate(Collection<IRay> rays) {
-        return rays.stream().map(this::illuminate).reduce(new LinearColour(0, 0, 0), IColour::add).multiply((double)1/rays.size());
+        return rays.stream().map(this::illuminate).reduce(new LinearColour(0, 0, 0), IColour::add);
     }
 
     abstract IColour illuminate(IRay ray);
