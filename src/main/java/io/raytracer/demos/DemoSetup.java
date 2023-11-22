@@ -37,7 +37,7 @@ public class DemoSetup {
         this.camera = this.makeCamera();
         IPicture picture;
         if (this.bufferDir != null && bufferFileCount != 0) {
-            picture = new BufferedPPMPicture(xSize, ySize, Paths.get(this.bufferDir), xSize * ySize / this.bufferFileCount);
+            picture = new BufferedPPMPicture(xSize, ySize, Paths.get(this.bufferDir), xSize * ySize / this.bufferFileCount, PPMPicture::new);
         }
         else {
             picture = new PPMPicture(xSize, ySize);

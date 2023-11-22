@@ -71,7 +71,7 @@ public class PPMPicture implements IPicture {
         return exported.toString();
     }
 
-    private String exportRow(ArrayList<IColour> ppmRow) {
+    protected String exportRow(ArrayList<IColour> ppmRow) {
         List<String> exported = new ArrayList<>();
         ppmRow.forEach(rowElement -> exported.add(rowElement.export()));
         return String.join(" ", exported);

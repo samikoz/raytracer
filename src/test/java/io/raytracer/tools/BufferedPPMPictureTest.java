@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class BufferedPPMPictureTest {
     @Test
     void defaultCanvasColour(@TempDir Path tempDir) throws IOException {
-        IPicture picture = new BufferedPPMPicture(2, 3, tempDir);
+        IPicture picture = new BufferedPPMPicture(2, 3, tempDir, PPMPicture::new);
 
         IColour defaultCanvasColour = picture.read(1, 1);
         IColour black = new LinearColour(0, 0, 0);
@@ -30,7 +30,7 @@ class BufferedPPMPictureTest {
     void writeAndReadFromUnbufferedCanvas(@TempDir Path tempDir) throws IOException {
         IColour first = new LinearColour(0.5, 0.2, 0.3);
         IColour second = new LinearColour(0, 0, 0.4);
-        BufferedPPMPicture picture = new BufferedPPMPicture(10, 20, tempDir, 3);
+        BufferedPPMPicture picture = new BufferedPPMPicture(10, 20, tempDir, 3, PPMPicture::new);
 
         picture.write(new Pixel(0, 19), first);
         picture.write(new Pixel(2, 0), second);
@@ -49,7 +49,7 @@ class BufferedPPMPictureTest {
     void writeAndReadFromBufferedCanvas(@TempDir Path tempDir) throws IOException {
         IColour first = new LinearColour(0.5, 0.2, 0.3);
         IColour second = new LinearColour(0, 0, 0.4);
-        BufferedPPMPicture picture = new BufferedPPMPicture(10, 20, tempDir, 2);
+        BufferedPPMPicture picture = new BufferedPPMPicture(10, 20, tempDir, 2, PPMPicture::new);
 
         picture.write(new Pixel(0, 19), first);
         picture.write(new Pixel(2, 0), second);
@@ -68,7 +68,7 @@ class BufferedPPMPictureTest {
     void correctPPMExportHeader(@TempDir Path tempdir) throws IOException {
         Path tempPath = tempdir.resolve("test.mth");
 
-        IPicture picture = new BufferedPPMPicture(5, 3, tempdir);
+        IPicture picture = new BufferedPPMPicture(5, 3, tempdir, PPMPicture::new);
         String expectedPPMFileStart = "P3\n5 3\n255";
 
         picture.export(tempPath);
@@ -82,7 +82,7 @@ class BufferedPPMPictureTest {
     void correctPPMExportPixelData(@TempDir Path tempdir) throws IOException {
         Path tempPath = tempdir.resolve("test.mth");
 
-        IPicture picture = new BufferedPPMPicture(5, 3, tempdir);
+        IPicture picture = new BufferedPPMPicture(5, 3, tempdir, PPMPicture::new);
         picture.write(new Pixel(0, 0), new GammaColour(1, 0, 0));
         picture.write(new Pixel(2, 1), new GammaColour(0, 0.5, 0));
         picture.write(new Pixel(4, 2), new GammaColour(-0.5, 0, 1));
@@ -99,11 +99,11 @@ class BufferedPPMPictureTest {
 
     @Test
     void getBlankPixelsReturnsUnpersistedPixels(@TempDir Path tempdir) throws IOException {
-        IPicture firstPicture = new BufferedPPMPicture(2, 2, tempdir, 2);
+        IPicture firstPicture = new BufferedPPMPicture(2, 2, tempdir, 2, PPMPicture::new);
         firstPicture.write(new Pixel(0, 0), new LinearColour(0.1, 0.2, 0.3));
         firstPicture.write(new Pixel(1, 0), new LinearColour(0.2, 0.1, 0.3));
         firstPicture.write(new Pixel(0, 1), new LinearColour(0.3, 0.2, 0.1));
-        IPicture secondPicture = new BufferedPPMPicture(2, 2, tempdir, 2);
+        IPicture secondPicture = new BufferedPPMPicture(2, 2, tempdir, 2, PPMPicture::new);
         Set<Pixel> unpersistedPixels = secondPicture.getBlankPixels().collect(Collectors.toSet());
 
         assertEquals(new HashSet<>(Arrays.asList(new Pixel(0, 1), new Pixel(1, 1))), unpersistedPixels);
@@ -111,11 +111,11 @@ class BufferedPPMPictureTest {
 
     @Test
     void persistedPixelsAccessibleAcrossBufferedPictures(@TempDir Path tempdir) throws IOException {
-        IPicture firstPicture = new BufferedPPMPicture(2, 2, tempdir, 2);
+        IPicture firstPicture = new BufferedPPMPicture(2, 2, tempdir, 2, PPMPicture::new);
         firstPicture.write(new Pixel(0, 0), new LinearColour(0.1, 0.2, 0.3));
         firstPicture.write(new Pixel(1, 0), new LinearColour(0.2, 0.1, 0.3));
         firstPicture.write(new Pixel(0, 1), new LinearColour(0.3, 0.2, 0.1));
-        BufferedPPMPicture secondPicture = new BufferedPPMPicture(2, 2, tempdir, 2);
+        BufferedPPMPicture secondPicture = new BufferedPPMPicture(2, 2, tempdir, 2, PPMPicture::new);
         secondPicture.loadPersisted();
 
         assertEquals(new LinearColour(0.2, 0.1, 0.3), secondPicture.read(1, 0));
