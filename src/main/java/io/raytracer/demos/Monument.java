@@ -20,7 +20,7 @@ import io.raytracer.shapes.Rectangle;
 import io.raytracer.shapes.Shape;
 import io.raytracer.textures.MonocolourTexture;
 import io.raytracer.tools.Camera;
-import io.raytracer.tools.ClosedPixelCurve;
+import io.raytracer.tools.PixelCurve;
 import io.raytracer.tools.IColour;
 import io.raytracer.tools.LinearColour;
 import io.raytracer.tools.Pixel;
@@ -51,8 +51,6 @@ public class Monument {
                 .eyePosition(new Point(0, 5, 1.55))
                 .lookDirection(new Vector(0, -5, -1.55))
                 .filename("monument.ppm")
-                .bufferDir("./buffStairsVertical/")
-                .bufferFileCount(100)
                 .build();
         List<Hittable> verticalObjects = new ArrayList<>();
 
@@ -77,9 +75,9 @@ public class Monument {
 
         //stairs
         LiteralParser parser = new LiteralParser();
-        parser.parse(new File("monumentCurve.pxs"));
+        parser.parse(new File("inputs/monumentCurve.pxs"));
         List<Pixel> pixelList = parser.getParsedPoints().stream().map(point -> new Pixel(point.x(), point.y())).collect(Collectors.toList());
-        ClosedPixelCurve pixelCurve = new ClosedPixelCurve(pixelList);
+        PixelCurve pixelCurve = new PixelCurve(pixelList);
 
         IVector vertDisp = new Vector(0.6, -1, 0.25);
         List<Hittable> verticalStairs = new ArrayList<>();
@@ -92,7 +90,7 @@ public class Monument {
             IPoint positionPoint = vertPush.act(initialPosition);
             Plane positionPlane = new Plane(new Vector(0, 1, 0), positionPoint);
             Pixel positionPixel = camera.projectOnSensorPlane(positionPoint).get();
-            for (Pair<Integer, Integer> xBounds : pixelCurve.getBoundsForY(positionPixel.y)) {
+            for (Pair<Integer, Integer> xBounds : pixelCurve.getXCoordsForY(positionPixel.y)) {
                 Cube block = new Cube(keyMaterial);
                 IPoint fourthCornerPosition = positionPlane.intersect((ILine) camera.getRayThrough(new Pixel(xBounds.getValue0(), positionPixel.y))).get();
                 IPoint seventhCornerPosition = positionPlane.intersect((ILine) camera.getRayThrough(new Pixel(xBounds.getValue1(), positionPixel.y))).get();

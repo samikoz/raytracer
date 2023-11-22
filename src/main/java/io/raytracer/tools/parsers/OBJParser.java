@@ -4,6 +4,7 @@ import io.raytracer.geometry.IPoint;
 import io.raytracer.geometry.IVector;
 import io.raytracer.geometry.Point;
 import io.raytracer.geometry.Vector;
+import io.raytracer.materials.Material;
 import io.raytracer.shapes.Group;
 import io.raytracer.shapes.Hittable;
 import io.raytracer.shapes.SmoothTriangle;
@@ -22,6 +23,7 @@ public class OBJParser implements Parser {
     public List<IVector> normals;
     private final List<List<Hittable>> parsed;
     private List<Hittable> currentlyParsed;
+    private final Material material;
 
     private final String floatPoint = "(-?\\d+(?:\\.\\d+)*)";
     private final Pattern vertexPattern = Pattern.compile("v " + floatPoint + " " + floatPoint + " " + floatPoint);
@@ -30,11 +32,16 @@ public class OBJParser implements Parser {
     private final Pattern normalPattern = Pattern.compile("vn " + floatPoint + " " + floatPoint + " " + floatPoint);
 
     public OBJParser() {
+        this(Material.builder().build());
+    }
+
+    public OBJParser(Material material) {
         this.vertices = new ArrayList<>();
         this.normals = new ArrayList<>();
         this.vertices.add(null);
         this.normals.add(null);
         this.parsed = new ArrayList<>();
+        this.material = material;
 
         this.currentlyParsed = new ArrayList<>();
         this.parsed.add(currentlyParsed);
@@ -103,14 +110,16 @@ public class OBJParser implements Parser {
                     this.vertices.get(Integer.parseInt(vertexInfos[i + 1][0])),
                     this.normals.get(Integer.parseInt(vertexInfos[0][2])),
                     this.normals.get(Integer.parseInt(vertexInfos[i][2])),
-                    this.normals.get(Integer.parseInt(vertexInfos[i + 1][2]))
+                    this.normals.get(Integer.parseInt(vertexInfos[i + 1][2])),
+                    this.material
                 ));
             }
             else {
                 parsedTriangles.add(new Triangle(
                     this.vertices.get(Integer.parseInt(vertexInfos[0][0])),
                     this.vertices.get(Integer.parseInt(vertexInfos[i][0])),
-                    this.vertices.get(Integer.parseInt(vertexInfos[i + 1][0]))
+                    this.vertices.get(Integer.parseInt(vertexInfos[i + 1][0])),
+                    this.material
                 ));
             }
         }

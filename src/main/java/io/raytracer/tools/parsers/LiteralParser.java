@@ -6,6 +6,7 @@ import io.raytracer.geometry.ThreeTransform;
 import io.raytracer.materials.Material;
 import io.raytracer.shapes.Hittable;
 import io.raytracer.shapes.Sphere;
+import io.raytracer.tools.Pixel;
 import lombok.Getter;
 
 import java.util.ArrayList;
@@ -17,22 +18,26 @@ import java.util.regex.Pattern;
 public class LiteralParser implements Parser {
     @Getter private final List<Hittable> parsed;
     @Getter private final List<IPoint> parsedPoints;
+    @Getter private final List<Pixel> parsedPixels;
     private final Material material;
 
     private final String floatPoint = "(-?\\d+\\.\\d+)";
     private final String threeFloatPoint = "P\\(" + floatPoint + "," + floatPoint + "," + floatPoint + "\\)";
     private final Pattern threeIntPoint = Pattern.compile("Point\\((\\d+),(\\d+),(\\d+)\\)");
+    private final Pattern pixel = Pattern.compile("Pixel\\(x=(\\d+), y=(\\d+)\\)");
     private final Pattern spherePattern = Pattern.compile("Sphere\\(" + this.threeFloatPoint + "," + this.floatPoint + "\\)");
 
     public LiteralParser() {
         this.parsed = new ArrayList<>();
         this.parsedPoints = new ArrayList<>();
+        this.parsedPixels = new ArrayList<>();
         this.material = Material.builder().build();
     }
 
     public LiteralParser(Material material) {
         this.parsed = new ArrayList<>();
         this.parsedPoints = new ArrayList<>();
+        this.parsedPixels = new ArrayList<>();
         this.material = material;
     }
 
@@ -45,6 +50,11 @@ public class LiteralParser implements Parser {
         Matcher pointMatcher = this.threeIntPoint.matcher(line);
         if (pointMatcher.find()) {
             this.parsedPoints.add(this.parsePoint(pointMatcher));
+            return;
+        }
+        Matcher pixelMatcher = this.pixel.matcher(line);
+        if (pixelMatcher.find()) {
+            this.parsedPixels.add(this.parsePixel(pixelMatcher));
             return;
         }
 
@@ -72,6 +82,13 @@ public class LiteralParser implements Parser {
             Integer.parseInt(pointMatcher.group(1)),
             Integer.parseInt(pointMatcher.group(2)),
             Integer.parseInt(pointMatcher.group(3))
+        );
+    }
+
+    private Pixel parsePixel(Matcher pixelMatcher) {
+        return new Pixel(
+                Integer.parseInt(pixelMatcher.group(1)),
+                Integer.parseInt(pixelMatcher.group(2))
         );
     }
 }
