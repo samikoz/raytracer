@@ -192,10 +192,6 @@ public class ThreeTransform implements ITransform {
                 .translate(pointToOrigin.x(), pointToOrigin.y(), pointToOrigin.z());
     }
     
-    public static ThreeTransform transformation(ISquareMatrix m) {
-        return new ThreeTransform(m);
-    }
-    
     public ThreeTransform transform(ISquareMatrix m) {
         return new ThreeTransform(m.multiply(this.matrix));
     }

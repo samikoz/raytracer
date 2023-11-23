@@ -31,7 +31,10 @@ public class Pixel implements Serializable {
     }
 
     public IPoint materialise(Camera cam, double distance) {
-        IPlane parallelPlane = new Plane(cam.getLookDirection(), cam.getEyePosition().add(cam.getLookDirection().multiply(distance)));
-        return parallelPlane.intersect(cam.getRayThrough(this)).get();
+        return this.materialise(cam, new Plane(cam.getLookDirection(), cam.getEyePosition().add(cam.getLookDirection().multiply(distance))));
+    }
+
+    public IPoint materialise(Camera cam, IPlane plane) {
+        return plane.intersect(cam.getRayThrough(this)).get();
     }
 }
