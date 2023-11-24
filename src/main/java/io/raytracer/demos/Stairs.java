@@ -21,6 +21,7 @@ import io.raytracer.tools.Camera;
 import io.raytracer.tools.IColour;
 import io.raytracer.tools.LinearColour;
 import io.raytracer.tools.Pixel;
+import lombok.NonNull;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -30,11 +31,14 @@ import java.util.List;
 public class Stairs {
     public static void main(String[] args) throws IOException {
         int size = 1080;
+        @NonNull String name = args[0];
+        @NonNull String name_appendix = args[1];
+        float brightness = Float.parseFloat(args[2]);
         IColour backgroundColour = new LinearColour(0, 0, 0);
 
         //setups
         DemoSetup horizontalSetup = DemoSetup.builder()
-                .rayCount(600)
+                .rayCount(200)
                 .xSize(size)
                 .ySize(size)
                 .viewAngle(Math.PI / 4)
@@ -44,18 +48,20 @@ public class Stairs {
                 .filename("bare.ppm")
                 .build();
         //--
+        //to try out:
         DemoSetup centralSetup = horizontalSetup.toBuilder()
                 .upDirection(new Vector(0, 0, 1))
                 .eyePosition(new Point(0, 5, -0.2))
                 .lookDirection(new Vector(0, -5, 0))
-                .filename("central.ppm")
-                .bufferDir("./stairsBuff/")
-                .bufferFileCount(20)
+                .filename(String.format("%s%s.ppm", name, name_appendix))
+                .bufferDir(String.format("./buffs/buff%s_%s/", name, name_appendix))
+                .bufferFileCount(5)
+                .brightness(brightness)
                 .build();
 
         //materials
         Material blockMaterial = Material.builder()
-                .texture(new MonocolourTexture(new LinearColour(0.6, 0.6, 0.6)))
+                .texture(new MonocolourTexture(new LinearColour(centralSetup.brightness)))
                 .build();
         blockMaterial.addRecaster(Recasters.diffuse, 1);
         Material emitentMaterial = Material.builder().emit(new LinearColour(10, 10, 10)).build();
@@ -84,13 +90,13 @@ public class Stairs {
         Group horizontalSteps = new Group(horizontalKeys);
         //--
         Camera cam = centralSetup.makeCamera();
-        IVector centralDisp = new Vector(0.6, -1, 0);
+        IVector centralDisp = new Vector(0.5, -1, 0);
         List<Hittable> centralStepList = new ArrayList<>();
-        ThreeTransform centralPush = ThreeTransform.translation(-1.85 - centralDisp.x(), -10 - centralDisp.y(), -1 - centralDisp.z());
-        for (int i = 0; i < 20; i++) {
+        ThreeTransform centralPush = ThreeTransform.translation(-1.81 - centralDisp.x(), -10 - centralDisp.y(), -1 - centralDisp.z());
+        for (int i = 0; i < 50; i++) {
             Cube key = new Cube(blockMaterial);
             centralPush = centralPush.translate(centralDisp.x(), centralDisp.y(), centralDisp.z());
-            ThreeTransform keyTransform = ThreeTransform.scaling(0.2, 10, 0.6).transform(centralPush);
+            ThreeTransform keyTransform = ThreeTransform.scaling(0.2, 10, 0.58).transform(centralPush);
             key.setTransform(keyTransform);
             IPoint closerCorner = key.getCornerPoint(CubeCorner.FOURTH);
             IPoint fartherCorner = key.getCornerPoint(CubeCorner.FIRST);
@@ -101,6 +107,7 @@ public class Stairs {
             ThreeTransform deltaTransform = ThreeTransform.scaling(1, 1, scaledelta).conjugateTranslating(closerCorner);
             ThreeTransform newTransform = keyTransform.transform(deltaTransform);
             key.setTransform(newTransform);
+
 
             centralStepList.add(key);
         }
