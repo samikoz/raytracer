@@ -29,6 +29,7 @@ public class DemoSetup {
     private final String filename;
     private final String bufferDir;
     private final int bufferFileCount;
+    public final double brightness;
 
     private Camera camera;
     @Getter private IPicture picture;

@@ -19,7 +19,7 @@ public class GammaColour extends LinearColour {
     @Override
     public String export() {
         return Stream.of(this.getRed(), this.getGreen(), this.getBlue())
-            .mapToDouble(this::clamp).map(this::gammaCorrect).mapToInt(this::scale)
+            .map(this::gammaCorrect).mapToInt(this::scale)
             .mapToObj(String::valueOf).reduce((c1, c2) -> c1 + " " + c2).get();
     }
 }

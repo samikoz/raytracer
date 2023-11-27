@@ -12,8 +12,8 @@ import lombok.Setter;
 import java.util.ArrayList;
 
 public class Cylinder extends Shape {
-    @Setter public double upperBound;
-    @Setter public double lowerBound;
+    @Setter private double upperBound;
+    @Setter private double lowerBound;
     @Setter public boolean isTopClosed;
     @Setter public boolean isBottomClosed;
 

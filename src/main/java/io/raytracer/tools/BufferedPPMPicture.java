@@ -32,10 +32,12 @@ public class BufferedPPMPicture implements IPicture {
         this.width = x;
         this.height = y;
         this.buffDir = bufferDirectory;
+        Files.createDirectories(this.buffDir);
         this.buffer = new ArrayList<>();
         this.bufferSize = bufferSize;
         this.persistedBufferIndex = this.scanForBufferIndex();
         this.bufferPictureConstructor = unbufferedConstructor;
+        this.loadedBuffer = unbufferedConstructor.apply(this.width, this.height);
     }
 
     public BufferedPPMPicture(int x, int y, Path bufferDirectory, BiFunction<Integer, Integer, IPicture> unbufferedConstructor) throws IOException {

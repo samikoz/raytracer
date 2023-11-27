@@ -53,6 +53,10 @@ public class ThreeTransform implements ITransform {
         ).multiply(this.matrix));
     }
 
+    public ThreeTransform translate(IVector v) {
+        return this.translate(v.x(), v.y(), v.z());
+    }
+
     public static ThreeTransform scaling(double x, double y, double z) {
         return new ThreeTransform(new FourMatrix(
                 x, 0, 0, 0,
