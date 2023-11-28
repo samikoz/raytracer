@@ -1,13 +1,16 @@
 package io.raytracer.tools.parsers;
 
 import io.raytracer.geometry.IPoint;
+import io.raytracer.geometry.IVector;
 import io.raytracer.geometry.Point;
 import io.raytracer.geometry.ThreeTransform;
+import io.raytracer.geometry.Vector;
 import io.raytracer.materials.Material;
 import io.raytracer.shapes.Hittable;
 import io.raytracer.shapes.Sphere;
 import io.raytracer.tools.Pixel;
 import lombok.Getter;
+import org.javatuples.Pair;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +21,7 @@ import java.util.regex.Pattern;
 public class LiteralParser implements Parser {
     @Getter private final List<Hittable> parsed;
     @Getter private final List<IPoint> parsedPoints;
+    @Getter private final List<IVector> parsedVectors;
     @Getter private final List<Pixel> parsedPixels;
     private final Material material;
 
@@ -26,11 +30,13 @@ public class LiteralParser implements Parser {
     private final Pattern threeIntPoint = Pattern.compile("Point\\((\\d+),(\\d+),(\\d+)\\)");
     private final Pattern pixel = Pattern.compile("Pixel\\(x=(\\d+), y=(\\d+)\\)");
     private final Pattern spherePattern = Pattern.compile("Sphere\\(" + this.threeFloatPoint + "," + this.floatPoint + "\\)");
+    private final Pattern curvepoint = Pattern.compile("CurvePoint\\(P\\(" + floatPoint + "," + floatPoint + "\\),V\\(" + floatPoint + "," + floatPoint + "\\)\\)");
 
     public LiteralParser() {
         this.parsed = new ArrayList<>();
         this.parsedPoints = new ArrayList<>();
         this.parsedPixels = new ArrayList<>();
+        this.parsedVectors = new ArrayList<>();
         this.material = Material.builder().build();
     }
 
@@ -38,6 +44,7 @@ public class LiteralParser implements Parser {
         this.parsed = new ArrayList<>();
         this.parsedPoints = new ArrayList<>();
         this.parsedPixels = new ArrayList<>();
+        this.parsedVectors = new ArrayList<>();
         this.material = material;
     }
 
@@ -55,6 +62,13 @@ public class LiteralParser implements Parser {
         Matcher pixelMatcher = this.pixel.matcher(line);
         if (pixelMatcher.find()) {
             this.parsedPixels.add(this.parsePixel(pixelMatcher));
+            return;
+        }
+        Matcher curvepointMatcher = this.curvepoint.matcher(line);
+        if (curvepointMatcher.find()) {
+            Pair<IPoint, IVector> parsed = this.parseCurvepoint(curvepointMatcher);
+            this.parsedPoints.add(parsed.getValue0());
+            this.parsedVectors.add(parsed.getValue1());
             return;
         }
 
@@ -90,5 +104,19 @@ public class LiteralParser implements Parser {
                 Integer.parseInt(pixelMatcher.group(1)),
                 Integer.parseInt(pixelMatcher.group(2))
         );
+    }
+
+    private Pair<IPoint, IVector> parseCurvepoint(Matcher matcher) {
+        IPoint p = new Point(
+            Double.parseDouble(matcher.group(1)),
+            Double.parseDouble(matcher.group(2)),
+            0
+        );
+        IVector v = new Vector(
+            Double.parseDouble(matcher.group(3)),
+            Double.parseDouble(matcher.group(4)),
+            0
+        );
+        return new Pair<>(p, v);
     }
 }
