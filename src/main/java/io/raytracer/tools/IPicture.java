@@ -1,11 +1,8 @@
 package io.raytracer.tools;
 
-import io.raytracer.geometry.IPoint;
-
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Collection;
-import java.util.function.BiPredicate;
 import java.util.stream.Stream;
 
 public interface IPicture {
@@ -23,23 +20,6 @@ public interface IPicture {
 
     IColour read(int x, int y);
     void export(Path path) throws IOException;
-    default void embed(IPicture picture, IPoint embedPosition) {
-        for (int y = 0; y < picture.getHeight(); y++) {
-            for (int x = 0; x < picture.getWidth(); x++) {
-                this.write(new Pixel((int)embedPosition.x() + x, (int)embedPosition.y() + y), picture.read(x, y));
-            }
-        }
-    }
-
-    default void embed(IPicture picture, BiPredicate<Integer, Integer> pixelCondition) {
-        for (int y = 0; y < picture.getHeight(); y++) {
-            for (int x = 0; x < picture.getWidth(); x++) {
-                if (pixelCondition.test(x, y)) {
-                    this.write(new Pixel(x, y), picture.read(x, y));
-                }
-            }
-        }
-    }
 
     default void average(Collection<IPicture> pictures) {
         for (int y = 0; y < this.getHeight(); y++) {
