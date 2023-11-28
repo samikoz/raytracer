@@ -4,41 +4,58 @@ import io.raytracer.geometry.IPoint;
 import io.raytracer.geometry.IVector;
 import io.raytracer.geometry.ThreeTransform;
 import io.raytracer.materials.Material;
+import io.raytracer.shapes.Axis;
 import io.raytracer.shapes.Cube;
 
-import java.util.List;
+import java.util.function.Function;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 
 
 public class CurveToCubesMapper {
     private final IPoint middle;
     private final double scale;
+    private final ICurve curve;
     private final Supplier<Cube> cubeMaker;
+    private final Function<Double, ThreeTransform> rotation;
 
-    public CurveToCubesMapper(IPoint middle, double scale, Material material) {
+    public CurveToCubesMapper(IPoint middle, double scale, ICurve curve, Axis axis, Material material) {
         this.middle = middle;
         this.scale = scale;
+        this.curve = curve;
         this.cubeMaker = () -> new Cube(material);
+        this.rotation = this.chooseRotation(axis);
     }
 
-    public CurveToCubesMapper(IPoint middle, double scale) {
+    public CurveToCubesMapper(IPoint middle, double scale, ICurve curve, Axis axis) {
         this.middle = middle;
         this.scale = scale;
+        this.curve = curve;
         this.cubeMaker = Cube::new;
+        this.rotation = this.chooseRotation(axis);
     }
 
-    public List<Cube> mapCurve(List<CurvepointData> curve) {
-        return curve.stream().map(curvepoint -> {
-            Cube aCube = this.cubeMaker.get();
-            aCube.setTransform(this.mapCurveData(curvepoint));
-            return aCube;
-        }).collect(Collectors.toList());
+    private Function<Double, ThreeTransform> chooseRotation(Axis axis) {
+        //Axis points along the domain of the curve
+        if (axis == Axis.X) {
+            return ThreeTransform::rotation_z;
+        }
+        if (axis == Axis.Z){
+            return ThreeTransform::rotation_x;
+        }
+        return null;
     }
 
-    private ThreeTransform mapCurveData(CurvepointData curvepointData) {
-        IVector tv = this.getTranslationVector(curvepointData.point);
-        return this.getScaledRotation(curvepointData.vector).translate(tv.x(), tv.y(), tv.z());
+    public Cube map(double t) {
+        IPoint point = this.curve.pointAt(t);
+        IVector normal = this.curve.normalAt(t);
+        Cube aCube = this.cubeMaker.get();
+        aCube.setTransform(this.mapCurveData(point, normal));
+        return aCube;
+    }
+
+    private ThreeTransform mapCurveData(IPoint point, IVector normal) {
+        IVector tv = this.getTranslationVector(point);
+        return this.getScaledRotation(normal).translate(tv.x(), tv.y(), tv.z());
     }
 
     private IVector getTranslationVector(IPoint point) {
@@ -46,6 +63,6 @@ public class CurveToCubesMapper {
     }
 
     private ThreeTransform getScaledRotation(IVector normal) {
-        return ThreeTransform.rotation_z(Math.atan2(normal.y(), normal.x()));
+        return this.rotation.apply(Math.PI/2 - Math.atan2(normal.y(), normal.x()));
     }
 }
