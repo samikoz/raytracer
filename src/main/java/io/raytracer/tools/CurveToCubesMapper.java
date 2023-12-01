@@ -1,9 +1,11 @@
 package io.raytracer.tools;
 
 import io.raytracer.geometry.IPoint;
+import io.raytracer.geometry.ITransform;
+import io.raytracer.geometry.ITuple;
 import io.raytracer.geometry.IVector;
 import io.raytracer.geometry.ThreeTransform;
-import io.raytracer.materials.Material;
+import io.raytracer.geometry.Vector;
 import io.raytracer.shapes.Axis;
 import io.raytracer.shapes.Cube;
 
@@ -18,11 +20,11 @@ public class CurveToCubesMapper {
     private final Supplier<Cube> cubeMaker;
     private final Function<Double, ThreeTransform> rotation;
 
-    public CurveToCubesMapper(IPoint middle, double scale, ICurve curve, Axis axis, Material material) {
+    public CurveToCubesMapper(IPoint middle, double scale, ICurve curve, Axis axis, Supplier<Cube> maker) {
         this.middle = middle;
         this.scale = scale;
         this.curve = curve;
-        this.cubeMaker = () -> new Cube(material);
+        this.cubeMaker = maker;
         this.rotation = this.chooseRotation(axis);
     }
 
@@ -49,20 +51,31 @@ public class CurveToCubesMapper {
         IPoint point = this.curve.pointAt(t);
         IVector normal = this.curve.normalAt(t);
         Cube aCube = this.cubeMaker.get();
-        aCube.setTransform(this.mapCurveData(point, normal));
+        ITransform initialTransform = aCube.getTransform();
+        aCube.setTransform(initialTransform.transform(this.mapCurveData(point, normal)));
         return aCube;
     }
 
+    public ThreeTransform getTranslation(double t) {
+        IPoint curvePoint = this.curve.pointAt(t);
+        return ThreeTransform.translation(curvePoint.x(), curvePoint.y(), curvePoint.z());
+    }
+
+    public ThreeTransform getRotation(double t) {
+        IVector curveNormal = this.curve.normalAt(t);
+        return this.rotation.apply(-Math.PI/2 + Math.atan2(curveNormal.y(), curveNormal.x()));
+    }
+
     private ThreeTransform mapCurveData(IPoint point, IVector normal) {
-        IVector tv = this.getTranslationVector(point);
-        return this.getScaledRotation(normal).translate(tv.x(), tv.y(), tv.z());
+        ITuple tv = this.getTranslationPoint(point);
+        return this.getNormalRotation(normal).translate(tv.x(), tv.y(), tv.z());
     }
 
-    private IVector getTranslationVector(IPoint point) {
-        return point.subtract(this.middle).multiply(this.scale);
+    private IPoint getTranslationPoint(IPoint point) {
+        return point.add(new Vector(this.middle)).multiply(this.scale);
     }
 
-    private ThreeTransform getScaledRotation(IVector normal) {
-        return this.rotation.apply(Math.PI/2 - Math.atan2(normal.y(), normal.x()));
+    private ThreeTransform getNormalRotation(IVector normal) {
+        return this.rotation.apply(-Math.PI/2 + Math.atan2(normal.y(), normal.x()));
     }
 }

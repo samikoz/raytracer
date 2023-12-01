@@ -21,7 +21,7 @@ class CurveToCubesMapperTest {
             Arrays.asList(new Point(100, 50, 0), new Point(150, 100, 0)),
             Arrays.asList(new Vector(0, 1, 0), new Vector(1, 0, 0))
         );
-        testMapper = new CurveToCubesMapper(new Point(100, 100, 0), 0.1, testCurve, Axis.X);
+        testMapper = new CurveToCubesMapper(new Point(-100, -100, 0), 0.1, testCurve, Axis.X);
     }
 
     @Test
