@@ -1,5 +1,7 @@
-package io.raytracer.geometry;
+package io.raytracer.algebra;
 
+import io.raytracer.algebra.Equation;
+import io.raytracer.algebra.IEquation;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

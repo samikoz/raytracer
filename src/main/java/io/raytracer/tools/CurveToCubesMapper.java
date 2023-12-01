@@ -1,10 +1,10 @@
 package io.raytracer.tools;
 
 import io.raytracer.geometry.IPoint;
-import io.raytracer.geometry.ITransform;
+import io.raytracer.algebra.ITransform;
 import io.raytracer.geometry.ITuple;
 import io.raytracer.geometry.IVector;
-import io.raytracer.geometry.ThreeTransform;
+import io.raytracer.algebra.ThreeTransform;
 import io.raytracer.geometry.Vector;
 import io.raytracer.shapes.Axis;
 import io.raytracer.shapes.Cube;

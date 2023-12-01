@@ -1,4 +1,7 @@
-package io.raytracer.geometry;
+package io.raytracer.algebra;
+
+import io.raytracer.geometry.IPoint;
+import io.raytracer.geometry.IVector;
 
 public interface ITransform {
     ITransform inverse();

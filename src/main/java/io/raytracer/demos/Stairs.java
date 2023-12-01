@@ -3,7 +3,7 @@ package io.raytracer.demos;
 import io.raytracer.geometry.IPoint;
 import io.raytracer.geometry.IVector;
 import io.raytracer.geometry.Point;
-import io.raytracer.geometry.ThreeTransform;
+import io.raytracer.algebra.ThreeTransform;
 import io.raytracer.geometry.Vector;
 import io.raytracer.materials.Material;
 import io.raytracer.mechanics.LambertianWorld;

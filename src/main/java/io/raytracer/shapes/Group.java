@@ -1,6 +1,6 @@
 package io.raytracer.shapes;
 
-import io.raytracer.geometry.ITransform;
+import io.raytracer.algebra.ITransform;
 import io.raytracer.geometry.Interval;
 import io.raytracer.mechanics.BBox;
 import io.raytracer.mechanics.IRay;

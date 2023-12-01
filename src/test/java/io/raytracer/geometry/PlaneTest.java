@@ -1,5 +1,6 @@
 package io.raytracer.geometry;
 
+import io.raytracer.algebra.ThreeTransform;
 import io.raytracer.shapes.Plane;
 import org.junit.jupiter.api.Test;
 

@@ -1,5 +1,7 @@
 package io.raytracer.shapes;
 
+import io.raytracer.algebra.Equation;
+import io.raytracer.algebra.IEquation;
 import io.raytracer.geometry.*;
 import io.raytracer.materials.Material;
 import io.raytracer.mechanics.BBox;

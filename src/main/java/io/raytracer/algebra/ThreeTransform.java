@@ -1,5 +1,10 @@
-package io.raytracer.geometry;
+package io.raytracer.algebra;
 
+import io.raytracer.geometry.IPoint;
+import io.raytracer.geometry.IVector;
+import io.raytracer.geometry.Point;
+import io.raytracer.geometry.Tuple4;
+import io.raytracer.geometry.Vector;
 import lombok.Getter;
 import lombok.ToString;
 

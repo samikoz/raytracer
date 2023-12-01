@@ -1,12 +1,12 @@
 package io.raytracer.tools;
 
-import io.raytracer.geometry.FourMatrix;
+import io.raytracer.algebra.FourMatrix;
 import io.raytracer.geometry.IPoint;
-import io.raytracer.geometry.ISquareMatrix;
-import io.raytracer.geometry.ITransform;
+import io.raytracer.algebra.ISquareMatrix;
+import io.raytracer.algebra.ITransform;
 import io.raytracer.geometry.IVector;
 import io.raytracer.geometry.Point;
-import io.raytracer.geometry.ThreeTransform;
+import io.raytracer.algebra.ThreeTransform;
 import io.raytracer.geometry.Vector;
 import io.raytracer.mechanics.IRay;
 import io.raytracer.mechanics.Ray;

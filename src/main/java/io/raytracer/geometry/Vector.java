@@ -1,5 +1,7 @@
 package io.raytracer.geometry;
 
+import io.raytracer.algebra.ITransform;
+
 public class Vector extends Tuple implements IVector {
     public Vector(double x, double y, double z) {
         super(x, y, z);

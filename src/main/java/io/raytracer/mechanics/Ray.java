@@ -1,7 +1,7 @@
 package io.raytracer.mechanics;
 
 import io.raytracer.geometry.IPoint;
-import io.raytracer.geometry.ITransform;
+import io.raytracer.algebra.ITransform;
 import io.raytracer.geometry.IVector;
 import io.raytracer.geometry.Line;
 import lombok.NonNull;

@@ -2,7 +2,7 @@ package io.raytracer.shapes.operators;
 
 import io.raytracer.geometry.Interval;
 import io.raytracer.geometry.Point;
-import io.raytracer.geometry.ThreeTransform;
+import io.raytracer.algebra.ThreeTransform;
 import io.raytracer.geometry.Vector;
 import io.raytracer.materials.Material;
 import io.raytracer.mechanics.*;

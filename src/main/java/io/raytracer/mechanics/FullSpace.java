@@ -1,6 +1,6 @@
 package io.raytracer.mechanics;
 
-import io.raytracer.geometry.ITransform;
+import io.raytracer.algebra.ITransform;
 import io.raytracer.geometry.Interval;
 
 public class FullSpace extends BBox {

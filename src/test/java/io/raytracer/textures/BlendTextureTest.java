@@ -1,7 +1,7 @@
 package io.raytracer.textures;
 
 import io.raytracer.geometry.Point;
-import io.raytracer.geometry.ThreeTransform;
+import io.raytracer.algebra.ThreeTransform;
 import io.raytracer.tools.IColour;
 import io.raytracer.tools.LinearColour;
 import org.junit.jupiter.api.Test;

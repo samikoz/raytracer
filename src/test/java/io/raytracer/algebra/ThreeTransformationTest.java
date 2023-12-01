@@ -1,5 +1,11 @@
-package io.raytracer.geometry;
+package io.raytracer.algebra;
 
+import io.raytracer.algebra.ITransform;
+import io.raytracer.algebra.ThreeTransform;
+import io.raytracer.geometry.IPoint;
+import io.raytracer.geometry.IVector;
+import io.raytracer.geometry.Point;
+import io.raytracer.geometry.Vector;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;

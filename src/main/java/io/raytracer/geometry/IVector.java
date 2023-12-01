@@ -1,5 +1,7 @@
 package io.raytracer.geometry;
 
+import io.raytracer.algebra.ITransform;
+
 public interface IVector extends ITuple {
     double distance(IVector them);
 

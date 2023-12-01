@@ -2,8 +2,8 @@ package io.raytracer.textures;
 
 import io.raytracer.tools.IColour;
 import io.raytracer.geometry.IPoint;
-import io.raytracer.geometry.ITransform;
-import io.raytracer.geometry.ThreeTransform;
+import io.raytracer.algebra.ITransform;
+import io.raytracer.algebra.ThreeTransform;
 import lombok.Getter;
 
 import java.util.Arrays;

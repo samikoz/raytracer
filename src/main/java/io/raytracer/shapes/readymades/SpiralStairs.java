@@ -1,6 +1,6 @@
 package io.raytracer.shapes.readymades;
 
-import io.raytracer.geometry.ThreeTransform;
+import io.raytracer.algebra.ThreeTransform;
 import io.raytracer.shapes.Cube;
 
 import java.util.ArrayList;

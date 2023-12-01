@@ -1,5 +1,7 @@
 package io.raytracer.geometry;
 
+import io.raytracer.algebra.ITransform;
+
 import java.util.Optional;
 
 public interface IPoint extends ITuple {

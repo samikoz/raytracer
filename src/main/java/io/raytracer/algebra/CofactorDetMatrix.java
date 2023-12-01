@@ -1,4 +1,4 @@
-package io.raytracer.geometry;
+package io.raytracer.algebra;
 
 import java.util.stream.IntStream;
 

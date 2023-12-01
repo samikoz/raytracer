@@ -1,5 +1,11 @@
-package io.raytracer.geometry;
+package io.raytracer.algebra;
 
+import io.raytracer.algebra.CofactorDetMatrix;
+import io.raytracer.algebra.FourMatrix;
+import io.raytracer.algebra.ISquareMatrix;
+import io.raytracer.algebra.ThreeMatrix;
+import io.raytracer.algebra.TwoMatrix;
+import io.raytracer.geometry.Tuple4;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertAll;

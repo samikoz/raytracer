@@ -33,10 +33,10 @@ class CurveToCubesMapperTest {
     }
 
     @Test
-    void mapCurveTangents() {
+    void mapCurveNormals() {
         IPoint cubeEnd = new Point(1, 0, 0);
 
         assertEquals(new Point(1, -5, 0), cubeEnd.transform(testMapper.map(0).getTransform()));
-        assertEquals(new Point(5, 1, 0), cubeEnd.transform(testMapper.map(1).getTransform()));
+        assertEquals(new Point(5, -1, 0), cubeEnd.transform(testMapper.map(1).getTransform()));
     }
 }

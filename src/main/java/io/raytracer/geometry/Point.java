@@ -1,5 +1,6 @@
 package io.raytracer.geometry;
 
+import io.raytracer.algebra.ITransform;
 import lombok.NonNull;
 
 import java.util.Optional;
