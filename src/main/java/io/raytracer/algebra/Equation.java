@@ -1,5 +1,7 @@
 package io.raytracer.algebra;
 
+import io.raytracer.algebra.solvers.AlgebraicSolver;
+
 public class Equation implements IEquation {
     private final double[] coefficients;
 
