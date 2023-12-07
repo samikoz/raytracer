@@ -7,6 +7,7 @@ import java.util.stream.IntStream;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class AlgebraicSolverTest {
 
@@ -16,6 +17,18 @@ class AlgebraicSolverTest {
         Arrays.sort(solutions);
 
         assertAll(IntStream.range(0, 4).mapToObj(i -> () -> assertEquals(i+1, solutions[i], 1e-6)));
+    }
+
+    @Test
+    void solveQuarticFourRealRoots() {
+        double[] solutions = AlgebraicSolver.solveQuartic(60963.1204, -15802.0951408, 1517.361926146, -63.981274357, 1);
+        Arrays.sort(solutions);
+
+        assertEquals(4, solutions.length);
+        assertTrue(solutions[0] > 12 && solutions[0] < 12.4);
+        assertTrue(solutions[1] > 14.2 && solutions[1] < 14.4);
+        assertTrue(solutions[2] > 17.6 && solutions[2] < 17.8);
+        assertTrue(solutions[3] > 19.8 && solutions[3] < 20);
     }
 
     @Test

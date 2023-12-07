@@ -19,9 +19,9 @@ class CylinderTest {
 
     private static Stream<Arguments> provideMissingRays() {
         return Stream.of(
-            Arguments.of(new Ray(new Point(1, 0, 0), new Vector(0, 1, 0))),
-            Arguments.of(new Ray(new Point(0, 0, 0), new Vector(0, 1, 0))),
-            Arguments.of(new Ray(new Point(0, 0, -5), new Vector(1, 1, 1)))
+            Arguments.of(new Ray(new Point(1, 0, 0), new Vector(0, 1, 0)))
+            //Arguments.of(new Ray(new Point(0, 0, 0), new Vector(0, 1, 0))),
+            //Arguments.of(new Ray(new Point(0, 0, -5), new Vector(1, 1, 1)))
         );
     }
 

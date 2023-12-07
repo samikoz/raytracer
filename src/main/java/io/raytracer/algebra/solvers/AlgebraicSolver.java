@@ -1,5 +1,7 @@
 package io.raytracer.algebra.solvers;
 
+import org.apache.commons.math3.complex.Complex;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,39 +50,42 @@ public class AlgebraicSolver {
             double p = -Math.pow(A,2)/12 - C;
             double q = -Math.pow(A,3)/108 + A*C/3 - Math.pow(B,2)/8;
             double rrootSq = Math.pow(q,2)/4 + Math.pow(p,3)/27;
-            if (rrootSq < 0) {
-                return new double[]{};
-            }
-            double r = -q/2 + Math.sqrt(rrootSq);
-            double y;
-            if (Math.abs(r) < AlgebraicSolver.tolerance) {
-                y = -5*A/6 - Math.pow(q, 1.0/3);
+            Complex r = new Complex(rrootSq).sqrt().add(-q/2);
+            Complex y;
+            if (r.abs() < AlgebraicSolver.tolerance) {
+                y = new Complex(-5*A/6 - Math.pow(q, 1.0/3));
             }
             else {
-                double u = Math.pow(r, 1.0/3);
-                y = -5*A/6 + u - p/(3*u);
+                //apparently can so choose the cube root here so that y is real
+                //then working on reals from here might be faster
+                Complex u = r.pow(1.0/3);
+                y = new Complex(-5*A/6).add(u).subtract(new Complex(p).divide(u.multiply(3)));
             }
-            double wSq = A + 2*y;
-            if (wSq < 0) {
-                return new double[] {};
+            Complex w = y.multiply(2).add(A).sqrt();
+            List<Double> roots = new ArrayList<>();
+            Complex negativeSubRoot = y.multiply(-2).subtract(3*A).subtract(new Complex(2*B).divide(w));
+            Complex rootOne = negativeSubRoot.sqrt().add(w).divide(2).add(-b/(4*a));
+            if (Math.abs(rootOne.getImaginary()) < AlgebraicSolver.tolerance) {
+                roots.add(rootOne.getReal());
             }
-            double w = Math.sqrt(wSq);
-            List<Double> solRoots = new ArrayList<>();
-            double firstSquared = -(3*A + 2*y + 2*B/w);
-            if (firstSquared > 0) {
-                solRoots.add(-b/(4*a) + (w + Math.sqrt(firstSquared))/2);
-                solRoots.add(-b/(4*a) + (w - Math.sqrt(firstSquared))/2);
+            Complex rootTwo = negativeSubRoot.sqrt().multiply(-1).add(w).divide(2).add(-b/(4*a));
+            if (Math.abs(rootTwo.getImaginary()) < AlgebraicSolver.tolerance) {
+                roots.add(rootTwo.getReal());
             }
-            double secondSquared = -(3*A + 2*y - 2*B/w);
-            if (secondSquared > 0) {
-                solRoots.add(-b/(4*a) - (w + Math.sqrt(secondSquared))/2);
-                solRoots.add(-b/(4*a) +- (w - Math.sqrt(secondSquared))/2);
+            Complex positiveSubRoot = negativeSubRoot.add(new Complex(4*B).divide(w));
+            Complex rootThree = positiveSubRoot.sqrt().subtract(w).divide(2).add(-b/(4*a));
+            if (Math.abs(rootThree.getImaginary()) < AlgebraicSolver.tolerance) {
+                roots.add(rootThree.getReal());
             }
-            double[] realSolutions = new double[solRoots.size()];
-            for (int i = 0; i < solRoots.size(); i++) {
-                realSolutions[i] = solRoots.get(i);
+            Complex rootFour = positiveSubRoot.sqrt().multiply(-1).subtract(w).divide(2).add(-b/(4*a));
+            if (Math.abs(rootFour.getImaginary()) < AlgebraicSolver.tolerance) {
+                roots.add(rootFour.getReal());
             }
-            return realSolutions;
+            double[] realRoots = new double[roots.size()];
+            for (int i = 0; i < roots.size(); i++) {
+                realRoots[i] = roots.get(i);
+            }
+            return realRoots;
         }
     }
 }
