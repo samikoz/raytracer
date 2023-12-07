@@ -12,8 +12,9 @@ import lombok.NonNull;
 
 import java.util.Arrays;
 
+@Getter
 public abstract class Shape extends Hittable {
-    @Getter private final Material material;
+    private final Material material;
 
     public Shape() {
         super();
