@@ -25,14 +25,14 @@ public class Tori {
 
         //setups
         DemoSetup centralSetup = DemoSetup.builder()
-                .rayCount(300)
+                .rayCount(50)
                 .xSize(size)
                 .ySize(size)
                 .viewAngle(Math.PI / 4)
                 .upDirection(new Vector(0, 1, 0))
                 .eyePosition(new Point(0, 8, 15))
                 .lookDirection(new Vector(0, -8, -15))
-                .filename("outputs/trash/tryTorus2.ppm")
+                .filename("outputs/trash/tryTorus4.ppm")
                 .build();
 
         Material blockMaterial = Material.builder()
@@ -49,7 +49,7 @@ public class Tori {
         int lightBrightness = 25;
         Material emitentMaterial = Material.builder().emit(new LinearColour(lightBrightness)).build();
         Shape emitent = new Rectangle(emitentMaterial);
-        emitent.setTransform(ThreeTransform.scaling(5, 5, 1).translate(0, 0, 20));
+        emitent.setTransform(ThreeTransform.rotation_y(Math.PI / 2).scale(5, 5, 1).translate(-10, 0, 0));
 
         //worlds
         World centralWorld = new LambertianWorld(backgroundColour);
