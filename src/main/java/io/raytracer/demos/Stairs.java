@@ -1,9 +1,9 @@
 package io.raytracer.demos;
 
+import io.raytracer.algebra.ThreeTransform;
 import io.raytracer.geometry.IPoint;
 import io.raytracer.geometry.IVector;
 import io.raytracer.geometry.Point;
-import io.raytracer.algebra.ThreeTransform;
 import io.raytracer.geometry.Vector;
 import io.raytracer.materials.Material;
 import io.raytracer.mechanics.LambertianWorld;
@@ -43,8 +43,8 @@ public class Stairs {
                 .upDirection(new Vector(0, 0, 1))
                 .eyePosition(new Point(0, 5, -0.2))
                 .lookDirection(new Vector(0, -5, 0))
-                .filename(String.format("outputs/trash/refCentral_%s.ppm", name_appendix))
-                .bufferDir(String.format("./buffs/refcstairs/buffcentral_%s/", name_appendix))
+                .filename(String.format("outputs/trash/centralMod_%s.ppm", name_appendix))
+                .bufferDir(String.format("./buffs/refcstairsmod/buffmod_%s/", name_appendix))
                 .bufferFileCount(2)
                 .build();
 
@@ -61,15 +61,16 @@ public class Stairs {
         centralLowerBlock.setTransform(ThreeTransform.scaling(11, 10, 0.37).translate(0, -10, -2.04));
 
         //stairs
-        double leftStairXMinPosition = -1.87;
-        double xScale = 0.2;
+        double leftStairXMinPosition = -1.82;
+        double xScale = 0.25;
         Camera cam = centralSetup.makeCamera();
-        IVector centralDisp = new Vector(2*xScale, -1, 0);
+        IVector centralDisp = new Vector(2*xScale, -1.5, 0);
         List<Hittable> centralStepList = new ArrayList<>();
         ThreeTransform centralPush = ThreeTransform.translation(leftStairXMinPosition - centralDisp.x(), -10 - centralDisp.y(), -1.1 - centralDisp.z());
-        for (int i = 0; i < 24; i++) {
+
+        for (int i = 0; i < 16; i++) {
             Material currentBlockMaterial = Material.builder()
-                    .texture(new MonocolourTexture(new LinearColour(0.6 - Math.max((i - 12)*0.05, 0))))
+                    .texture(new MonocolourTexture(new LinearColour(0.6 - Math.max((i - 2)*0.05, 0))))
                     .build();
             currentBlockMaterial.addRecaster(Recasters.diffuse, 1);
             Cube key = new Cube(currentBlockMaterial);

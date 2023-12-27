@@ -12,23 +12,24 @@ import java.nio.file.Paths;
 
 public class Accumulator {
     public static void main(String[] args) throws IOException {
-        IPicture sumPicture = new PPMPicture(1080, 1080);
-        for (int i = 0; i < 10; i++) {
-            Stairs.main(new String[] {Integer.toString(i)});
+        int size = 1080;
+        IPicture sumPicture = new PPMPicture(size, size);
+        for (int i = 0; i < 16; i++) {
+            Stairs.main(new String[]{Integer.toString(i)});
             BufferedPPMPicture justExecuted = new BufferedPPMPicture(
-                1080, 1080, Paths.get(String.format("./buffs/refcstairs/buffcentral_%s/", i)), 1080*1080/5,
+                size, size, Paths.get(String.format("./buffs/refcstairsmod/buffmod_%s/", i)), size*size/2,
                 PPMPicture::new);
             justExecuted.loadPersisted();
-            IPicture accumulatedPicture = new AveragingPPMPicture(1080, 1080, (i+1)*500);
-            for (int y = 0; y < 1080; y++) {
-                for (int x = 0; x < 1080; x++) {
+            IPicture accumulatedPicture = new AveragingPPMPicture(size, size, (i+1)*500);
+            for (int y = 0; y < size; y++) {
+                for (int x = 0; x < size; x++) {
                     IColour justColoured = justExecuted.read(x, y);
                     IColour summed = sumPicture.read(x, y).add(justColoured);
                     sumPicture.write(new Pixel(x, y), summed);
                     accumulatedPicture.write(new Pixel(x, y), summed);
                 }
             }
-            accumulatedPicture.export(Paths.get(String.format("outputs/refCentral_%d.ppm", i)));
+            accumulatedPicture.export(Paths.get(String.format("outputs/centralMod_%d.ppm", i)));
         }
     }
 }

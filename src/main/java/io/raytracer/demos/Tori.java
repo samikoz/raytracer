@@ -20,19 +20,19 @@ import java.io.IOException;
 
 public class Tori {
     public static void main(String[] args) throws IOException {
-        int size = 540;
+        int size = 1080;
         IColour backgroundColour = new LinearColour(0, 0, 0);
 
         //setups
         DemoSetup centralSetup = DemoSetup.builder()
-                .rayCount(50)
+                .rayCount(1500)
                 .xSize(size)
                 .ySize(size)
                 .viewAngle(Math.PI / 4)
                 .upDirection(new Vector(0, 1, 0))
                 .eyePosition(new Point(0, 8, 15))
                 .lookDirection(new Vector(0, -8, -15))
-                .filename("outputs/trash/tryTorus4.ppm")
+                .filename("outputs/insideTorus.ppm")
                 .build();
 
         Material blockMaterial = Material.builder()
@@ -49,7 +49,7 @@ public class Tori {
         int lightBrightness = 25;
         Material emitentMaterial = Material.builder().emit(new LinearColour(lightBrightness)).build();
         Shape emitent = new Rectangle(emitentMaterial);
-        emitent.setTransform(ThreeTransform.rotation_y(Math.PI / 2).scale(5, 5, 1).translate(-10, 0, 0));
+        emitent.setTransform(ThreeTransform.rotation_y(Math.PI / 2).scale(5, 5, 1));
 
         //worlds
         World centralWorld = new LambertianWorld(backgroundColour);
