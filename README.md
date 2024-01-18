@@ -14,4 +14,4 @@ ray-intersection solver for these.
 - No tests for reflection, refraction etc. Have messed with refraction, so before you use
 it make sure it works properly.
 - For texture parameters add separate methods to interface. Write separate classes so that can switch between them.
-Spring, finally? look whether can group Mapping parameter together with IPoint in one class
+Spring, finally? look whether can group Mapping parameter together with IPoint in one class[main](src%2Fmain)

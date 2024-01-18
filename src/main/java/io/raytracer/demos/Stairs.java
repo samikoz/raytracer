@@ -52,7 +52,6 @@ public class Stairs {
         Material blockMaterial = Material.builder()
                 .texture(new MonocolourTexture(new LinearColour(0.65)))
                 .build();
-        blockMaterial.addRecaster(Recasters.diffuse, 1);
 
         //blocks
         Shape centralUpperBlock = new Cube(blockMaterial);
@@ -72,7 +71,6 @@ public class Stairs {
             Material currentBlockMaterial = Material.builder()
                     .texture(new MonocolourTexture(new LinearColour(0.6 - Math.max((i - 2)*0.05, 0))))
                     .build();
-            currentBlockMaterial.addRecaster(Recasters.diffuse, 1);
             Cube key = new Cube(currentBlockMaterial);
             centralPush = centralPush.translate(centralDisp.x(), centralDisp.y(), centralDisp.z());
             ThreeTransform keyTransform = ThreeTransform.scaling(xScale, 10, 0.58).transform(centralPush);

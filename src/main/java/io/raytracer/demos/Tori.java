@@ -25,25 +25,32 @@ public class Tori {
 
         //setups
         DemoSetup centralSetup = DemoSetup.builder()
-                .rayCount(1500)
+                .rayCount(3000)
                 .xSize(size)
                 .ySize(size)
                 .viewAngle(Math.PI / 4)
                 .upDirection(new Vector(0, 1, 0))
                 .eyePosition(new Point(0, 8, 15))
                 .lookDirection(new Vector(0, -8, -15))
-                .filename("outputs/insideTorus.ppm")
+                .bufferFileCount(5)
+                .bufferDir("buffs/em10buff/")
+                .filename("outputs/em10.ppm")
                 .build();
+
+        DemoSetup secondSetup = centralSetup.toBuilder().filename("outputs/em9.ppm").bufferDir("buffs/em9buff/").build();
 
         Material blockMaterial = Material.builder()
                 .texture(new MonocolourTexture(new LinearColour(0.65)))
                 .build();
-        blockMaterial.addRecaster(Recasters.diffuse, 1);
 
         Shape torusFlat = new Torus(3, 1, blockMaterial);
         torusFlat.setTransform(ThreeTransform.translation(-2.5, -2.5, -1.5));
         Shape torusStand = new Torus(3, 1, blockMaterial);
         torusStand.setTransform(ThreeTransform.rotation_x(Math.PI / 2).rotate_z(Math.PI / 4).translate(-0.2, -0.2, -1.5));
+        Shape torus3 = new Torus(4.5, 1, blockMaterial);
+        torus3.setTransform(ThreeTransform.rotation_x(Math.PI/3).translate(-2, -4, 0));
+        Shape torus4 = new Torus(8, 2, blockMaterial);
+        torus4.setTransform(ThreeTransform.rotation_x(Math.PI / 2 - Math.PI / 6).rotate_z(Math.PI / 3).translate(-2,-6, -3));
 
         //light
         int lightBrightness = 25;
@@ -54,10 +61,15 @@ public class Tori {
         //worlds
         World centralWorld = new LambertianWorld(backgroundColour);
         centralWorld.put(emitent);
-        centralWorld.put(new Group(new Hittable[] {torusFlat, torusStand}));
+        centralWorld.put(new Group(new Hittable[] {torusFlat, torusStand, torus4}));
 
+        World secondWorld = new LambertianWorld(backgroundColour);
+        secondWorld.put(emitent);
+        secondWorld.put(new Group(new Hittable[] {torusFlat, torusStand, torus3}));
         //render
         centralSetup.render(centralWorld);
+        secondSetup.render(secondWorld);
+        secondSetup.export();
         centralSetup.export();
     }
 }

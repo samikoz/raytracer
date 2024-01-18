@@ -40,7 +40,6 @@ public class Pillars {
         Material cylinderMaterial = Material.builder()
                 .texture(new MonocolourTexture(new LinearColour(0.6, 0.6, 0.6)))
                 .build();
-        cylinderMaterial.addRecaster(Recasters.diffuse, 1);
 
         Point[] prePillarPositions = new Point[] {
             new Point(-9.0, 3.0, 7.0),

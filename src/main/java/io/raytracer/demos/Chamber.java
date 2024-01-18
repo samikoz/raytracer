@@ -43,14 +43,12 @@ public class Chamber {
         Material floorMaterial = Material.builder()
             .texture(floorTexture)
             .build();
-        floorMaterial.addRecaster(Recasters.diffuse, 1);
         Shape floor = new Plane(new Vector(0, 1, 0), floorMaterial);
         world.put(floor);
 
         Material columnMaterial = Material.builder()
             .texture(new MonocolourTexture(new GammaColour(0.2, 0.2, 0.2)))
             .build();
-        columnMaterial.addRecaster(Recasters.diffuse, 1);
         /*IntStream.range(0, columnCount).mapToObj(columnIndex -> {
             Shape cylinder = new Cylinder(columnMaterial);
             cylinder.setTransform(ThreeTransform.scaling(columnScale, 1, columnScale).translate(15-columnIndex*columnSeparation, 0, 0));

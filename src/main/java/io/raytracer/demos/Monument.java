@@ -58,12 +58,12 @@ public class Monument {
         Material keyMaterial = Material.builder()
                 .texture(new MonocolourTexture(new LinearColour(0.73, 0.73, 0.73)))
                 .build();
-        keyMaterial.addRecaster(Recasters.diffuse, 1);
         Material verticalEmitentMaterial = Material.builder().emit(new LinearColour(22, 22, 22)).build();
         //--
-        Material blockMaterial = keyMaterial.toBuilder().build();
-        blockMaterial.addRecaster(Recasters.diffuse, 0.7);
-        blockMaterial.addRecaster(Recasters.fuzzilyReflective.apply(0.0), 0.3);
+        Material blockMaterial = keyMaterial.toBuilder()
+                .recast(Recasters.diffuse, 0.7)
+                .recast(Recasters.fuzzilyReflective.apply(0.0), 0.3)
+                .build();
 
         //keys
         Shape upperBlock = new Cube(blockMaterial);

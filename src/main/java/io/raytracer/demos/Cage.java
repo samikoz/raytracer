@@ -41,7 +41,6 @@ public class Cage {
         Material floorMaterial = Material.builder()
                 .texture(new MonocolourTexture(new LinearColour(0.2, 0.2, 0.2)))
                 .build();
-        floorMaterial.addRecaster(Recasters.diffuse, 1);
         Shape floor = new Disc(floorMaterial);
         floor.setTransform(ThreeTransform.rotation_x(Math.PI / 2).scale(27, 27, 27).translate(barSeparation*(barCount-1)/2.0, 0, firstBarPosition + (barSeparation*barCount-1)/2.0));
 
@@ -51,7 +50,6 @@ public class Cage {
         Material barMaterial = Material.builder()
                 .texture(new MonocolourTexture(new LinearColour(0.2, 0.2, 0.2)))
                 .build();
-        barMaterial.addRecaster(Recasters.diffuse, 1);
 
         List<Hittable> backGroup = new ArrayList<>();
         List<Hittable> rightGroup = new ArrayList<>();
@@ -83,7 +81,6 @@ public class Cage {
 
         /*
         Material smokeMaterial = Material.builder().texture(new MonocolourTexture(new LinearColour(0.8, 0.8, 0.8))).build();
-        smokeMaterial.addRecaster(Recasters.diffuse, 1);
         Shape smokeBoundary1 = new Cube(smokeMaterial);
         smokeBoundary1.setTransform(ThreeTransform.scaling(100, 40, 100).translate(-60+barSeparation*(barCount-1)/2.0, 0, -60+firstBarPosition + (barSeparation*barCount-1)/2.0));
         Shape smoke1 = new Volume(0.03, smokeBoundary1, smokeMaterial);

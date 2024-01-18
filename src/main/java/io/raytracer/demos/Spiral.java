@@ -42,7 +42,6 @@ public class Spiral {
         Material stairMaterial = Material.builder()
                 .texture(new MonocolourTexture(new LinearColour(0.73, 0.73, 0.73)))
                 .build();
-        stairMaterial.addRecaster(Recasters.diffuse, 1);
 
         SpiralParameters parameters = SpiralParameters.builder()
                 .count(26)
