@@ -1,6 +1,7 @@
 package io.raytracer.tools;
 
 import lombok.Getter;
+import org.apache.commons.io.FileUtils;
 import org.javatuples.Pair;
 
 import java.io.IOException;
@@ -85,7 +86,7 @@ public class BufferedPPMPicture implements IPicture {
         persistedBufferIndex++;
         Path buffer = this.getBuffer(this.persistedBufferIndex);
         try {
-            ObjectOutputStream outStream = new ObjectOutputStream(Files.newOutputStream(buffer));
+            ObjectOutputStream outStream = new ObjectOutputStream(FileUtils.openOutputStream(buffer.toFile()));
             outStream.writeObject(this.buffer);
             outStream.close();
         } catch (IOException e) {

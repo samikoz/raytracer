@@ -2,8 +2,10 @@ package io.raytracer.tools;
 
 import lombok.Getter;
 import lombok.NonNull;
+import org.apache.commons.io.FileUtils;
 
 import java.io.BufferedReader;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.Writer;
 import java.nio.file.Files;
@@ -57,9 +59,9 @@ public class PPMPicture implements IPicture {
 
     @Override
     public void export(Path path) throws IOException {
-        Writer writer = Files.newBufferedWriter(path);
-        writer.write(this.export());
-        writer.close();
+        FileOutputStream writeStream = FileUtils.openOutputStream(path.toFile());
+        writeStream.write(this.export().getBytes());
+        writeStream.close();
     }
 
     private String export() {
