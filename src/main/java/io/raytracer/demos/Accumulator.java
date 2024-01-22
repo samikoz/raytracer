@@ -13,14 +13,31 @@ import java.nio.file.Paths;
 public class Accumulator {
     public static void main(String[] args) throws IOException {
         int size = 1080;
+        int rayCount = 500;
+        String filenameTemplate = "./outputs/trash/em05_%02d.ppm";
+        String finalFilenameTemplate = "./outputs/tori/em/em05_%02d.ppm";
+        String bufferDirTemplate = "./buffs/em05buff/";
+        int bufferCount = 2;
+
         IPicture sumPicture = new PPMPicture(size, size);
-        for (int i = 0; i < 16; i++) {
-            Stairs.main(new String[]{Integer.toString(i)});
+        int i = 0;
+        while (true) {
+            DemoSetup setup = DemoSetup.builder()
+                    .rayCount(rayCount)
+                    .xSize(size)
+                    .ySize(size)
+                    .filename(String.format(filenameTemplate, i))
+                    .bufferDir(String.format(bufferDirTemplate, i))
+                    .bufferFileCount(bufferCount)
+                    .build();
+            Tori renderer = new Tori(setup);
+            renderer.render();
+
             BufferedPPMPicture justExecuted = new BufferedPPMPicture(
-                size, size, Paths.get(String.format("./buffs/refcstairsmod/buffmod_%s/", i)), size*size/2,
+                size, size, Paths.get(String.format(bufferDirTemplate + "buff_%02d", i)), size*size/bufferCount,
                 PPMPicture::new);
             justExecuted.loadPersisted();
-            IPicture accumulatedPicture = new AveragingPPMPicture(size, size, (i+1)*500);
+            IPicture accumulatedPicture = new AveragingPPMPicture(size, size, (i+1)*rayCount);
             for (int y = 0; y < size; y++) {
                 for (int x = 0; x < size; x++) {
                     IColour justColoured = justExecuted.read(x, y);
@@ -29,7 +46,8 @@ public class Accumulator {
                     accumulatedPicture.write(new Pixel(x, y), summed);
                 }
             }
-            accumulatedPicture.export(Paths.get(String.format("outputs/centralMod_%d.ppm", i)));
+            accumulatedPicture.export(Paths.get(String.format(finalFilenameTemplate, i)));
+            i++;
         }
     }
 }

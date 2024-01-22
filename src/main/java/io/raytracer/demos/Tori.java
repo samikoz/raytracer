@@ -18,32 +18,31 @@ import io.raytracer.tools.LinearColour;
 import java.io.IOException;
 
 public class Tori {
-    public static void main(String[] args) throws IOException {
-        int size = 1080;
+    private final DemoSetup setup;
+
+    public Tori(DemoSetup setup) {
+        this.setup = setup;
+    }
+
+    public void render() throws IOException {
         IColour backgroundColour = new LinearColour(0, 0, 0);
 
         //setups
-        DemoSetup centralSetup = DemoSetup.builder()
-                .rayCount(3000)
-                .xSize(size)
-                .ySize(size)
+        DemoSetup centralSetup = setup.toBuilder()
                 .viewAngle(Math.PI / 4)
                 .upDirection(new Vector(0, 1, 0))
                 .eyePosition(new Point(0, 8, 15))
                 .lookDirection(new Vector(0, -8, -15))
-                .bufferFileCount(5)
-                .bufferDir("buffs/em10buff/")
-                .filename("outputs/em10.ppm")
                 .build();
 
         Material blockMaterial = Material.builder()
                 .texture(new MonocolourTexture(new LinearColour(0.65)))
                 .build();
 
-        Shape torusFlat = new Torus(3, 1, blockMaterial);
-        torusFlat.setTransform(ThreeTransform.translation(-2.5, -2.5, -1.5));
+        Shape torusFlat = new Torus(4, 2, blockMaterial);
+        torusFlat.setTransform(ThreeTransform.translation(-2, -3.5, -1.5));
         Shape torusStand = new Torus(3, 1, blockMaterial);
-        torusStand.setTransform(ThreeTransform.rotation_x(Math.PI / 2).rotate_z(Math.PI / 4).translate(-0.2, -0.2, -1.5));
+        torusStand.setTransform(ThreeTransform.rotation_x(Math.PI/2 + Math.PI/9).rotate_z(Math.PI/11).translate(3, 1, -1.5));
         Shape torusOver = new Torus(8, 2, blockMaterial);
         torusOver.setTransform(ThreeTransform.rotation_x(Math.PI / 2 - Math.PI / 6).rotate_z(Math.PI / 3).translate(-2,-6, -3));
 
@@ -56,10 +55,25 @@ public class Tori {
         //worlds
         World centralWorld = new LambertianWorld(backgroundColour);
         centralWorld.put(emitent);
-        centralWorld.put(new Group(new Hittable[] {torusFlat, torusStand, torusOver}));
+        centralWorld.put(new Group(new Hittable[] {torusFlat, torusOver, torusStand}));
 
         //render
         centralSetup.render(centralWorld);
         centralSetup.export();
+    }
+
+    public static void main(String[] args) throws IOException {
+        int size = 1080;
+        int rayCount = 5;
+        String filenameTemplate = "./outputs/tori/em/em10.ppm";
+
+        DemoSetup setup = DemoSetup.builder()
+                .rayCount(rayCount)
+                .xSize(size)
+                .ySize(size)
+                .filename(filenameTemplate)
+                .build();
+        Tori renderer = new Tori(setup);
+        renderer.render();
     }
 }
