@@ -14,7 +14,7 @@ import io.raytracer.shapes.Rectangle;
 import io.raytracer.shapes.Shape;
 import io.raytracer.textures.MonocolourTexture;
 import io.raytracer.tools.Camera;
-import io.raytracer.tools.GammaColour;
+import io.raytracer.tools.LinearColour;
 import io.raytracer.tools.IColour;
 import io.raytracer.tools.IPicture;
 import io.raytracer.tools.LinearColour;
@@ -29,10 +29,10 @@ import java.util.stream.IntStream;
 
 public class Pillars {
     public static void main(String[] args) throws IOException {
-        Function<IRay, IColour> background = ray -> new GammaColour(0, 0, 0);
+        Function<IRay, IColour> background = ray -> new LinearColour(0, 0, 0);
         LambertianWorld world = new LambertianWorld(background);
 
-        Material lighting = Material.builder().emit(new GammaColour(10, 10, 10)).build();
+        Material lighting = Material.builder().emit(new LinearColour(10, 10, 10)).build();
         Shape light = new Rectangle(lighting);
         light.setTransform(ThreeTransform.scaling(25, 25, 1).rotate_x(Math.PI / 2).translate(0, 35, -10));
         world.put(light);

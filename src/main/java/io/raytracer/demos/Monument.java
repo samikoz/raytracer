@@ -19,16 +19,13 @@ import io.raytracer.shapes.Plane;
 import io.raytracer.shapes.Rectangle;
 import io.raytracer.shapes.Shape;
 import io.raytracer.textures.MonocolourTexture;
-import io.raytracer.tools.Camera;
-import io.raytracer.tools.PixelCurve;
-import io.raytracer.tools.IColour;
-import io.raytracer.tools.LinearColour;
-import io.raytracer.tools.Pixel;
+import io.raytracer.tools.*;
 import io.raytracer.tools.parsers.LiteralParser;
 import org.javatuples.Pair;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -50,7 +47,6 @@ public class Monument {
                 .upDirection(new Vector(0, 0, 1))
                 .eyePosition(new Point(0, 5, 1.55))
                 .lookDirection(new Vector(0, -5, -1.55))
-                .filename("monument.ppm")
                 .build();
         List<Hittable> verticalObjects = new ArrayList<>();
 
@@ -112,8 +108,9 @@ public class Monument {
         verticalWorld.put(new Group(verticalObjects.toArray(new Hittable[] {})));
 
         //render
-        verticalSetup.render(verticalWorld);
-        verticalSetup.export();
+        IPicture picture = verticalSetup.makePicture();
+        verticalWorld.render(picture, verticalSetup.makeCamera());
+        picture.export(Paths.get("monument.ppm"));
     }
 
     private static ITransform makePositionTransform(IPoint fourthPosition, IPoint seventhPosition) {

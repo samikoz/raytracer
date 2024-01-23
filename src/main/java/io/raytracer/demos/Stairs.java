@@ -17,13 +17,11 @@ import io.raytracer.shapes.Plane;
 import io.raytracer.shapes.Rectangle;
 import io.raytracer.shapes.Shape;
 import io.raytracer.textures.MonocolourTexture;
-import io.raytracer.tools.Camera;
-import io.raytracer.tools.IColour;
-import io.raytracer.tools.LinearColour;
-import io.raytracer.tools.Pixel;
+import io.raytracer.tools.*;
 import lombok.NonNull;
 
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,7 +29,6 @@ import java.util.List;
 public class Stairs {
     public static void main(String[] args) throws IOException {
         int size = 1080;
-        @NonNull String name_appendix = args[0];
         IColour backgroundColour = new LinearColour(0, 0, 0);
 
         //setups
@@ -43,8 +40,7 @@ public class Stairs {
                 .upDirection(new Vector(0, 0, 1))
                 .eyePosition(new Point(0, 5, -0.2))
                 .lookDirection(new Vector(0, -5, 0))
-                .filename(String.format("outputs/trash/centralMod_%s.ppm", name_appendix))
-                .bufferDir(String.format("./buffs/refcstairsmod/buffmod_%s/", name_appendix))
+                .bufferDir("./buffs/buffStairs/")
                 .bufferFileCount(2)
                 .build();
 
@@ -101,7 +97,8 @@ public class Stairs {
         centralWorld.put(centralSteps);
 
         //render
-        centralSetup.render(centralWorld);
-        centralSetup.export();
+        IPicture picture = centralSetup.makePicture();
+        centralWorld.render(picture, centralSetup.makeCamera());
+        picture.export(Paths.get("outputs/stairs.ppm"));
     }
 }

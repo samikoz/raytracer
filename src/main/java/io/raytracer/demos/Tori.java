@@ -13,9 +13,11 @@ import io.raytracer.shapes.Shape;
 import io.raytracer.shapes.Torus;
 import io.raytracer.textures.MonocolourTexture;
 import io.raytracer.tools.IColour;
+import io.raytracer.tools.IPicture;
 import io.raytracer.tools.LinearColour;
 
 import java.io.IOException;
+import java.nio.file.Paths;
 
 public class Tori {
     private final DemoSetup setup;
@@ -24,7 +26,7 @@ public class Tori {
         this.setup = setup;
     }
 
-    public void render() throws IOException {
+    public IPicture render() throws IOException {
         IColour backgroundColour = new LinearColour(0, 0, 0);
 
         //setups
@@ -58,22 +60,23 @@ public class Tori {
         centralWorld.put(new Group(new Hittable[] {torusFlat, torusOver, torusStand}));
 
         //render
-        centralSetup.render(centralWorld);
-        centralSetup.export();
+        IPicture picture = centralSetup.makePicture();
+        centralWorld.render(picture, centralSetup.makeCamera());
+        return picture;
     }
 
     public static void main(String[] args) throws IOException {
         int size = 1080;
-        int rayCount = 5;
-        String filenameTemplate = "./outputs/tori/em/em10.ppm";
+        int rayCount = 100;
+        String filename = "./outputs/tori/em/em11.ppm";
 
         DemoSetup setup = DemoSetup.builder()
                 .rayCount(rayCount)
                 .xSize(size)
                 .ySize(size)
-                .filename(filenameTemplate)
                 .build();
         Tori renderer = new Tori(setup);
-        renderer.render();
+        IPicture rendered = renderer.render();
+        rendered.export(Paths.get(filename));
     }
 }
