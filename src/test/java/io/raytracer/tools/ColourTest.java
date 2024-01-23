@@ -21,13 +21,6 @@ class ColourTest {
     }
 
     @Test
-    void exportGamma() {
-        IColour c = new GammaColour(0, 0.5, 1);
-
-        assertEquals("0 180 255", c.export(), "Exporting should integer-scale by 255 and gamma-correct");
-    }
-
-    @Test
     void add() {
         IColour first = new LinearColour(0.9, 0.6, 0.75);
         IColour second = new LinearColour(0.7, 0.1, 0.25);

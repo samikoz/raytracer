@@ -25,7 +25,7 @@ public class BufferedPPMPicture implements IPicture {
     private final int bufferSize;
     private List<Pair<Pixel, IColour>> buffer;
     private int persistedBufferIndex;
-    private IPicture loadedBuffer;
+    private IPicture unbufferedPicture;
     private final BiFunction<Integer, Integer, IPicture> bufferPictureConstructor;
     private static final String buffFileExtension = ".buff";
 
@@ -36,16 +36,20 @@ public class BufferedPPMPicture implements IPicture {
         Files.createDirectories(this.buffDir);
         this.buffer = new ArrayList<>();
         this.bufferSize = bufferSize;
-        this.persistedBufferIndex = this.scanForBufferIndex();
         this.bufferPictureConstructor = unbufferedConstructor;
-        this.loadedBuffer = unbufferedConstructor.apply(this.width, this.height);
+        this.unbufferedPicture = unbufferedConstructor.apply(this.width, this.height);
+        this.persistedBufferIndex = this.scanForBufferIndex();
+        if (this.persistedBufferIndex != 0) {
+            this.loadPersisted();
+        }
     }
 
     public BufferedPPMPicture(int x, int y, Path bufferDirectory, BiFunction<Integer, Integer, IPicture> unbufferedConstructor) throws IOException {
-        this(x, y, bufferDirectory, x * y / 100, unbufferedConstructor);
+        this(x, y, bufferDirectory, x * y, unbufferedConstructor);
     }
 
     public synchronized void write(Pixel p, IColour colour) {
+        this.unbufferedPicture.write(p, colour);
         this.buffer.add(new Pair<>(p, colour));
         if (this.buffer.size() >= this.bufferSize) {
             this.persistBuffer();
@@ -54,11 +58,7 @@ public class BufferedPPMPicture implements IPicture {
 
     @Override
     public IColour read(int x, int y) {
-        return this.buffer.stream()
-                .filter(pair -> pair.getValue0().x == x && pair.getValue0().y == y)
-                .findFirst()
-                .map(Pair::getValue1)
-                .orElse(this.loadedBuffer.read(x, y));
+        return this.unbufferedPicture.read(x, y);
     }
 
     @Override
@@ -72,10 +72,7 @@ public class BufferedPPMPicture implements IPicture {
 
     @Override
     public void export(Path path) throws IOException {
-        this.persistBuffer();
-        this.loadPersisted();
-        this.loadedBuffer.export(path);
-        //this.deletePersisted();
+        this.unbufferedPicture.export(path);
     }
 
     private Path getBuffer(int index) {
@@ -116,7 +113,7 @@ public class BufferedPPMPicture implements IPicture {
     public void loadPersisted() {
         IPicture loaded = this.bufferPictureConstructor.apply(this.width, this.height);
         this.parsePersisted().forEach(loadedColour -> loaded.write(loadedColour.getValue0(), loadedColour.getValue1()));
-        this.loadedBuffer = loaded;
+        this.unbufferedPicture = loaded;
     }
 
     private void deletePersisted() throws IOException {

@@ -63,13 +63,32 @@ class PPMPictureTest {
         Path tempPath = tempdir.resolve("test.mth");
 
         IPicture picture = new PPMPicture(5, 3);
-        picture.write(new Pixel(0, 0), new GammaColour(1, 0, 0));
-        picture.write(new Pixel(2, 1), new GammaColour(0, 0.5, 0));
-        picture.write(new Pixel(4, 2), new GammaColour(-0.5, 0, 1));
+        picture.write(new Pixel(0, 0), new LinearColour(1, 0, 0));
+        picture.write(new Pixel(2, 1), new LinearColour(0, 0.5, 0));
+        picture.write(new Pixel(4, 2), new LinearColour(-0.5, 0, 1));
 
         String expectedFirstRowData = "255 0 0 0 0 0 0 0 0 0 0 0 0 0 0\n";
-        String expectedSecondRowData = "0 0 0 0 0 0 0 180 0 0 0 0 0 0 0\n";
+        String expectedSecondRowData = "0 0 0 0 0 0 0 128 0 0 0 0 0 0 0\n";
         String expectedThirdRowData = "0 0 0 0 0 0 0 0 0 0 0 0 0 0 255";
+        String expectedPixelData = expectedFirstRowData + expectedSecondRowData + expectedThirdRowData;
+        picture.export(tempPath);
+        String pixelData = String.join("\n", Files.readAllLines(tempPath));
+
+        assertTrue(pixelData.endsWith(expectedPixelData));
+    }
+
+    @Test
+    void correctlyAveragedPPMExportPixelData(@TempDir Path tempdir) throws IOException {
+        Path tempPath = tempdir.resolve("test.mth");
+
+        IPicture picture = new PPMPicture(5, 3, 2);
+        picture.write(new Pixel(0, 0), new LinearColour(1, 0, 0));
+        picture.write(new Pixel(2, 1), new LinearColour(0, 0.5, 0));
+        picture.write(new Pixel(4, 2), new LinearColour(-0.5, 0, 1));
+
+        String expectedFirstRowData = "128 0 0 0 0 0 0 0 0 0 0 0 0 0 0\n";
+        String expectedSecondRowData = "0 0 0 0 0 0 0 64 0 0 0 0 0 0 0\n";
+        String expectedThirdRowData = "0 0 0 0 0 0 0 0 0 0 0 0 0 0 128";
         String expectedPixelData = expectedFirstRowData + expectedSecondRowData + expectedThirdRowData;
         picture.export(tempPath);
         String pixelData = String.join("\n", Files.readAllLines(tempPath));
@@ -82,15 +101,15 @@ class PPMPictureTest {
         Path tempPath = tempdir.resolve("test.mth");
 
         IPicture picture = new PPMPicture(10, 2);
-        IColour aColour = new GammaColour(1, 0.8, 0.6);
+        IColour aColour = new LinearColour(1, 0.8, 0.6);
 
         for (int i = 0; i < 10; ++i) {
             picture.write(new Pixel(i, 0), aColour);
             picture.write(new Pixel(i, 1), aColour);
         }
 
-        String expectedPreLineBreak = "255 228 198 255 228 198 255 228 198 255 228 198 255 228 198 255 228";
-        String expectedPostLineBreak = "198 255 228 198 255 228 198 255 228 198 255 228 198";
+        String expectedPreLineBreak = "255 204 153 255 204 153 255 204 153 255 204 153 255 204 153 255 204";
+        String expectedPostLineBreak = "153 255 204 153 255 204 153 255 204 153 255 204 153";
 
         picture.export(tempPath);
         String pixelData = String.join("\n", Files.readAllLines(tempPath));

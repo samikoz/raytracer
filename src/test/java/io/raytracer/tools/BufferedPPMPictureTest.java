@@ -27,25 +27,6 @@ class BufferedPPMPictureTest {
     }
 
     @Test
-    void writeAndReadFromUnbufferedCanvas(@TempDir Path tempDir) throws IOException {
-        IColour first = new LinearColour(0.5, 0.2, 0.3);
-        IColour second = new LinearColour(0, 0, 0.4);
-        BufferedPPMPicture picture = new BufferedPPMPicture(10, 20, tempDir, 3, PPMPicture::new);
-
-        picture.write(new Pixel(0, 19), first);
-        picture.write(new Pixel(2, 0), second);
-
-        picture.loadPersisted();
-        IColour firstRead = picture.read(0, 19);
-        IColour secondRead = picture.read(2, 0);
-
-        assertAll("Reading from canvas should return written objects.",
-                () -> assertEquals(firstRead, first),
-                () -> assertEquals(secondRead, second)
-        );
-    }
-
-    @Test
     void writeAndReadFromBufferedCanvas(@TempDir Path tempDir) throws IOException {
         IColour first = new LinearColour(0.5, 0.2, 0.3);
         IColour second = new LinearColour(0, 0, 0.4);
@@ -83,12 +64,12 @@ class BufferedPPMPictureTest {
         Path tempPath = tempdir.resolve("test.mth");
 
         IPicture picture = new BufferedPPMPicture(5, 3, tempdir, PPMPicture::new);
-        picture.write(new Pixel(0, 0), new GammaColour(1, 0, 0));
-        picture.write(new Pixel(2, 1), new GammaColour(0, 0.5, 0));
-        picture.write(new Pixel(4, 2), new GammaColour(-0.5, 0, 1));
+        picture.write(new Pixel(0, 0), new LinearColour(1, 0, 0));
+        picture.write(new Pixel(2, 1), new LinearColour(0, 0.5, 0));
+        picture.write(new Pixel(4, 2), new LinearColour(-0.5, 0, 1));
 
         String expectedFirstRowData = "255 0 0 0 0 0 0 0 0 0 0 0 0 0 0\n";
-        String expectedSecondRowData = "0 0 0 0 0 0 0 180 0 0 0 0 0 0 0\n";
+        String expectedSecondRowData = "0 0 0 0 0 0 0 128 0 0 0 0 0 0 0\n";
         String expectedThirdRowData = "0 0 0 0 0 0 0 0 0 0 0 0 0 0 255";
         String expectedPixelData = expectedFirstRowData + expectedSecondRowData + expectedThirdRowData;
         picture.export(tempPath);

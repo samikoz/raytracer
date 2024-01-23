@@ -3,7 +3,7 @@ package io.raytracer.mechanics;
 import io.raytracer.materials.RecasterContribution;
 import io.raytracer.mechanics.reporters.RenderData;
 import io.raytracer.mechanics.reporters.Reporter;
-import io.raytracer.tools.GammaColour;
+import io.raytracer.tools.LinearColour;
 import io.raytracer.tools.IColour;
 import io.raytracer.tools.LinearColour;
 
@@ -61,7 +61,7 @@ public class LambertianWorld extends World {
 
             float randVar = this.randomVariable.get();
             Optional<IRay> recastRay = this.getRecastRay(hitpoint, randVar);
-            IColour recastColour = recastRay.map(r -> this.illuminate(r, contributedColour)).orElse(new GammaColour(0, 0, 0));
+            IColour recastColour = recastRay.map(r -> this.illuminate(r, contributedColour)).orElse(new LinearColour(0, 0, 0));
             return ownColour.mix(recastColour);
         }
         else {

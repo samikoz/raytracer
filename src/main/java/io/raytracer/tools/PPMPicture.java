@@ -7,7 +7,6 @@ import org.apache.commons.io.FileUtils;
 import java.io.BufferedReader;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.Writer;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -23,8 +22,9 @@ import java.util.stream.Stream;
 public class PPMPicture implements IPicture {
     @Getter private final int width;
     @Getter private final int height;
-    private final List<ArrayList<IColour>> pixelGrid;
+    private final IColour[][] pixelGrid;
     private final String exportHeader;
+    private final int averagingFactor;
     private int loadingPointer;
     private final List<Integer> parsingResidue;
 
@@ -32,11 +32,16 @@ public class PPMPicture implements IPicture {
     static private final int exportedLineMaxLength = 70;
 
     public PPMPicture(int x, int y) {
+        this(x, y, 1);
+    }
+
+    public PPMPicture(int x, int y, int averagingFactor) {
         this.width = x;
         this.height = y;
         exportHeader = "P3\n" + x + " " + y + "\n255\n";
+        this.averagingFactor = averagingFactor;
 
-        pixelGrid = Stream.generate(() -> new ArrayList<>(Collections.nCopies(x, PPMPicture.initialColour))).limit(y).collect(Collectors.toList());
+        pixelGrid = new IColour[y][x];
 
         this.loadingPointer = 0;
         this.parsingResidue = new ArrayList<>(3);
@@ -44,12 +49,20 @@ public class PPMPicture implements IPicture {
 
     @Override
     public void write(Pixel p, @NonNull IColour colour) {
-        pixelGrid.get(p.y).set(p.x, colour);
+        this.pixelGrid[p.y][p.x] = colour;
     }
 
     @Override
     public IColour read(int x, int y) {
-        return pixelGrid.get(y).get(x);
+        try {
+            IColour read = this.pixelGrid[y][x];
+            if (read == null) {
+                throw new IndexOutOfBoundsException(String.format("%d,%d", x, y));
+            }
+            return read;
+        } catch (IndexOutOfBoundsException e) {
+            return PPMPicture.initialColour;
+        }
     }
 
     @Override
@@ -67,15 +80,17 @@ public class PPMPicture implements IPicture {
     private String export() {
         StringBuilder exported = new StringBuilder(exportHeader);
 
-        for (ArrayList<IColour> row : this.pixelGrid) {
-            exported.append(putLineBreaks(this.exportRow(row))).append("\n");
+        for (int y = 0; y < this.height; y++) {
+            exported.append(putLineBreaks(this.exportRow(y))).append("\n");
         }
         return exported.toString();
     }
 
-    protected String exportRow(ArrayList<IColour> ppmRow) {
+    protected String exportRow(int y) {
         List<String> exported = new ArrayList<>();
-        ppmRow.forEach(rowElement -> exported.add(rowElement.export()));
+        for (int x = 0; x < this.width; x++) {
+            exported.add(this.read(x, y).multiply(1.0/this.averagingFactor).export());
+        }
         return String.join(" ", exported);
     }
 
