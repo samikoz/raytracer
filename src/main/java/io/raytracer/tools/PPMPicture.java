@@ -11,11 +11,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -72,6 +70,7 @@ public class PPMPicture implements IPicture {
 
     @Override
     public void export(Path path) throws IOException {
+        System.out.printf("exporting to %s\n", path.toString());
         FileOutputStream writeStream = FileUtils.openOutputStream(path.toFile());
         writeStream.write(this.export().getBytes());
         writeStream.close();
@@ -106,6 +105,7 @@ public class PPMPicture implements IPicture {
     }
 
     public static PPMPicture load(Path file) throws IOException {
+        System.out.printf("loading from %s\n", file.toString());
         BufferedReader reader = Files.newBufferedReader(file);
         PPMPicture loadedPicture = PPMPicture.parseHeader(reader);
         reader.lines().forEach(loadedPicture::parseLoadedLine);

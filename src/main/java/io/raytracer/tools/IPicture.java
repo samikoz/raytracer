@@ -21,13 +21,10 @@ public interface IPicture {
     IColour read(int x, int y);
     void export(Path path) throws IOException;
 
-    default void add(Collection<IPicture> pictures) {
+    default void add(IPicture pic) {
         for (int y = 0; y < this.getHeight(); y++) {
             for (int x = 0; x < this.getWidth(); x++) {
-                IColour sum = new LinearColour(0);
-                for (IPicture pic : pictures) {
-                    sum = sum.add(pic.read(x, y));
-                }
+                IColour sum = this.read(x, y).add(pic.read(x, y));
                 this.write(new Pixel(x, y), sum);
             }
         }

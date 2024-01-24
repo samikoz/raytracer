@@ -95,6 +95,7 @@ public class BufferedPPMPicture implements IPicture {
 
     private Stream<Pair<Pixel, IColour>> parsePersisted() {
         Stream<Pair<Pixel, IColour>> parsed = Stream.empty();
+        System.out.printf("loading from %s\n", this.buffDir.toString());
         for (int bufferIndex = 1; bufferIndex < this.persistedBufferIndex+1; bufferIndex++) {
             try {
                 ObjectInputStream inStream = new ObjectInputStream(Files.newInputStream(this.getBuffer(bufferIndex)));
@@ -126,5 +127,9 @@ public class BufferedPPMPicture implements IPicture {
         try (Stream<Path> stream = Files.list(this.buffDir)) {
             return stream.map(path -> path.getFileName().toString()).map(pathname -> pathname.replace(buffFileExtension, "")).mapToInt(Integer::parseInt).max().orElse(0);
         }
+    }
+
+    public IPicture getUnbuffered() {
+        return this.unbufferedPicture;
     }
 }
