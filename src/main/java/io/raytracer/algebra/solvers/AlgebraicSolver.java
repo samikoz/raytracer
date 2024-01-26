@@ -6,7 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AlgebraicSolver {
-    private static double tolerance = 1e-6;
+    private static double tolerance = 1e-7;
+
     public static double[] solveSecondOrder(double c, double b, double a) {
         double delta = Math.pow(b, 2) - 4*a*c;
         if (delta < 0) {
@@ -57,7 +58,6 @@ public class AlgebraicSolver {
             }
             else {
                 //apparently can so choose the cube root here so that y is real
-                //then working on reals from here might be faster
                 Complex u = r.pow(1.0/3);
                 y = new Complex(-5*A/6).add(u).subtract(new Complex(p).divide(u.multiply(3)));
             }

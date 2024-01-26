@@ -19,6 +19,8 @@ public class RayHit extends Intersection {
     public final double refractiveRatio;
     public boolean shadowed;
 
+    private static double surfaceOffset = 1e-3;
+
     private RayHit(Intersection i) {
         super(i.object, i.ray, i.rayParameter);
 
@@ -34,8 +36,8 @@ public class RayHit extends Intersection {
         this.point = intersectionPoint;
         this.eyeVector = eyeVector.normalise();
         this.normalVector = surfaceNormal.normalise();
-        this.offsetAbove = this.point.add(this.normalVector.multiply(1e-6));
-        this.offsetBelow = this.point.subtract(this.normalVector.multiply(1e-6));
+        this.offsetAbove = this.point.add(this.normalVector.multiply(RayHit.surfaceOffset));
+        this.offsetBelow = this.point.subtract(this.normalVector.multiply(RayHit.surfaceOffset));
         this.shadowed = false;
     }
 
