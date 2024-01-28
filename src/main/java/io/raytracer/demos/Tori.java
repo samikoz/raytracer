@@ -4,39 +4,37 @@ import io.raytracer.algebra.ThreeTransform;
 import io.raytracer.geometry.Point;
 import io.raytracer.geometry.Vector;
 import io.raytracer.materials.Material;
-import io.raytracer.mechanics.LambertianWorld;
-import io.raytracer.mechanics.World;
-import io.raytracer.shapes.Group;
 import io.raytracer.shapes.Hittable;
 import io.raytracer.shapes.Rectangle;
 import io.raytracer.shapes.Shape;
 import io.raytracer.shapes.Torus;
 import io.raytracer.textures.MonocolourTexture;
-import io.raytracer.tools.IColour;
 import io.raytracer.tools.IPicture;
 import io.raytracer.tools.LinearColour;
+import lombok.Getter;
 
 import java.io.IOException;
 import java.nio.file.Paths;
 
-public class Tori {
-    private final DemoSetup setup;
+@Getter
+public class Tori extends Painter {
 
     public Tori(DemoSetup setup) {
-        this.setup = setup;
+        super(setup);
     }
 
-    public IPicture render() throws IOException {
-        IColour backgroundColour = new LinearColour(0, 0, 0);
-
-        //setups
-        DemoSetup centralSetup = setup.toBuilder()
+    @Override
+    protected void setSetup() {
+        this.setup = this.setup.toBuilder()
                 .viewAngle(Math.PI / 4)
                 .upDirection(new Vector(0, 1, 0))
                 .eyePosition(new Point(0, 8, 15))
                 .lookDirection(new Vector(0, -8, -15))
                 .build();
+    }
 
+    @Override
+    protected Hittable[] makeObjects() {
         Material blockMaterial = Material.builder()
                 .texture(new MonocolourTexture(new LinearColour(0.65)))
                 .build();
@@ -48,21 +46,12 @@ public class Tori {
         Shape torusOver = new Torus(8, 2, blockMaterial);
         torusOver.setTransform(ThreeTransform.rotation_x(Math.PI / 2 - Math.PI / 6).rotate_z(Math.PI / 3).translate(-2,-6, -3));
 
-        //light
         int lightBrightness = 25;
         Material emitentMaterial = Material.builder().emit(new LinearColour(lightBrightness)).build();
-        Shape emitent = new Rectangle(emitentMaterial);
-        emitent.setTransform(ThreeTransform.rotation_y(Math.PI / 2).scale(5, 5, 1));
+        Shape light = new Rectangle(emitentMaterial);
+        light.setTransform(ThreeTransform.rotation_y(Math.PI / 2).scale(5, 5, 1));
 
-        //worlds
-        World centralWorld = new LambertianWorld(backgroundColour);
-        centralWorld.put(emitent);
-        centralWorld.put(new Group(new Hittable[] {torusFlat, torusOver, torusStand}));
-
-        //render
-        IPicture picture = centralSetup.makePicture();
-        centralWorld.render(picture, centralSetup.makeCamera());
-        return picture;
+        return new Hittable[] {light, torusFlat, torusOver, torusStand};
     }
 
     public static void main(String[] args) throws IOException {

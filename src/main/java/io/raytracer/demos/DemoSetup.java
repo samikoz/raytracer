@@ -13,8 +13,8 @@ import java.nio.file.Paths;
 @Builder(toBuilder = true)
 @AllArgsConstructor
 public class DemoSetup {
-    private final int rayCount;
-    private final int xSize;
+    public final int rayCount;
+    public final int xSize;
     public final int ySize;
     private final double viewAngle;
     private final IPoint eyePosition;
