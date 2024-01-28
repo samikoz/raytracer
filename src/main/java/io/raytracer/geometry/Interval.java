@@ -54,4 +54,8 @@ public class Interval {
     public Interval expand(double delta) {
         return new Interval(this.min - delta/2, this.max + delta/2);
     }
+
+    public boolean contains(double x) {
+        return x > this.min && x < this.max;
+    }
 }

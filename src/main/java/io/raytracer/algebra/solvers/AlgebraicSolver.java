@@ -6,7 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AlgebraicSolver {
-    private static double tolerance = 1e-7;
+    private static final double tolerance = 1e-7;
+    private static final double bTolerance = 1e-15;
 
     public static double[] solveSecondOrder(double c, double b, double a) {
         double delta = Math.pow(b, 2) - 4*a*c;
@@ -24,7 +25,7 @@ public class AlgebraicSolver {
         double A = -3*b2/(8*a2) + c/a;
         double B = Math.pow(b,3)/(8*a3) - b*c/(2*a2) + d/a;
         double C = -3*Math.pow(b,4)/(256*Math.pow(a,4)) + c*b2/(16*a3) - b*d/(4*a2) + e/a;
-        if (Math.abs(B) < AlgebraicSolver.tolerance) {
+        if (Math.abs(B) < AlgebraicSolver.bTolerance) {
             double quasiDeltaSq = Math.pow(A,2) - 4*C;
             if (quasiDeltaSq < 0) {
                 return new double[] {};

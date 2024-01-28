@@ -10,13 +10,6 @@ public interface IPicture {
     int getHeight();
     Stream<Pixel> getBlankPixels();
     void write(Pixel p, IColour colour);
-    default void fill(IColour colour) {
-        for (int y = 0; y < this.getHeight(); y++) {
-            for (int x = 0; x < this.getWidth(); x++) {
-                this.write(new Pixel(x, y), colour);
-            }
-        }
-    }
 
     IColour read(int x, int y);
     void export(Path path) throws IOException;
@@ -26,6 +19,17 @@ public interface IPicture {
             for (int x = 0; x < this.getWidth(); x++) {
                 IColour sum = this.read(x, y).add(pic.read(x, y));
                 this.write(new Pixel(x, y), sum);
+            }
+        }
+    }
+
+    default void patch(IPicture pic) {
+        for (int y = 0; y < this.getHeight(); y++) {
+            for (int x = 0; x < this.getWidth(); x++) {
+                IColour colour = pic.read(x, y);
+                if (!colour.equals(new LinearColour(0, 0, 0))) {
+                    this.write(new Pixel(x, y), colour);
+                }
             }
         }
     }
