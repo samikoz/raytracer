@@ -24,7 +24,7 @@ public class PolyAccumulator {
                 .eyePosition(new Point(highEye.x(), highEye.y(), highEye.z()))
                 .lookDirection(new Vector(1, -0.6, -0.35))
                 .build();
-        Painter highHole = new Corridor(highHoleSetup);
+        Painter highHole = new Hole(highHoleSetup);
 
         IVector lowEye = new Vector(0, -radius, 0).transform(ThreeTransform.rotation_z(Math.PI / 10));
 
@@ -34,7 +34,7 @@ public class PolyAccumulator {
                 .eyePosition(new Point(lowEye.x()-radius, lowEye.y(), lowEye.z()))
                 .lookDirection(new Vector(1, -0.1, 0.15))
                 .build();
-        Painter lowHole = new Corridor(lowSetup);
+        Painter lowHole = new Hole(lowSetup);
 
         Accumulator lowHoleAccumulator = new Accumulator(lowHole, Paths.get("./buffs/lowHole/"), "./outputs/holes/low%02d.ppm");
         Accumulator highHoleAccumulator = new Accumulator(highHole, Paths.get("./buffs/highHole/"), "./outputs/holes/high%02d.ppm");

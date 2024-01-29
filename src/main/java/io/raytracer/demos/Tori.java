@@ -24,8 +24,8 @@ public class Tori extends Painter {
     }
 
     @Override
-    protected void setSetup() {
-        this.setup = this.setup.toBuilder()
+    protected DemoSetup setSetup(DemoSetup setup) {
+        return setup.toBuilder()
                 .viewAngle(Math.PI / 4)
                 .upDirection(new Vector(0, 1, 0))
                 .eyePosition(new Point(0, 8, 15))
@@ -64,8 +64,8 @@ public class Tori extends Painter {
                 .xSize(size)
                 .ySize(size)
                 .build();
-        Tori renderer = new Tori(setup);
-        IPicture rendered = renderer.render();
+        Painter painter = new Tori(setup);
+        IPicture rendered = painter.render();
         rendered.export(Paths.get(filename));
     }
 }

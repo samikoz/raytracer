@@ -1,13 +1,7 @@
-# Rough ideas
-- Self-containment, stacking like stairs
-- Merging perspectives like Cézanne or eyesight
-- Windows
-
 # Technical Resources
 1. https://raytracing.github.io/
 
 # Dev
-- Revisit and make right the matrices if you feel like.
 - Could avoid inverting matrices as often as possible. e.g. for scenes with lots of spheres could implement
 simple sphere which for scaling and translation just changes radius and centre and implements general
 ray-intersection solver for these.

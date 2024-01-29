@@ -58,12 +58,12 @@ public class Accumulator {
 
     public static void main(String[] args) throws IOException {
         DemoSetup base = DemoSetup.builder()
-                .rayCount(500)
+                .rayCount(50)
                 .xSize(1080)
                 .ySize(1080)
                 .build();
-        Painter painter = new Tori(base);
-        Accumulator acc = new Accumulator(painter, Paths.get("./buffs/em07corrd/"), "./outputs/tori/em/em07corrd_%02d.ppm");
+        Painter painter = new Nose(base);
+        Accumulator acc = new Accumulator(painter, Paths.get("./buffs/nosering/"), "./outputs/holes/nosering_%02d.ppm");
 
         while (true) {
             acc.accumulate();

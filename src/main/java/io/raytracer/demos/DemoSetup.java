@@ -17,8 +17,8 @@ public class DemoSetup {
     public final int xSize;
     public final int ySize;
     private final double viewAngle;
-    private final IPoint eyePosition;
-    private final IVector lookDirection;
+    public final IPoint eyePosition;
+    public final IVector lookDirection;
     private final IVector upDirection;
     private final String bufferDir;
     private final int bufferFileCount;

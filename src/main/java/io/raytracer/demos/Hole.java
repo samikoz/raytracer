@@ -15,15 +15,15 @@ import java.io.IOException;
 import java.nio.file.Paths;
 
 @Getter
-public class Corridor extends Painter {
+public class Hole extends Painter {
 
-    public Corridor(DemoSetup setup) {
+    public Hole(DemoSetup setup) {
         super(setup);
     }
 
     @Override
-    protected void setSetup() {
-
+    protected DemoSetup setSetup(DemoSetup setup) {
+        return setup;
     }
 
     @Override
@@ -57,7 +57,7 @@ public class Corridor extends Painter {
                 .eyePosition(new Point(lowEye.x()-radius, lowEye.y(), lowEye.z()))
                 .lookDirection(new Vector(1, -0.1, 0.15))
                 .build();
-        Painter painter = new Corridor(setup);
+        Painter painter = new Hole(setup);
         IPicture rendered = painter.render();
         rendered.export(Paths.get(filename));
     }

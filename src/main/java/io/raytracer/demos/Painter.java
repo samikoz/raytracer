@@ -17,7 +17,7 @@ public abstract class Painter {
         this.setup = setup;
     }
 
-    abstract protected void setSetup();
+    abstract protected DemoSetup setSetup(DemoSetup setup);
 
     protected LinearColour backgroundColour() {
         return new LinearColour(0);
@@ -26,7 +26,7 @@ public abstract class Painter {
     abstract protected Hittable[] makeObjects();
 
     public IPicture render() throws IOException {
-        this.setSetup();
+        this.setup = this.setSetup(this.setup);
 
         Group objects = new Group(this.makeObjects());
         World world = new LambertianWorld(this.backgroundColour());
