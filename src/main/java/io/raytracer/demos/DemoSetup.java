@@ -2,6 +2,7 @@ package io.raytracer.demos;
 
 import io.raytracer.geometry.IPoint;
 import io.raytracer.geometry.IVector;
+import io.raytracer.shapes.Shape;
 import io.raytracer.tools.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -22,6 +23,8 @@ public class DemoSetup {
     private final IVector upDirection;
     private final String bufferDir;
     private final int bufferFileCount;
+    public final Shape injectedObject;
+    public final int brightness;
 
     public IPicture makePicture() throws IOException {
         IPicture picture;

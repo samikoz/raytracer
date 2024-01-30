@@ -10,7 +10,7 @@ public class Point extends Tuple implements IPoint {
         super(x, y, z);
     }
 
-    private Point(ITuple them) {
+    public Point(ITuple them) {
         this(them.x(), them.y(), them.z());
     }
 

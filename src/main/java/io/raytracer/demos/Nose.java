@@ -6,6 +6,9 @@ import io.raytracer.geometry.IVector;
 import io.raytracer.geometry.Point;
 import io.raytracer.geometry.Vector;
 import io.raytracer.materials.Material;
+import io.raytracer.mechanics.LambertianWorld;
+import io.raytracer.mechanics.Recasters;
+import io.raytracer.mechanics.World;
 import io.raytracer.shapes.*;
 import io.raytracer.textures.MonocolourTexture;
 import io.raytracer.tools.IPicture;
@@ -32,30 +35,37 @@ public class Nose extends Painter{
     }
 
     @Override
-    protected LinearColour backgroundColour() {
-        return new LinearColour(0.5);
-    }
-
-    @Override
     protected Hittable[] makeObjects() {
-        Material material = Material.builder()
+        Material ringMaterial = Material.builder()
                 .texture(new MonocolourTexture(new LinearColour(0.65)))
+                .recast(Recasters.fuzzilyReflective.apply(0.2), 0.5)
+                .recast(Recasters.diffuse, 0.5)
                 .build();
-        Material lightMaterial = Material.builder().emit(new LinearColour(10)).build();
+        Material lightMaterial = Material.builder().emit(new LinearColour(this.setup.brightness)).build();
 
-        Shape torus = new Torus(radius, 2, material);
         Shape light = new Sphere(lightMaterial);
-        Shape noseRing = new Torus(2, 0.5, material);
+        Shape noseRing = new Torus(2, 0.5, ringMaterial);
         IPoint ringPosition = this.setup.eyePosition.add(this.setup.lookDirection.multiply(4.5).add(new Vector(1.5, 0, 0.3)));
         noseRing.setTransform(ThreeTransform.rotation_x(Math.PI / 2).rotate_z(-Math.PI / 8).rotate_y(Math.PI/4).translate(ringPosition.x(), ringPosition.y(), ringPosition.z()));
         light.setTransform(ThreeTransform.translation(-radius, 0, 0));
-        return new Hittable[] {torus, light, noseRing};
+        return new Hittable[] {this.setup.injectedObject, light, noseRing};
+    }
+
+    @Override
+    protected World makeWorld() {
+        Hittable[] objects = this.makeObjects();
+        Hittable[] groupable = new Hittable[] {objects[1], objects[2]};
+        Group group = new Group(groupable);
+        World world = new LambertianWorld(this.backgroundColour());
+        world.put(objects[0]);
+        world.put(group);
+        return world;
     }
 
     public static void main(String[] args) throws IOException {
         int size = 1080;
-        int rayCount = 5;
-        String filename = "./outputs/trash/sewtest15.ppm"; // 11 should be on minor 0.4, multiply 4.5, 12 on 0.5 mult5, both add x 0.5, majR 2
+        int rayCount = 3;
+        String filename = "./outputs/trash/modNose06_.ppm";
 
         DemoSetup setup = DemoSetup.builder()
                 .rayCount(rayCount)

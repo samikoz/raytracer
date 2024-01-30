@@ -1,5 +1,13 @@
 package io.raytracer.demos;
 
+import io.raytracer.algebra.ThreeTransform;
+import io.raytracer.geometry.IPoint;
+import io.raytracer.geometry.Point;
+import io.raytracer.geometry.Vector;
+import io.raytracer.materials.Material;
+import io.raytracer.shapes.Shape;
+import io.raytracer.shapes.Torus;
+import io.raytracer.textures.MonocolourTexture;
 import io.raytracer.tools.*;
 
 import java.io.IOException;
@@ -57,13 +65,23 @@ public class Accumulator {
     }
 
     public static void main(String[] args) throws IOException {
-        DemoSetup base = DemoSetup.builder()
-                .rayCount(50)
+        int radius = 12;
+        IPoint eyePosition = new Point(new Vector(-radius, 0, 0).transform(ThreeTransform.rotation_z(Math.PI / 10)));
+        Material material = Material.builder()
+                .texture(new MonocolourTexture(new LinearColour(0.65)))
+                .build();
+        Shape leftTorus = new Torus(radius, 2, material);
+        ThreeTransform torusRotation = ThreeTransform.rotation_y(-Math.PI/12).rotate_x(-Math.PI/5.5);
+        leftTorus.setTransform(torusRotation.conjugateTranslating(eyePosition));
+        DemoSetup leftSetup = DemoSetup.builder()
+                .rayCount(100)
                 .xSize(1080)
                 .ySize(1080)
+                .brightness(16)
+                .injectedObject(leftTorus)
                 .build();
-        Painter painter = new Nose(base);
-        Accumulator acc = new Accumulator(painter, Paths.get("./buffs/nosering/"), "./outputs/holes/nosering_%02d.ppm");
+        Painter painter = new Nose(leftSetup);
+        Accumulator acc = new Accumulator(painter, Paths.get("./buffs/newLeftNostril/"), "./outputs/holes/newLeft%02d.ppm");
 
         while (true) {
             acc.accumulate();

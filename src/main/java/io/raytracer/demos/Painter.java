@@ -25,15 +25,16 @@ public abstract class Painter {
 
     abstract protected Hittable[] makeObjects();
 
+    protected World makeWorld() {
+        World world = new LambertianWorld(this.backgroundColour());
+        world.put(new Group(this.makeObjects()));
+        return world;
+    }
+
     public IPicture render() throws IOException {
         this.setup = this.setSetup(this.setup);
-
-        Group objects = new Group(this.makeObjects());
-        World world = new LambertianWorld(this.backgroundColour());
-        world.put(objects);
-
         IPicture picture = this.setup.makePicture();
-        world.render(picture, this.setup.makeCamera());
+        this.makeWorld().render(picture, this.setup.makeCamera());
         return picture;
     }
 }
