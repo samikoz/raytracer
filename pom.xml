@@ -97,6 +97,12 @@
             <artifactId>jmh-generator-annprocess</artifactId>
             <version>1.37</version>
         </dependency>
+        <dependency>
+            <groupId>org.processing</groupId>
+            <artifactId>core</artifactId>
+            <version>4.3</version>
+        </dependency>
+
     </dependencies>
 
     <properties>

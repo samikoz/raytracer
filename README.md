@@ -1,3 +1,7 @@
+# Build
+Need to [install](https://processing.org/download) processing, then install it in local Maven repository
+# mvn install:install-file -Dfile=INSTALL_DIR/core/library/core.jar -DgroupId=org.processing -DartifactId=core -Dversion=4.3 -Dpackaging=jar
+
 # Technical Resources
 1. https://raytracing.github.io/
 
